@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ScalaCompilerConfiguration">
+    <option name="separateProdTestSources" value="true" />
+    <profile name="sbt 1" modules="Waygrid,Waygrid.common-lib,Waygrid.common-model,Waygrid.commonLib,Waygrid.commonLib.main,Waygrid.commonLib.test,Waygrid.commonModel,Waygrid.commonModel.main,Waygrid.commonModel.test,Waygrid.destination-blackhole,Waygrid.destination-webhook,Waygrid.destinationBlackhole,Waygrid.destinationBlackhole.main,Waygrid.destinationBlackhole.test,Waygrid.destinationWebhook,Waygrid.destinationWebhook.main,Waygrid.destinationWebhook.test,Waygrid.origin-http,Waygrid.originHttp,Waygrid.originHttp.main,Waygrid.originHttp.test,Waygrid.system-archive,Waygrid.system-waystation,Waygrid.systemArchive,Waygrid.systemArchive.main,Waygrid.systemArchive.test,Waygrid.systemWaystation,Waygrid.systemWaystation.main,Waygrid.systemWaystation.test,waygrid-router,waygrid-router.main,waygrid-router.test" />
+    <profile name="sbt 2" modules="Waygrid.common-lib.main,Waygrid.common-lib.test,Waygrid.common-model.main,Waygrid.common-model.test,Waygrid.destination-blackhole.main,Waygrid.destination-blackhole.test,Waygrid.destination-webhook.main,Waygrid.destination-webhook.test,Waygrid.main,Waygrid.origin-http.main,Waygrid.origin-http.test,Waygrid.system-archive.main,Waygrid.system-archive.test,Waygrid.system-waystation.main,Waygrid.system-waystation.test,Waygrid.test">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-Xfatal-warnings" />
+      </parameters>
+    </profile>
+  </component>
+</project>
