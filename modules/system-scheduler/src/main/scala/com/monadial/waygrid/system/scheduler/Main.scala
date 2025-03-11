@@ -1,4 +1,4 @@
-package com.monadial.waygrid.system.archive
+package com.monadial.waygrid.system.scheduler
 
 import cats.effect.{IO, IOApp}
 

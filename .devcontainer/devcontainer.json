@@ -1,0 +1,24 @@
+{
+  "name": "Waygrid Development Container",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "."
+  },
+  "postCreateCommand": "sbt update",
+  "workspaceFolder": "/workspace",
+  "customizations": {
+    "jetbrains": {
+      "plugins": [
+        "org.intellij.scala",
+        "com.github.copilot",
+        "izhangzhihao.rainbow.brackets",
+        "com.github.catppuccin.jetbrains",
+        "com.github.catppuccin.jetbrains_icons",
+        "com.intellij.bigdatatools.rfs",
+        "com.intellij.bigdatatools.binary.files",
+        "com.intellij.bigdatatools.core",
+        "com.intellij.bigdatatools",
+      ],
+    },
+  }
+}
