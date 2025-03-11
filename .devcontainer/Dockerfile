@@ -11,4 +11,6 @@ RUN apt-get update && \
 # Copy node to the final image
 COPY --from=node:22 /usr/local/bin/node /usr/local/bin/node
 
+COPY ../ /workspace
+
 WORKDIR /workspace
