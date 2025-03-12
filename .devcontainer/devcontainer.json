@@ -14,6 +14,8 @@
         "izhangzhihao.rainbow.brackets",
         "com.github.catppuccin.jetbrains",
         "com.github.catppuccin.jetbrains_icons",
+        "com.intellij.bigdatatools.spark",
+        "com.intellij.bigdatatools.metastore.core",
         "com.intellij.bigdatatools.rfs",
         "com.intellij.bigdatatools.binary.files",
         "com.intellij.bigdatatools.core",

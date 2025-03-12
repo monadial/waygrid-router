@@ -5,7 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5d705240-6319-489e-88cb-7594ee34bd68" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.devcontainer/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/.devcontainer/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.editorconfig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.github/labeler.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.github/workflows/dependency-graph.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.devcontainer/devcontainer.json" beforeDir="false" afterPath="$PROJECT_DIR$/.devcontainer/devcontainer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/scala_compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/scala_compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -17,6 +21,23 @@
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
     </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="SBT">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="Waygrid" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -39,7 +60,8 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Main.executor&quot;: &quot;Debug&quot;,
+    &quot;Application.com.monadial.waygrid.destination.blackhole.Main.executor&quot;: &quot;Run&quot;,
     &quot;Application.com.monadial.waygrid.origin.http.Main.executor&quot;: &quot;Run&quot;,
     &quot;Application.com.monadial.waygrid.system.scheduler.Main.executor&quot;: &quot;Run&quot;,
     &quot;Docker..devcontainer/Dockerfile.executor&quot;: &quot;Run&quot;,
@@ -53,9 +75,10 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;remote.dev.show.docker.config.missing.jdk.notification&quot;: &quot;false&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
@@ -68,7 +91,7 @@
       <window_info id="Commit_Guest" show_stripe_button="false" />
       <window_info id="Pull Requests" />
       <window_info id="Learn" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.082499996" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.13764882" />
       <window_info id="Commit" order="1" weight="0.25" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Database Changes" />
@@ -82,12 +105,14 @@
       <window_info anchor="bottom" id="Version Control" order="0" />
       <window_info anchor="bottom" id="Problems" order="1" />
       <window_info anchor="bottom" id="Problems View" order="2" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="3" visible="true" weight="0.32950002" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="3" visible="true" weight="0.18330559" />
       <window_info anchor="bottom" id="Services" order="4" />
-      <window_info active="true" anchor="bottom" id="Run" order="5" visible="true" weight="0.32972825" />
+      <window_info anchor="bottom" id="Run" order="5" weight="0.18275097" />
+      <window_info anchor="bottom" id="Debug" order="6" weight="0.18275097" />
       <window_info anchor="right" id="sbt" />
       <window_info anchor="right" id="Endpoints" />
       <window_info anchor="right" id="github.copilotToolWindow" />
+      <window_info anchor="right" id="BigDataToolWindow" />
       <window_info anchor="right" id="Coverage" side_tool="true" />
       <window_info anchor="right" id="GitHub Copilot Chat" />
       <window_info anchor="right" id="bsp" />
@@ -107,7 +132,7 @@
       <recent name="com.monadial.waygrid.origin.http" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.com.monadial.waygrid.system.scheduler.Main">
+  <component name="RunManager" selected="Application.com.monadial.waygrid.destination.blackhole.Main">
     <configuration default="true" type="AZURE_FUNCTION_SUPPORT" factoryName="Run Functions">
       <option name="appName" />
       <option name="appServicePlanName" />
@@ -140,7 +165,7 @@
     </configuration>
     <configuration name="Main" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="waystation.Main" />
-      <module name="Waygrid.system-waystation.main" />
+      <module name="Waygrid.system-waystation" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="waystation.*" />
@@ -151,9 +176,22 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="com.monadial.waygrid.destination.blackhole.Main" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="com.monadial.waygrid.destination.blackhole.Main" />
+      <module name="Waygrid.destination-blackhole" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.monadial.waygrid.destination.blackhole.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="com.monadial.waygrid.origin.http.Main" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="com.monadial.waygrid.origin.http.Main" />
-      <module name="Waygrid.origin-http.main" />
+      <module name="Waygrid.origin-http" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.monadial.waygrid.origin.http.*" />
@@ -166,7 +204,7 @@
     </configuration>
     <configuration name="com.monadial.waygrid.system.scheduler.Main" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="com.monadial.waygrid.system.scheduler.Main" />
-      <module name="Waygrid.system-scheduler.main" />
+      <module name="Waygrid.system-scheduler" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.monadial.waygrid.system.scheduler.*" />
@@ -202,23 +240,13 @@
       </deployment>
       <method v="2" />
     </configuration>
-    <configuration name="modules/origin-http/target/docker/stage/Dockerfile stage0" type="docker-deploy" factoryName="dockerfile" temporary="true" server-name="Docker">
-      <deployment type="dockerfile">
-        <settings>
-          <option name="imageTag" value="openjdk23_stage0" />
-          <option name="buildCliOptions" value="--target stage0" />
-          <option name="sourceFilePath" value="modules/origin-http/target/docker/stage/Dockerfile" />
-        </settings>
-      </deployment>
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.com.monadial.waygrid.system.scheduler.Main" />
-        <item itemvalue="Docker..devcontainer/Dockerfile" />
+        <item itemvalue="Application.com.monadial.waygrid.destination.blackhole.Main" />
         <item itemvalue="Application.com.monadial.waygrid.origin.http.Main" />
-        <item itemvalue="Docker.modules/origin-http/target/docker/stage/Dockerfile stage0" />
         <item itemvalue="Application.Main" />
+        <item itemvalue="Docker..devcontainer/Dockerfile" />
+        <item itemvalue="Application.com.monadial.waygrid.system.scheduler.Main" />
       </list>
     </recent_temporary>
   </component>
@@ -229,8 +257,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.23774.16" />
-        <option value="bundled-js-predefined-d6986cc7102b-45be767fe593-JavaScript-IU-251.23774.16" />
+        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.25659.59" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.25659.59" />
       </set>
     </attachedChunks>
   </component>
@@ -249,11 +277,30 @@
       <workItem from="1741728917963" duration="238000" />
       <workItem from="1741729272811" duration="20000" />
       <workItem from="1741729515927" duration="19000" />
+      <workItem from="1741729791835" duration="197000" />
+      <workItem from="1741730120493" duration="36000" />
+      <workItem from="1741730162587" duration="33000" />
+      <workItem from="1741730242233" duration="419000" />
+      <workItem from="1741731344115" duration="1441000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="scala-line">
+          <url>file://$PROJECT_DIR$/modules/system-waystation/src/main/scala/waystation/Main.scala</url>
+          <line>5</line>
+          <properties>
+            <option name="lambda-ordinal" value="0" />
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -1,0 +1,59 @@
+module:
+  - changed-files:
+      - any-glob-to-any-file: modules/**/*
+
+docs:
+  - changed-files:
+      - any-glob-to-any-file: docs
+
+infra:
+  - changed-files:
+      - any-glob-to-any-file: infra
+
+readme:
+  - changed-files:
+      - any-glob-to-any-file: README.md
+
+deps:
+  - changed-files:
+      - any-glob-to-any-file: [ 'build.sbt', 'project/**/*' ]
+
+lints:
+  - changed-files:
+      - any-glob-to-any-file: [ '.scalafmt.conf', '.scalafix.conf' ]
+
+gitignore:
+  - changed-files:
+      - any-glob-to-any-file: .gitignore
+
+common/lib:
+  - changed-files:
+      - any-glob-to-any-file: modules/common-lib/**/*
+
+common/model:
+  - changed-files:
+      - any-glob-to-any-file: modules/common-model/**/*
+
+destination/blackhole:
+  - changed-files:
+      - any-glob-to-any-file: modules/destination-blackhole/**/*
+
+destination/webhook:
+  - changed-files:
+      - any-glob-to-any-file: modules/destination-webhook/**/*
+
+origin/http:
+  - changed-files:
+      - any-glob-to-any-file: modules/origin-http/**/*
+
+system/history:
+  - changed-files:
+      - any-glob-to-any-file: modules/system-history/**/*
+
+system/scheduler:
+  - changed-files:
+      - any-glob-to-any-file: modules/system-scheduler/**/*
+
+system/waystation:
+  - changed-files:
+      - any-glob-to-any-file: modules/system-waystation/**/*
