@@ -80,6 +80,11 @@ lazy val `destination-webhook` = (project in file("modules/destination-webhook")
   .settings(dockerBuild("destination", "webhook")*)
   .dependsOn(`common-lib`)
 
+lazy val `destination-websocket` = (project in file("modules/destination-websocket"))
+  .enablePlugins(DockerPlugin, JavaAppPackaging)
+  .settings(dockerBuild("destination", "websocket")*)
+  .dependsOn(`common-lib`)
+
 lazy val `destination-blackhole` = (project in file("modules/destination-blackhole"))
   .enablePlugins(DockerPlugin, JavaAppPackaging)
   .settings(dockerBuild("destination", "blackhole")*)

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ScalaCompilerConfiguration">
-    <option name="separateProdTestSources" value="true" />
-    <profile name="sbt 1" modules="Waygrid,Waygrid.common-lib,Waygrid.common-model,Waygrid.destination-blackhole,Waygrid.destination-webhook,Waygrid.origin-http,Waygrid.system-history,Waygrid.system-scheduler,Waygrid.system-waystation,waygrid-router_856" />
-    <profile name="sbt 2" modules="Waygrid.common-lib.main,Waygrid.common-lib.test,Waygrid.common-model.main,Waygrid.common-model.test,Waygrid.destination-blackhole.main,Waygrid.destination-blackhole.test,Waygrid.destination-webhook.main,Waygrid.destination-webhook.test,Waygrid.main,Waygrid.origin-http.main,Waygrid.origin-http.test,Waygrid.system-archive,Waygrid.system-history.main,Waygrid.system-history.test,Waygrid.system-scheduler.main,Waygrid.system-scheduler.test,Waygrid.system-waystation.main,Waygrid.system-waystation.test,Waygrid.test">
+    <profile name="sbt 1" modules="waygrid-router_856" />
+    <profile name="sbt 2" modules="Waygrid,Waygrid.common-lib,Waygrid.common-lib.main,Waygrid.common-lib.test,Waygrid.common-model,Waygrid.common-model.main,Waygrid.common-model.test,Waygrid.destination-blackhole,Waygrid.destination-blackhole.main,Waygrid.destination-blackhole.test,Waygrid.destination-webhook,Waygrid.destination-webhook.main,Waygrid.destination-webhook.test,Waygrid.main,Waygrid.origin-http,Waygrid.origin-http.main,Waygrid.origin-http.test,Waygrid.system-archive,Waygrid.system-history,Waygrid.system-history.main,Waygrid.system-history.test,Waygrid.system-scheduler,Waygrid.system-scheduler.main,Waygrid.system-scheduler.test,Waygrid.system-waystation,Waygrid.system-waystation.main,Waygrid.system-waystation.test,Waygrid.test">
       <option name="implicitConversions" value="true" />
       <option name="higherKinds" value="true" />
       <option name="macros" value="true" />
