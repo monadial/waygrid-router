@@ -1,0 +1,43 @@
+Waygrid License
+
+License: Server Side Public License, version 1 (SSPL-1.0)
+
+Copyright (C) 2025 Monadial
+
+This program is free software: you can use, modify, and redistribute it under the terms of the Server Side Public License, version 1, as published by MongoDB, Inc.
+
+You may obtain a copy of the License at:
+
+https://www.mongodb.com/licensing/server-side-public-license
+
+Purpose:
+
+The SSPL is designed to ensure that the community benefits from all software that is built on top of this project, particularly if it is offered as a service to third parties.
+
+Key Terms:
+
+You may make modifications or derivative works under the SSPL.
+
+You may use Waygrid internally without any obligations.
+
+If you offer Waygrid or any modified version of it to third parties as a service ("Service Offering"), you must release the complete source code of:
+
+The part of the Service Offering that is based on Waygrid,
+
+Any management software, user interfaces, APIs, automation scripts, monitoring software, backup software, and hosting software necessary to run the service.
+
+All source code must be licensed under the SSPL.
+
+Disclaimer of Warranty:
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+Commercial License:
+
+A separate commercial license is available for companies that wish to use Waygrid without complying with SSPL obligations. Please contact Monadial at [contact@monadial.com] for more information.
+
+Contributions:
+
+By contributing to Waygrid, you agree that your contributions will be licensed under the SSPL and affirm that you have the right to license your contributions under these terms.
+
+See the LICENSE FAQ (FAQ.md) for common questions and clarifications.

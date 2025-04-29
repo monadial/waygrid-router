@@ -2,38 +2,39 @@ import sbt.{Def, *}
 
 object Dependencies {
   object V {
-    val airframeUlid                 = "24.8.0"
-    val bouncyCastleVersion          = "1.78.1"
-    val cats                         = "2.12.0"
-    val catsEffect                   = "3.5.4"
-    val circe                        = "0.14.10"
-    val circeConfig                  = "0.10.1"
-    val circeRefined                 = "0.14.9"
-    val cloudEvents                  = "2.5.0"
-    val fs2core                      = "3.11.0"
-    val fs2Kafka                     = "3.5.1"
-    val http4s                       = "1.0.0-M41"
-    val http4sMetrics                = "1.0.0-M40"
-    val http4sWs                     = "1.0.0-M40"
-    val ip4s                         = "3.6.0"
-    val kittens                      = "3.4.0"
-    val log4cats                     = "2.6.0"
-    val logbackClassic               = "1.5.8"
-    val monocle                      = "3.3.0"
-    val odin                         = "0.13.0"
-    val odinContrib                  = "1.0.2"
-    val opentelemetryInstrumentation = "2.7.0-alpha"
-    val opentelemetryOtlp            = "1.42.0"
-    val otel4s                       = "0.9.0"
-    val redis4Cats                   = "1.7.1"
-    val scalacheck                   = "1.18.0"
-    val typesafeConfig               = "1.4.3"
-    val weaver                       = "0.8.4"
+    val airframeUlid = "2025.1.9"
+    val bouncyCastleVersion = "1.80"
+    val cats = "2.13.0"
+    val catsActors = "2.0.0"
+    val catsEffect = "3.6.1"
+    val circe = "0.14.10"
+    val circeConfig = "0.10.1"
+    val circeRefined = "0.15.1"
+    val cloudEvents = "2.5.0"
+    val fly4s = "1.1.0"
+    val fs2core = "3.12.0"
+    val fs2Kafka = "3.7.0"
+    val http4s = "1.0.0-M44"
+    val http4sMetrics = "1.0.0-M44"
+    val http4sWs = "1.0.0-M44"
+    val ip4s = "3.6.0"
+    val kittens = "3.5.0"
+    val laika = "1.3.2"
+    val log4cats = "2.7.0"
+    val logbackClassic = "1.5.18"
+    val monocle = "3.3.0"
+    val odin = "0.17.0"
+    val opentelemetryInstrumentation = "2.15.0-alpha"
+    val opentelemetryOtlp = "1.49.0"
+    val otel4s = "0.12.0"
+    val prometheus4cats = "3.0.0"
+    val redis4Cats = "1.7.2"
+    val refined = "0.11.3"
+    val scalacheck = "1.18.1"
+    val skunk = "0.6.4"
+    val typesafeConfig = "1.4.3"
+    val weaver = "0.8.4"
     val zeroAllocationHashingVersion = "0.16"
-    val catsActors                   = "2.0.0"
-    val skunk                        = "0.6.4"
-    val fly4s                        = "1.1.0"
-    val prometheus4cats              = "3.0.0"
   }
 
   object Libraries {
@@ -73,9 +74,7 @@ object Dependencies {
 
     val airframeUlid = Def.setting("org.wvlet.airframe" %% "airframe-ulid" % V.airframeUlid)
 
-    val logBack       = Def.setting("ch.qos.logback" % "logback-classic" % V.logbackClassic)
-    val log4CatsCore  = Def.setting("org.typelevel" %% "log4cats-core" % V.log4cats)
-    val log4CatsSlf4j = Def.setting("org.typelevel" %% "log4cats-slf4j" % V.log4cats)
+    val odinCore = Def.setting("dev.scalafreaks" %% "odin-core" % V.odin)
 
     val bouncyCastle = Def.setting("org.bouncycastle" % "bcprov-jdk18on" % V.bouncyCastleVersion)
 
@@ -106,6 +105,10 @@ object Dependencies {
     val weaverCats       = "com.disneystreaming" %% "weaver-cats"       % V.weaver
     val weaverDiscipline = "com.disneystreaming" %% "weaver-discipline" % V.weaver
     val weaverScalaCheck = "com.disneystreaming" %% "weaver-scalacheck" % V.weaver
+
+    // refined
+    val refined = Def.setting("eu.timepit" %% "refined" % V.refined)
+    val refinedCats = Def.setting("eu.timepit" %% "refined-cats" % V.refined)
   }
 }
 

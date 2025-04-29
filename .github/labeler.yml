@@ -26,34 +26,11 @@ gitignore:
   - changed-files:
       - any-glob-to-any-file: .gitignore
 
-common/lib:
+common/application:
   - changed-files:
-      - any-glob-to-any-file: modules/common-lib/**/*
+      - any-glob-to-any-file: modules/common/common-application/**/*
 
 common/model:
   - changed-files:
-      - any-glob-to-any-file: modules/common-model/**/*
+      - any-glob-to-any-file: modules/common/common-model/**/*
 
-destination/blackhole:
-  - changed-files:
-      - any-glob-to-any-file: modules/destination-blackhole/**/*
-
-destination/webhook:
-  - changed-files:
-      - any-glob-to-any-file: modules/destination-webhook/**/*
-
-origin/http:
-  - changed-files:
-      - any-glob-to-any-file: modules/origin-http/**/*
-
-system/history:
-  - changed-files:
-      - any-glob-to-any-file: modules/system-history/**/*
-
-system/scheduler:
-  - changed-files:
-      - any-glob-to-any-file: modules/system-scheduler/**/*
-
-system/waystation:
-  - changed-files:
-      - any-glob-to-any-file: modules/system-waystation/**/*
