@@ -5,7 +5,7 @@ import scala.collection.Seq
 
 ThisBuild / version := "1.0.0-SNAPSHOT"
 
-ThisBuild / scalaVersion     := "3.6.3"
+ThisBuild / scalaVersion     := "3.7.0" // update to 3.7.+ when libraries are ready
 ThisBuild / organization     := "com.monadial"
 ThisBuild / organizationName := "Monadial"
 
@@ -34,13 +34,21 @@ def dockerImage(component: String, service: String): Seq[Setting[?]] = Seq(
 )
 
 def buildInfo(component: String, service: String) = Seq(
-  buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion),
+  buildInfoKeys    := Seq[BuildInfoKey](name, version, scalaVersion),
   buildInfoPackage := s"com.monadial.waygrid.${component}.${service}"
 )
 
 lazy val root = (project in file("."))
   .settings(
     name := "Waygrid",
+    Compile / javaOptions ++= Seq(
+      "-Dotel.java.global-autoconfigure.enabled=true",
+      s"-Dotel.service.name=${name.value}",
+      "-Dotel.exporter.otlp.endpoint=http://localhost:4317"
+    ),
+    Universal / javaOptions ++= (Compile / javaOptions).value,
+    fork              := true,
+    scalafmtOnCompile := true
   )
 
 //
@@ -97,6 +105,17 @@ lazy val `common-application` = (project in file("modules/common/common-applicat
       Libraries.http4sDsl,
       Libraries.http4sServer,
       Libraries.http4sCirce,
+      Libraries.http4sOtel4sCore,
+      Libraries.http4sOtel4sMetrics,
+      Libraries.http4sOtel4sTraceCore,
+      Libraries.http4sOtel4sTraceServer,
+      // otel4s
+      Libraries.otel4sOtelJava.value,
+      Libraries.otel4InstrumentationMetrics.value,
+      Libraries.opentelemetryExporterOtlp.value,
+      Libraries.opentelemetrySdkExtensionAutoconfigure.value,
+      Libraries.opentelemetryInstrumentation.value,
+
       // tests
       Libraries.catsLaws         % Test,
       Libraries.monocleLaw       % Test,
@@ -113,26 +132,26 @@ lazy val `common-application` = (project in file("modules/common/common-applicat
 // SYSTEM
 lazy val `system-topology` = (project in file("modules/system/system-topology"))
   .enablePlugins(BuildInfoPlugin, DockerPlugin, JavaAppPackaging)
-  .settings(dockerImage("system", "topology")*)
-  .settings(buildInfo("system", "topology")*)
+  .settings(dockerImage("system", "topology") *)
+  .settings(buildInfo("system", "topology") *)
   .dependsOn(`common-application`)
 
 lazy val `system-waystation` = (project in file("modules/system/system-waystation"))
   .enablePlugins(BuildInfoPlugin, DockerPlugin, JavaAppPackaging)
-  .settings(dockerImage("system", "waystation")*)
-  .settings(buildInfo("system", "waystation")*)
+  .settings(dockerImage("system", "waystation") *)
+  .settings(buildInfo("system", "waystation") *)
   .dependsOn(`common-application`)
 
 lazy val `system-history` = (project in file("modules/system/system-history"))
   .enablePlugins(BuildInfoPlugin, DockerPlugin, JavaAppPackaging)
-  .settings(dockerImage("system", "history")*)
-  .settings(buildInfo("system", "history")*)
+  .settings(dockerImage("system", "history") *)
+  .settings(buildInfo("system", "history") *)
   .dependsOn(`common-application`)
 
 lazy val `system-scheduler` = (project in file("modules/system/system-scheduler"))
   .enablePlugins(BuildInfoPlugin, DockerPlugin, JavaAppPackaging)
-  .settings(dockerImage("system", "scheduler")*)
-  .settings(buildInfo("system", "scheduler")*)
+  .settings(dockerImage("system", "scheduler") *)
+  .settings(buildInfo("system", "scheduler") *)
   .dependsOn(`common-application`)
 
 lazy val `system-k8s-operator` = (project in file("modules/system/system-k8s-operator"))
@@ -144,7 +163,7 @@ lazy val `system-k8s-operator` = (project in file("modules/system/system-k8s-ope
 // ORIGIN
 lazy val `origin-http` = (project in file("modules/origin/origin-http"))
   .enablePlugins(DockerPlugin, JavaAppPackaging)
-  .settings(dockerImage("origin", "http")*)
+  .settings(dockerImage("origin", "http") *)
   .dependsOn(`common-application`)
 
 //
@@ -152,20 +171,20 @@ lazy val `origin-http` = (project in file("modules/origin/origin-http"))
 // DESTINATION
 lazy val `destination-webhook` = (project in file("modules/destination/destination-webhook"))
   .enablePlugins(BuildInfoPlugin, DockerPlugin, JavaAppPackaging)
-  .settings(dockerImage("destination", "webhook")*)
-  .settings(buildInfo("destination", "webhook")*)
+  .settings(dockerImage("destination", "webhook") *)
+  .settings(buildInfo("destination", "webhook") *)
   .dependsOn(`common-application`)
 
 lazy val `destination-websocket` = (project in file("modules/destination/destination-websocket"))
   .enablePlugins(BuildInfoPlugin, DockerPlugin, JavaAppPackaging)
-  .settings(dockerImage("destination", "websocket")*)
-  .settings(buildInfo("destination", "websocket")*)
+  .settings(dockerImage("destination", "websocket") *)
+  .settings(buildInfo("destination", "websocket") *)
   .dependsOn(`common-application`)
 
 lazy val `destination-blackhole` = (project in file("modules/destination/destination-blackhole"))
   .enablePlugins(BuildInfoPlugin, DockerPlugin, JavaAppPackaging)
-  .settings(dockerImage("destination", "blackhole")*)
-  .settings(buildInfo("destination", "blackhole")*)
+  .settings(dockerImage("destination", "blackhole") *)
+  .settings(buildInfo("destination", "blackhole") *)
   .dependsOn(`common-application`)
 
 //
@@ -173,6 +192,6 @@ lazy val `destination-blackhole` = (project in file("modules/destination/destina
 // PROCESSOR
 lazy val `processor-openai` = (project in file("modules/processor/processor-openai"))
   .enablePlugins(BuildInfoPlugin, DockerPlugin, JavaAppPackaging)
-  .settings(dockerImage("processor", "openai")*)
-  .settings(buildInfo("processor", "openai")*)
+  .settings(dockerImage("processor", "openai") *)
+  .settings(buildInfo("processor", "openai") *)
   .dependsOn(`common-application`)

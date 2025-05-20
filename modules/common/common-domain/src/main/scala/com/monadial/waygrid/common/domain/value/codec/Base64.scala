@@ -17,4 +17,3 @@ trait Base64Codec[A] extends Base64Encoder[A] with Base64Decoder[A]
 
 object Base64Codec:
   def apply[A](using codec: Base64Codec[A]): Base64Codec[A] = codec
-

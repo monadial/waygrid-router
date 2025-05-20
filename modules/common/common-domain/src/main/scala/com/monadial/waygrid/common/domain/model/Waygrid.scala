@@ -1,4 +1,5 @@
 package com.monadial.waygrid.common.domain.model
 
 object Waygrid:
-  def appName: String = "waygrid"
+  def appName: String   = "waygrid"
+  def appPrefix: String = "com.monadial.waygrid"

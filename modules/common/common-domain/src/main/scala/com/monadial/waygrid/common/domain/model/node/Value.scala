@@ -1,6 +1,8 @@
 package com.monadial.waygrid.common.domain.model.node
 
-import com.monadial.waygrid.common.domain.value.string.{StringValue, StringValueRefined}
+import cats.Show
+import cats.implicits.*
+import com.monadial.waygrid.common.domain.value.string.{ StringValue, StringValueRefined }
 import eu.timepit.refined.predicates.all.NonEmpty
 import io.circe.Codec
 
@@ -25,7 +27,6 @@ object NodeClientId extends StringValue
 type NodeReceiveAddress = NodeReceiveAddress.Type
 object NodeReceiveAddress extends StringValue
 
-
 type NodeNameTest = NodeNameTest.Type
 object NodeNameTest extends StringValueRefined[NonEmpty]
 
@@ -43,3 +44,20 @@ enum NodeDescriptor(
       extends NodeDescriptor(NodeComponent("system"), service)
 
 final case class NodeRuntime() derives Codec.AsObject
+
+object NodeDescriptor:
+  def destination(string: String): NodeDescriptor =
+    NodeDescriptor.Destination(NodeService(string))
+
+  def origin(string: String): NodeDescriptor =
+    NodeDescriptor.Origin(NodeService(string))
+
+  def processor(string: String): NodeDescriptor =
+    NodeDescriptor.Processor(NodeService(string))
+
+  def system(string: String): NodeDescriptor =
+    NodeDescriptor.System(NodeService(string))
+
+  given Show[NodeDescriptor] with
+    def show(nodeDescriptor: NodeDescriptor): String =
+      s"${nodeDescriptor.component.show}.${nodeDescriptor.service.show}"

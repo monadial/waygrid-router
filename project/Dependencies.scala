@@ -1,39 +1,40 @@
-import sbt.{Def, *}
+import sbt.*
 
 object Dependencies {
   object V {
-    val airframeUlid = "2025.1.9"
-    val bouncyCastleVersion = "1.80"
-    val cats = "2.13.0"
-    val catsActors = "2.0.0"
-    val catsEffect = "3.6.1"
-    val circe = "0.14.10"
-    val circeConfig = "0.10.1"
-    val circeRefined = "0.15.1"
-    val cloudEvents = "2.5.0"
-    val fly4s = "1.1.0"
-    val fs2core = "3.12.0"
-    val fs2Kafka = "3.7.0"
-    val http4s = "1.0.0-M44"
-    val http4sMetrics = "1.0.0-M44"
-    val http4sWs = "1.0.0-M44"
-    val ip4s = "3.6.0"
-    val kittens = "3.5.0"
-    val laika = "1.3.2"
-    val log4cats = "2.7.0"
-    val logbackClassic = "1.5.18"
-    val monocle = "3.3.0"
-    val odin = "0.17.0"
+    val airframeUlid                 = "2025.1.9"
+    val bouncyCastleVersion          = "1.80"
+    val cats                         = "2.13.0"
+    val catsActors                   = "2.0.0"
+    val catsEffect                   = "3.6.1"
+    val circe                        = "0.14.10"
+    val circeConfig                  = "0.10.1"
+    val circeRefined                 = "0.15.1"
+    val cloudEvents                  = "2.5.0"
+    val fly4s                        = "1.1.0"
+    val fs2core                      = "3.12.0"
+    val fs2Kafka                     = "3.7.0"
+    val http4s                       = "0.23.30"
+    val http4sMetrics                = "0.23.30"
+    val http4sWs                     = "0.23.30"
+    val http4sOtel4s                 = "0.12.0"
+    val ip4s                         = "3.6.0"
+    val kittens                      = "3.5.0"
+    val laika                        = "1.3.2"
+    val log4cats                     = "2.7.0"
+    val logbackClassic               = "1.5.18"
+    val monocle                      = "3.3.0"
+    val odin                         = "0.17.0"
     val opentelemetryInstrumentation = "2.15.0-alpha"
-    val opentelemetryOtlp = "1.49.0"
-    val otel4s = "0.12.0"
-    val prometheus4cats = "3.0.0"
-    val redis4Cats = "1.7.2"
-    val refined = "0.11.3"
-    val scalacheck = "1.18.1"
-    val skunk = "0.6.4"
-    val typesafeConfig = "1.4.3"
-    val weaver = "0.8.4"
+    val opentelemetryOtlp            = "1.49.0"
+    val otel4s                       = "0.12.0"
+    val prometheus4cats              = "3.0.0"
+    val redis4Cats                   = "1.7.2"
+    val refined                      = "0.11.3"
+    val scalacheck                   = "1.18.1"
+    val skunk                        = "0.6.4"
+    val typesafeConfig               = "1.4.3"
+    val weaver                       = "0.8.4"
     val zeroAllocationHashingVersion = "0.16"
   }
 
@@ -65,8 +66,11 @@ object Dependencies {
     val http4sServer = http4s("ember-server")
     val http4sCirce  = http4s("circe")
 
-    val http4sJdkWs   = "org.http4s" %% "http4s-jdk-http-client"    % V.http4sWs
-    val http4sMetrics = "org.http4s" %% "http4s-prometheus-metrics" % V.http4sMetrics
+    val http4sJdkWs             = "org.http4s" %% "http4s-jdk-http-client"                % V.http4sWs
+    val http4sOtel4sCore        = "org.http4s" %% "http4s-otel4s-middleware-core"         % V.http4sOtel4s
+    val http4sOtel4sMetrics     = "org.http4s" %% "http4s-otel4s-middleware-metrics"      % V.http4sOtel4s
+    val http4sOtel4sTraceCore   = "org.http4s" %% "http4s-otel4s-middleware-trace-core"   % V.http4sOtel4s
+    val http4sOtel4sTraceServer = "org.http4s" %% "http4s-otel4s-middleware-trace-server" % V.http4sOtel4s
 
     val ip4sCore = Def.setting("com.comcast" %% "ip4s-core" % V.ip4s)
 
@@ -80,7 +84,8 @@ object Dependencies {
 
     val zeroAllocationHashing = Def.setting("net.openhft" % "zero-allocation-hashing" % V.zeroAllocationHashingVersion)
 
-    val otel4sOtelJava = Def.setting("org.typelevel" %% "otel4s-oteljava" % V.otel4s)
+    val otel4sOtelJava              = Def.setting("org.typelevel" %% "otel4s-oteljava" % V.otel4s)
+    val otel4InstrumentationMetrics = Def.setting("org.typelevel" %% "otel4s-instrumentation-metrics" % V.otel4s)
     val opentelemetryExporterOtlp =
       Def.setting("io.opentelemetry" % "opentelemetry-exporter-otlp" % V.opentelemetryOtlp)
     val opentelemetrySdkExtensionAutoconfigure =
@@ -107,9 +112,7 @@ object Dependencies {
     val weaverScalaCheck = "com.disneystreaming" %% "weaver-scalacheck" % V.weaver
 
     // refined
-    val refined = Def.setting("eu.timepit" %% "refined" % V.refined)
+    val refined     = Def.setting("eu.timepit" %% "refined" % V.refined)
     val refinedCats = Def.setting("eu.timepit" %% "refined-cats" % V.refined)
   }
 }
-
-

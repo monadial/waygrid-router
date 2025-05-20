@@ -1,8 +1,8 @@
 package com.monadial.waygrid.common.application.instances
 
-import io.circe.{Decoder, Encoder}
+import io.circe.{ Decoder, Encoder }
 import io.odin.Level
-import io.odin.Level.{Debug, Error, Info, Trace, Warn}
+import io.odin.Level.{ Debug, Error, Info, Trace, Warn }
 
 object OdinLoggerInstances:
   given Encoder[Level] = Encoder
@@ -10,8 +10,8 @@ object OdinLoggerInstances:
     .contramap:
       case Trace => "TRACE"
       case Debug => "DEBUG"
-      case Info => "INFO"
-      case Warn => "WARN"
+      case Info  => "INFO"
+      case Warn  => "WARN"
       case Error => "ERROR"
 
   given Decoder[Level] = Decoder
@@ -20,7 +20,7 @@ object OdinLoggerInstances:
     .emap:
       case "TRACE" => Right(Trace)
       case "DEBUG" => Right(Debug)
-      case "INFO" => Right(Info)
-      case "WARN" => Right(Warn)
+      case "INFO"  => Right(Info)
+      case "WARN"  => Right(Warn)
       case "ERROR" => Right(Error)
-      case other => Left(s"Unknown log level: $other")
+      case other   => Left(s"Unknown log level: $other")
