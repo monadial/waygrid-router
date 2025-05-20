@@ -1,10 +1,7 @@
 package com.monadial.waygrid.common.application.algebra
 
-import com.monadial.waygrid.common.application.model.event.Event
-import fs2.Pipe
+import com.monadial.waygrid.common.application.model.event.{ Event, EventStream }
+import com.monadial.waygrid.common.domain.model.event.Event as DomainEvent
 
 trait EventSink[F[+_]]:
-  def pipe: Pipe[F, Event, Unit]
-
-
-
+  def publish(stream: EventStream, event: Event[? <: DomainEvent]): F[Unit]

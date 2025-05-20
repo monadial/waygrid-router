@@ -84,3 +84,14 @@ services:
       - "1336:8080"
     environment:
       - KAFKA_BROKERS=waygrid-kafka-node-1:9092,waygrid-kafka-node-2:9094,waygrid-kafka-node-3:9096
+
+  waygrid-otel-lgtm:
+      image: grafana/otel-lgtm
+      hostname: waygrid-otel-lgtm
+      container_name: waygrid-otel-lgtm
+      ports:
+        - "3000:3000"
+        - "4317:4317"
+        - "4318:4318"
+      environment :
+        - OTEL_METRIC_EXPORT_INTERVAL=500

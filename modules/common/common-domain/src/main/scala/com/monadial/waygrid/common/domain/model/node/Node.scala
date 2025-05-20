@@ -3,14 +3,13 @@ package com.monadial.waygrid.common.domain.model.node
 import com.monadial.waygrid.common.domain.model.Waygrid
 import com.monadial.waygrid.common.domain.syntax.StringSyntax.toDomain
 import io.circe.Codec
-
 import java.time.Instant
 
 final case class Node(
   descriptor: NodeDescriptor,
   clusterId: NodeClusterId,
   startedAt: Instant,
-  runtime: NodeRuntime,
+  runtime: NodeRuntime
 ) derives Codec.AsObject:
   /**
    * Unique client identifier used for Kafka, cluster-wide subscriptions,
@@ -50,3 +49,9 @@ final case class Node(
   inline def receiveAddress: NodeReceiveAddress =
     s"${Waygrid.appName}.events.${descriptor.component}.${descriptor.service}"
       .toDomain[NodeReceiveAddress]
+
+  inline def producerName = s"${Waygrid.appName}-producer-${descriptor.component}-${descriptor.service}"
+
+  inline def consumerName = s"${Waygrid.appName}-consumer-${descriptor.component}-${descriptor.service}"
+
+  inline def otelName = s""

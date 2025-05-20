@@ -2,8 +2,13 @@ package com.monadial.waygrid.common.domain.instances
 
 import cats.data.Validated
 import cats.syntax.all.*
-import com.monadial.waygrid.common.domain.value.codec.{Base64Codec, Base64DecodingError, BytesCodec, BytesDecodingError}
-import eu.timepit.refined.api.{RefType, Validate}
+import com.monadial.waygrid.common.domain.value.codec.{
+  Base64Codec,
+  Base64DecodingError,
+  BytesCodec,
+  BytesDecodingError
+}
+import eu.timepit.refined.api.{ RefType, Validate }
 
 object RefinedInstances:
   given [T, P, F[_, _]](using
@@ -15,7 +20,8 @@ object RefinedInstances:
     override def encode(value: F[T, P]): Array[Byte] =
       underlying.encode(refType.unwrap(value))
 
-    override def decode(value: Array[Byte]): Validated[BytesDecodingError, F[T, P]] =
+    override def decode(value: Array[Byte])
+      : Validated[BytesDecodingError, F[T, P]] =
       underlying
         .decode(value)
         .andThen:
@@ -23,7 +29,9 @@ object RefinedInstances:
             refType
               .refine[P](x)
               .toValidated
-              .leftMap(x => BytesDecodingError(x))
+              .leftMap(
+                x => BytesDecodingError(x)
+              )
 
   given [T, P, F[_, _]](using
     underlying: Base64Codec[T],
@@ -33,7 +41,8 @@ object RefinedInstances:
     override def encode(value: F[T, P]): String =
       underlying.encode(refType.unwrap(value))
 
-    override def decode(value: String): Validated[Base64DecodingError, F[T, P]] =
+    override def decode(value: String)
+      : Validated[Base64DecodingError, F[T, P]] =
       underlying
         .decode(value)
         .andThen:
@@ -41,4 +50,6 @@ object RefinedInstances:
             refType
               .refine[P](x)
               .toValidated
-              .leftMap(x => Base64DecodingError(x))
+              .leftMap(
+                x => Base64DecodingError(x)
+              )
