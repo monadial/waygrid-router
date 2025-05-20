@@ -1,15 +1,13 @@
 package com.monadial.waygrid.common.application.syntax
 
-import cats.effect.Concurrent
-import fs2.{Pull, Stream}
+import fs2.{ Pull, Stream }
 
 object StreamSyntax:
 
-
-  extension [F[_] : Concurrent, A](self: Stream[F, A])
+  extension [F[+_], A](self: Stream[F, A])
 
     /**
-     * Applies a given effectful function to the first element of the stream, if it exists, without modifying the stream contents.
+     * Applies a given effectful function to the first element of the stream if it exists, without modifying the stream contents.
      *
      * If the stream is empty, no effect is applied.
      *

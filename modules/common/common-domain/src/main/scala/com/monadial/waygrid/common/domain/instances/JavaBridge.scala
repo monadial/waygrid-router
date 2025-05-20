@@ -12,6 +12,3 @@ object JavaBridge:
     JavaBase64
       .getEncoder
       .encodeToString(t)
-
-
-

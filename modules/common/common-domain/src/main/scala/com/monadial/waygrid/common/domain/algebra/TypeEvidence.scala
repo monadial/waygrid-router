@@ -19,5 +19,3 @@ trait TypeEvidence[A, B]:
 
 object TypeEvidence:
   def apply[A, B](using ev: TypeEvidence[A, B]): TypeEvidence[A, B] = ev
-
-

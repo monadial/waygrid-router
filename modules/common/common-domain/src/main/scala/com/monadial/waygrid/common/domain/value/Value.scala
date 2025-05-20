@@ -1,9 +1,9 @@
 package com.monadial.waygrid.common.domain.value
 
-import cats.{Eq, Order, Show}
+import cats.{ Eq, Order, Show }
 import com.monadial.waygrid.common.domain.algebra.TypeEvidence
-import com.monadial.waygrid.common.domain.value.codec.{Base64Codec, BytesCodec}
-import io.circe.{Decoder as JsonDecoder, Encoder as JsonEncoder}
+import com.monadial.waygrid.common.domain.value.codec.{ Base64Codec, BytesCodec }
+import io.circe.{ Decoder as JsonDecoder, Encoder as JsonEncoder }
 import monocle.Iso
 
 abstract class Value[V](using

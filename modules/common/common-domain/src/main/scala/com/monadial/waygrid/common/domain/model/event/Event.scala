@@ -1,5 +1,5 @@
 package com.monadial.waygrid.common.domain.model.event
 
-type EventHandler[F[+_], E <: Event] = E => F[Unit]
+import com.monadial.waygrid.common.domain.model.message.Message
 
-trait Event
+trait Event extends Message
