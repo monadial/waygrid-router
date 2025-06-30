@@ -14,7 +14,7 @@ object OdinLoggerInterpreter: // todo refactor
     for
       thisNode <- HasNode[F].get
       nodeContext <- Map(
-        "address"   -> thisNode.address.show,
+//        "address"   -> thisNode.address.show,
         "component" -> thisNode.descriptor.component.show,
         "service"   -> thisNode.descriptor.service.show
       ).pure[F]

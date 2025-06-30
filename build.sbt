@@ -21,6 +21,8 @@ ThisBuild / scalacOptions ++= Seq(
   "-source:3.7" // @see https://scala-lang.org/2024/08/19/given-priority-change-3.7.html#migrating-to-the-new-prioritization
 )
 
+ThisBuild / semanticdbEnabled := true
+
 //
 //
 // UTIL
@@ -48,7 +50,8 @@ lazy val root = (project in file("."))
     ),
     Universal / javaOptions ++= (Compile / javaOptions).value,
     fork              := true,
-    scalafmtOnCompile := true
+    scalafmtOnCompile := true,
+    scalafixOnCompile := true
   )
 
 //
@@ -71,9 +74,16 @@ lazy val `common-domain` = (project in file("modules/common/common-domain"))
       // circe
       Libraries.circeCore.value,
       Libraries.circeRefined.value,
+      // scodec
+      Libraries.scodecCore.value,
+      // jsoniter
+      Libraries.jsoniterScalaCore.value,
+      Libraries.jsoniterScalaMacros.value,
       // refined
       Libraries.refined.value,
       Libraries.refinedCats.value,
+      // uri
+      Libraries.http4sCore,
       // tests
       Libraries.catsLaws         % Test,
       Libraries.monocleLaw       % Test,
@@ -97,10 +107,14 @@ lazy val `common-application` = (project in file("modules/common/common-applicat
       Libraries.circeParser.value,
       Libraries.circeRefined.value,
       Libraries.circeConfig.value,
-      // actorss
+      // actors
       Libraries.catsActors.value,
+      // shapeless
+      Libraries.shapeless3Typeable.value,
       // fs2
       Libraries.fs2Kafka.value,
+      // scodec
+      Libraries.scodecBits.value,
       // http4s
       Libraries.http4sDsl,
       Libraries.http4sServer,
@@ -115,6 +129,9 @@ lazy val `common-application` = (project in file("modules/common/common-applicat
       Libraries.opentelemetryExporterOtlp.value,
       Libraries.opentelemetrySdkExtensionAutoconfigure.value,
       Libraries.opentelemetryInstrumentation.value,
+      // redis
+      Libraries.redis4CatsEffects.value,
+      Libraries.redis4CatsStream.value,
 
       // tests
       Libraries.catsLaws         % Test,
@@ -164,6 +181,11 @@ lazy val `system-k8s-operator` = (project in file("modules/system/system-k8s-ope
 lazy val `origin-http` = (project in file("modules/origin/origin-http"))
   .enablePlugins(DockerPlugin, JavaAppPackaging)
   .settings(dockerImage("origin", "http") *)
+  .dependsOn(`common-application`)
+
+lazy val `origin-grpc` = (project in file("modules/origin/origin-grpc"))
+  .enablePlugins(DockerPlugin, JavaAppPackaging)
+  .settings(dockerImage("origin", "grpc") *)
   .dependsOn(`common-application`)
 
 //

@@ -9,7 +9,6 @@ import com.monadial.waygrid.common.application.actor.HttpServerActorCommand.{
 import com.monadial.waygrid.common.application.algebra.*
 import com.monadial.waygrid.common.application.algebra.SupervisedRequest.{ Restart, Start, Stop }
 import com.monadial.waygrid.common.application.http.resource.WellknownResource
-import com.monadial.waygrid.common.application.model.settings.HttpServerSettings
 import com.monadial.waygrid.common.application.util.logging.LoggerLog4CatsWrapper
 
 import cats.Parallel
@@ -17,6 +16,7 @@ import cats.data.Kleisli
 import cats.effect.implicits.*
 import cats.effect.{ Async, Fiber, Ref, Resource }
 import cats.syntax.all.*
+import com.monadial.waygrid.common.application.domain.model.settings.HttpServerSettings
 import com.suprnation.actor.Actor.ReplyingReceive
 import fs2.io.net.Network
 import org.http4s.{ HttpRoutes, Request }
@@ -30,12 +30,11 @@ import org.typelevel.otel4s.metrics.MeterProvider
 
 sealed trait ServerState[F[+_]]
 object ServerState:
-  case class Idling[F[+_]]()                                                   extends ServerState[F]
+  case class Stopped[F[+_]]()                                                  extends ServerState[F]
   case class PreStart[F[+_]]()                                                 extends ServerState[F]
   case class Failed[F[+_]](error: Throwable)                                   extends ServerState[F]
   case class Restarting[F[+_]](server: Fiber[F, Throwable, (Server, F[Unit])]) extends ServerState[F]
   case class Running[F[+_]](server: Fiber[F, Throwable, (Server, F[Unit])])    extends ServerState[F]
-  case class Stopping[F[+_]]()                                                 extends ServerState[F]
 
 sealed trait HttpServerActorCommand[F[+_]]
 object HttpServerActorCommand:
@@ -66,7 +65,7 @@ object HttpServerActor:
       wsRoutesMapRef      <- Resource.eval(Ref.of[F, WsRouteMap[F]](Map.empty))
       combinedRoutesRef   <- Resource.eval(Ref.of[F, HttpRoutes[F]](defaultRoutes[F]))
       combinedWsRoutesRef <- Resource.eval(Ref.of[F, WsRoutes[F]](_ => HttpRoutes.empty[F]))
-      stateRef            <- Resource.eval(Ref.of[F, ServerState[F]](ServerState.Idling()))
+      stateRef            <- Resource.eval(Ref.of[F, ServerState[F]](ServerState.Stopped()))
     yield new SupervisedActor[F, HttpServerActorCommand[F]]:
       override def receive: ReplyingReceive[F, HttpServerActorCommand[F] | SupervisedRequest, Any] =
         case RegisterRoute(key, route)   => handleRouteRegistration(key, route)
@@ -85,7 +84,7 @@ object HttpServerActor:
               case ServerState.Running(_) =>
                 Logger[F].warn("HTTP Server actor is already running...")
 
-              case ServerState.Idling() =>
+              case ServerState.Stopped() =>
                 for
                   _ <- Logger[F].info(s"Starting HTTP server on ${settings.host}:${settings.port}")
                   fiber <- EmberServerBuilder
@@ -129,10 +128,10 @@ object HttpServerActor:
                 for
                   _ <- Logger[F].info("Stopping HTTP server...")
                   _ <- fiber.cancel
-                  _ <- stateRef.set(ServerState.Idling())
+                  _ <- stateRef.set(ServerState.Stopped())
                 yield ()
 
-              case ServerState.Idling() =>
+              case ServerState.Stopped() =>
                 Logger[F].warn("HTTP Server actor is already stopped...")
 
               case ServerState.Failed(e) =>

@@ -11,5 +11,5 @@ object IsInstant:
   def apply[A: IsInstant]: IsInstant[A] = summon[IsInstant[A]]
 
   given IsInstant[Instant] with
-    def iso: Iso[Instant, Instant] =
+    inline def iso: Iso[Instant, Instant] =
       Iso[Instant, Instant](identity)(identity)

@@ -1,12 +1,13 @@
 package com.monadial.waygrid.common.domain.value.bytes
 
 import com.monadial.waygrid.common.domain.algebra.TypeEvidence
+import scodec.bits.ByteVector
 
-trait IsBytes[A] extends TypeEvidence[Array[Byte], A]
+trait IsBytes[A] extends TypeEvidence[ByteVector, A]
 
 object IsBytes:
   def apply[A: IsBytes]: IsBytes[A] = summon[IsBytes[A]]
 
-  given IsBytes[Array[Byte]] with
-    def iso: monocle.Iso[Array[Byte], Array[Byte]] =
-      monocle.Iso[Array[Byte], Array[Byte]](identity)(identity)
+  given IsBytes[ByteVector] with
+    inline def iso: monocle.Iso[ByteVector, ByteVector] =
+      monocle.Iso[ByteVector, ByteVector](identity)(identity)

@@ -2,7 +2,7 @@ package com.monadial.waygrid.common.domain.value.codec
 
 import cats.data.Validated
 
-trait BytesCodecError:
+trait BytesCodecError extends Throwable:
   def message: String
 
 final case class BytesDecodingError(message: String) extends BytesCodecError

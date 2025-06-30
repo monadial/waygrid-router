@@ -1,24 +1,25 @@
 package com.monadial.waygrid.common.application.interpreter
 
-import cats.syntax.all.*
-import cats.effect.Async
-import io.circe.{ Codec, Decoder, Encoder, parser }
-import com.monadial.waygrid.common.application.`macro`.EventCodecRegistry
+import com.monadial.waygrid.common.application.`macro`.CirceEventCodecRegistryMacro
 import com.monadial.waygrid.common.application.algebra.EventCodec
-import com.monadial.waygrid.common.application.model.event.*
-import com.monadial.waygrid.common.application.syntax.EventSyntax.toEvent
-import com.monadial.waygrid.common.application.syntax.EventSyntax.toRawEvent
+import com.monadial.waygrid.common.application.syntax.EventSyntax.{toEvent, toRawEvent}
+import cats.effect.Async
+import cats.syntax.all.*
+import com.monadial.waygrid.common.application.domain.model.event.{Event, EventPayload, EventType, RawEvent, RawPayload}
 import com.monadial.waygrid.common.domain.model.event.Event as DomainEvent
+import io.circe.{Codec, Decoder, Encoder, parser}
+
+import scala.collection.mutable
 
 object EventCodecInterpreter:
 
   def apply[F[+_]: Async]: EventCodec[F] =
-    fromRegistry[F](EventCodecRegistry.readRegistry())
+    fromRegistry[F](CirceEventCodecRegistryMacro.readRegistry())
 
-  private def fromRegistry[F[+_]: Async](registry: Map[EventType, Codec[? <: DomainEvent]]): EventCodec[F] =
+  private def fromRegistry[F[+_]: Async](registry: mutable.Map[EventType, Codec[? <: DomainEvent]]): EventCodec[F] =
     new EventCodec[F]:
 
-      override def decode(raw: RawEvent): F[Event[? <: DomainEvent]] =
+      inline override def decode(raw: RawEvent): F[Event[? <: DomainEvent]] =
         val eventType = raw.payload.eType
 
         registry.get(eventType) match
@@ -26,21 +27,23 @@ object EventCodecInterpreter:
             Async[F].raiseError(decodeMissingError(eventType))
 
           case Some(codec) =>
-            Async[F].delay(parser.parse(raw.payload.payload.show)).flatMap {
-              case Left(parseErr) =>
-                Async[F].raiseError(jsonParseError(eventType, parseErr.message))
+            Async[F]
+              .delay(parser.parse(raw.payload.payload.show))
+              .flatMap {
+                case Left(err) =>
+                  Async[F].raiseError(jsonParseError(eventType, err.message))
 
-              case Right(json) =>
-                codec
-                  .asInstanceOf[Decoder[DomainEvent]]
-                  .decodeJson(json) match
-                  case Left(decErr) =>
-                    Async[F].raiseError(jsonDecodeError(eventType, decErr.message))
-                  case Right(decoded) =>
-                    raw.toEvent(decoded).pure[F]
-            }
+                case Right(json) =>
+                  codec
+                    .asInstanceOf[Decoder[DomainEvent]]
+                    .decodeJson(json) match
+                    case Left(err) =>
+                      Async[F].raiseError(jsonDecodeError(eventType, err.message))
+                    case Right(decoded) =>
+                      Async[F].pure(raw.toEvent(decoded))
+              }
 
-      override def encode[E <: DomainEvent](event: Event[E]): F[RawEvent] =
+      inline override def encode[E <: DomainEvent](event: Event[E]): F[RawEvent] =
         val eventType = EventType(event.event.getClass.getName)
 
         registry.get(eventType) match

@@ -3,9 +3,10 @@ package com.monadial.waygrid.common.domain.syntax
 import cats.Applicative
 import cats.implicits.*
 import com.monadial.waygrid.common.domain.value.bytes.IsBytes
+import scodec.bits.ByteVector
 
 object BytesSyntax:
-  extension (bytes: Array[Byte])
+  extension (bytes: ByteVector)
     def toDomain[A: IsBytes]: A                         = IsBytes[A].iso.get(bytes)
     def toDomainF[F[+_]: Applicative, A: IsBytes]: F[A] = toDomain[A].pure
 

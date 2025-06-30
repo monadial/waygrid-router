@@ -1,6 +1,10 @@
 package com.monadial.waygrid.common.application.syntax
 
-import com.monadial.waygrid.common.application.model.event.{ Event, RawEvent, RawPayload }
+import com.monadial.waygrid.common.application.algebra.HasNode
+
+import cats.effect.Async
+import cats.implicits.*
+import com.monadial.waygrid.common.application.domain.model.event.{Event, EventAddress, EventId, RawEvent, RawPayload}
 import com.monadial.waygrid.common.domain.model.event.Event as DomainEvent
 
 object EventSyntax:
@@ -8,6 +12,7 @@ object EventSyntax:
     def toEvent[E <: DomainEvent](payload: E): Event[E] =
       Event(
         id = raw.id,
+        address = raw.address,
         event = payload
       )
 
@@ -15,5 +20,13 @@ object EventSyntax:
     def toRawEvent(rawPayload: RawPayload): RawEvent =
       RawEvent(
         id = event.id,
+        address = event.address,
         payload = rawPayload
       )
+
+  extension [E <: DomainEvent](event: E)
+    def fromDomainEvent[F[+_]: {Async, HasNode}](address: EventAddress): F[Event[E]] =
+      for
+        id   <- EventId.next[F]
+        node <- HasNode[F].get
+      yield Event(id, address, event)

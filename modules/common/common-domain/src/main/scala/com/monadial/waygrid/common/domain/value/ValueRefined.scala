@@ -2,10 +2,7 @@ package com.monadial.waygrid.common.domain.value
 
 import cats.{ Eq, Functor, Order, Show }
 import com.monadial.waygrid.common.domain.algebra.TypeEvidence
-import com.monadial.waygrid.common.domain.value.codec.{
-  Base64Codec,
-  BytesCodec
-}
+import com.monadial.waygrid.common.domain.value.codec.{ Base64Codec, BytesCodec }
 import eu.timepit.refined.*
 import eu.timepit.refined.api.{ Refined, Validate }
 import eu.timepit.refined.auto.*
@@ -24,7 +21,8 @@ abstract class ValueRefined[V, P](using
 ):
   infix opaque type Type = Refined[V, P]
 
-  def unsafeFrom(value: V): Type = refineV[P](value).toOption.get
+  def unsafeFrom(value: V): Type =
+    refineV[P](value).toOption.fold(throw new IllegalArgumentException(s"Invalid value: $value"))(identity)
 
   def from(value: V): Either[String, Type] = refineV[P].apply(value)
 

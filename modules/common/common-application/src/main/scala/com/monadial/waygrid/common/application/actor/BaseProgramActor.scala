@@ -1,5 +1,7 @@
 package com.monadial.waygrid.common.application.actor
 
+import com.monadial.waygrid.common.application.algebra.SupervisedRequest.{ Restart, Start, Stop }
+
 import cats.Parallel
 import cats.effect.Async
 import cats.syntax.all.*
@@ -9,41 +11,34 @@ import com.monadial.waygrid.common.application.algebra.{
   SupervisedActorRef,
   SupervisedRequest
 }
+
 import com.suprnation.actor.Actor.ReplyingReceive
 
-enum ProgramSupervisorRequest:
-  case StartProgram
-  case StopProgram
-  case RestartProgram
+trait ProgramSupervisorRequest
 
-enum ProgramSupervisorState:
-  case Idle
-  case Starting
-  case Running
-  case Stopping
-
-type ProgramSupervisorRef[F[+_]] = SupervisedActorRef[F, ProgramSupervisorRequest]
+type BaseProgramActorRef[F[+_]] = SupervisedActorRef[F, ProgramSupervisorRequest]
 
 abstract class BaseProgramActor[F[+_]: {Async, Parallel, Logger}] extends SupervisedActor[F, ProgramSupervisorRequest]:
   override def receive: ReplyingReceive[F, ProgramSupervisorRequest | SupervisedRequest, Any] =
-    case ProgramSupervisorRequest.StartProgram =>
+    case Start =>
       for
         _ <- Logger[F].info("Starting program supervisor...")
-        _ <- startProgram
+        _ <- onProgramStart
       yield ()
 
-    case ProgramSupervisorRequest.StopProgram =>
+    case Stop =>
       for
         _ <- Logger[F].info("Stopping program supervisor...")
-        _ <- stopProgram
+        _ <- onProgramStop
+        _ <- self.stop
       yield ()
 
-    case ProgramSupervisorRequest.RestartProgram =>
+    case Restart =>
       for
         _ <- Logger[F].info("Restarting program supervisor...")
-        _ <- restartProgram
+        _ <- onProgramRestart
       yield ()
 
-  def startProgram: F[Unit]
-  def stopProgram: F[Unit]
-  def restartProgram: F[Unit]
+  def onProgramStart: F[Unit]
+  def onProgramStop: F[Unit]
+  def onProgramRestart: F[Unit]

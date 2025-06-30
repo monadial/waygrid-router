@@ -5,93 +5,116 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5d705240-6319-489e-88cb-7594ee34bd68" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/actor/BaseProgramActor.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/actor/HearthBeatActor.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/actor/TopologyClientActor.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/algebra/EventCodec.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/algebra/FSM.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/algebra/TopologyAwareActor.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/http/resource/WellknownResource.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/instances/Ip4sInstances.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/interpreter/AllEventCodecs.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/interpreter/EventCodecInterpreter.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/interpreter/RawEventStreamInterpreter.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/macro/EventCodecRegistry.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/model/envelope/Envelope.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/model/fsm/FSM.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/model/settings/HttpServerSettings.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/program/WaygridApp.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/syntax/EventSyntax.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/syntax/FSMSyntax.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/util/fs2/kafka/KafkaProducerPool.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/util/logging/LoggerLog4CatsWrapper.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/model/message/Message.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/origin/origin-http/src/main/resources/application.conf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/origin/origin-http/src/main/scala/com/monadial/waygrid/origin/http/actor/ProgramActor.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/origin/origin-http/src/main/scala/com/monadial/waygrid/origin/http/http/resource/v1/IngestResource.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modules/origin/origin-http/src/main/scala/com/monadial/waygrid/origin/http/settings/HttpSettings.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CODEOWNERS" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/algebra/EventRouter.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/algebra/TransactionalEventSource.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/domain/model/envelope/Envelope.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/domain/model/envelope/Value.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/domain/model/routing/CirceInstances.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/domain/model/routing/SCodecInstances.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/instances/CirceInstances.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/interpreter/EventSinkInterpreter.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/interpreter/EventSourceInterpreter.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/interpreter/TransactionalEventSourceInterpreter.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/macro/EventRouterMacro.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/syntax/EventRouterSyntax.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/syntax/EventSourceSyntax.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/test/scala/com/monadial/waygrid/common/application/model/routing/RouteGraphSpec.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/common/common-application/src/test/scala/com/monadial/waygrid/common/application/model/routing/RouteNodeSpec.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/instances/ByteVectorInstances.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/instances/URIInstances.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/model/routing/Event.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/model/routing/Route.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/model/routing/RouteGraph.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/model/routing/RouteNode.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/model/routing/Value.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/model/settings/Settings.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/model/topology/Value.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/value/uri/IsURI.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/value/uri/URIValue.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/origin/origin-http/src/main/scala/com/monadial/waygrid/origin/http/http/resource/v1/RoutingResource.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/system/system-scheduler/src/main/resources/application.conf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/system/system-scheduler/src/main/scala/com/monadial/waygrid/system/scheduler/actor/ProgramActor.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/system/system-scheduler/src/main/scala/com/monadial/waygrid/system/scheduler/actor/TaskSchedulerActor.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/system/system-scheduler/src/main/scala/com/monadial/waygrid/system/scheduler/settings/SchedulerSettings.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/system/system-topology/src/main/scala/com/monadial/waygrid/system/topology/actor/ProgramActor.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/system/system-topology/src/main/scala/com/monadial/waygrid/system/topology/actor/TopologyServerActor.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/system/system-waystation/src/main/scala/com/monadial/waygrid/system/waystation/actor/ProgramActor.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modules/system/system-waystation/src/main/scala/com/monadial/waygrid/system/waystation/settings/WaystationSettings.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sbt.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sbt.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/scala_compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/scala_compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.scalafix.conf" beforeDir="false" afterPath="$PROJECT_DIR$/.scalafix.conf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.scalafmt.conf" beforeDir="false" afterPath="$PROJECT_DIR$/.scalafmt.conf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.sbt" beforeDir="false" afterPath="$PROJECT_DIR$/build.sbt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docker-compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/actor/EventDispatcherActor.scala" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/actor/EventReceiverActor.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/actor/BaseProgramActor.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/actor/BaseProgramActor.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/actor/HttpServerActor.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/actor/HttpServerActor.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/actor/SupervisorActor.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/actor/SupervisorActor.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/actor/TopologyClientActor.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/actor/TopologyClientActor.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/algebra/EventCodec.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/algebra/EventCodec.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/algebra/EventSink.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/algebra/EventSink.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/algebra/EventSource.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/algebra/EventSource.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/algebra/HasNode.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/algebra/HasNode.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/algebra/SupervisedActor.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/algebra/SupervisedActor.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/http/Server.scala" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/http/resource/HealthCheckResource.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/http/resource/HealthCheckResource.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/algebra/TopologyAwareActor.scala" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/instances/DurationInstances.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/instances/DurationInstances.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/instances/OdinLoggerInstances.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/instances/OdinLoggerInstances.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/interpreter/CirceSettingsLoaderInterpreter.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/interpreter/CirceSettingsLoaderInterpreter.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/interpreter/AllEventCodecs.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/interpreter/AllEventCodecs.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/interpreter/EnvHasNodeInterpreter.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/interpreter/EnvHasNodeInterpreter.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/interpreter/EventSinkInterpreter.scala" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/interpreter/EventSourceInterpreter.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/interpreter/EventCodecInterpreter.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/interpreter/EventCodecInterpreter.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/interpreter/OdinLoggerInterpreter.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/interpreter/OdinLoggerInterpreter.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/model/event/Event.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/model/event/Event.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/model/event/Value.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/model/event/Value.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/model/settings/EventStreamSettings.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/model/settings/EventStreamSettings.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/model/settings/NodeSettings.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/model/settings/NodeSettings.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/syntax/StreamSyntax.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/syntax/StreamSyntax.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/algebra/TypeEvidence.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/algebra/TypeEvidence.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/interpreter/RawEventStreamInterpreter.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/interpreter/RawEventSourceInterpreter.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/macro/EventCodecRegistry.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/macro/CirceEventCodecRegistryMacro.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/model/envelope/Envelope.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/model/event/Event.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/domain/model/event/Event.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/model/event/Value.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/domain/model/event/Value.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/model/fsm/FSM.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/domain/model/fsm/FSM.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/model/settings/EventStreamSettings.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/domain/model/settings/EventStreamSettings.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/model/settings/HttpServerSettings.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/domain/model/settings/HttpServerSettings.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/model/settings/NodeSettings.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/domain/model/settings/NodeSettings.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/program/WaygridApp.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/program/WaygridApp.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/syntax/EventSyntax.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/syntax/EventSyntax.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/syntax/FSMSyntax.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/syntax/FSMSyntax.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/syntax/NodeSyntax.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/syntax/NodeSyntax.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/util/fs2/kafka/KafkaProducerPool.scala" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/instances/BytesInstances.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/instances/BytesInstances.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/instances/InstantInstances.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/instances/InstantInstances.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/instances/JavaBridge.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/instances/JavaBridge.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/instances/LongInstances.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/instances/LongInstances.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/instances/RefinedInstances.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/instances/RefinedInstances.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/instances/StringInstances.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/instances/StringInstances.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/instances/ULIDInstances.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/instances/ULIDInstances.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/model/Waygrid.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/model/Waygrid.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/model/event/Event.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/model/event/Event.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/model/node/Event.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/model/node/Event.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/model/node/Node.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/model/node/Node.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/model/node/Value.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/model/node/Value.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/model/topology/Event.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/model/topology/Event.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/model/topology/Topology.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/model/topology/Topology.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/syntax/BytesSyntax.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/syntax/BytesSyntax.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/syntax/InstantSyntax.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/syntax/InstantSyntax.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/syntax/LongSyntax.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/syntax/LongSyntax.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/syntax/StringSyntax.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/syntax/StringSyntax.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/syntax/ULIDSyntax.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/syntax/ULIDSyntax.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/value/Value.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/value/Value.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/value/ValueRefined.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/value/ValueRefined.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/value/bytes/BytesValue.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/value/bytes/BytesValue.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/value/bytes/IsBytes.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/value/bytes/IsBytes.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/value/codec/Base64.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/value/codec/Base64.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/value/long/LongValueRefined.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/value/long/LongValueRefined.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/value/string/StringValueRefined.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/value/string/StringValueRefined.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/value/ulid/GenULID.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/value/ulid/GenULID.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/value/codec/Bytes.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/value/codec/Bytes.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/value/instant/IsInstant.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/value/instant/IsInstant.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/value/long/IsLong.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/value/long/IsLong.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/value/string/IsString.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/value/string/IsString.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/value/ulid/IsULID.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/value/ulid/IsULID.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/value/ulid/ULIDValue.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/value/ulid/ULIDValue.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/origin/origin-http/src/main/resources/app.conf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/test/scala/com/monadial/waygrid/common/domain/value/long/LongValueSpec.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/test/scala/com/monadial/waygrid/common/domain/value/long/LongValueSpec.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/test/scala/com/monadial/waygrid/common/domain/value/string/StringValueSpec.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/test/scala/com/monadial/waygrid/common/domain/value/string/StringValueSpec.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/common-domain/src/test/scala/com/monadial/waygrid/common/domain/value/ulid/ULIDValueSpec.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/common-domain/src/test/scala/com/monadial/waygrid/common/domain/value/ulid/ULIDValueSpec.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/origin/origin-http/src/main/resources/application.conf" beforeDir="false" afterPath="$PROJECT_DIR$/modules/origin/origin-http/src/main/resources/application.conf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/origin/origin-http/src/main/scala/com/monadial/waygrid/origin/http/Main.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/origin/origin-http/src/main/scala/com/monadial/waygrid/origin/http/Main.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/origin/origin-http/src/main/scala/com/monadial/waygrid/origin/http/actor/ProgramActor.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/origin/origin-http/src/main/scala/com/monadial/waygrid/origin/http/actor/ProgramActor.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/origin/origin-http/src/main/scala/com/monadial/waygrid/origin/http/http/resource/v1/IngestResource.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/origin/origin-http/src/main/scala/com/monadial/waygrid/origin/http/settings/HttpSettings.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/origin/origin-http/src/main/scala/com/monadial/waygrid/origin/http/settings/HttpSettings.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/system/system-scheduler/src/main/scala/com/monadial/waygrid/system/scheduler/Main.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/system/system-scheduler/src/main/scala/com/monadial/waygrid/system/scheduler/Main.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/system/system-topology/src/main/resources/application.conf" beforeDir="false" afterPath="$PROJECT_DIR$/modules/system/system-topology/src/main/resources/application.conf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/system/system-topology/src/main/scala/com/monadial/waygrid/system/topology/Main.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/system/system-topology/src/main/scala/com/monadial/waygrid/system/topology/Main.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/system/system-topology/src/main/scala/com/monadial/waygrid/system/topology/actor/TopologyActor.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/system/system-topology/src/main/scala/com/monadial/waygrid/system/topology/actor/TopologyActor.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/system/system-topology/src/main/scala/com/monadial/waygrid/system/topology/actor/TopologyActor.scala" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/system/system-topology/src/main/scala/com/monadial/waygrid/system/topology/settings/TopologySettings.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/system/system-topology/src/main/scala/com/monadial/waygrid/system/topology/settings/TopologySettings.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/system/system-waystation/src/main/resources/application.conf" beforeDir="false" afterPath="$PROJECT_DIR$/modules/system/system-waystation/src/main/resources/application.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/system/system-waystation/src/main/scala/com/monadial/waygrid/system/waystation/Main.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/system/system-waystation/src/main/scala/com/monadial/waygrid/system/waystation/Main.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/Dependencies.scala" beforeDir="false" afterPath="$PROJECT_DIR$/project/Dependencies.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/plugins.sbt" beforeDir="false" afterPath="$PROJECT_DIR$/project/plugins.sbt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,6 +148,10 @@
       <list>
         <option value="JUnit5 Test Class" />
         <option value="Package Object" />
+        <option value="Class" />
+        <option value="HTTP Request" />
+        <option value="HTTP Public Environment File" />
+        <option value="JUnit3 Test Class" />
       </list>
     </option>
   </component>
@@ -135,6 +162,7 @@
     <setting file="jar://$USER_HOME$/.sbt/boot/scala-2.12.20/org.scala-sbt/sbt/1.10.10/collections_2.12-1.10.10.jar!/sbt/internal/util/Init.class" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/.sbt/boot/scala-2.12.20/org.scala-sbt/sbt/1.10.10/librarymanagement-core_2.12-1.10.4.jar!/sbt/librarymanagement/LibraryManagementSyntax.class" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/.sbt/boot/scala-2.12.20/org.scala-sbt/sbt/1.10.10/librarymanagement-core_2.12-1.10.4.jar!/sbt/librarymanagement/License.class" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/.sbt/boot/scala-2.12.20/org.scala-sbt/sbt/1.10.10/main-settings_2.12-1.10.10.jar!/sbt/std/MacroValue.class" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/.sbt/boot/scala-2.12.20/org.scala-sbt/sbt/1.10.10/main_2.12-1.10.10.jar!/sbt/Keys.class" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/.sbt/boot/scala-2.12.20/org.scala-sbt/sbt/1.10.10/main_2.12-1.10.10.jar!/sbt/Project.class" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/jitpack.io/com/github/suprnation/cats-actors/cats-actors_3/2.0.0/cats-actors_3-2.0.0-sources.jar!/com/suprnation/actor/Actor.scala" root0="SKIP_INSPECTION" />
@@ -144,10 +172,21 @@
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/co/fs2/fs2-core_3/3.12.0/fs2-core_3-3.12.0-sources.jar!/fs2/Stream.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/disneystreaming/weaver-cats-core_3/0.8.4/weaver-cats-core_3-0.8.4-sources.jar!/weaver/BaseIOSuite.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/disneystreaming/weaver-core_3/0.8.4/weaver-core_3-0.8.4-sources.jar!/SourceLocationMacro.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/github/fd4s/fs2-kafka_3/3.7.0/fs2-kafka_3-3.7.0-sources.jar!/fs2/kafka/CommittableConsumerRecord.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/github/fd4s/fs2-kafka_3/3.7.0/fs2-kafka_3-3.7.0-sources.jar!/fs2/kafka/CommittableOffsetBatch.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/github/fd4s/fs2-kafka_3/3.7.0/fs2-kafka_3-3.7.0-sources.jar!/fs2/kafka/ConsumerRecord.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/github/fd4s/fs2-kafka_3/3.7.0/fs2-kafka_3-3.7.0-sources.jar!/fs2/kafka/KafkaProducer.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/github/fd4s/fs2-kafka_3/3.7.0/fs2-kafka_3-3.7.0-sources.jar!/fs2/kafka/ProducerRecord.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/github/fd4s/fs2-kafka_3/3.7.0/fs2-kafka_3-3.7.0-sources.jar!/fs2/kafka/TransactionalProducerSettings.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/github/fd4s/fs2-kafka_3/3.7.0/fs2-kafka_3-3.7.0-sources.jar!/fs2/kafka/consumer/KafkaConsume.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/github/fd4s/fs2-kafka_3/3.7.0/fs2-kafka_3-3.7.0-sources.jar!/fs2/kafka/package.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/github/plokhotnyuk/jsoniter-scala/jsoniter-scala-core_3/2.36.2/jsoniter-scala-core_3-2.36.2-sources.jar!/com/github/plokhotnyuk/jsoniter_scala/core/JsonCodec.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/github/plokhotnyuk/jsoniter-scala/jsoniter-scala-core_3/2.36.2/jsoniter-scala-core_3-2.36.2-sources.jar!/com/github/plokhotnyuk/jsoniter_scala/core/JsonReaderException.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/github/plokhotnyuk/jsoniter-scala/jsoniter-scala-core_3/2.36.2/jsoniter-scala-core_3-2.36.2-sources.jar!/com/github/plokhotnyuk/jsoniter_scala/core/JsonWriter.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/github/plokhotnyuk/jsoniter-scala/jsoniter-scala-core_3/2.36.2/jsoniter-scala-core_3-2.36.2-sources.jar!/com/github/plokhotnyuk/jsoniter_scala/core/package.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/github/plokhotnyuk/jsoniter-scala/jsoniter-scala-macros_3/2.36.2/jsoniter-scala-macros_3-2.36.2-sources.jar!/com/github/plokhotnyuk/jsoniter_scala/macros/ConfiguredJsonValueCodec.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/github/plokhotnyuk/jsoniter-scala/jsoniter-scala-macros_3/2.36.2/jsoniter-scala-macros_3-2.36.2-sources.jar!/com/github/plokhotnyuk/jsoniter_scala/macros/JsonCodecMaker.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/github/plokhotnyuk/jsoniter-scala/jsoniter-scala-macros_3/2.36.2/jsoniter-scala-macros_3-2.36.2-sources.jar!/com/github/plokhotnyuk/jsoniter_scala/macros/NameMapper.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/github/sbt/sbt-native-packager_2.12_1.0/1.11.1/sbt-native-packager_2.12_1.0-1.11.1.jar!/com/typesafe/sbt/packager/archetypes/JavaAppPackaging.class" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/dev/optics/monocle-core_3/3.3.0/monocle-core_3-3.3.0-sources.jar!/monocle/package.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/eu/timepit/refined-cats_3/0.11.3/refined-cats_3-0.11.3-sources.jar!/eu/timepit/refined/cats/Shift.scala" root0="SKIP_INSPECTION" />
@@ -169,37 +208,65 @@
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/eu/timepit/refined_3/0.11.3/refined_3-0.11.3-sources.jar!/eu/timepit/refined/types/numeric.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/io/circe/circe-config_3/0.10.1/circe-config_3-0.10.1-sources.jar!/io.circe.config/syntax.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/io/circe/circe-core_3/0.14.10/circe-core_3-0.14.10-sources.jar!/io/circe/Decoder.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/io/circe/circe-core_3/0.14.10/circe-core_3-0.14.10-sources.jar!/io/circe/Derivation.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/io/circe/circe-core_3/0.14.10/circe-core_3-0.14.10-sources.jar!/io/circe/Encoder.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/io/circe/circe-core_3/0.14.10/circe-core_3-0.14.10-sources.jar!/io/circe/Json.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/io/circe/circe-core_3/0.14.10/circe-core_3-0.14.10-sources.jar!/io/circe/derivation/Configuration.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/io/circe/circe-refined_3/0.15.1/circe-refined_3-0.15.1-sources.jar!/io/circe/refined/CirceCodecRefined.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/apache/kafka/kafka-clients/3.8.1/kafka-clients-3.8.1.jar!/org/apache/kafka/shaded/com/google/protobuf/StringValue.class" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/http4s/http4s-core_3/0.23.30/http4s-core_3-0.23.30-sources.jar!/org/http4s/MessageFailure.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/http4s/http4s-core_3/0.23.30/http4s-core_3-0.23.30-sources.jar!/org/http4s/Uri.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/http4s/http4s-core_3/0.23.30/http4s-core_3-0.23.30-sources.jar!/org/http4s/package.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/http4s/http4s-core_3/0.23.30/http4s-core_3-0.23.30-sources.jar!/org/http4s/util/Renderable.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scala-library/2.13.15/scala-library-2.13.15-sources.jar!/scala/Option.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scala-library/2.13.15/scala-library-2.13.15-sources.jar!/scala/StringContext.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scala-library/2.13.15/scala-library-2.13.15-sources.jar!/scala/concurrent/duration/Duration.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scala-library/2.13.15/scala-library-2.13.15-sources.jar!/scala/concurrent/duration/package.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scala-library/2.13.16/scala-library-2.13.16-sources.jar!/scala/PartialFunction.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scala-library/2.13.16/scala-library-2.13.16-sources.jar!/scala/collection/immutable/Map.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scala3-library_3/3.6.3/scala3-library_3-3.6.3-sources.jar!/scala/runtime/stdLibPatches/Predef.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scala3-library_3/3.6.3/scala3-library_3-3.6.3-sources.jar!/scala/util/NotGiven.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/case-insensitive_3/1.4.2/case-insensitive_3-1.4.2-sources.jar!/org/typelevel/ci/CIString.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-core_3/2.13.0/cats-core_3-2.13.0-sources.jar!/cats/Applicative.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-core_3/2.13.0/cats-core_3-2.13.0-sources.jar!/cats/Contravariant.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-core_3/2.13.0/cats-core_3-2.13.0-sources.jar!/cats/FlatMap.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-core_3/2.13.0/cats-core_3-2.13.0-sources.jar!/cats/Functor.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-core_3/2.13.0/cats-core_3-2.13.0-sources.jar!/cats/Show.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-core_3/2.13.0/cats-core_3-2.13.0-sources.jar!/cats/data/Validated.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-core_3/2.13.0/cats-core_3-2.13.0-sources.jar!/cats/implicits.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-core_3/2.13.0/cats-core_3-2.13.0-sources.jar!/cats/package.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-core_3/2.13.0/cats-core_3-2.13.0-sources.jar!/cats/syntax/applicativeError.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-core_3/2.13.0/cats-core_3-2.13.0-sources.jar!/cats/syntax/apply.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-effect-kernel_3/3.6.1/cats-effect-kernel_3-3.6.1-sources.jar!/cats/effect/kernel/Fiber.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-effect-kernel_3/3.6.1/cats-effect-kernel_3-3.6.1-sources.jar!/cats/effect/kernel/Resource.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-effect-std_3/3.6.1/cats-effect-std_3-3.6.1-sources.jar!/cats/effect/std/QueueSink.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-effect-std_3/3.6.1/cats-effect-std_3-3.6.1-sources.jar!/cats/effect/std/QueueSource.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-effect_3/3.5.4/cats-effect_3-3.5.4-sources.jar!/cats/effect/IOApp.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-kernel_3/2.13.0/cats-kernel_3-2.13.0-sources.jar!/cats/kernel/Bounded.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-kernel_3/2.13.0/cats-kernel_3-2.13.0-sources.jar!/cats/kernel/CommutativeSemigroup.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-kernel_3/2.13.0/cats-kernel_3-2.13.0-sources.jar!/cats/kernel/Comparison.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-kernel_3/2.13.0/cats-kernel_3-2.13.0-sources.jar!/cats/kernel/Eq.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-kernel_3/2.13.0/cats-kernel_3-2.13.0-sources.jar!/cats/kernel/Hash.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-kernel_3/2.13.0/cats-kernel_3-2.13.0-sources.jar!/cats/kernel/Monoid.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-kernel_3/2.13.0/cats-kernel_3-2.13.0-sources.jar!/cats/kernel/Order.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-kernel_3/2.13.0/cats-kernel_3-2.13.0-sources.jar!/cats/kernel/instances/StringInstances.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/shapeless3-typeable_3/3.5.0/shapeless3-typeable_3-3.5.0-sources.jar!/shapeless3/typeable/typeable.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/vault_3/3.6.0/vault_3-3.6.0-sources.jar!/org/typelevel/vault/InvariantMapping.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/vault_3/3.6.0/vault_3-3.6.0-sources.jar!/org/typelevel/vault/Key.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/vault_3/3.6.0/vault_3-3.6.0-sources.jar!/org/typelevel/vault/Locker.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/vault_3/3.6.0/vault_3-3.6.0-sources.jar!/org/typelevel/vault/Vault.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/wvlet/airframe/airframe-ulid_3/2025.1.9/airframe-ulid_3-2025.1.9-sources.jar!/wvlet/airframe/ulid/ULID.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/wvlet/airframe/airframe-ulid_3/24.8.0/airframe-ulid_3-24.8.0-sources.jar!/wvlet/airframe/ulid/ULID.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Java/JavaVirtualMachines/temurin-23.0.2/Contents/Home/lib/src.zip!/java.base/java/lang/Object.java" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Java/JavaVirtualMachines/temurin-23.0.2/Contents/Home/lib/src.zip!/java.base/java/lang/String.java" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Java/JavaVirtualMachines/temurin-23.0.2/Contents/Home/lib/src.zip!/java.base/java/lang/System.java" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Java/JavaVirtualMachines/temurin-23.0.2/Contents/Home/lib/src.zip!/java.base/java/util/Base64.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Java/JavaVirtualMachines/temurin-23.0.2/Contents/Home/lib/src.zip!/java.desktop/com/apple/laf/AquaBorder.java" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="HttpClientSelectedEnvironments">
+    <file url="jar://$APPLICATION_HOME_DIR$/plugins/restClient/lib/restClient.jar!/com/intellij/ws/rest/client/requests/collection/ws-requests.http" environment="test" />
+    <file url="jar://$APPLICATION_HOME_DIR$/plugins/restClient/lib/restClient.jar!/com/intellij/ws/rest/client/requests/collection/graphql-requests.http" environment="test" />
+    <file url="file:///private/var/folders/vk/z19vb4d120v6d9cz_hl7p5cm0000gn/T/whats-new-dir/whats-new.http" environment="test" />
   </component>
   <component name="JvmLoggingSettingsStorage">
     <option name="loggerId" value="Slf4j" />
@@ -228,18 +295,23 @@
     &quot;Application.MaiTestGSn.executor&quot;: &quot;Run&quot;,
     &quot;Application.Main.executor&quot;: &quot;Run&quot;,
     &quot;Application.MainTest.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Test.executor&quot;: &quot;Run&quot;,
     &quot;Application.TestMain.executor&quot;: &quot;Run&quot;,
     &quot;Application.com.monadial.waygrid.destination.blackhole.Main.executor&quot;: &quot;Run&quot;,
     &quot;Application.com.monadial.waygrid.origin.http.Main.executor&quot;: &quot;Run&quot;,
     &quot;Application.com.monadial.waygrid.system.scheduler.Main.executor&quot;: &quot;Run&quot;,
     &quot;Application.com.monadial.waygrid.system.topology.Main.executor&quot;: &quot;Run&quot;,
     &quot;Application.com.monadial.waygrid.system.waystation.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Application.testRouter.executor&quot;: &quot;Run&quot;,
     &quot;Docker..devcontainer/Dockerfile.executor&quot;: &quot;Run&quot;,
     &quot;Docker.docker-compose.yaml.waygrid-redpanda: Compose Deployment.executor&quot;: &quot;Run&quot;,
     &quot;Docker.docker-compose.yaml: Compose Deployment.executor&quot;: &quot;Run&quot;,
     &quot;Docker.modules/origin-http/target/docker/stage/Dockerfile stage0.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.All in Waygrid.common-application.executor&quot;: &quot;Run&quot;,
     &quot;JUnit.EventSerializationSpec$.executor&quot;: &quot;Run&quot;,
     &quot;JUnit.LongValueSpec$.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.RouteGraphSpec$.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.RouteNodeSpec$.executor&quot;: &quot;Run&quot;,
     &quot;JUnit.StringValueSpec$.executor&quot;: &quot;Run&quot;,
     &quot;JUnit.StringValueSpec$UserName$ (1).executor&quot;: &quot;Debug&quot;,
     &quot;JUnit.StringValueSpec$UserName$ (2).executor&quot;: &quot;Run&quot;,
@@ -252,7 +324,8 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;Scala REPL.Scala REPL.executor&quot;: &quot;Run&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit3&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit3&quot;: &quot;&quot;,
     &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
     &quot;git-widget-placeholder&quot;: &quot;1-setup-project&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
@@ -268,7 +341,7 @@
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
     &quot;remote.dev.show.docker.config.missing.jdk.notification&quot;: &quot;false&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.Scala&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.inline.completion&quot;,
     &quot;ts.external.directory.path&quot;: &quot;/Users/tomas/waygrid/waygrid-router/docs/node_modules/typescript/lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
@@ -319,16 +392,17 @@
       <recent name="$PROJECT_DIR$/modules/system-waystation/src/main/resources" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/model" />
+      <recent name="$PROJECT_DIR$/modules/common/common-application/src/test/scala/com/monadial/waygrid/common/application/model/routing" />
       <recent name="$PROJECT_DIR$/modules/processor" />
       <recent name="$PROJECT_DIR$/modules/system" />
       <recent name="$PROJECT_DIR$/modules/origin" />
-      <recent name="$PROJECT_DIR$/modules/destination" />
-      <recent name="$PROJECT_DIR$/modules/common" />
     </key>
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
     </key>
     <key name="CreateTestDialog.RecentsKey">
+      <recent name="com.monadial.waygrid.common.application.model.routing" />
       <recent name="com.monadial.waygrid.common.domain.value" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -367,24 +441,11 @@
       </method>
     </configuration>
     <configuration name="Main" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="com.monadial.waygrid.destination.webhook.Main" />
-      <module name="Waygrid.destination-webhook" />
+      <option name="MAIN_CLASS_NAME" value="com.monadial.waygrid.system.scheduler.Main" />
+      <module name="Waygrid.system-scheduler" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.monadial.waygrid.destination.webhook.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="TestMain" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="com.monadial.waygrid.origin.http.TestMain" />
-      <module name="Waygrid.origin-http" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.monadial.waygrid.origin.http.*" />
+          <option name="PATTERN" value="com.monadial.waygrid.system.scheduler.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -394,6 +455,7 @@
     </configuration>
     <configuration name="com.monadial.waygrid.origin.http.Main" type="Application" factoryName="Application" temporary="true">
       <envs>
+        <env name="OTEL_METRIC_EXPORT_INTERVAL" value="1000" />
         <env name="OTEL_RESOURCE_ATTRIBUTES" value="service.name=waygrid-origin-http,env=dev" />
         <env name="WAYGRID_CLUSTER_ID" value="cluster1" />
       </envs>
@@ -409,20 +471,40 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="com.monadial.waygrid.system.topology.Main" type="Application" factoryName="Application" temporary="true">
-      <envs>
-        <env name="WAYGRID_CLUSTER_ID" value="cluster1" />
-        <env name="WAYGRID_SETTINGS_PATH" value="/tomas/" />
-      </envs>
-      <option name="MAIN_CLASS_NAME" value="com.monadial.waygrid.system.topology.Main" />
-      <module name="Waygrid.system-topology" />
-      <option name="PROGRAM_PARAMETERS" value="-Dcats.effect.tracing.mode=full -Dcats.effect.tracing.buffer.size=1024" />
+    <configuration name="All in Waygrid.common-application" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Waygrid.common-application" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RouteGraphSpec$" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Waygrid.common-application" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.monadial.waygrid.system.topology.*" />
+          <option name="PATTERN" value="com.monadial.waygrid.common.application.model.routing.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <option name="PACKAGE_NAME" value="com.monadial.waygrid.common.application.model.routing" />
+      <option name="MAIN_CLASS_NAME" value="com.monadial.waygrid.common.application.model.routing.RouteGraphSpec$" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RouteNodeSpec$" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Waygrid.common-application" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.monadial.waygrid.common.application.model.routing.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.monadial.waygrid.common.application.model.routing" />
+      <option name="MAIN_CLASS_NAME" value="com.monadial.waygrid.common.application.model.routing.RouteNodeSpec$" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -450,33 +532,20 @@
       </deployment>
       <method v="2" />
     </configuration>
-    <configuration name="docker-compose.yaml.waygrid-redpanda: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
-      <deployment type="docker-compose.yml">
-        <settings>
-          <option name="services">
-            <list>
-              <option value="waygrid-redpanda" />
-            </list>
-          </option>
-          <option name="sourceFilePath" value="docker-compose.yaml" />
-        </settings>
-      </deployment>
-      <method v="2" />
-    </configuration>
     <list>
-      <item itemvalue="Application.TestMain" />
-      <item itemvalue="Application.com.monadial.waygrid.origin.http.Main" />
       <item itemvalue="Application.Main" />
-      <item itemvalue="Application.com.monadial.waygrid.system.topology.Main" />
-      <item itemvalue="Docker.docker-compose.yaml.waygrid-redpanda: Compose Deployment" />
+      <item itemvalue="Application.com.monadial.waygrid.origin.http.Main" />
+      <item itemvalue="JUnit.All in Waygrid.common-application" />
+      <item itemvalue="JUnit.RouteGraphSpec$" />
+      <item itemvalue="JUnit.RouteNodeSpec$" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.com.monadial.waygrid.origin.http.Main" />
-        <item itemvalue="Application.TestMain" />
-        <item itemvalue="Application.com.monadial.waygrid.system.topology.Main" />
         <item itemvalue="Application.Main" />
-        <item itemvalue="Docker.docker-compose.yaml.waygrid-redpanda: Compose Deployment" />
+        <item itemvalue="JUnit.RouteGraphSpec$" />
+        <item itemvalue="JUnit.All in Waygrid.common-application" />
+        <item itemvalue="JUnit.RouteNodeSpec$" />
       </list>
     </recent_temporary>
   </component>
@@ -487,8 +556,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.25410.129" />
-        <option value="bundled-js-predefined-d6986cc7102b-6a121458b545-JavaScript-IU-251.25410.129" />
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.26094.121" />
+        <option value="bundled-js-predefined-d6986cc7102b-b26f3e71634d-JavaScript-IU-251.26094.121" />
       </set>
     </attachedChunks>
   </component>
@@ -592,7 +661,58 @@
       <workItem from="1747661032970" duration="15068000" />
       <workItem from="1747684061997" duration="9265000" />
       <workItem from="1747722794612" duration="4988000" />
-      <workItem from="1747730110879" duration="181000" />
+      <workItem from="1747730110879" duration="2841000" />
+      <workItem from="1747734348915" duration="19533000" />
+      <workItem from="1747776357740" duration="2735000" />
+      <workItem from="1747810025183" duration="2934000" />
+      <workItem from="1747821030232" duration="1013000" />
+      <workItem from="1747855214625" duration="16377000" />
+      <workItem from="1747901041411" duration="1478000" />
+      <workItem from="1747904056238" duration="3216000" />
+      <workItem from="1747920144230" duration="15882000" />
+      <workItem from="1747946472222" duration="12073000" />
+      <workItem from="1747990221581" duration="13991000" />
+      <workItem from="1748011429763" duration="2269000" />
+      <workItem from="1748034319754" duration="2548000" />
+      <workItem from="1748056158658" duration="5142000" />
+      <workItem from="1748172919367" duration="14038000" />
+      <workItem from="1748243733293" duration="40000" />
+      <workItem from="1748243792397" duration="16830000" />
+      <workItem from="1748264264114" duration="23443000" />
+      <workItem from="1748371575708" duration="14198000" />
+      <workItem from="1748450837542" duration="3742000" />
+      <workItem from="1748459615459" duration="11482000" />
+      <workItem from="1748507804825" duration="308000" />
+      <workItem from="1748524099241" duration="3014000" />
+      <workItem from="1748528629035" duration="2664000" />
+      <workItem from="1748533063135" duration="7333000" />
+      <workItem from="1748615519669" duration="6724000" />
+      <workItem from="1748632053521" duration="9957000" />
+      <workItem from="1748805489969" duration="18703000" />
+      <workItem from="1748895007944" duration="6554000" />
+      <workItem from="1748955590194" duration="76000" />
+      <workItem from="1748955680560" duration="2364000" />
+      <workItem from="1749022896361" duration="2096000" />
+      <workItem from="1749025005215" duration="11708000" />
+      <workItem from="1749050897157" duration="568000" />
+      <workItem from="1749051687650" duration="31000" />
+      <workItem from="1749071643141" duration="79000" />
+      <workItem from="1749071734634" duration="3819000" />
+      <workItem from="1749116322872" duration="6402000" />
+      <workItem from="1749152338504" duration="2460000" />
+      <workItem from="1749224412742" duration="3242000" />
+      <workItem from="1749468857796" duration="9681000" />
+      <workItem from="1749499426981" duration="12302000" />
+      <workItem from="1749554473158" duration="3910000" />
+      <workItem from="1749590054768" duration="4490000" />
+      <workItem from="1749740625214" duration="8915000" />
+      <workItem from="1750061034110" duration="9432000" />
+      <workItem from="1750356768166" duration="7702000" />
+      <workItem from="1750529220132" duration="1837000" />
+      <workItem from="1750661358028" duration="5094000" />
+      <workItem from="1750688750273" duration="557000" />
+      <workItem from="1750711144758" duration="826000" />
+      <workItem from="1751046379757" duration="303000" />
     </task>
     <servers />
   </component>
@@ -603,40 +723,75 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="scala-line">
-          <url>jar://$USER_HOME$/Library/Caches/Coursier/v1/https/jitpack.io/com/github/suprnation/cats-actors/cats-actors_3/2.0.0/cats-actors_3-2.0.0-sources.jar!/com/suprnation/actor/ReplyingActorRef.scala</url>
-          <line>250</line>
+          <url>jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scodec/scodec-core_3/2.3.2/scodec-core_3-2.3.2-sources.jar!/scodec/Attempt.scala</url>
+          <line>40</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="scala-line">
+          <url>file://$PROJECT_DIR$/modules/common/common-application/src/test/scala/com/monadial/waygrid/common/application/model/routing/RouteGraphSpec.scala</url>
+          <line>39</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="scala-line">
+          <url>jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scodec/scodec-core_3/2.3.2/scodec-core_3-2.3.2-sources.jar!/scodec/codecs/StringCodec.scala</url>
+          <line>61</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="scala-line">
+          <url>jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scodec/scodec-core_3/2.3.2/scodec-core_3-2.3.2-sources.jar!/scodec/codecs/StringCodec.scala</url>
+          <line>56</line>
           <option name="timeStamp" value="9" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="scala-line">
-          <url>file://$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/actor/SupervisorActor.scala</url>
-          <line>35</line>
+          <url>jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scodec/scodec-core_3/2.3.2/scodec-core_3-2.3.2-sources.jar!/scodec/codecs/StringCodec.scala</url>
+          <line>54</line>
           <option name="timeStamp" value="11" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="scala-line">
-          <url>file://$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/actor/SupervisorActor.scala</url>
-          <line>61</line>
-          <properties>
-            <option name="lambda-ordinal" value="-1" />
-          </properties>
-          <option name="timeStamp" value="12" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="scala-line">
-          <url>file://$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/value/ValueRefined.scala</url>
-          <line>15</line>
+          <url>jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scodec/scodec-core_3/2.3.2/scodec-core_3-2.3.2-sources.jar!/scodec/codecs/StringCodec.scala</url>
+          <line>57</line>
           <option name="timeStamp" value="14" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="scala-line">
-          <url>file://$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/util/logging/LoggerLog4CatsWrapper.scala</url>
-          <line>32</line>
+          <url>file://$PROJECT_DIR$/modules/common/common-application/src/test/scala/com/monadial/waygrid/common/application/model/routing/RouteGraphSpec.scala</url>
+          <line>47</line>
+          <properties>
+            <option name="lambda-ordinal" value="-1" />
+          </properties>
           <option name="timeStamp" value="15" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="scala-line">
-          <url>file://$PROJECT_DIR$/modules/common/common-application/src/main/scala/com/monadial/waygrid/common/application/actor/HttpServerActor.scala</url>
-          <line>176</line>
-          <option name="timeStamp" value="17" />
+          <url>jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scodec/scodec-core_3/2.3.2/scodec-core_3-2.3.2-sources.jar!/scodec/Codec.scala</url>
+          <line>536</line>
+          <option name="timeStamp" value="18" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="scala-line">
+          <url>jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scodec/scodec-core_3/2.3.2/scodec-core_3-2.3.2-sources.jar!/scodec/Codec.scala</url>
+          <line>537</line>
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="scala-line">
+          <url>jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scodec/scodec-core_3/2.3.2/scodec-core_3-2.3.2-sources.jar!/scodec/Codec.scala</url>
+          <line>407</line>
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="scala-line">
+          <url>jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scodec/scodec-core_3/2.3.2/scodec-core_3-2.3.2-sources.jar!/scodec/Codec.scala</url>
+          <line>516</line>
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="scala-line">
+          <url>file://$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/instances/InstantInstances.scala</url>
+          <line>21</line>
+          <option name="timeStamp" value="22" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <inline-watch fileUrl="file://$PROJECT_DIR$/modules/common/common-domain/src/main/scala/com/monadial/waygrid/common/domain/instances/StringInstances.scala" line="25">
+        <watch expression="bytes.toString" language="Scala" />
+      </inline-watch>
+    </watches-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -10,5 +10,5 @@ object IsULID:
   def apply[A: IsULID]: IsULID[A] = summon[IsULID[A]]
 
   given IsULID[ULID] with
-    def iso: Iso[ULID, ULID] =
+    inline def iso: Iso[ULID, ULID] =
       Iso[ULID, ULID](identity)(identity)

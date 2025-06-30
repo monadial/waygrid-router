@@ -9,5 +9,5 @@ object IsLong:
   def apply[A: IsLong]: IsLong[A] = summon[IsLong[A]]
 
   given IsLong[Long] with
-    def iso: Iso[Long, Long] =
+    inline def iso: Iso[Long, Long] =
       Iso[Long, Long](identity)(identity)

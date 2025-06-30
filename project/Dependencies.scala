@@ -32,6 +32,10 @@ object Dependencies {
     val redis4Cats                   = "1.7.2"
     val refined                      = "0.11.3"
     val scalacheck                   = "1.18.1"
+    val scodeCore                       = "2.3.2"
+    val scodeBits                      = "1.2.1"
+    val shapeless3                   = "3.5.0"
+    val jsoniter                     = "2.36.2"
     val skunk                        = "0.6.4"
     val typesafeConfig               = "1.4.3"
     val weaver                       = "0.8.4"
@@ -47,8 +51,9 @@ object Dependencies {
     val cats       = Def.setting("org.typelevel" %% "cats-core" % V.cats)
     val catsEffect = Def.setting("org.typelevel" %% "cats-effect" % V.catsEffect)
 
-    val fs2Core  = Def.setting("co.fs2" %% "fs2-core" % V.fs2core)
-    val fs2Kafka = Def.setting("com.github.fd4s" %% "fs2-kafka" % V.fs2Kafka)
+    val fs2Core   = Def.setting("co.fs2" %% "fs2-core" % V.fs2core)
+    val fs2Scodec = Def.setting("co.fs2" %% "fs2-scodec" % V.fs2core)
+    val fs2Kafka  = Def.setting("com.github.fd4s" %% "fs2-kafka" % V.fs2Kafka)
 
     val kittens = Def.setting("org.typelevel" %% "kittens" % V.kittens)
 
@@ -62,6 +67,7 @@ object Dependencies {
     val circeConfig: Def  = circe("config", V.circeConfig)
     val circeTesting: Def = circe("testing", V.circe)
 
+    val http4sCore   = http4s("core")
     val http4sDsl    = http4s("dsl")
     val http4sServer = http4s("ember-server")
     val http4sCirce  = http4s("circe")
@@ -84,6 +90,15 @@ object Dependencies {
 
     val zeroAllocationHashing = Def.setting("net.openhft" % "zero-allocation-hashing" % V.zeroAllocationHashingVersion)
 
+    val shapeless3Deriving = Def.setting("org.typelevel" %% "shapeless3-deriving" % V.shapeless3)
+    val shapeless3Typeable = Def.setting("org.typelevel" %% "shapeless3-typeable" % V.shapeless3)
+
+    // Use the %%% operator instead of %% for Scala.js and Scala Native
+    val jsoniterScalaCore = Def.setting("com.github.plokhotnyuk.jsoniter-scala" %% "jsoniter-scala-core" % V.jsoniter)
+    val jsoniterScalaMacros = Def.setting(
+      "com.github.plokhotnyuk.jsoniter-scala" %% "jsoniter-scala-macros" % V.jsoniter
+    )
+
     val otel4sOtelJava              = Def.setting("org.typelevel" %% "otel4s-oteljava" % V.otel4s)
     val otel4InstrumentationMetrics = Def.setting("org.typelevel" %% "otel4s-instrumentation-metrics" % V.otel4s)
     val opentelemetryExporterOtlp =
@@ -97,6 +112,9 @@ object Dependencies {
     val redis4CatsEffects  = Def.setting("dev.profunktor" %% "redis4cats-effects" % V.redis4Cats)
     val redis4CatsStream   = Def.setting("dev.profunktor" %% "redis4cats-streams" % V.redis4Cats)
     val redis4CatsLog4cats = Def.setting("dev.profunktor" %% "redis4cats-log4cats" % V.redis4Cats)
+
+    val scodecCore = Def.setting("org.scodec" %% "scodec-core" % V.scodeCore)
+    val scodecBits = Def.setting("org.scodec" %% "scodec-bits" % V.scodeBits)
 
     val skunkCore = Def.setting("org.tpolecat" %% "skunk-core" % V.skunk)
     val fly4s     = Def.setting("com.github.geirolz" %% "fly4s" % V.fly4s)

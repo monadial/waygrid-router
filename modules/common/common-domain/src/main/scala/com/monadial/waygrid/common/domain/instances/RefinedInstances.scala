@@ -17,39 +17,33 @@ object RefinedInstances:
     refType: RefType[F]
   ): BytesCodec[F[T, P]] with
 
-    override def encode(value: F[T, P]): Array[Byte] =
+    inline override def encode(value: F[T, P]): Array[Byte] =
       underlying.encode(refType.unwrap(value))
 
-    override def decode(value: Array[Byte])
+    inline override def decode(value: Array[Byte])
       : Validated[BytesDecodingError, F[T, P]] =
       underlying
         .decode(value)
-        .andThen:
-          x =>
-            refType
-              .refine[P](x)
-              .toValidated
-              .leftMap(
-                x => BytesDecodingError(x)
-              )
+        .andThen: x =>
+          refType
+            .refine[P](x)
+            .toValidated
+            .leftMap(x => BytesDecodingError(x))
 
   given [T, P, F[_, _]](using
     underlying: Base64Codec[T],
     validate: Validate[T, P],
     refType: RefType[F]
   ): Base64Codec[F[T, P]] with
-    override def encode(value: F[T, P]): String =
+    inline override def encode(value: F[T, P]): String =
       underlying.encode(refType.unwrap(value))
 
-    override def decode(value: String)
+    inline override def decode(value: String)
       : Validated[Base64DecodingError, F[T, P]] =
       underlying
         .decode(value)
-        .andThen:
-          x =>
-            refType
-              .refine[P](x)
-              .toValidated
-              .leftMap(
-                x => Base64DecodingError(x)
-              )
+        .andThen: x =>
+          refType
+            .refine[P](x)
+            .toValidated
+            .leftMap(x => Base64DecodingError(x))

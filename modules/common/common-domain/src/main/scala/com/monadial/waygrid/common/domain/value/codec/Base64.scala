@@ -2,7 +2,7 @@ package com.monadial.waygrid.common.domain.value.codec
 
 import cats.data.Validated
 
-trait Base64CodecError:
+trait Base64CodecError extends Throwable:
   def message: String
 
 final case class Base64DecodingError(message: String) extends Base64CodecError

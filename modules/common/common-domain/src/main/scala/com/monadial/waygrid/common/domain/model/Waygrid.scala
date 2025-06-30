@@ -1,5 +1,13 @@
 package com.monadial.waygrid.common.domain.model
 
+import com.monadial.waygrid.common.domain.value.string.StringValue
+
 object Waygrid:
-  def appName: String   = "waygrid"
-  def appPrefix: String = "com.monadial.waygrid"
+
+  lazy val appName = "waygrid"
+
+  type Address = Address.Type
+  object Address extends StringValue
+
+
+
