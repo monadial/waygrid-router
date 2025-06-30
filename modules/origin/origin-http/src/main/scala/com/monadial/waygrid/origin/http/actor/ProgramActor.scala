@@ -1,13 +1,14 @@
 package com.monadial.waygrid.origin.http.actor
 
-import cats.syntax.all.*
+import com.monadial.waygrid.common.application.actor.{BaseProgramActor, HttpServerActorRef}
+import com.monadial.waygrid.common.application.actor.HttpServerActorCommand.{RegisterRoute, UnregisterRoute}
+import com.monadial.waygrid.common.application.algebra.Logger
+import com.monadial.waygrid.origin.http.http.resource.v1.RoutingResource
+
 import cats.Parallel
 import cats.effect.Async
 import cats.effect.kernel.Resource
-import com.monadial.waygrid.common.application.actor.BaseProgramActor
-import com.monadial.waygrid.common.application.actor.HttpServerActorRef
-import com.monadial.waygrid.common.application.algebra.Logger
-import com.monadial.waygrid.common.application.algebra.SupervisedRequest.{Start, Stop}
+import cats.syntax.all.*
 
 trait SupervisorActorRequest
 
@@ -16,16 +17,16 @@ object ProgramActor:
     Resource
       .pure:
       new BaseProgramActor[F]:
-        override def startProgram: F[Unit] =
+        override def onProgramStart: F[Unit] =
           for
             _ <- Logger[F].info("Starting program...")
-            _ <- httpServerRef ! Start
+            _ <- httpServerRef ! RegisterRoute("v1.ingest", RoutingResource.ingest[F])
           yield ()
 
-        override def stopProgram: F[Unit] =
+        override def onProgramStop: F[Unit] =
           for
             _ <- Logger[F].info("Stopping program...")
-            _ <- httpServerRef ! Stop
+            _ <- httpServerRef ! UnregisterRoute("v1.ingest")
           yield ()
 
-        override def restartProgram: F[Unit] = ???
+        override def onProgramRestart: F[Unit] = ???

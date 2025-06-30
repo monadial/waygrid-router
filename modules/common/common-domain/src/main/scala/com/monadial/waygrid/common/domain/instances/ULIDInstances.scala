@@ -3,20 +3,26 @@ package com.monadial.waygrid.common.domain.instances
 import cats.Show
 import cats.data.Validated
 import cats.kernel.Order
-import com.monadial.waygrid.common.domain.value.codec.{
-  Base64Codec,
-  Base64DecodingError,
-  BytesCodec,
-  BytesDecodingError
-}
-import io.circe.{ Decoder as JsonDecoder, Encoder as JsonEncoder }
+import com.monadial.waygrid.common.domain.instances.StringInstances.given
+import com.monadial.waygrid.common.domain.value.codec.{Base64Codec, Base64DecodingError, BytesCodec, BytesDecodingError}
+import io.circe.{Decoder as JsonDecoder, Encoder as JsonEncoder}
+import scodec.bits.ByteVector
+import scodec.{Attempt, Err, Decoder as SDecoder, Encoder as SEncoder}
 import wvlet.airframe.ulid.ULID
 
-import scala.util.Try
+import scala.util.{Failure, Success, Try}
 
 object ULIDInstances:
   given Order[ULID] = (x: ULID, y: ULID) => x.compareTo(y)
   given Show[ULID]  = (t: ULID) => t.toString
+
+  given SEncoder[ULID] = scodec.codecs.bytes.asEncoder.contramap(x => ByteVector(x.toBytes))
+  given SDecoder[ULID] = scodec.codecs.bytes.asDecoder.emap: bytes =>
+      Try(ULID.fromBytes(bytes.toArray)) match
+        case Success(ulid) =>
+          Attempt.successful(ulid)
+        case Failure(ex) =>
+          Attempt.failure(Err(ex.getMessage))
 
   given JsonEncoder[ULID] =
     JsonEncoder
@@ -26,33 +32,25 @@ object ULIDInstances:
   given JsonDecoder[ULID] =
     JsonDecoder
       .decodeString
-      .emapTry(
-        str => Try(ULID.fromString(str))
-      )
+      .emapTry(str => Try(ULID.fromString(str)))
 
   given BytesCodec[ULID] with
-    def encode(value: ULID): Array[Byte] =
-      value
-        .toBytes
+    inline def encode(value: ULID): Array[Byte] =
+      BytesCodec[String]
+        .encode(value.toString)
 
-    def decode(value: Array[Byte]): Validated[BytesDecodingError, ULID] =
-      Validated
-        .catchNonFatal(ULID.fromBytes(value))
-        .leftMap(
-          x => BytesDecodingError(x.getMessage)
-        )
+    inline def decode(value: Array[Byte]): Validated[BytesDecodingError, ULID] =
+      BytesCodec[String]
+        .decode(value)
+        .map(ULID.fromString)
 
   given Base64Codec[ULID] with
-    def encode(value: ULID): String =
+    inline def encode(value: ULID): String =
       JavaBridge
         .base64Encoder(BytesCodec[ULID].encode(value))
 
-    def decode(value: String): Validated[Base64DecodingError, ULID] =
+    inline def decode(value: String): Validated[Base64DecodingError, ULID] =
       Validated
         .catchNonFatal(JavaBridge.base64Decoder(value))
-        .andThen(
-          x => Validated.catchNonFatal(ULID.fromBytes(x))
-        )
-        .leftMap(
-          x => Base64DecodingError(x.getMessage)
-        )
+        .andThen(x => Validated.catchNonFatal(ULID.fromBytes(x)))
+        .leftMap(x => Base64DecodingError(x.getMessage))

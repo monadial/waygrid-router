@@ -3,9 +3,9 @@ package com.monadial.waygrid.common.application.syntax
 import com.monadial.waygrid.common.application.algebra.FSM as FSMAlg
 import com.monadial.waygrid.common.application.algebra.FSMResult as FSMRes
 import com.monadial.waygrid.common.application.algebra.FSMTransformer as FSMDec
-import com.monadial.waygrid.common.application.model.fsm.FSM as FSMDom
 import cats.Monad
 import cats.implicits.*
+import com.monadial.waygrid.common.application.domain.model.fsm.FSM as FSMDom
 
 object FSMSyntax:
 

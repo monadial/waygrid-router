@@ -17,14 +17,14 @@ object BytesInstances:
   given Show[Array[Byte]]  = Show.show(bytes => s"ArrayByte(${bytes.mkString(", ")})")
 
   given BytesCodec[Array[Byte]] with
-    def encode(value: Array[Byte]): Array[Byte] = value
-    def decode(value: Array[Byte]): Validated[BytesDecodingError, Array[Byte]] =
+    inline def  encode(value: Array[Byte]): Array[Byte] = value
+    inline def decode(value: Array[Byte]): Validated[BytesDecodingError, Array[Byte]] =
       Validated
         .valid(value)
 
   given Base64Codec[Array[Byte]] with
-    def encode(value: Array[Byte]): String = JavaBridge.base64Encoder(value)
-    def decode(value: String): Validated[Base64DecodingError, Array[Byte]] =
+    inline def encode(value: Array[Byte]): String = JavaBridge.base64Encoder(value)
+    inline def decode(value: String): Validated[Base64DecodingError, Array[Byte]] =
       Validated
         .catchNonFatal(JavaBridge.base64Decoder(value))
         .leftMap(x => Base64DecodingError(x.getMessage))

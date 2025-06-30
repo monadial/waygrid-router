@@ -9,5 +9,5 @@ object IsString:
   def apply[A: IsString]: IsString[A] = summon[IsString[A]]
 
   given IsString[String] with
-    def iso: Iso[String, String] =
+    inline def iso: Iso[String, String] =
       Iso[String, String](identity)(identity)

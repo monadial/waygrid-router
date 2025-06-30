@@ -1,7 +1,7 @@
 package com.monadial.waygrid.common.application.algebra
 
+import com.monadial.waygrid.common.application.domain.model.event.{Event, RawEvent}
 import com.monadial.waygrid.common.domain.model.event.Event as DomainEvent
-import com.monadial.waygrid.common.application.model.event.{ Event, RawEvent }
 
 /**
  * Typeclass-style abstraction for encoding and decoding domain events.

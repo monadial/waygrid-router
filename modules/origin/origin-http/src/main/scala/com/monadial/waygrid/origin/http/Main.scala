@@ -1,10 +1,10 @@
 package com.monadial.waygrid.origin.http
 
-import com.monadial.waygrid.common.application.actor.TopologyClientCommand.{ BeginRegistration, BeginUnregistration }
+import com.monadial.waygrid.common.application.actor.TopologyClientCommand.{ RequestJoin, RequestLeave }
 import com.monadial.waygrid.common.application.actor.{ HttpServerActor, TopologyClientActor }
-import com.monadial.waygrid.common.application.algebra.{ HasNode, Logger }
+import com.monadial.waygrid.common.application.algebra.*
 import com.monadial.waygrid.common.application.program.WaygridApp
-import com.monadial.waygrid.common.domain.model.node.{ Node, NodeDescriptor }
+import com.monadial.waygrid.common.domain.model.node.Value.NodeDescriptor
 import com.monadial.waygrid.origin.http.actor.ProgramActor
 import com.monadial.waygrid.origin.http.settings.HttpSettings
 
@@ -12,16 +12,22 @@ import cats.Parallel
 import cats.effect.*
 import cats.effect.std.Console
 import cats.syntax.all.*
+import com.monadial.waygrid.common.domain.model.node.Node
 import com.suprnation.actor.ActorSystem
 import org.typelevel.otel4s.metrics.MeterProvider
 
+import scala.annotation.nowarn
+
 object Main extends WaygridApp[HttpSettings](NodeDescriptor.origin("http")):
-  override def programBuilder[F[+_]: {Async, Parallel, Console, Logger, HasNode, MeterProvider}](
+
+  @nowarn("msg=unused implicit parameter")
+  def programBuilder[F[+_]: {Async, Parallel, Console, Logger, HasNode,
+    MeterProvider, EventSink, EventSource}](
+    actorSystem: ActorSystem[F],
     settings: HttpSettings,
     thisNode: Node
   ): Resource[F, Unit] =
     for
-      actorSystem <- ActorSystem[F](thisNode.clientId.show)
       httpServer <- HttpServerActor
         .behavior(settings.httpServer)
         .evalMap(actorSystem.actorOf(_, "http-server"))
@@ -29,13 +35,13 @@ object Main extends WaygridApp[HttpSettings](NodeDescriptor.origin("http")):
         .behavior[F](httpServer)
         .evalMap(actorSystem.actorOf(_, "supervisor"))
       topologyClient <- TopologyClientActor
-        .behavior[F](actorSystem, program, httpServer)
+        .behavior[F](program, httpServer)
         .evalMap(actorSystem.actorOf(_, "topology-client"))
-      _ <- Resource.eval(topologyClient ! BeginRegistration)
+      _ <- Resource.eval(topologyClient ! RequestJoin)
       _ <- Resource.make(Concurrent[F].pure(actorSystem)): system =>
           Logger[F].info(
             "Shutting down actor system"
-          ) *> (topologyClient ! BeginUnregistration) *> Concurrent[F].race(
+          ) *> (topologyClient ! RequestLeave) *> Concurrent[F].race(
             system.waitForTermination,
             Concurrent[F].sleep(settings.gracefulShutdownTimeout)
           ) *> Concurrent[F].unit

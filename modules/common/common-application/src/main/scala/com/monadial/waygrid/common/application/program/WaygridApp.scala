@@ -1,24 +1,21 @@
 package com.monadial.waygrid.common.application.program
 
-import com.monadial.waygrid.common.application.`macro`.EventCodecRegistry
-import com.monadial.waygrid.common.application.algebra.{ HasNode, Logger }
-import com.monadial.waygrid.common.application.interpreter.{
-  AllEventCodecs,
-  CirceSettingsLoaderInterpreter,
-  EnvHasNodeInterpreter,
-  OdinLoggerInterpreter
-}
-import com.monadial.waygrid.common.application.model.settings.NodeSettings
-import com.monadial.waygrid.common.domain.model.node.{ Node, NodeDescriptor }
+import com.monadial.waygrid.common.application.`macro`.CirceEventCodecRegistryMacro
+import com.monadial.waygrid.common.application.algebra.{ EventSink, EventSource, HasNode, Logger }
+import com.monadial.waygrid.common.application.interpreter.*
+import com.monadial.waygrid.common.domain.model.node.Value.NodeDescriptor
 
 import cats.Parallel
 import cats.effect.*
 import cats.effect.std.{ Console, Env }
 import cats.implicits.*
 import cats.syntax.all.*
+import com.monadial.waygrid.common.application.domain.model.settings.NodeSettings
+import com.monadial.waygrid.common.domain.model.node.Node
+import com.suprnation.actor.ActorSystem
 import io.circe.Decoder
 import org.typelevel.otel4s.instrumentation.ce.IORuntimeMetrics
-import org.typelevel.otel4s.metrics.MeterProvider
+import org.typelevel.otel4s.metrics.{ Meter, MeterProvider }
 import org.typelevel.otel4s.oteljava.OtelJava
 import org.typelevel.otel4s.trace.TracerProvider
 
@@ -54,16 +51,20 @@ trait WaygridApp[S <: NodeSettings](
 
   private def programInterpreter[F[+_]: {Async, Parallel, Console, Env, MeterProvider}]: Resource[F, Unit] =
     for
-      bootTime         <- Resource.eval(Clock[F].realTimeInstant)
-      given HasNode[F] <- EnvHasNodeInterpreter.resource[F](nodeDescriptor)
-      programSettings  <- CirceSettingsLoaderInterpreter.resource[F, S].evalMap(_.load)
-      thisNode         <- Resource.eval(HasNode[F].get)
-      given Logger[F]  <- OdinLoggerInterpreter.resource[F](programSettings.logLevel)
-      _                <- Resource.eval(Logger[F].info(s"Starting ${thisNode.clientId.show}..."))
-      _                <- Resource.eval(Logger[F].info(s"Node address: ${thisNode.address.show}"))
-      _                <- Resource.eval(Logger[F].info(s"Boot time: ${bootTime.toString}"))
-      _                <- Resource.eval(EventCodecRegistry.debug)
-      program          <- programBuilder[F](programSettings, thisNode)
+      bootTime             <- Resource.eval(Clock[F].realTimeInstant)
+      given HasNode[F]     <- EnvHasNodeInterpreter.resource[F](nodeDescriptor)
+      given Meter[F]       <- Resource.eval(MeterProvider[F].get("waygrid-app.origin"))
+      programSettings      <- CirceSettingsLoaderInterpreter.resource[F, S].evalMap(_.load)
+      thisNode             <- Resource.eval(HasNode[F].get)
+      given Logger[F]      <- OdinLoggerInterpreter.resource[F](programSettings.logLevel)
+      given EventSink[F]   <- EventSinkInterpreter.kafka[F](programSettings.eventStream.kafka)
+      given EventSource[F] <- EventSourceInterpreter.kafka[F](programSettings.eventStream.kafka)
+//      _                    <- Resource.eval(Logger[F].info(s"Starting ${thisNode.clientId.show}..."))
+//      _                    <- Resource.eval(Logger[F].info(s"Node address: ${thisNode.address.show}"))
+      _           <- Resource.eval(Logger[F].info(s"Boot time: ${bootTime.toString}"))
+      _           <- Resource.eval(CirceEventCodecRegistryMacro.debug)
+      actorSystem <- ActorSystem[F](thisNode.settingsPath.show)
+      program     <- programBuilder[F](actorSystem, programSettings, thisNode)
     yield program
 
   /**
@@ -74,7 +75,8 @@ trait WaygridApp[S <: NodeSettings](
    * @param thisNode fully resolved NodeDescriptor (with address & ID)
    * @return Resource representing the core service lifecycle
    */
-  def programBuilder[F[+_]: {Async, Parallel, Console, Logger, HasNode, MeterProvider}](
+  def programBuilder[F[+_]: {Async, Parallel, Console, Logger, HasNode, MeterProvider, EventSink, EventSource}](
+    actorSystem: ActorSystem[F],
     settings: S,
     thisNode: Node
   ): Resource[F, Unit]
