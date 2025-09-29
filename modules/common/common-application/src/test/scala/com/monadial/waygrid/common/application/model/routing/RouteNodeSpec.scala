@@ -2,7 +2,6 @@ package com.monadial.waygrid.common.application.model.routing
 
 import cats.effect.IO
 import cats.implicits.*
-import com.monadial.waygrid.common.application.domain.model.routing.CirceInstances.given
 import com.monadial.waygrid.common.domain.model.Waygrid.Address
 import com.monadial.waygrid.common.domain.model.routing.RouteNode
 import com.monadial.waygrid.common.domain.model.routing.Value.{DeliveryStrategy, RetryMaxRetries, RetryPolicy}

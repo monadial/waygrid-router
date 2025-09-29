@@ -1,15 +1,10 @@
 package com.monadial.waygrid.common.domain.instances
 
 import cats.data.Validated
-import com.github.plokhotnyuk.jsoniter_scala.core.JsonValueCodec
-import com.github.plokhotnyuk.jsoniter_scala.macros.JsonCodecMaker
 import com.monadial.waygrid.common.domain.value.codec.{Base64Codec, Base64DecodingError, BytesCodec, BytesDecodingError}
 import scodec.{Attempt, codecs, Decoder as SDecoder, Encoder as SEncoder}
 
 object LongInstances:
-
-
-
 
   given BytesCodec[Long] with
     inline def encode(value: Long): Array[Byte] =
@@ -35,5 +30,3 @@ object LongInstances:
         .catchNonFatal(JavaBridge.base64Decoder(value))
         .map(BigInt(_).toLong)
         .leftMap(x => Base64DecodingError(x.getMessage))
-
-  given JsonValueCodec[Long] = JsonCodecMaker.make

@@ -23,7 +23,7 @@ type TopologyServerActor[F[+_]]    = SupervisedActor[F, TopologyServerRequest]
 type TopologyServerActorRef[F[+_]] = SupervisedActorRef[F, TopologyServerRequest]
 
 object TopologyServerActor:
-  def behavior[F[+_]: {Async, HasNode, Concurrent, Parallel, Logger,
+  def behavior[F[+_]: {Async, ThisNode, Concurrent, Parallel, Logger,
     EventSink, EventSource}]: Resource[F, TopologyServerActor[F]] =
     for
       eventSourceFiber <- Resource.eval(Ref.of[F, Option[Fiber[F, Throwable, Unit]]](None))

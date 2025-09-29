@@ -1,7 +1,7 @@
 package com.monadial.waygrid.common.application.algebra
 
 import cats.effect.Resource
-import com.monadial.waygrid.common.application.domain.model.event.{Event, EventStream, RawEvent}
+import com.monadial.waygrid.common.application.domain.model.event.{ Event, EventStream, RawEvent }
 import com.monadial.waygrid.common.domain.model.event.Event as DomainEvent
 import fs2.Stream
 

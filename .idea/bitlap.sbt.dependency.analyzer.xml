@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SbtDependencyAnalyzer.Settings">
+    <option name="organization" value="com.monadial" />
+    <option name="sbtModules">
+      <map>
+        <entry key="__SINGLE_MODULE__" value="waygrid" />
+      </map>
+    </option>
+  </component>
+</project>

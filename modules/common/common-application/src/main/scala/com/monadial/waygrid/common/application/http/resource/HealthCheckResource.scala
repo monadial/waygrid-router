@@ -1,20 +1,24 @@
 package com.monadial.waygrid.common.application.http.resource
 
-import cats.effect.kernel.Async
+import cats.effect.Async
 import cats.syntax.all.*
-import com.monadial.waygrid.common.application.algebra.Logger
-import org.http4s.HttpRoutes
+import io.circe.Codec
+import org.http4s.circe.*
 import org.http4s.dsl.Http4sDsl
+import org.http4s.{EntityEncoder, HttpRoutes}
 
 object HealthCheckResource:
-  def apply[F[+_]: {Async, Logger}]: HttpRoutes[F] =
+  private final case class Response() derives Codec.AsObject
+
+  def resource[F[+_] : {Async}]: HttpRoutes[F] =
     object serverDsl extends Http4sDsl[F]
     import serverDsl.*
+
+    given EntityEncoder[F, Response] = jsonEncoderOf[F, Response]
 
     HttpRoutes.of[F] {
       case GET -> Root / "health-check" =>
         for
-          _   <- Logger[F].info("Received health-check request", Map("endpoint" -> "/.wellknown/health-check"))
-          res <- Ok("1")
+          res <- Ok(Response())
         yield res
     }

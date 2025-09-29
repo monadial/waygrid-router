@@ -1,6 +1,6 @@
 package com.monadial.waygrid.common.application.syntax
 
-import com.monadial.waygrid.common.application.algebra.HasNode
+import com.monadial.waygrid.common.application.algebra.ThisNode
 
 import cats.effect.Async
 import cats.implicits.*
@@ -25,8 +25,8 @@ object EventSyntax:
       )
 
   extension [E <: DomainEvent](event: E)
-    def fromDomainEvent[F[+_]: {Async, HasNode}](address: EventAddress): F[Event[E]] =
+    def fromDomainEvent[F[+_]: {Async, ThisNode}](address: EventAddress): F[Event[E]] =
       for
         id   <- EventId.next[F]
-        node <- HasNode[F].get
+        node <- ThisNode[F].get
       yield Event(id, address, event)

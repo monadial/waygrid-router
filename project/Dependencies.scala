@@ -2,44 +2,48 @@ import sbt.*
 
 object Dependencies {
   object V {
-    val airframeUlid                 = "2025.1.9"
-    val bouncyCastleVersion          = "1.80"
+    val airframeUlid                 = "2025.1.14"
+    val bouncyCastleVersion          = "1.81"
     val cats                         = "2.13.0"
     val catsActors                   = "2.0.0"
-    val catsEffect                   = "3.6.1"
+    val catsEffect                   = "3.6.2"
     val circe                        = "0.14.10"
+    val jsonsKema                    = "0.25.0"
     val circeConfig                  = "0.10.1"
     val circeRefined                 = "0.15.1"
     val cloudEvents                  = "2.5.0"
-    val fly4s                        = "1.1.0"
+    val doobie                       = "1.0.0-RC10"
+    val doobieFlyway                 = "0.5.3"
+    val flyway                        = "11.10.3"
     val fs2core                      = "3.12.0"
-    val fs2Kafka                     = "3.7.0"
+    val fs2Kafka                     = "3.8.0"
     val http4s                       = "0.23.30"
     val http4sMetrics                = "0.23.30"
     val http4sWs                     = "0.23.30"
-    val http4sOtel4s                 = "0.12.0"
-    val ip4s                         = "3.6.0"
+    val http4sOtel4s                 = "0.13.0"
+    val ip4s                         = "3.7.0"
     val kittens                      = "3.5.0"
     val laika                        = "1.3.2"
     val log4cats                     = "2.7.0"
     val logbackClassic               = "1.5.18"
     val monocle                      = "3.3.0"
     val odin                         = "0.17.0"
-    val opentelemetryInstrumentation = "2.15.0-alpha"
+    val opentelemetryInstrumentation = "2.18.0-alpha"
     val opentelemetryOtlp            = "1.49.0"
-    val otel4s                       = "0.12.0"
+    val otel4s                       = "0.13.1"
+    val postgres                     = "42.7.7"
     val prometheus4cats              = "3.0.0"
-    val redis4Cats                   = "1.7.2"
+    val redis4Cats                   = "2.0.1"
     val refined                      = "0.11.3"
     val scalacheck                   = "1.18.1"
-    val scodeCore                       = "2.3.2"
-    val scodeBits                      = "1.2.1"
+    val scodeCore                    = "2.3.2"
+    val scodeBits                    = "1.2.4"
     val shapeless3                   = "3.5.0"
-    val jsoniter                     = "2.36.2"
+    val jsoniter                     = "2.36.7"
     val skunk                        = "0.6.4"
-    val typesafeConfig               = "1.4.3"
+    val typesafeConfig               = "1.4.4"
     val weaver                       = "0.8.4"
-    val zeroAllocationHashingVersion = "0.16"
+    val zeroAllocationHashingVersion = "0.27ea1"
   }
 
   object Libraries {
@@ -66,6 +70,8 @@ object Dependencies {
     val circeRefined: Def = circe("refined", V.circeRefined)
     val circeConfig: Def  = circe("config", V.circeConfig)
     val circeTesting: Def = circe("testing", V.circe)
+
+    val jsonsKema = Def.setting("com.github.erosb" % "json-sKema" % V.jsonsKema)
 
     val http4sCore   = http4s("core")
     val http4sDsl    = http4s("dsl")
@@ -116,8 +122,12 @@ object Dependencies {
     val scodecCore = Def.setting("org.scodec" %% "scodec-core" % V.scodeCore)
     val scodecBits = Def.setting("org.scodec" %% "scodec-bits" % V.scodeBits)
 
-    val skunkCore = Def.setting("org.tpolecat" %% "skunk-core" % V.skunk)
-    val fly4s     = Def.setting("com.github.geirolz" %% "fly4s" % V.fly4s)
+    val doobieCore          = Def.setting("org.tpolecat" %% "doobie-core" % V.doobie)
+    val doobieHikari        = Def.setting("org.tpolecat" %% "doobie-hikari" % V.doobie)
+    val doobiePostgres      = Def.setting("org.tpolecat" %% "doobie-postgres" % V.doobie)
+    val doobiePostgresCirce = Def.setting("org.tpolecat" %% "doobie-postgres-circe" % V.doobie)
+    val doobieFlyway        = Def.setting("de.lhns" %% "doobie-flyway" % V.doobieFlyway)
+    val flywayPostgres    = Def.setting("org.flywaydb" % "flyway-database-postgresql" % V.flyway)
 
     val catsActors = Def.setting("com.github.suprnation.cats-actors" %% "cats-actors" % V.catsActors)
 

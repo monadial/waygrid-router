@@ -15,3 +15,7 @@ abstract class ULIDValue extends Value[ULID]:
   inline def fromString[F[+_]: Applicative](ulid: String): F[Type] =
     GenULID[F]
       .fromString[Type](ulid)
+
+  inline def fromStringUnsafe[F[+_]: Applicative](ulid: String): Type =
+    GenULID[F]
+      .fromStringUnsafe[Type](ulid)

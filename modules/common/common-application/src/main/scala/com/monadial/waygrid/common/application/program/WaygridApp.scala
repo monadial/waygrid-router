@@ -1,7 +1,7 @@
 package com.monadial.waygrid.common.application.program
 
 import com.monadial.waygrid.common.application.`macro`.CirceEventCodecRegistryMacro
-import com.monadial.waygrid.common.application.algebra.{ EventSink, EventSource, HasNode, Logger }
+import com.monadial.waygrid.common.application.algebra.{ EventSink, EventSource, ThisNode, Logger }
 import com.monadial.waygrid.common.application.interpreter.*
 import com.monadial.waygrid.common.domain.model.node.Value.NodeDescriptor
 
@@ -52,15 +52,15 @@ trait WaygridApp[S <: NodeSettings](
   private def programInterpreter[F[+_]: {Async, Parallel, Console, Env, MeterProvider}]: Resource[F, Unit] =
     for
       bootTime             <- Resource.eval(Clock[F].realTimeInstant)
-      given HasNode[F]     <- EnvHasNodeInterpreter.resource[F](nodeDescriptor)
-      given Meter[F]       <- Resource.eval(MeterProvider[F].get("waygrid-app.origin"))
+      given ThisNode[F]     <- EnvHasNodeInterpreter.resource[F](nodeDescriptor)
       programSettings      <- CirceSettingsLoaderInterpreter.resource[F, S].evalMap(_.load)
-      thisNode             <- Resource.eval(HasNode[F].get)
+      thisNode             <- Resource.eval(ThisNode[F].get)
       given Logger[F]      <- OdinLoggerInterpreter.resource[F](programSettings.logLevel)
+      given Meter[F]       <- Resource.eval(MeterProvider[F].get(thisNode.id.show))
       given EventSink[F]   <- EventSinkInterpreter.kafka[F](programSettings.eventStream.kafka)
       given EventSource[F] <- EventSourceInterpreter.kafka[F](programSettings.eventStream.kafka)
-//      _                    <- Resource.eval(Logger[F].info(s"Starting ${thisNode.clientId.show}..."))
-//      _                    <- Resource.eval(Logger[F].info(s"Node address: ${thisNode.address.show}"))
+      _                    <- Resource.eval(Logger[F].info(s"Service address: ${thisNode.address.service.show}"))
+      _                    <- Resource.eval(Logger[F].info(s"Node address: ${thisNode.address.show}"))
       _           <- Resource.eval(Logger[F].info(s"Boot time: ${bootTime.toString}"))
       _           <- Resource.eval(CirceEventCodecRegistryMacro.debug)
       actorSystem <- ActorSystem[F](thisNode.settingsPath.show)
@@ -75,7 +75,7 @@ trait WaygridApp[S <: NodeSettings](
    * @param thisNode fully resolved NodeDescriptor (with address & ID)
    * @return Resource representing the core service lifecycle
    */
-  def programBuilder[F[+_]: {Async, Parallel, Console, Logger, HasNode, MeterProvider, EventSink, EventSource}](
+  def programBuilder[F[+_]: {Async, Parallel, Console, Logger, ThisNode, MeterProvider, EventSink, EventSource}](
     actorSystem: ActorSystem[F],
     settings: S,
     thisNode: Node

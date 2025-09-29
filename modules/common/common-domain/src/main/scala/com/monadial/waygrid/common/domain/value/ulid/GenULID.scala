@@ -7,6 +7,7 @@ import wvlet.airframe.ulid.ULID
 trait GenULID[F[+_]]:
   def next[A: IsULID]: F[A]
   def fromString[A: IsULID](ulid: String): F[A]
+  def fromStringUnsafe[A: IsULID](ulid: String): A
 
 object GenULID:
   def apply[F[+_]](using ev: GenULID[F]): GenULID[F] = ev
@@ -23,3 +24,8 @@ object GenULID:
         .fromString(ulid)
         .pure[F]
         .map(IsULID[A].iso.get)
+
+    override def fromStringUnsafe[A: IsULID](ulid: String): A =
+      IsULID[A]
+        .iso
+        .get(ULID.fromString(ulid))

@@ -1,22 +1,27 @@
 package com.monadial.waygrid.common.domain.model.node
 
-import com.monadial.waygrid.common.domain.model.Waygrid.Address
 import com.monadial.waygrid.common.domain.model.Waygrid
 import com.monadial.waygrid.common.domain.model.node.Value.*
-import com.monadial.waygrid.common.domain.model.settings.Settings
 import com.monadial.waygrid.common.domain.syntax.StringSyntax.toDomain
+import io.circe.Codec
 
 import java.time.Instant
 
 final case class Node(
+  id: NodeId,
   descriptor: NodeDescriptor,
   clusterId: NodeClusterId,
-  nodeId: NodeId,
+  region: NodeRegion,
   startedAt: Instant,
-  runtime: NodeRuntime,
-):
-  inline def address: Address = Address(s"${descriptor.component}.${descriptor.service}")
+  runtime: NodeRuntime
+) derives Codec.AsObject
 
-  inline def settingsPath: NodeSettingsPath =
-    s"${Waygrid.appName}.${descriptor.component}.${descriptor.service}"
-      .toDomain[NodeSettingsPath]
+object Node:
+  extension (node: Node)
+    inline def settingsPath: NodeSettingsPath =
+      s"${Waygrid.appName}.${node.descriptor.component}.${node.descriptor.service}"
+        .toDomain[NodeSettingsPath]
+
+    inline def address: NodeAddress = NodeAddress.fromNode(node)
+
+    def uptime: Long = Instant.now().toEpochMilli - node.startedAt.toEpochMilli

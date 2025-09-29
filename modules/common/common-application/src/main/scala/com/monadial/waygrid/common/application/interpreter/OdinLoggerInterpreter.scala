@@ -3,18 +3,20 @@ package com.monadial.waygrid.common.application.interpreter
 import cats.effect.*
 import cats.implicits.catsSyntaxApplicativeId
 import cats.syntax.all.*
-import com.monadial.waygrid.common.application.algebra.{ HasNode, Logger, LoggerContext }
+import com.monadial.waygrid.common.application.algebra.{ ThisNode, Logger, LoggerContext }
 import io.odin.formatter.Formatter
 import io.odin.meta.Position
 import io.odin.{ Level, consoleLogger }
 
 object OdinLoggerInterpreter: // todo refactor
 
-  def default[F[+_]: {HasNode, Async}](minLevel: Level): F[Logger[F]] =
+  def default[F[+_]: {ThisNode, Async}](minLevel: Level): F[Logger[F]] =
     for
-      thisNode <- HasNode[F].get
+      thisNode <- ThisNode[F].get
       nodeContext <- Map(
-//        "address"   -> thisNode.address.show,
+        "clusterId" -> thisNode.clusterId.show,
+        "nodeId"    -> thisNode.id.show,
+        "region"    -> thisNode.region.show,
         "component" -> thisNode.descriptor.component.show,
         "service"   -> thisNode.descriptor.service.show
       ).pure[F]
@@ -195,7 +197,7 @@ object OdinLoggerInterpreter: // todo refactor
         odinLogger
           .trace(msg, ctx ++ nodeContext, t)
 
-  def resource[F[+_]: {HasNode,
+  def resource[F[+_]: {ThisNode,
     Async}](minLevel: Level): Resource[F, Logger[F]] =
     Resource
       .eval(default(minLevel))

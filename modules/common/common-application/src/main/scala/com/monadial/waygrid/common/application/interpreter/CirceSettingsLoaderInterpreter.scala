@@ -5,7 +5,7 @@ import cats.data.OptionT
 import cats.effect.Resource
 import cats.effect.std.Env
 import cats.syntax.all.*
-import com.monadial.waygrid.common.application.algebra.{ HasNode, SettingsLoader }
+import com.monadial.waygrid.common.application.algebra.{ ThisNode, SettingsLoader }
 import com.typesafe.config.ConfigFactory
 import io.circe.Decoder
 import io.circe.config.syntax.CirceConfigOps
@@ -17,9 +17,9 @@ object CirceSettingsLoaderInterpreter:
     Resource
       .pure:
         new SettingsLoader[F, A]:
-          override def load(using HasNode[F]): F[A] =
+          override def load(using ThisNode[F]): F[A] =
             for
-              thisNode        <- HasNode[F].get
+              thisNode        <- ThisNode[F].get
               bundledSettings <- ConfigFactory.load().pure[F]
               envSettings <- OptionT(Env[F].get("WAYGRID_SETTINGS_PATH"))
                 .filter(f => new File(f).exists)

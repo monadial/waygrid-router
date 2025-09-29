@@ -1,12 +1,12 @@
 package com.monadial.waygrid.common.domain.value
 
-import cats.{ Eq, Functor, Order, Show }
+import cats.{Eq, Functor, Order, Show}
 import com.monadial.waygrid.common.domain.algebra.TypeEvidence
-import com.monadial.waygrid.common.domain.value.codec.{ Base64Codec, BytesCodec }
+import com.monadial.waygrid.common.domain.value.codec.{Base64Codec, BytesCodec}
 import eu.timepit.refined.*
-import eu.timepit.refined.api.{ Refined, Validate }
+import eu.timepit.refined.api.{Refined, Validate}
 import eu.timepit.refined.auto.*
-import io.circe.{ Decoder as JsonDecoder, Encoder as JsonEncoder }
+import io.circe.{Decoder as JsonDecoder, Encoder as JsonEncoder}
 import monocle.Iso
 
 abstract class ValueRefined[V, P](using
