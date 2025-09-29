@@ -1,6 +1,6 @@
 package com.monadial.waygrid.common.application.algebra
 
-import cats.effect.kernel.{ Fiber, Resource }
+import cats.effect.{ Fiber, Resource }
 import com.monadial.waygrid.common.application.domain.model.event.{Event, EventStream}
 import com.monadial.waygrid.common.domain.model.event.Event as DomainEvent
 

@@ -1,0 +1,574 @@
+POST http://localhost:1337/v1/ingest
+Content-Type: application/json
+Authorization: Bearer dev-token
+X-TenantId: value
+X-ChannelId: value
+Content-Length: 322
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "graph": {
+    "entryPoint": {
+      "address": "waygrid://destination/webhook",
+      "retryPolicy": {
+        "type": "NoRetry"
+      },
+      "deliveryStrategy": {
+        "type": "Immediate"
+      },
+      "onSuccess": null,
+      "onFailure": null
+    },
+    "repeatPolicy": {
+      "type": "NoRepeat"
+    }
+  }
+}
+
+<> 2025-09-24T232252.200.json
+
+###
+
+POST http://localhost:1337/v1/ingest
+Authorization: Bearer dev-token
+X-TenantId: value
+X-ChannelId: value
+Content-Length: 322
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "graph": {
+    "entryPoint": {
+      "address": "waygrid://destination/webhook",
+      "retryPolicy": {
+        "type": "NoRetry"
+      },
+      "deliveryStrategy": {
+        "type": "Immediate"
+      },
+      "onSuccess": null,
+      "onFailure": null
+    },
+    "repeatPolicy": {
+      "type": "NoRepeat"
+    }
+  }
+}
+
+<> 2025-09-24T232243.200.json
+
+###
+
+POST http://localhost:1337/v1/ingest
+Authorization: Bearer dev-token
+X-TenantId: value
+X-ChannelId: value
+Content-Length: 322
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "graph": {
+    "entryPoint": {
+      "address": "waygrid://destination/webhook",
+      "retryPolicy": {
+        "type": "NoRetry"
+      },
+      "deliveryStrategy": {
+        "type": "Immediate"
+      },
+      "onSuccess": null,
+      "onFailure": null
+    },
+    "repeatPolicy": {
+      "type": "NoRepeat"
+    }
+  }
+}
+
+<> 2025-09-24T232241.200.json
+
+###
+
+POST http://localhost:1337/v1/ingest
+Content-Type: application/json
+Authorization: Bearer dev-token
+X-TenantId: value
+X-ChannelId: value
+Content-Length: 322
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "graph": {
+    "entryPoint": {
+      "address": "waygrid://destination/webhook",
+      "retryPolicy": {
+        "type": "NoRetry"
+      },
+      "deliveryStrategy": {
+        "type": "Immediate"
+      },
+      "onSuccess": null,
+      "onFailure": null
+    },
+    "repeatPolicy": {
+      "type": "NoRepeat"
+    }
+  }
+}
+
+<> 2025-09-24T232214-1.200.json
+
+###
+
+POST http://localhost:1337/v1/ingest
+Content-Type: application/json
+Authorization: Bearer dev-token
+X-TenantId: value
+X-ChannelId: value
+Content-Length: 322
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "graph": {
+    "entryPoint": {
+      "address": "waygrid://destination/webhook",
+      "retryPolicy": {
+        "type": "NoRetry"
+      },
+      "deliveryStrategy": {
+        "type": "Immediate"
+      },
+      "onSuccess": null,
+      "onFailure": null
+    },
+    "repeatPolicy": {
+      "type": "NoRepeat"
+    }
+  }
+}
+
+<> 2025-09-24T232214.200.json
+
+###
+
+POST http://localhost:1337/v1/ingest
+Content-Type: application/json
+Authorization: Bearer dev-token
+X-TenantId: value
+X-ChannelId: value
+Content-Length: 322
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "graph": {
+    "entryPoint": {
+      "address": "waygrid://destination/webhook",
+      "retryPolicy": {
+        "type": "NoRetry"
+      },
+      "deliveryStrategy": {
+        "type": "Immediate"
+      },
+      "onSuccess": null,
+      "onFailure": null
+    },
+    "repeatPolicy": {
+      "type": "NoRepeat"
+    }
+  }
+}
+
+<> 2025-09-24T232212.200.json
+
+###
+
+POST http://localhost:1337/v1/ingest
+Content-Type: application/json
+Authorization: Bearer dev-token
+X-TenantId: value
+X-ChannelId: value
+Content-Length: 322
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "graph": {
+    "entryPoint": {
+      "address": "waygrid://destination/webhook",
+      "retryPolicy": {
+        "type": "NoRetry"
+      },
+      "deliveryStrategy": {
+        "type": "Immediate"
+      },
+      "onSuccess": null,
+      "onFailure": null
+    },
+    "repeatPolicy": {
+      "type": "NoRepeat"
+    }
+  }
+}
+
+<> 2025-09-23T091241.200.json
+
+###
+
+POST http://localhost:1337/v1/ingest
+Content-Type: application/json
+Authorization: Bearer dev-token
+X-TenantId: value
+X-ChannelId: value
+Content-Length: 322
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "graph": {
+    "entryPoint": {
+      "address": "waygrid://destination/webhook",
+      "retryPolicy": {
+        "type": "NoRetry"
+      },
+      "deliveryStrategy": {
+        "type": "Immediate"
+      },
+      "onSuccess": null,
+      "onFailure": null
+    },
+    "repeatPolicy": {
+      "type": "NoRepeat"
+    }
+  }
+}
+
+<> 2025-09-23T091140.200.json
+
+###
+
+POST http://localhost:1337/v1/ingest
+Content-Type: application/json
+Authorization: Bearer dev-token
+X-TenantId: value
+X-ChannelId: value
+Content-Length: 322
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "graph": {
+    "entrypoint": {
+      "address": "waygrid://destination/webhook",
+      "retrypolicy": {
+        "type": "NoRetry"
+      },
+      "deliverystrategy": {
+        "type": "Immediate"
+      },
+      "onsuccess": null,
+      "onfailure": null
+    },
+    "repeatpolicy": {
+      "type": "NoRepeat"
+    }
+  }
+}
+
+<> 2025-09-23T090500.200.json
+
+###
+
+POST http://localhost:1337/v1/ingest
+Content-Type: application/json
+Authorization: Bearer dev-token
+X-TenantId: value
+X-ChannelId: value
+Content-Length: 274
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "graph": {
+    "entryPoint": {
+      "address": "waygrid://destination/webhook",
+      "repeatPolicy": {
+        "type": "NoRepeat"
+      },
+      "deliveryStrategy": {
+        "type": "Immediate"
+      }
+    },
+    "repeatPolicy": {
+      "type": "NoRepeat"
+    }
+  }
+}
+
+<> 2025-09-23T090157.200.json
+
+###
+
+POST http://localhost:1337/v1/ingest
+Content-Type: application/json
+Authorization: Bearer dev-token
+X-TenantId: value
+X-ChannelId: value
+Content-Length: 274
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "graph": {
+    "entryPoint": {
+      "address": "waygrid://destination/webhook",
+      "repeatPolicy": {
+        "type": "NoRepeat"
+      },
+      "deliveryStrategy": {
+        "type": "Immediate"
+      }
+    },
+    "repeatPolicy": {
+      "type": "NoRepeat"
+    }
+  }
+}
+
+<> 2025-09-23T085332.500.txt
+
+###
+
+POST http://localhost:1337/v1/ingest
+Content-Type: application/json
+Authorization: Bearer dev-token
+X-TenantId: value
+X-ChannelId: value
+Content-Length: 274
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "graph": {
+    "entryPoint": {
+      "address": "waygrid://destination/webhook",
+      "repeatPolicy": {
+        "type": "NoRepeat"
+      },
+      "deliveryStrategy": {
+        "type": "Immediate"
+      }
+    },
+    "repeatPolicy": {
+      "type": "NoRepeat"
+    }
+  }
+}
+
+<> 2025-09-23T085307.500.txt
+
+###
+
+POST http://localhost:1337/v1/ingest
+Content-Type: application/json
+Authorization: Bearer dev-token
+Content-Length: 170
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "envelope": {
+    "content": {
+      "type": "text/plain",
+      "data": "Hello, World!"
+    }
+  },
+  "route": {
+    "address": "waygrid://destination/webhook",
+  }
+}
+
+<> 2025-08-24T134212.200.json
+
+###
+
+POST http://localhost:1337/v1/ingest
+Content-Type: application/json
+Authorization: Bearer dev-token
+Content-Length: 170
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "envelope": {
+    "content": {
+      "type": "text/plain",
+      "data": "Hello, World!"
+    }
+  },
+  "route": {
+    "address": "waygrid://destination/webhook",
+  }
+}
+
+<> 2025-08-24T134045.200.json
+
+###
+
+POST http://localhost:1337/v1/ingest
+Content-Type: application/json
+Authorization: Bearer dev-token
+Content-Length: 170
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "envelope": {
+    "content": {
+      "type": "text/plain",
+      "data": "Hello, World!"
+    }
+  },
+  "route": {
+    "address": "waygrid://destination/webhook",
+  }
+}
+
+<> 2025-08-23T201137.500.txt
+
+###
+
+POST http://localhost:1337/v1/ingest
+Content-Type: application/json
+Authorization: Bearer dev-token
+Content-Length: 170
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "envelope": {
+    "content": {
+      "type": "text/plain",
+      "data": "Hello, World!"
+    }
+  },
+  "route": {
+    "address": "waygrid://destination/webhook",
+  }
+}
+
+<> 2025-08-23T201056.500.txt
+
+###
+
+POST http://localhost:1337/v1/ingest
+Content-Type: application/json
+Authorization: Bearer dev-token
+Content-Length: 170
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "envelope": {
+    "content": {
+      "type": "text/plain",
+      "data": "Hello, World!"
+    }
+  },
+  "route": {
+    "address": "waygrid://destination/webhook",
+  }
+}
+
+###
+
+POST http://localhost:1337/v1/ingest
+Content-Type: application/json
+Authorization: Bearer dev-token
+Content-Length: 170
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "envelope": {
+    "content": {
+      "type": "text/plain",
+      "data": "Hello, World!"
+    }
+  },
+  "route": {
+    "address": "waygrid://destination/webhook",
+  }
+}
+
+###
+
+POST http://localhost:1337/v1/ingest
+Content-Type: application/json
+Authorization: Bearer dev-token
+Content-Length: 170
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "envelope": {
+    "content": {
+      "type": "text/plain",
+      "data": "Hello, World!"
+    }
+  },
+  "route": {
+    "address": "waygrid://destination/webhook",
+  }
+}
+
+###
+
+POST http://localhost:1337/ingest/v1/origin
+Content-Type: application/json
+Authorization: Bearer dev-token
+Content-Length: 170
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "envelope": {
+    "content": {
+      "type": "text/plain",
+      "data": "Hello, World!"
+    }
+  },
+  "route": {
+    "address": "waygrid://destination/webhook",
+  }
+}
+
+<> 2025-08-23T200526.404.txt
+
+###
+

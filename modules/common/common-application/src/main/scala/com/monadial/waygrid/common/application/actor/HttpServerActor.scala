@@ -1,25 +1,19 @@
 package com.monadial.waygrid.common.application.actor
 
-import com.monadial.waygrid.common.application.actor.HttpServerActorCommand.{
-  RegisterRoute,
-  RegisterWsRoute,
-  UnregisterRoute,
-  UnregisterWsRoute
-}
+import com.monadial.waygrid.common.application.actor.HttpServerActorCommand.{RegisterRoute, RegisterWsRoute, UnregisterRoute, UnregisterWsRoute}
 import com.monadial.waygrid.common.application.algebra.*
-import com.monadial.waygrid.common.application.algebra.SupervisedRequest.{ Restart, Start, Stop }
-import com.monadial.waygrid.common.application.http.resource.WellknownResource
+import com.monadial.waygrid.common.application.algebra.SupervisedRequest.{Restart, Start, Stop}
+import com.monadial.waygrid.common.application.http.resource.{HomeResource, WellknownResource}
 import com.monadial.waygrid.common.application.util.logging.LoggerLog4CatsWrapper
-
 import cats.Parallel
-import cats.data.Kleisli
+import cats.data.{Kleisli, OptionT}
 import cats.effect.implicits.*
-import cats.effect.{ Async, Fiber, Ref, Resource }
+import cats.effect.{Async, Fiber, Ref, Resource}
 import cats.syntax.all.*
 import com.monadial.waygrid.common.application.domain.model.settings.HttpServerSettings
 import com.suprnation.actor.Actor.ReplyingReceive
 import fs2.io.net.Network
-import org.http4s.{ HttpRoutes, Request }
+import org.http4s.{HttpRoutes, Request}
 import org.http4s.ember.server.EmberServerBuilder
 import org.http4s.implicits.given
 import org.http4s.otel4s.middleware.metrics.OtelMetrics
@@ -30,11 +24,11 @@ import org.typelevel.otel4s.metrics.MeterProvider
 
 sealed trait ServerState[F[+_]]
 object ServerState:
-  case class Stopped[F[+_]]()                                                  extends ServerState[F]
-  case class PreStart[F[+_]]()                                                 extends ServerState[F]
-  case class Failed[F[+_]](error: Throwable)                                   extends ServerState[F]
-  case class Restarting[F[+_]](server: Fiber[F, Throwable, (Server, F[Unit])]) extends ServerState[F]
-  case class Running[F[+_]](server: Fiber[F, Throwable, (Server, F[Unit])])    extends ServerState[F]
+  case class Stopped[F[+_]]()                                               extends ServerState[F]
+  case class PreStart[F[+_]]()                                              extends ServerState[F]
+  case class Failed[F[+_]](error: Throwable)                                extends ServerState[F]
+  case class Restarting[F[+_]]()                                            extends ServerState[F]
+  case class Running[F[+_]](server: Fiber[F, Throwable, (Server, F[Unit])]) extends ServerState[F]
 
 sealed trait HttpServerActorCommand[F[+_]]
 object HttpServerActorCommand:
@@ -53,9 +47,9 @@ type WsRouteMap[F[+_]] = Map[String, WsRoutes[F]]
 
 object HttpServerActor:
 
-  private inline def defaultRoutes[F[+_]: {Async}] = WellknownResource.v1[F]
+  private inline def defaultRoutes[F[+_]: {ThisNode, Async}] = HomeResource.resource[F] <+> WellknownResource.v1[F]
 
-  def behavior[F[+_]: {Async, Parallel, Logger,
+  def behavior[F[+_]: {Async, ThisNode, Parallel, Logger,
     MeterProvider}](settings: HttpServerSettings): Resource[F, HttpServerActor[F]] =
     for
       given Network[F]    <- Resource.pure(Network.forAsync[F])
@@ -74,7 +68,26 @@ object HttpServerActor:
         case UnregisterWsRoute(key)      => handleWsRouteUnregistration(key)
         case Start                       => handleServerStart
         case Stop                        => handleServerStop
-        case Restart                     => receive(Stop) *> receive(Start)
+        case Restart                     => handleRestart
+
+      private def handleRestart: F[Unit] =
+        Logger[F].info("HTTP Server actor Restart signal received...") *>
+          stateRef
+            .get
+            .flatMap:
+              case ServerState.Running(fiber) =>
+                Logger[F].info("Stopping HTTP server before restart...") *>
+                  fiber.cancel *> handleServerStart
+
+              case ServerState.Stopped() =>
+                Logger[F].warn("HTTP Server actor is already stopped, starting it...") *>
+                  handleServerStart
+
+              case ServerState.Failed(e) =>
+                Logger[F].error("HTTP Server actor is in failed state, cannot restart.", e)
+
+              case _ =>
+                Logger[F].warn("HTTP Server actor is in an unknown state, cannot restart.")
 
       private def handleServerStart: F[Unit] =
         Logger[F].info("HTTP Server actor Start signal received...") *>
@@ -92,7 +105,7 @@ object HttpServerActor:
                     .withLogger(logger)
                     .withHost(settings.host)
                     .withPort(settings.port)
-                    .withMaxConnections(65536)
+                    .withMaxConnections(settings.maxConnections.getOrElse(65536))
                     .withHttpWebSocketApp: ws =>
                       Kleisli: req =>
                         for
@@ -160,7 +173,7 @@ object HttpServerActor:
         for
           routes <- routeMapRef.get
           _ <- combinedRoutesRef.set(
-            routes.values.toList.reduceOption(_ <+> _).getOrElse(defaultRoutes[F])
+            (routes.values.toList :+ defaultRoutes[F]).reduce(_ <+> _)
           )
         yield ()
 

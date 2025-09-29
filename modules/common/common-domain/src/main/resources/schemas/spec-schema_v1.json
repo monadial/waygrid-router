@@ -1,0 +1,230 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://waygrid.dev/schemas/waygrid/spec.json",
+  "title": "Routing Spec",
+  "type": "object",
+  "properties": {
+    "graph": {
+      "type": "object",
+      "properties": {
+        "entryPoint": {
+          "$ref": "#/$defs/Node"
+        },
+        "repeatPolicy": {
+          "$ref": "#/$defs/RepeatPolicy"
+        }
+      },
+      "required": [
+        "entryPoint",
+        "repeatPolicy"
+      ]
+    }
+  },
+  "required": [
+    "graph"
+  ],
+  "$defs": {
+    "Node": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string",
+          "description": "Service address, e.g. waygrid://destination/webhook",
+          "pattern": "^waygrid://(processor|destination)/[a-z0-9_-]+$"
+        },
+        "retryPolicy": {
+          "$ref": "#/$defs/RetryPolicy"
+        },
+        "deliveryStrategy": {
+          "$ref": "#/$defs/DeliveryStrategy"
+        },
+        "onSuccess": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/Node"
+            }
+          ]
+        },
+        "onFailure": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/Node"
+            }
+          ]
+        }
+      },
+      "required": [
+        "address",
+        "retryPolicy",
+        "deliveryStrategy"
+      ]
+    },
+    "RetryPolicy": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "NoRetry"
+            }
+          },
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "Linear"
+            },
+            "delay": {
+              "type": "string",
+              "pattern": "^[0-9]+(ms|s|m|h)$"
+            },
+            "maxRetries": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "type",
+            "delay",
+            "maxRetries"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "Exponential"
+            },
+            "baseDelay": {
+              "type": "string",
+              "pattern": "^[0-9]+(ms|s|m|h)$"
+            },
+            "maxRetries": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "type",
+            "baseDelay",
+            "maxRetries"
+          ]
+        }
+      ]
+    },
+    "DeliveryStrategy": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "Immediate"
+            }
+          },
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "ScheduleAfter"
+            },
+            "delay": {
+              "type": "string",
+              "pattern": "^[0-9]+(ms|s|m|h)$"
+            }
+          },
+          "required": [
+            "type",
+            "delay"
+          ]
+        }
+      ]
+    },
+    "RepeatPolicy": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "NoRepeat"
+            }
+          },
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "Indefinitely"
+            },
+            "every": {
+              "type": "string",
+              "pattern": "^[0-9]+(ms|s|m|h)$"
+            }
+          },
+          "required": [
+            "type",
+            "every"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "Times"
+            },
+            "every": {
+              "type": "string",
+              "pattern": "^[0-9]+(ms|s|m|h)$"
+            },
+            "time": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "type",
+            "every",
+            "time"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "Until"
+            },
+            "every": {
+              "type": "string",
+              "pattern": "^[0-9]+(ms|s|m|h)$"
+            },
+            "until": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "required": [
+            "type",
+            "every",
+            "until"
+          ]
+        }
+      ]
+    }
+  }
+}

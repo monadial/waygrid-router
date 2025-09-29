@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ScalaCompilerConfiguration">
-    <profile name="sbt 1" modules="waygrid-router_856" />
-    <profile name="sbt 10" modules="Waygrid.origin-http">
+    <option name="separateProdTestSources" value="true" />
+    <profile name="sbt 1" modules="Waygrid,Waygrid.common-application,Waygrid.common-domain,Waygrid.destination-blackhole,Waygrid.destination-webhook,Waygrid.destination-websocket,Waygrid.origin-grpc,Waygrid.origin-http,Waygrid.origin-kafka,Waygrid.processor-openai,Waygrid.system-billing,Waygrid.system-common,Waygrid.system-dag-registry,Waygrid.system-history,Waygrid.system-iam,Waygrid.system-k8s-operator,Waygrid.system-kms,Waygrid.system-scheduler,Waygrid.system-secure-store,Waygrid.system-topology,Waygrid.system-waystation,waygrid-router_856" />
+    <profile name="sbt 10" modules="Waygrid.destination-blackhole.main">
       <option name="implicitConversions" value="true" />
       <option name="higherKinds" value="true" />
       <option name="macros" value="true" />
@@ -11,6 +12,7 @@
       <option name="featureWarnings" value="true" />
       <parameters>
         <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
         <parameter value="-encoding" />
         <parameter value="utf8" />
         <parameter value="-Xkind-projector" />
@@ -25,13 +27,13 @@
         <parameter value="-Xfatal-warnings" />
         <parameter value="-Xsemanticdb" />
         <parameter value="-semanticdb-target" />
-        <parameter value="$PROJECT_DIR$/modules/origin/origin-http/target/scala-3.7.0/meta" />
+        <parameter value="$PROJECT_DIR$/modules/destination/destination-blackhole/target/scala-3.7.0/meta" />
       </parameters>
       <plugins>
         <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
       </plugins>
     </profile>
-    <profile name="sbt 11" modules="Waygrid.processor-openai">
+    <profile name="sbt 11" modules="Waygrid.destination-webhook.test">
       <option name="implicitConversions" value="true" />
       <option name="higherKinds" value="true" />
       <option name="macros" value="true" />
@@ -40,6 +42,7 @@
       <option name="featureWarnings" value="true" />
       <parameters>
         <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
         <parameter value="-encoding" />
         <parameter value="utf8" />
         <parameter value="-Xkind-projector" />
@@ -54,13 +57,13 @@
         <parameter value="-Xfatal-warnings" />
         <parameter value="-Xsemanticdb" />
         <parameter value="-semanticdb-target" />
-        <parameter value="$PROJECT_DIR$/modules/processor/processor-openai/target/scala-3.7.0/meta" />
+        <parameter value="$PROJECT_DIR$/modules/destination/destination-webhook/target/scala-3.7.0/test-meta" />
       </parameters>
       <plugins>
         <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
       </plugins>
     </profile>
-    <profile name="sbt 12" modules="Waygrid.system-history">
+    <profile name="sbt 12" modules="Waygrid.destination-webhook.main">
       <option name="implicitConversions" value="true" />
       <option name="higherKinds" value="true" />
       <option name="macros" value="true" />
@@ -69,6 +72,7 @@
       <option name="featureWarnings" value="true" />
       <parameters>
         <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
         <parameter value="-encoding" />
         <parameter value="utf8" />
         <parameter value="-Xkind-projector" />
@@ -83,13 +87,13 @@
         <parameter value="-Xfatal-warnings" />
         <parameter value="-Xsemanticdb" />
         <parameter value="-semanticdb-target" />
-        <parameter value="$PROJECT_DIR$/modules/system/system-history/target/scala-3.7.0/meta" />
+        <parameter value="$PROJECT_DIR$/modules/destination/destination-webhook/target/scala-3.7.0/meta" />
       </parameters>
       <plugins>
         <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
       </plugins>
     </profile>
-    <profile name="sbt 13" modules="Waygrid.system-k8s-operator">
+    <profile name="sbt 13" modules="Waygrid.destination-websocket.test">
       <option name="implicitConversions" value="true" />
       <option name="higherKinds" value="true" />
       <option name="macros" value="true" />
@@ -98,6 +102,7 @@
       <option name="featureWarnings" value="true" />
       <parameters>
         <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
         <parameter value="-encoding" />
         <parameter value="utf8" />
         <parameter value="-Xkind-projector" />
@@ -112,13 +117,13 @@
         <parameter value="-Xfatal-warnings" />
         <parameter value="-Xsemanticdb" />
         <parameter value="-semanticdb-target" />
-        <parameter value="$PROJECT_DIR$/modules/system/system-k8s-operator/target/scala-3.7.0/meta" />
+        <parameter value="$PROJECT_DIR$/modules/destination/destination-websocket/target/scala-3.7.0/test-meta" />
       </parameters>
       <plugins>
         <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
       </plugins>
     </profile>
-    <profile name="sbt 14" modules="Waygrid.system-scheduler">
+    <profile name="sbt 14" modules="Waygrid.destination-websocket.main">
       <option name="implicitConversions" value="true" />
       <option name="higherKinds" value="true" />
       <option name="macros" value="true" />
@@ -127,6 +132,7 @@
       <option name="featureWarnings" value="true" />
       <parameters>
         <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
         <parameter value="-encoding" />
         <parameter value="utf8" />
         <parameter value="-Xkind-projector" />
@@ -141,13 +147,13 @@
         <parameter value="-Xfatal-warnings" />
         <parameter value="-Xsemanticdb" />
         <parameter value="-semanticdb-target" />
-        <parameter value="$PROJECT_DIR$/modules/system/system-scheduler/target/scala-3.7.0/meta" />
+        <parameter value="$PROJECT_DIR$/modules/destination/destination-websocket/target/scala-3.7.0/meta" />
       </parameters>
       <plugins>
         <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
       </plugins>
     </profile>
-    <profile name="sbt 15" modules="Waygrid.system-topology">
+    <profile name="sbt 15" modules="Waygrid.origin-grpc.test">
       <option name="implicitConversions" value="true" />
       <option name="higherKinds" value="true" />
       <option name="macros" value="true" />
@@ -156,6 +162,7 @@
       <option name="featureWarnings" value="true" />
       <parameters>
         <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
         <parameter value="-encoding" />
         <parameter value="utf8" />
         <parameter value="-Xkind-projector" />
@@ -170,13 +177,13 @@
         <parameter value="-Xfatal-warnings" />
         <parameter value="-Xsemanticdb" />
         <parameter value="-semanticdb-target" />
-        <parameter value="$PROJECT_DIR$/modules/system/system-topology/target/scala-3.7.0/meta" />
+        <parameter value="$PROJECT_DIR$/modules/origin/origin-grpc/target/scala-3.7.0/test-meta" />
       </parameters>
       <plugins>
         <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
       </plugins>
     </profile>
-    <profile name="sbt 16" modules="Waygrid.system-waystation">
+    <profile name="sbt 16" modules="Waygrid.origin-grpc.main">
       <option name="implicitConversions" value="true" />
       <option name="higherKinds" value="true" />
       <option name="macros" value="true" />
@@ -185,35 +192,7 @@
       <option name="featureWarnings" value="true" />
       <parameters>
         <parameter value="-source:3.7" />
-        <parameter value="-encoding" />
-        <parameter value="utf8" />
-        <parameter value="-Xkind-projector" />
-        <parameter value="-Wvalue-discard" />
-        <parameter value="-Wnonunit-statement" />
-        <parameter value="-Wunused:implicits" />
-        <parameter value="-Wunused:explicits" />
-        <parameter value="-Wunused:imports" />
-        <parameter value="-Wunused:locals" />
-        <parameter value="-Wunused:params" />
-        <parameter value="-Wunused:privates" />
-        <parameter value="-Xfatal-warnings" />
-        <parameter value="-Xsemanticdb" />
-        <parameter value="-semanticdb-target" />
-        <parameter value="$PROJECT_DIR$/modules/system/system-waystation/target/scala-3.7.0/meta" />
-      </parameters>
-      <plugins>
-        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
-      </plugins>
-    </profile>
-    <profile name="sbt 17" modules="Waygrid.origin-grpc">
-      <option name="implicitConversions" value="true" />
-      <option name="higherKinds" value="true" />
-      <option name="macros" value="true" />
-      <option name="deprecationWarnings" value="true" />
-      <option name="uncheckedWarnings" value="true" />
-      <option name="featureWarnings" value="true" />
-      <parameters>
-        <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
         <parameter value="-encoding" />
         <parameter value="utf8" />
         <parameter value="-Xkind-projector" />
@@ -234,7 +213,97 @@
         <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
       </plugins>
     </profile>
-    <profile name="sbt 2" modules="Waygrid.common-lib.main,Waygrid.common-lib.test,Waygrid.common-model,Waygrid.common-model.main,Waygrid.common-model.test,Waygrid.destination-blackhole.main,Waygrid.destination-blackhole.test,Waygrid.destination-webhook.main,Waygrid.destination-webhook.test,Waygrid.main,Waygrid.origin-http.main,Waygrid.origin-http.test,Waygrid.system-archive,Waygrid.system-history.main,Waygrid.system-history.test,Waygrid.system-k8s-operator~1,Waygrid.system-scheduler.main,Waygrid.system-scheduler.test,Waygrid.system-waystation.main,Waygrid.system-waystation.test,Waygrid.test">
+    <profile name="sbt 17" modules="Waygrid.origin-http.test">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/origin/origin-http/target/scala-3.7.0/test-meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 18" modules="Waygrid.main">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/target/scala-3.7.0/meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 19" modules="Waygrid.origin-http.main">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/origin/origin-http/target/scala-3.7.0/meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 2" modules="Waygrid.common-lib.main,Waygrid.common-lib.test,Waygrid.common-model,Waygrid.common-model.main,Waygrid.common-model.test,Waygrid.system-archive,Waygrid.system-k8s-operator~1">
       <option name="implicitConversions" value="true" />
       <option name="higherKinds" value="true" />
       <option name="macros" value="true" />
@@ -255,6 +324,306 @@
         <parameter value="-Wunused:privates" />
         <parameter value="-Xfatal-warnings" />
       </parameters>
+    </profile>
+    <profile name="sbt 20" modules="Waygrid.processor-openai.test">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/processor/processor-openai/target/scala-3.7.0/test-meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 21" modules="Waygrid.processor-openai.main">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/processor/processor-openai/target/scala-3.7.0/meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 22" modules="Waygrid.system-history.test">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/system/system-history/target/scala-3.7.0/test-meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 23" modules="Waygrid.system-history.main">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/system/system-history/target/scala-3.7.0/meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 24" modules="Waygrid.system-k8s-operator.test">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/system/system-k8s-operator/target/scala-3.7.0/test-meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 25" modules="Waygrid.system-k8s-operator.main">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/system/system-k8s-operator/target/scala-3.7.0/meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 26" modules="Waygrid.system-scheduler.test">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/system/system-scheduler/target/scala-3.7.0/test-meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 27" modules="Waygrid.system-scheduler.main">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/system/system-scheduler/target/scala-3.7.0/meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 28" modules="Waygrid.system-topology.test">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/system/system-topology/target/scala-3.7.0/test-meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 29" modules="Waygrid.system-topology.main">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/system/system-topology/target/scala-3.7.0/meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
+      </plugins>
     </profile>
     <profile name="sbt 3" modules="Waygrid.Waygrid Docs,Waygrid.common-application~1,Waygrid.common-lib">
       <option name="implicitConversions" value="true" />
@@ -279,7 +648,7 @@
         <parameter value="-Xfatal-warnings" />
       </parameters>
     </profile>
-    <profile name="sbt 4" modules="Waygrid">
+    <profile name="sbt 30" modules="Waygrid.system-waystation.test">
       <option name="implicitConversions" value="true" />
       <option name="higherKinds" value="true" />
       <option name="macros" value="true" />
@@ -288,6 +657,7 @@
       <option name="featureWarnings" value="true" />
       <parameters>
         <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
         <parameter value="-encoding" />
         <parameter value="utf8" />
         <parameter value="-Xkind-projector" />
@@ -302,13 +672,13 @@
         <parameter value="-Xfatal-warnings" />
         <parameter value="-Xsemanticdb" />
         <parameter value="-semanticdb-target" />
-        <parameter value="$PROJECT_DIR$/target/scala-3.7.0/meta" />
+        <parameter value="$PROJECT_DIR$/modules/system/system-waystation/target/scala-3.7.0/test-meta" />
       </parameters>
       <plugins>
         <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
       </plugins>
     </profile>
-    <profile name="sbt 5" modules="Waygrid.common-application">
+    <profile name="sbt 31" modules="Waygrid.system-waystation.main">
       <option name="implicitConversions" value="true" />
       <option name="higherKinds" value="true" />
       <option name="macros" value="true" />
@@ -317,6 +687,517 @@
       <option name="featureWarnings" value="true" />
       <parameters>
         <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/system/system-waystation/target/scala-3.7.0/meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 32" modules="Waygrid.system-common.test">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/system/system-common/target/scala-3.7.0/test-meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 33" modules="Waygrid.system-common.main">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/system/system-common/target/scala-3.7.0/meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 34" modules="Waygrid.system-dag-registry.test">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/system/system-dag-registry/target/scala-3.7.0/test-meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 35" modules="Waygrid.system-dag-registry.main">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/system/system-dag-registry/target/scala-3.7.0/meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 36" modules="Waygrid.system-secure-store.test">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/system/system-secure-store/target/scala-3.7.0/test-meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 37" modules="Waygrid.system-secure-store.main">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/system/system-secure-store/target/scala-3.7.0/meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 38" modules="Waygrid.system-iam.test">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/system/system-iam/target/scala-3.7.0/test-meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 39" modules="Waygrid.system-iam.main">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/system/system-iam/target/scala-3.7.0/meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 4" modules="Waygrid.test">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/target/scala-3.7.0/test-meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 40" modules="Waygrid.origin-kafka.test">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/origin/origin-kafka/target/scala-3.7.0/test-meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 41" modules="Waygrid.origin-kafka.main">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/origin/origin-kafka/target/scala-3.7.0/meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 42" modules="Waygrid.system-billing.test">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/system/system-billing/target/scala-3.7.0/test-meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 43" modules="Waygrid.system-billing.main">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/system/system-billing/target/scala-3.7.0/meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 44" modules="Waygrid.system-kms.test">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/system/system-kms/target/scala-3.7.0/test-meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 45" modules="Waygrid.system-kms.main">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/system/system-kms/target/scala-3.7.0/meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 5" modules="Waygrid.common-application.test">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/common/common-application/target/scala-3.7.0/test-meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 6" modules="Waygrid.common-application.main">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
         <parameter value="-encoding" />
         <parameter value="utf8" />
         <parameter value="-Xkind-projector" />
@@ -337,7 +1218,7 @@
         <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
       </plugins>
     </profile>
-    <profile name="sbt 6" modules="Waygrid.common-domain">
+    <profile name="sbt 7" modules="Waygrid.common-domain.test">
       <option name="implicitConversions" value="true" />
       <option name="higherKinds" value="true" />
       <option name="macros" value="true" />
@@ -346,6 +1227,37 @@
       <option name="featureWarnings" value="true" />
       <parameters>
         <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/common/common-domain/target/scala-3.7.0/test-meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 8" modules="Waygrid.common-domain.main">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
         <parameter value="-encoding" />
         <parameter value="utf8" />
         <parameter value="-Xkind-projector" />
@@ -366,7 +1278,7 @@
         <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
       </plugins>
     </profile>
-    <profile name="sbt 7" modules="Waygrid.destination-blackhole">
+    <profile name="sbt 9" modules="Waygrid.destination-blackhole.test">
       <option name="implicitConversions" value="true" />
       <option name="higherKinds" value="true" />
       <option name="macros" value="true" />
@@ -375,6 +1287,7 @@
       <option name="featureWarnings" value="true" />
       <parameters>
         <parameter value="-source:3.7" />
+        <parameter value="-Xprint-suspension" />
         <parameter value="-encoding" />
         <parameter value="utf8" />
         <parameter value="-Xkind-projector" />
@@ -389,65 +1302,7 @@
         <parameter value="-Xfatal-warnings" />
         <parameter value="-Xsemanticdb" />
         <parameter value="-semanticdb-target" />
-        <parameter value="$PROJECT_DIR$/modules/destination/destination-blackhole/target/scala-3.7.0/meta" />
-      </parameters>
-      <plugins>
-        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
-      </plugins>
-    </profile>
-    <profile name="sbt 8" modules="Waygrid.destination-webhook">
-      <option name="implicitConversions" value="true" />
-      <option name="higherKinds" value="true" />
-      <option name="macros" value="true" />
-      <option name="deprecationWarnings" value="true" />
-      <option name="uncheckedWarnings" value="true" />
-      <option name="featureWarnings" value="true" />
-      <parameters>
-        <parameter value="-source:3.7" />
-        <parameter value="-encoding" />
-        <parameter value="utf8" />
-        <parameter value="-Xkind-projector" />
-        <parameter value="-Wvalue-discard" />
-        <parameter value="-Wnonunit-statement" />
-        <parameter value="-Wunused:implicits" />
-        <parameter value="-Wunused:explicits" />
-        <parameter value="-Wunused:imports" />
-        <parameter value="-Wunused:locals" />
-        <parameter value="-Wunused:params" />
-        <parameter value="-Wunused:privates" />
-        <parameter value="-Xfatal-warnings" />
-        <parameter value="-Xsemanticdb" />
-        <parameter value="-semanticdb-target" />
-        <parameter value="$PROJECT_DIR$/modules/destination/destination-webhook/target/scala-3.7.0/meta" />
-      </parameters>
-      <plugins>
-        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
-      </plugins>
-    </profile>
-    <profile name="sbt 9" modules="Waygrid.destination-websocket">
-      <option name="implicitConversions" value="true" />
-      <option name="higherKinds" value="true" />
-      <option name="macros" value="true" />
-      <option name="deprecationWarnings" value="true" />
-      <option name="uncheckedWarnings" value="true" />
-      <option name="featureWarnings" value="true" />
-      <parameters>
-        <parameter value="-source:3.7" />
-        <parameter value="-encoding" />
-        <parameter value="utf8" />
-        <parameter value="-Xkind-projector" />
-        <parameter value="-Wvalue-discard" />
-        <parameter value="-Wnonunit-statement" />
-        <parameter value="-Wunused:implicits" />
-        <parameter value="-Wunused:explicits" />
-        <parameter value="-Wunused:imports" />
-        <parameter value="-Wunused:locals" />
-        <parameter value="-Wunused:params" />
-        <parameter value="-Wunused:privates" />
-        <parameter value="-Xfatal-warnings" />
-        <parameter value="-Xsemanticdb" />
-        <parameter value="-semanticdb-target" />
-        <parameter value="$PROJECT_DIR$/modules/destination/destination-websocket/target/scala-3.7.0/meta" />
+        <parameter value="$PROJECT_DIR$/modules/destination/destination-blackhole/target/scala-3.7.0/test-meta" />
       </parameters>
       <plugins>
         <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />

@@ -1,0 +1,25 @@
+# HTTPs  V1 Ingest API
+POST {{ host }}:{{ port }}/v1/ingest
+Content-Type: application/json
+Authorization: Bearer {{ token }}
+X-TenantId: {{ tenantId }}
+X-ChannelId: {{ channelId }}
+
+{
+  "graph": {
+    "entryPoint": {
+      "address": "waygrid://destination/webhook",
+      "retryPolicy": {
+        "type": "NoRetry"
+      },
+      "deliveryStrategy": {
+        "type": "Immediate"
+      },
+      "onSuccess": null,
+      "onFailure": null
+    },
+    "repeatPolicy": {
+      "type": "NoRepeat"
+    }
+  }
+}

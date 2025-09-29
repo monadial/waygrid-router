@@ -5,3 +5,6 @@ import com.monadial.waygrid.common.domain.value.ulid.ULIDValue
 object Value:
   type ContractId = ContractId.Type
   object ContractId extends ULIDValue
+
+  type ClusterId = ClusterId.Type
+  object ClusterId extends ULIDValue

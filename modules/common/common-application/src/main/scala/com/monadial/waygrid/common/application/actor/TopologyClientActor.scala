@@ -29,10 +29,11 @@ type TopologyClientActorRef[F[+_]] = SupervisedActorRef[F, TopologyClientCommand
 enum TopologyClientState:
   case Idle
   case Joining[F[+_]](startedAt: Instant)
+  case Joined
   case TimedOut
 
 object TopologyClientActor:
-  def behavior[F[+_]: {Async, Parallel, Logger, HasNode, EventSource, EventSink}](
+  def behavior[F[+_]: {Async, Parallel, Logger, ThisNode, EventSource, EventSink}](
     programActor: BaseProgramActorRef[F],
     httpActor: HttpServerActorRef[F]
   ): Resource[F, TopologyClientActor[F]] =
@@ -40,7 +41,7 @@ object TopologyClientActor:
       state            <- Resource.eval(Ref.of[F, TopologyClientState](TopologyClientState.Idle))
       eventSourceFiber <- Resource.eval(Ref.of[F, Option[Fiber[F, Throwable, Unit]]](None))
       contractIdRef    <- Resource.eval(Ref.of[F, Option[ContractId]](None))
-      thisNode         <- Resource.eval(HasNode[F].get)
+      thisNode         <- Resource.eval(ThisNode[F].get)
     yield new TopologyClientActor[F]:
       override def receive: ReplyingReceive[F, TopologyClientCommand | SupervisedRequest, Any] =
         case RequestJoin  => handleJoin

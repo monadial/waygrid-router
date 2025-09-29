@@ -41,7 +41,6 @@ trait EventSink[F[+_]]:
   /**
    * Sends a batch of events to the specified stream.
    *
-   * @param stream the target stream
    * @param events chunk of events to send
    */
   def sendBatch(events: List[Evt]): F[Unit]

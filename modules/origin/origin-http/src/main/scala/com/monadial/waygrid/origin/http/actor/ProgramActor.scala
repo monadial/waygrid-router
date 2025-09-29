@@ -1,19 +1,17 @@
 package com.monadial.waygrid.origin.http.actor
 
-import com.monadial.waygrid.common.application.actor.{BaseProgramActor, HttpServerActorRef}
-import com.monadial.waygrid.common.application.actor.HttpServerActorCommand.{RegisterRoute, UnregisterRoute}
-import com.monadial.waygrid.common.application.algebra.Logger
-import com.monadial.waygrid.origin.http.http.resource.v1.RoutingResource
-
 import cats.Parallel
-import cats.effect.Async
-import cats.effect.kernel.Resource
+import cats.effect.{Async, Resource}
 import cats.syntax.all.*
+import com.monadial.waygrid.common.application.actor.HttpServerActorCommand.{RegisterRoute, UnregisterRoute}
+import com.monadial.waygrid.common.application.actor.{BaseProgramActor, HttpServerActorRef}
+import com.monadial.waygrid.common.application.algebra.{Logger, ThisNode}
+import com.monadial.waygrid.origin.http.http.resource.v1.RoutingResource
 
 trait SupervisorActorRequest
 
 object ProgramActor:
-  def behavior[F[+_]: {Async, Parallel, Logger}](httpServerRef: HttpServerActorRef[F]): Resource[F, BaseProgramActor[F]] =
+  def behavior[F[+_]: {Async, Parallel, Logger, ThisNode}](httpServerRef: HttpServerActorRef[F]): Resource[F, BaseProgramActor[F]] =
     Resource
       .pure:
       new BaseProgramActor[F]:

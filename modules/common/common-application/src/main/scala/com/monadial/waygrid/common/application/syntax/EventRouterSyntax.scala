@@ -1,6 +1,7 @@
 package com.monadial.waygrid.common.application.syntax
 
 import com.monadial.waygrid.common.application.`macro`.EventRouterMacro
+import com.monadial.waygrid.common.application.domain.model.envelope.Envelope
 import com.monadial.waygrid.common.application.domain.model.event.Event
 import com.monadial.waygrid.common.domain.model.event.Event as DomainEvent
 import shapeless3.typeable.Typeable
@@ -20,7 +21,7 @@ object EventRouterSyntax:
    * @param tpe evidence that `E` is Typeable at runtime
    */
   inline def route[F[+_], E <: DomainEvent](
-    inline f: Event[E] => F[Unit]
+    inline f: Envelope[E] => F[Unit]
   )(using b: EventRouterMacro.Builder[F], tpe: Typeable[E]): Unit =
     b.handle(f, 0)
 
@@ -38,5 +39,5 @@ object EventRouterSyntax:
    */
   inline def routeWithPriority[F[+_], E <: DomainEvent](
     priority: Int
-  )(inline f: Event[E] => F[Unit])(using b: EventRouterMacro.Builder[F], tpe: Typeable[E]): Unit =
+  )(inline f: Envelope[E] => F[Unit])(using b: EventRouterMacro.Builder[F], tpe: Typeable[E]): Unit =
     b.handle(f, priority)

@@ -1,0 +1,18 @@
+{
+  "graph": {
+    "entrypoint": {
+      "address": "waygrid://destination/webhook",
+      "retrypolicy": {
+        "type": "NoRetry"
+      },
+      "deliverystrategy": {
+        "type": "Immediate"
+      },
+      "onsuccess": null,
+      "onfailure": null
+    },
+    "repeatpolicy": {
+      "type": "NoRepeat"
+    }
+  }
+}

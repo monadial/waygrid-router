@@ -1,0 +1,24 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="origin.HTTP" type="Application" factoryName="Application">
+    <envs>
+      <env name="WAYGRID_CLUSTER_ID" value="cluster1" />
+      <env name="WAYGRID_REGION" value="eu-central-1" />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="com.monadial.waygrid.origin.http.Main" />
+    <module name="Waygrid.origin-http.main" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="com.monadial.waygrid.origin.http.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">
+      <option name="credential" />
+      <option name="region" />
+      <option name="useCurrentConnection" value="false" />
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

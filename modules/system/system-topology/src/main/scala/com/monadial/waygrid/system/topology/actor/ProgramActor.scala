@@ -2,7 +2,7 @@ package com.monadial.waygrid.system.topology.actor
 
 import com.monadial.waygrid.common.application.actor.BaseProgramActor
 import com.monadial.waygrid.common.application.algebra.SupervisedRequest.{ Start, Stop }
-import com.monadial.waygrid.common.application.algebra.{ EventSink, EventSource, HasNode, Logger }
+import com.monadial.waygrid.common.application.algebra.{ EventSink, EventSource, ThisNode, Logger }
 
 import cats.implicits.*
 import cats.Parallel
@@ -12,7 +12,7 @@ import com.suprnation.actor.ActorSystem
 import scala.annotation.nowarn
 
 object ProgramActor:
-  @nowarn def behavior[F[+_]: {Async, HasNode, Parallel, EventSink, EventSource,
+  @nowarn def behavior[F[+_]: {Async, ThisNode, Parallel, EventSink, EventSource,
     Logger}](actorSystem: ActorSystem[F]): Resource[F, BaseProgramActor[F]] =
     for
       topologyServer <- TopologyServerActor.behavior[F].evalMap(actorSystem.actorOf(_, "topology-server"))
