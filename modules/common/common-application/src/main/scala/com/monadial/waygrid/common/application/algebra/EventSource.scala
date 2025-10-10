@@ -1,9 +1,10 @@
 package com.monadial.waygrid.common.application.algebra
 
 import cats.effect.Resource
-import com.monadial.waygrid.common.application.domain.model.event.{ Event, EventStream, RawEvent }
-import com.monadial.waygrid.common.domain.model.event.Event as DomainEvent
+import com.monadial.waygrid.common.application.domain.model.envelope.Envelope
+import com.monadial.waygrid.common.application.domain.model.event.{EventStream, RawEvent}
 import fs2.Stream
+import com.monadial.waygrid.common.domain.model.event.Event
 
 /**
  * A low-level abstraction for reading raw (serialized) events from a stream.
@@ -29,7 +30,7 @@ trait EventSource[F[+_]]:
   /**
    * A type alias for domain events.
    */
-  type Evt = Event[? <: DomainEvent]
+  type Evt = Envelope[? <: Event]
 
   /**
    * A handler that selectively processes domain events.

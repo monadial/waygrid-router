@@ -1,19 +1,16 @@
 package com.monadial.waygrid.common.application.actor
 
-import com.monadial.waygrid.common.application.actor.TopologyClientCommand.{ RequestJoin, RequestLeave }
-import com.monadial.waygrid.common.application.actor.TopologyClientState.Joining
-import com.monadial.waygrid.common.application.algebra.*
-import com.monadial.waygrid.common.application.algebra.SupervisedRequest.{ Start, Stop }
-import com.monadial.waygrid.common.application.syntax.EventSyntax.fromDomainEvent
-import com.monadial.waygrid.common.application.syntax.EventRouterSyntax.route
-import com.monadial.waygrid.common.application.syntax.EventSourceSyntax.subscribeRoutes
-import com.monadial.waygrid.common.domain.model.topology.Value.ContractId
-
 import cats.Parallel
 import cats.effect.*
 import cats.syntax.all.*
-import com.monadial.waygrid.common.application.domain.model.event.{EventAddress, EventStream}
-import com.monadial.waygrid.common.domain.model.topology.{JoinRequested, JoinedSuccessfully, LeaveRequested, LeftSuccessfully}
+import com.monadial.waygrid.common.application.actor.TopologyClientCommand.{RequestJoin, RequestLeave}
+import com.monadial.waygrid.common.application.algebra.*
+import com.monadial.waygrid.common.application.algebra.SupervisedRequest.{Start, Stop}
+import com.monadial.waygrid.common.application.domain.model.event.EventStream
+import com.monadial.waygrid.common.application.syntax.EventRouterSyntax.route
+import com.monadial.waygrid.common.application.syntax.EventSourceSyntax.subscribeRoutes
+import com.monadial.waygrid.common.domain.model.topology.Value.ContractId
+import com.monadial.waygrid.common.domain.model.topology.{JoinedSuccessfully, LeftSuccessfully}
 import com.suprnation.actor.Actor.ReplyingReceive
 
 import java.time.Instant
@@ -33,7 +30,7 @@ enum TopologyClientState:
   case TimedOut
 
 object TopologyClientActor:
-  def behavior[F[+_]: {Async, Parallel, Logger, ThisNode, EventSource, EventSink}](
+  def behavior[F[+_]: {Async, Parallel, Logger, ThisNode, EventSource}](
     programActor: BaseProgramActorRef[F],
     httpActor: HttpServerActorRef[F]
   ): Resource[F, TopologyClientActor[F]] =
@@ -53,15 +50,15 @@ object TopologyClientActor:
           _          <- Logger[F].info(s"Node: ${thisNode.descriptor.show}@${startedAt} starting to join into cluster...")
           contractId <- ContractId.next[F]
           _          <- contractIdRef.set(Some(contractId))
-          _ <- JoinRequested(contractId, thisNode)
-            .fromDomainEvent[F](EventAddress("system-topology.in"))
-            .flatMap(evt => EventSink[F].send(evt))
+//          _ <- JoinRequested(contractId, thisNode)
+//            .fromDomainEvent[F](EventAddress("system-topology.in"))
+//            .flatMap(evt => EventSink[F].send(evt))
           fiber <- EventSource[F].subscribeRoutes(EventStream("system-topology.out")):
               route[F, JoinedSuccessfully]: event =>
                 for
                   contractId <- contractIdRef.get
                   _ <- contractId match
-                    case Some(id) if id == event.event.contractId =>
+                    case Some(id) if id == event.message.contractId =>
                       for
                         _ <- Logger[F].info(s"Node: ${thisNode.descriptor.show} successfully joined the cluster.")
                         _ <- programActor ! Start
@@ -76,7 +73,7 @@ object TopologyClientActor:
                 for
                   contractId <- contractIdRef.get
                   _ <- contractId match
-                    case Some(id) if id == event.event.contractId =>
+                    case Some(id) if id == event.message.contractId =>
                       for
                         _        <- Logger[F].info(s"Node: ${thisNode.descriptor.show} left the cluster successfully.")
                         _        <- state.set(TopologyClientState.Idle)
@@ -99,15 +96,19 @@ object TopologyClientActor:
       private def handleLeave: F[Unit] =
         for
           _ <- Logger[F].info(s"Node: ${thisNode.descriptor.show} preparing for leave from cluster...")
-          _ <- contractIdRef.get.flatMap:
-              case Some(contractId) =>
-                for
-                  _ <- LeaveRequested(contractId)
-                    .fromDomainEvent[F](EventAddress("system-topology.in"))
-                    .flatMap(evt => EventSink[F].send(evt))
-                yield ()
-              case None =>
-                Logger[F].warn(s"Node: ${thisNode.descriptor.show} has no contract ID to leave the cluster.")
+//          _ <- contractIdRef.get.flatMap:
+//              case Some(contractId) =>
+//                for
+//                  _ <- Envelope.toWaystation()
+//
+//
+//
+//                      LeaveRequested(contractId)
+//                    .fromDomainEvent[F](EventAddress("system-topology.in"))
+//                    .flatMap(evt => EventSink[F].send(evt))
+//                yield ()
+//              case None =>
+//                Logger[F].warn(s"Node: ${thisNode.descriptor.show} has no contract ID to leave the cluster.")
         yield ()
 
       override def preStart: F[Unit] =

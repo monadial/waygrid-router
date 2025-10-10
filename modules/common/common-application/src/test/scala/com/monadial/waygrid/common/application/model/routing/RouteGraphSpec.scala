@@ -64,7 +64,7 @@ object RouteGraphSpec extends SimpleIOSuite:
                 deliveryStrategy = DeliveryStrategy.Immediate,
                 onFailure = None,
                 onSuccess = None
-              )
+              ),
             ),
             onSuccess = Option(
               RouteNode(

@@ -79,10 +79,10 @@ object DagCompiler:
       private def toDagNode(id: NodeId, node: SpecNode): DagNode =
         DagNode(
           id = id,
+          label = node.label,
           retryPolicy = node.retryPolicy,
           deliveryStrategy = node.deliveryStrategy,
-          address = node.address,
-          label = node.label
+          address = node.address
         )
 
       /**
@@ -205,7 +205,8 @@ object DagCompiler:
 
           // Compute final DAG hash as XOR of all node keys + salt
           dagHash <- Sync[F]
-            .delay(idMap.keysIterator.toList.sorted.foldLeft(0L)(_ ^ _) ^ saltH.unwrap)
+            .delay:
+              idMap.keysIterator.toList.sorted.foldLeft(0L)(_ ^ _) ^ saltH.unwrap
             .flatMap(toHex(HashLen, _))
             .map(DagHash(_))
 

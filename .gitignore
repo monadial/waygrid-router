@@ -40,9 +40,11 @@ build/
 
 ### VS Code ###
 .vscode/
+.bloop/
 
 ### Mac OS ###
 .DS_Store
 
 ### Scala ###
 .bsp/
+.metals/

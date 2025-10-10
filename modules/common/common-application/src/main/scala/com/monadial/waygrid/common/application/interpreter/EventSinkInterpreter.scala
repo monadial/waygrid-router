@@ -1,17 +1,15 @@
 package com.monadial.waygrid.common.application.interpreter
 
-import com.monadial.waygrid.common.application.algebra.{ EventSink, Logger }
-import com.monadial.waygrid.common.application.instances.CirceInstances.given
-import com.monadial.waygrid.common.domain.value.codec.BytesCodec
-
 import cats.effect.implicits.*
 import cats.effect.std.Queue
 import cats.effect.{ Async, Resource, Temporal }
 import cats.implicits.*
-import cats.syntax.all.*
-import com.monadial.waygrid.common.application.domain.model.event.{Event, EventId, RawEvent}
+import com.monadial.waygrid.common.application.algebra.{ EventSink, Logger }
+import com.monadial.waygrid.common.application.domain.model.event.{ Event, EventId, RawEvent }
 import com.monadial.waygrid.common.application.domain.model.settings.Kafka
+import com.monadial.waygrid.common.application.instances.CirceInstances.given
 import com.monadial.waygrid.common.domain.model.event.Event as DomainEvent
+import com.monadial.waygrid.common.domain.value.codec.BytesCodec
 import fs2.Stream
 import fs2.kafka.*
 import io.circe.Json
@@ -183,10 +181,12 @@ object EventSinkInterpreter:
           Logger[F].info("[event-sink] Kafka sink stopped")
       )
     yield new EventSink[F]:
-      override def send(event: Event[? <: DomainEvent]): F[Unit] =
-        Logger[F].trace(s"[event-sink] Enqueuing event: ${event.id}") *>
-          metrics.realtimeQueueCounter.add(1L) *>
-          internalQueue.offer(Some(event))
-
-      override def sendBatch(events: List[Event[? <: DomainEvent]]): F[Unit] =
-        events.traverse_(send)
+      override def send(event: Evt): F[Unit] = ???
+      override def sendBatch(events: List[Evt]): F[Unit] = ???
+//      override def send(event: Event[? <: DomainEvent]): F[Unit] =
+//        Logger[F].trace(s"[event-sink] Enqueuing event: ${event.id}") *>
+//          metrics.realtimeQueueCounter.add(1L) *>
+//          internalQueue.offer(Some(event))
+//
+//      override def sendBatch(events: List[Event[? <: DomainEvent]]): F[Unit] =
+//        events.traverse_(send)

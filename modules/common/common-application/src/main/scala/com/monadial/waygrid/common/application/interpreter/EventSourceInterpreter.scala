@@ -12,8 +12,6 @@ import fs2.kafka.*
 import io.circe.Json
 import org.apache.kafka.common.TopicPartition
 
-import scala.concurrent.duration.*
-
 object EventSourceInterpreter:
 
   def kafka[F[+_]: {Async, Concurrent, Logger}](settings: Kafka.Settings): Resource[F, EventSource[F]] =
@@ -63,38 +61,38 @@ object EventSourceInterpreter:
                   Logger[F].info("✅ Kafka assignment monitor fiber cancelled, stopping...")
                 }
                 .start
-          consumerFiber <- Resource
-            .eval:
-              kafkaConsumer
-                .partitionedRecords
-                .map: partitionedStream =>
-                  partitionedStream
-                    .evalMap: record =>
-                      for
-                        _ <- Logger[F].trace(
-                          s"Received event id: ${record.record.key.show} on partition ${record.offset.topicPartition}"
-                        )
-                        event <- EventCodecInterpreter[F].decode(record.record.value)
-                      yield (record.offset, event)
-                    .evalMap: (offset, event) =>
-                      handler.applyOrElse(
-                        event,
-                        _ => Logger[F].warn(s"Unhandled event: ${event.id.show}")
-                      ) *> offset.pure[F]
-                .parJoinUnbounded
-                .through(commitBatchWithin[F](500, 1.seconds))
-                .compile
-                .drain
-                .handleErrorWith: ex =>
-                  Logger[F].error(s"Error in Kafka consumer: ${ex.getMessage}") *> ex.raiseError[F, Unit]
-                .onCancel {
-                  Logger[F].info("✅ Kafka consumer fiber cancelled, stopping...")
-                }
-                .start
-          _ <- Resource.onFinalize:
-              Logger[F].info("Stopping Kafka consumer") *>
-                kafkaConsumer.stopConsuming *>
-                consumerFiber.cancel *>
-                assignmentMonitorFiber.cancel *>
-                Logger[F].info("✅ Kafka consumer stopped")
+          // consumerFiber <- Resource
+          //   .eval:
+          //     kafkaConsumer
+          //       .partitionedRecords
+          //       .map: partitionedStream =>
+          //         partitionedStream
+          //           .evalMap: record =>
+          //             for
+          //               _ <- Logger[F].trace(
+          //                 s"Received event id: ${record.record.key.show} on partition ${record.offset.topicPartition}"
+          //               )
+          //               event <- EventCodecInterpreter[F].decode(record.record.value)
+          //             yield (record.offset, event)
+          //           .evalMap: (offset, event) =>
+          //             handler.applyOrElse(
+          //               event,
+          //               _ => Logger[F].warn(s"Unhandled event: ${event.id.show}")
+          //             ) *> offset.pure[F]
+          //       .parJoinUnbounded
+          //       .through(commitBatchWithin[F](500, 1.seconds))
+          //       .compile
+          //       .drain
+          //       .handleErrorWith: ex =>
+          //         Logger[F].error(s"Error in Kafka consumer: ${ex.getMessage}") *> ex.raiseError[F, Unit]
+          //       .onCancel {
+          //         Logger[F].info("✅ Kafka consumer fiber cancelled, stopping...")
+          //       }
+          //       .start
+          // _ <- Resource.onFinalize:
+          //     Logger[F].info("Stopping Kafka consumer") *>
+          //       kafkaConsumer.stopConsuming *>
+          //       consumerFiber.cancel *>
+          //       assignmentMonitorFiber.cancel *>
+          //       Logger[F].info("✅ Kafka consumer stopped")
         yield ()

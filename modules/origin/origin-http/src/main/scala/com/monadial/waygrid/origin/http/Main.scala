@@ -9,6 +9,7 @@ import com.monadial.waygrid.common.application.actor.HttpServerActorCommand.Regi
 import com.monadial.waygrid.common.application.algebra.*
 import com.monadial.waygrid.common.application.algebra.SupervisedRequest.Start
 import com.monadial.waygrid.common.application.program.WaygridApp
+import com.monadial.waygrid.common.domain.algebra.DagCompiler
 import com.monadial.waygrid.common.domain.model.node.Node
 import com.monadial.waygrid.common.domain.model.node.Value.{NodeDescriptor, NodeService}
 import com.monadial.waygrid.origin.http.http.resource.v1.RoutingResource
@@ -31,7 +32,8 @@ object Main extends WaygridApp[HttpSettings](NodeDescriptor.Origin(NodeService("
       httpServer <- HttpServerActor
         .behavior(settings.httpServer)
         .evalMap(actorSystem.actorOf(_, "http-server"))
-      _ <- Resource.eval(httpServer ! RegisterRoute[F]("v1.ingest", JsonSchemaValidator.forSchema(RoutingResource.ingest[F])))
+      compiler <- DagCompiler.default[F]
+      _ <- Resource.eval(httpServer ! RegisterRoute[F]("v1.ingest", RoutingResource.ingest[F](compiler)))
       _ <- Resource.eval(httpServer ! Start)
       _ <- Resource.make(Concurrent[F].pure(actorSystem)): system =>
           Logger[F].info(

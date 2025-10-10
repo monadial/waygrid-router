@@ -6,8 +6,8 @@ import com.monadial.waygrid.common.domain.model.routing.dag.Value.NodeId
 
 final case class Node(
   id: NodeId,
+  label: Option[String],
   retryPolicy: RetryPolicy,
   deliveryStrategy: DeliveryStrategy,
   address: ServiceAddress,
-  label: Option[String] = None
 )

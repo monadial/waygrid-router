@@ -2,7 +2,7 @@ package com.monadial.waygrid.system.topology
 
 import com.monadial.waygrid.common.application.actor.*
 import com.monadial.waygrid.common.application.algebra.SupervisedRequest.{Start, Stop}
-import com.monadial.waygrid.common.application.algebra.{EventSink, EventSource, ThisNode, Logger}
+import com.monadial.waygrid.common.application.algebra.{EventSink, EventSource, Logger, ThisNode}
 import com.monadial.waygrid.common.application.program.WaygridApp
 import com.monadial.waygrid.common.domain.model.node.Value.NodeDescriptor
 import com.monadial.waygrid.system.topology.actor.ProgramActor
@@ -12,7 +12,6 @@ import cats.effect.*
 import cats.effect.std.Console
 import cats.syntax.all.*
 import com.monadial.waygrid.common.domain.model.node.Node
-import com.monadial.waygrid.system.common.program.SystemWaygridApp
 import com.suprnation.actor.ActorSystem
 import org.typelevel.otel4s.metrics.MeterProvider
 

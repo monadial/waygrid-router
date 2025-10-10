@@ -12,6 +12,9 @@ object Value:
   type RouteId = RouteId.Type
   object RouteId extends ULIDValue
 
+  type TraversalId = TraversalId.Type
+  object TraversalId extends ULIDValue
+
   type RouteSalt = RouteSalt.Type
   object RouteSalt extends StringValue
 

@@ -2,7 +2,6 @@ package com.monadial.waygrid.common.application.syntax
 
 import com.monadial.waygrid.common.application.`macro`.EventRouterMacro
 import com.monadial.waygrid.common.application.domain.model.envelope.Envelope
-import com.monadial.waygrid.common.application.domain.model.event.Event
 import com.monadial.waygrid.common.domain.model.event.Event as DomainEvent
 import shapeless3.typeable.Typeable
 
