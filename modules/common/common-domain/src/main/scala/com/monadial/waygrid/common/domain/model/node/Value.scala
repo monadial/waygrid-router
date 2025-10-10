@@ -38,15 +38,15 @@ object Value:
   object NodeAddress extends URIValue:
     def fromNode(node: Node): NodeAddress =
       NodeAddress(
-        node.descriptor.serviceAddress().unwrap +? ("region" -> node.region.show) +? ("clusterId" -> node.clusterId.show) +? ("nodeId" -> node.id.show)
+        node.descriptor.serviceAddress.unwrap +? ("region" -> node.region.show) +? ("clusterId" -> node.clusterId.show) +? ("nodeId" -> node.id.show)
       )
 
     extension (nodeAddress: NodeAddress)
-      inline def service: ServiceAddress = ServiceAddress(nodeAddress.unwrap -? "clusterId" -? "nodeId")
+      inline def toServiceAddress: ServiceAddress = ServiceAddress(nodeAddress.unwrap -? "nodeId")
 
   type ServiceAddress = ServiceAddress.Type
   object ServiceAddress extends URIValue:
-    private inline def nodeScheme = Scheme.unsafeFromString(Waygrid.appName)
+    private inline def nodeScheme = Scheme.unsafeFromString(Waygrid.appName.toLowerCase)
 
     def fromUri(value: Uri): ServiceAddress =
       if value.scheme.contains(nodeScheme) then ServiceAddress(value)
@@ -103,7 +103,7 @@ object Value:
         s"${nodeDescriptor.component.show}.${nodeDescriptor.service.show}"
 
     extension (nodeDescriptor: NodeDescriptor)
-      inline def serviceAddress(): ServiceAddress =
+      inline def serviceAddress: ServiceAddress =
         ServiceAddress.fromNodeDescriptor(nodeDescriptor)
 
   final case class NodeRuntime() derives Codec.AsObject

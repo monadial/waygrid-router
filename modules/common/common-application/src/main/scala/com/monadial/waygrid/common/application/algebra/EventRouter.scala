@@ -1,7 +1,7 @@
 package com.monadial.waygrid.common.application.algebra
 
-import com.monadial.waygrid.common.domain.model.envelope.Envelope
-import com.monadial.waygrid.common.domain.model.event.Event as DomainEvent
+import com.monadial.waygrid.common.application.domain.model.envelope.Envelope
+import com.monadial.waygrid.common.domain.model.event.Event
 
 /**
  * A router for domain‐typed events.
@@ -16,4 +16,4 @@ trait EventRouter[F[_]]:
    * @param evt  the event to route
    * @return     an effect that completes once all matching handlers have been launched
    */
-  def route(evt: Envelope[? <: DomainEvent]): F[Unit]
+  def route(evt: Envelope[? <: Event]): F[Unit]

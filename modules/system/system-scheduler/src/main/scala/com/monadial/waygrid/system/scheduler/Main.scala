@@ -3,11 +3,10 @@ package com.monadial.waygrid.system.scheduler
 import cats.Parallel
 import cats.effect.std.Console
 import cats.effect.{Async, Resource}
-import com.monadial.waygrid.common.application.algebra.{EventSink, EventSource, ThisNode, Logger}
+import com.monadial.waygrid.common.application.algebra.{EventSink, EventSource, Logger, ThisNode}
 import com.monadial.waygrid.common.application.program.WaygridApp
 import com.monadial.waygrid.common.application.util.doobie.Doobie
 import com.monadial.waygrid.common.domain.model.node.Node
-import com.monadial.waygrid.system.common.program.SystemWaygridApp
 import com.monadial.waygrid.system.scheduler.interpreter.DoobieScheduledTaskDataStorage
 import com.monadial.waygrid.system.scheduler.model.eventdata.ScheduledTaskData
 import com.monadial.waygrid.system.scheduler.model.schedule.Value.{ScheduleTime, ScheduleToken}

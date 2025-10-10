@@ -14,7 +14,7 @@ import scala.collection.mutable
 object EventCodecInterpreter:
 
   def apply[F[+_]: Async]: EventCodec[F] =
-    fromRegistry[F](CirceEventCodecRegistryMacro.readRegistry())
+    fromRegistry[F](CirceEventCodecRegistryMacro.readRegistry)
 
   private def fromRegistry[F[+_]: Async](registry: mutable.Map[EventType, Codec[? <: DomainEvent]]): EventCodec[F] =
     new EventCodec[F]:

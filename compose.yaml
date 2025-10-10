@@ -10,10 +10,10 @@ volumes:
   waygrid_redisinsight_data: { }
 
 x-kafka-cluster-base: &kafka-cluster-base
-  image: bitnami/kafka
+  image: bitnamilegacy/kafka:latest
 
 x-redis-cluster-base: &redis-cluster-base
-  image: bitnami/redis-cluster:latest
+  image: bitnamilegacy/redis-cluster:latest
 
 services:
   kafka-node-1:

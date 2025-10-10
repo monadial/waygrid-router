@@ -1,4 +1,4 @@
-package com.monadial.waygrid.system.common.program
+package com.monadial.waygrid.common.domain
 
 import com.monadial.waygrid.common.domain.model.node.Value.{NodeDescriptor, NodeService}
 

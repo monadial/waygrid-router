@@ -58,7 +58,7 @@ object CirceEventCodecRegistryMacro:
   private def isRegistered(eventType: EventType): Boolean =
     eventCodecRegistry.contains(eventType)
 
-  def readRegistry(): CodecMap = eventCodecRegistry
+  inline def readRegistry: CodecMap = eventCodecRegistry
 
   def debug[F[+_]: {Async, Logger}]: F[Unit] =
     eventCodecRegistry.toList.traverse_ {

@@ -59,7 +59,7 @@ trait WaygridApp[S <: NodeSettings](
       given Meter[F]       <- Resource.eval(MeterProvider[F].get(thisNode.id.show))
       given EventSink[F]   <- EventSinkInterpreter.kafka[F](programSettings.eventStream.kafka)
       given EventSource[F] <- EventSourceInterpreter.kafka[F](programSettings.eventStream.kafka)
-      _                    <- Resource.eval(Logger[F].info(s"Service address: ${thisNode.address.service.show}"))
+      _                    <- Resource.eval(Logger[F].info(s"Service address: ${thisNode.address.toServiceAddress.show}"))
       _                    <- Resource.eval(Logger[F].info(s"Node address: ${thisNode.address.show}"))
       _           <- Resource.eval(Logger[F].info(s"Boot time: ${bootTime.toString}"))
       _           <- Resource.eval(CirceEventCodecRegistryMacro.debug)
