@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package com.monadial.waygrid.common.topology;
+
+message HeartbeatRequest {
+  bytes NodeAddress = 1;
+
+}
+
+message HeartbeatResponse {
+  bytes NodeAddress = 1;
+}
+
+service Heartbeat {
+
+  rpc HeartbeatStream(stream HeartbeatRequest) returns (stream HeartbeatResponse) {}
+}

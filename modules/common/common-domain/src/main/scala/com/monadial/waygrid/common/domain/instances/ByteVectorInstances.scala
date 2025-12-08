@@ -3,7 +3,7 @@ package com.monadial.waygrid.common.domain.instances
 import cats.Show
 import cats.data.Validated
 import cats.kernel.Order
-import com.monadial.waygrid.common.domain.value.codec.{Base64Codec, Base64DecodingError, BytesCodec, BytesDecodingError}
+import com.monadial.waygrid.common.domain.algebra.value.codec.{Base64Codec, Base64DecodingError, BytesCodec, BytesDecodingError}
 import io.circe.{Json, Decoder as JsonDecoder, Encoder as JsonEncoder}
 import scodec.bits.ByteVector
 import scodec.{Decoder as SDecoder, Encoder as SEncoder}
@@ -17,21 +17,21 @@ object ByteVectorInstances:
   given SEncoder[ByteVector] = scodec.codecs.bytes.asEncoder
 
   given Order[ByteVector] = Order.from((x, y) => x.compareTo(y))
-  given Show[ByteVector] = Show.show(bytes => s"ByteVector(${bytes.toHex})")
+  given Show[ByteVector] = Show.show(bytes => s"ByteVector(${bytes.toHexDumpColorized})")
 
   given BytesCodec[ByteVector] with
-    inline def encode(value: ByteVector): Array[Byte] =
-      value
-        .toArray
-    inline def decode(value: Array[Byte]): Validated[BytesDecodingError, ByteVector] =
+    override inline def decodeFromScalar(value: ByteVector): Validated[BytesDecodingError, ByteVector] =
       Validated
-        .valid(ByteVector(value))
+          .valid(value)
+
+    override inline def encodeToScalar(value: ByteVector): ByteVector = value
+
 
   given Base64Codec[ByteVector] with
-    inline def encode(value: ByteVector): String =
-      JavaBridge.base64Encoder(value.toArray)
+    override inline def encode(value: ByteVector): String =
+      JavaBridge.base64Encoder(value)
 
-    inline def decode(value: String): Validated[Base64DecodingError, ByteVector] =
+    override inline def decode(value: String): Validated[Base64DecodingError, ByteVector] =
       Validated
-        .catchNonFatal(ByteVector(JavaBridge.base64Decoder(value)))
-        .leftMap(x => Base64DecodingError(x.getMessage))
+          .catchNonFatal(JavaBridge.base64Decoder(value))
+          .leftMap(x => Base64DecodingError(x.getMessage))

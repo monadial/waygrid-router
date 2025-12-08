@@ -1,6 +1,6 @@
 package com.monadial.waygrid.common.domain.algebra.ddd
 
-import com.monadial.waygrid.common.domain.model.event.Event
+import com.monadial.waygrid.common.domain.algebra.messaging.event.Event
 
 final case class AggregateHandlerResult[I, S <: AggregateRootState[I, S], E <: Event](
   state: S,

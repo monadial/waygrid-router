@@ -11,19 +11,20 @@ import com.monadial.waygrid.common.application.algebra.SupervisedRequest.Start
 import com.monadial.waygrid.common.application.program.WaygridApp
 import com.monadial.waygrid.common.domain.algebra.DagCompiler
 import com.monadial.waygrid.common.domain.model.node.Node
-import com.monadial.waygrid.common.domain.model.node.Value.{NodeDescriptor, NodeService}
-import com.monadial.waygrid.origin.http.http.resource.v1.RoutingResource
+import com.monadial.waygrid.common.domain.model.node.Value.{ NodeDescriptor, NodeService }
+import com.monadial.waygrid.origin.http.http.resource.v1.IngestResource
 import com.monadial.waygrid.origin.http.settings.HttpSettings
 import com.suprnation.actor.ActorSystem
 import org.typelevel.otel4s.metrics.MeterProvider
+import org.typelevel.otel4s.trace.{ Tracer, TracerProvider }
 
 import scala.annotation.nowarn
 
-object Main extends WaygridApp[HttpSettings](NodeDescriptor.Origin(NodeService("http"))) :
+object Main extends WaygridApp[HttpSettings](NodeDescriptor.Origin(NodeService("http"))):
 
   @nowarn("msg=unused implicit parameter")
   def programBuilder[F[+_]: {Async, Parallel, Console, Logger, ThisNode,
-    MeterProvider, EventSink, EventSource}](
+    MeterProvider, TracerProvider, EventSink, EventSource, Tracer}](
     actorSystem: ActorSystem[F],
     settings: HttpSettings,
     thisNode: Node
@@ -33,8 +34,8 @@ object Main extends WaygridApp[HttpSettings](NodeDescriptor.Origin(NodeService("
         .behavior(settings.httpServer)
         .evalMap(actorSystem.actorOf(_, "http-server"))
       compiler <- DagCompiler.default[F]
-      _ <- Resource.eval(httpServer ! RegisterRoute[F]("v1.ingest", RoutingResource.ingest[F](compiler)))
-      _ <- Resource.eval(httpServer ! Start)
+      _        <- Resource.eval(httpServer ! RegisterRoute[F]("v1.ingest", IngestResource.ingest[F](compiler)))
+      _        <- Resource.eval(httpServer ! Start)
       _ <- Resource.make(Concurrent[F].pure(actorSystem)): system =>
           Logger[F].info(
             "Shutting down actor system"

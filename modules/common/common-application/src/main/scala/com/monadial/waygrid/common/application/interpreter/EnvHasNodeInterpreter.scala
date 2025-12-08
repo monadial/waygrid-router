@@ -1,13 +1,7 @@
 package com.monadial.waygrid.common.application.interpreter
 
 import com.monadial.waygrid.common.application.algebra.ThisNode
-import com.monadial.waygrid.common.domain.model.node.Value.{
-  NodeClusterId,
-  NodeDescriptor,
-  NodeId,
-  NodeRegion,
-  NodeRuntime
-}
+import com.monadial.waygrid.common.domain.model.node.Value.*
 import com.monadial.waygrid.common.domain.syntax.StringSyntax.toDomain
 import cats.*
 import cats.data.*

@@ -33,7 +33,7 @@ object Redis:
       case _ =>
         cluster(settings)
 
-  def cluster[F[+_]: {Async, Logger}, K, V](
+  private def cluster[F[+_]: {Async, Logger}, K, V](
     settings: RedisSettings
   )(using codec: RedisCodec[K, V]): Resource[F, RedisClient[F, K, V]] =
     for
@@ -47,7 +47,7 @@ object Redis:
       _ <- Resource.onFinalize(Logger[F].info("🔌 Disconnected from Redis cluster"))
     yield redis
 
-  def singleNode[F[+_]: {Async, Logger}, K, V](
+  private def singleNode[F[+_]: {Async, Logger}, K, V](
     settings: RedisSettings
   )(using codec: RedisCodec[K, V]): Resource[F, RedisClient[F, K, V]] =
     for

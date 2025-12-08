@@ -2,7 +2,7 @@ package com.monadial.waygrid.common.domain.syntax
 
 import cats.Applicative
 import cats.implicits.*
-import com.monadial.waygrid.common.domain.value.long.IsLong
+import com.monadial.waygrid.common.domain.algebra.value.long.IsLong
 
 object LongSyntax:
   extension (long: Long)

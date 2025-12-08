@@ -62,5 +62,12 @@
         </introspection-scope>
       </schema-mapping>
     </data-source>
+    <data-source name="@clickhouse.waygrid-clickhouse.svc.cluster.local" uuid="d7b11245-85d8-407d-ab69-deb48078b8a2">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="CLICKHOUSE" />
+      <secret-storage>master_key</secret-storage>
+      <auth-provider>no-auth</auth-provider>
+      <user-name>waygrid</user-name>
+      <schema-mapping />
+    </data-source>
   </component>
 </project>

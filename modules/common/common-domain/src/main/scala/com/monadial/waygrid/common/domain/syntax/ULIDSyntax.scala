@@ -2,7 +2,7 @@ package com.monadial.waygrid.common.domain.syntax
 
 import cats.Applicative
 import cats.implicits.*
-import com.monadial.waygrid.common.domain.value.ulid.IsULID
+import com.monadial.waygrid.common.domain.algebra.value.ulid.IsULID
 import wvlet.airframe.ulid.ULID
 
 object ULIDSyntax:

@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+package com.monadial.waygrid.common.topology;
+
+message RegisterNodeRequest {
+  required string nodeId = 1;
+}
+
+message RegistrationNodeResponse {
+  required string nodeId = 1;
+}
+
+service TopologyProtocol {
+
+  rpc RegisterNode(RegisterNodeRequest)
+    returns (RegistrationNodeResponse);
+
+}

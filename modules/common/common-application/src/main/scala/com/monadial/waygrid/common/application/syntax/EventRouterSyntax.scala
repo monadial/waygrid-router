@@ -1,8 +1,8 @@
 package com.monadial.waygrid.common.application.syntax
 
 import com.monadial.waygrid.common.application.`macro`.EventRouterMacro
-import com.monadial.waygrid.common.application.domain.model.envelope.Envelope
-import com.monadial.waygrid.common.domain.model.event.Event as DomainEvent
+import com.monadial.waygrid.common.domain.algebra.messaging.event.Event as DomainEvent
+import com.monadial.waygrid.common.domain.model.envelope.DomainEnvelope
 import shapeless3.typeable.Typeable
 
 /**
@@ -19,8 +19,8 @@ object EventRouterSyntax:
    * @param b   the enclosing macro’s Builder[F]
    * @param tpe evidence that `E` is Typeable at runtime
    */
-  inline def route[F[+_], E <: DomainEvent](
-    inline f: Envelope[E] => F[Unit]
+  inline def event[F[+_], E <: DomainEvent](
+    inline f: DomainEnvelope[E] => F[Unit]
   )(using b: EventRouterMacro.Builder[F], tpe: Typeable[E]): Unit =
     b.handle(f, 0)
 
@@ -36,7 +36,7 @@ object EventRouterSyntax:
    * @param b        the enclosing macro’s Builder[F]
    * @param tpe      evidence that `E` is Typeable at runtime
    */
-  inline def routeWithPriority[F[+_], E <: DomainEvent](
+  inline def eventWithPriority[F[+_], E <: DomainEvent](
     priority: Int
-  )(inline f: Envelope[E] => F[Unit])(using b: EventRouterMacro.Builder[F], tpe: Typeable[E]): Unit =
+  )(inline f: DomainEnvelope[E] => F[Unit])(using b: EventRouterMacro.Builder[F], tpe: Typeable[E]): Unit =
     b.handle(f, priority)

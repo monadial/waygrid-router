@@ -3,12 +3,8 @@ package com.monadial.waygrid.common.domain.instances
 import cats.Show
 import cats.data.Validated
 import cats.kernel.Order
-import com.monadial.waygrid.common.domain.value.codec.{
-  Base64Codec,
-  Base64DecodingError,
-  BytesCodec,
-  BytesDecodingError
-}
+import com.monadial.waygrid.common.domain.algebra.value.codec.{Base64Codec, Base64DecodingError, BytesCodec, BytesDecodingError}
+import scodec.bits.ByteVector
 
 import java.util
 
@@ -17,14 +13,27 @@ object BytesInstances:
   given Show[Array[Byte]]  = Show.show(bytes => s"ArrayByte(${bytes.mkString(", ")})")
 
   given BytesCodec[Array[Byte]] with
-    inline def  encode(value: Array[Byte]): Array[Byte] = value
-    inline def decode(value: Array[Byte]): Validated[BytesDecodingError, Array[Byte]] =
+    override def decodeFromScalar(value: ByteVector): Validated[BytesDecodingError, Array[Byte]] =
       Validated
-        .valid(value)
+        .catchNonFatal(value.toArrayUnsafe)
+        .leftMap(x => BytesDecodingError(x.getMessage))
+
+    override def encodeToScalar(value: Array[Byte]): ByteVector =
+      ByteVector(value)
 
   given Base64Codec[Array[Byte]] with
-    inline def encode(value: Array[Byte]): String = JavaBridge.base64Encoder(value)
-    inline def decode(value: String): Validated[Base64DecodingError, Array[Byte]] =
+    override def decode(value: String): Validated[Base64DecodingError, Array[Byte]] =
       Validated
-        .catchNonFatal(JavaBridge.base64Decoder(value))
-        .leftMap(x => Base64DecodingError(x.getMessage))
+          .catchNonFatal(JavaBridge.base64Decoder(value))
+          .map(x => x.toArrayUnsafe)
+          .leftMap(x => Base64DecodingError(x.getMessage))
+
+    override def encode(value: Array[Byte]): String =
+      JavaBridge
+        .base64Encoder(BytesCodec[Array[Byte]].encodeToScalar(value))
+
+//    inline def encode(value: Array[Byte]): String = JavaBridge.base64Encoder(value)
+//    inline def decode(value: String): Validated[Base64DecodingError, Array[Byte]] =
+//      Validated
+//        .catchNonFatal(JavaBridge.base64Decoder(value))
+//        .leftMap(x => Base64DecodingError(x.getMessage))

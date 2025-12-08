@@ -1,26 +1,36 @@
 package com.monadial.waygrid.common.application.actor
 
-import com.monadial.waygrid.common.application.actor.HttpServerActorCommand.{RegisterRoute, RegisterWsRoute, UnregisterRoute, UnregisterWsRoute}
-import com.monadial.waygrid.common.application.algebra.*
-import com.monadial.waygrid.common.application.algebra.SupervisedRequest.{Restart, Start, Stop}
-import com.monadial.waygrid.common.application.http.resource.{HomeResource, WellknownResource}
-import com.monadial.waygrid.common.application.util.logging.LoggerLog4CatsWrapper
 import cats.Parallel
-import cats.data.{Kleisli, OptionT}
+import cats.data.Kleisli
 import cats.effect.implicits.*
-import cats.effect.{Async, Fiber, Ref, Resource}
+import cats.effect.{ Async, Fiber, Ref, Resource }
 import cats.syntax.all.*
+import com.monadial.waygrid.common.application.actor.HttpServerActorCommand.{
+  RegisterRoute,
+  RegisterWsRoute,
+  UnregisterRoute,
+  UnregisterWsRoute
+}
+import com.monadial.waygrid.common.application.algebra.*
+import com.monadial.waygrid.common.application.algebra.SupervisedRequest.{ Restart, Start, Stop }
 import com.monadial.waygrid.common.application.domain.model.settings.HttpServerSettings
+import com.monadial.waygrid.common.application.http.resource.{ HomeResource, WellknownResource }
+import com.monadial.waygrid.common.application.util.logging.LoggerLog4CatsWrapper
 import com.suprnation.actor.Actor.ReplyingReceive
 import fs2.io.net.Network
-import org.http4s.{HttpRoutes, Request}
+import org.http4s.Uri.Fragment
 import org.http4s.ember.server.EmberServerBuilder
 import org.http4s.implicits.given
 import org.http4s.otel4s.middleware.metrics.OtelMetrics
+import org.http4s.otel4s.middleware.trace.client.UriRedactor
+import org.http4s.otel4s.middleware.trace.{ PerRequestFilter, redact }
+import org.http4s.otel4s.middleware.trace.server.{ ServerMiddleware, ServerSpanDataProvider }
 import org.http4s.server.Server
 import org.http4s.server.middleware.Metrics
 import org.http4s.server.websocket.WebSocketBuilder2
+import org.http4s.{ HttpRoutes, Query, Request, Uri }
 import org.typelevel.otel4s.metrics.MeterProvider
+import org.typelevel.otel4s.trace.TracerProvider
 
 sealed trait ServerState[F[+_]]
 object ServerState:
@@ -49,12 +59,25 @@ object HttpServerActor:
 
   private inline def defaultRoutes[F[+_]: {ThisNode, Async}] = HomeResource.resource[F] <+> WellknownResource.v1[F]
 
+  val redactor: UriRedactor = new UriRedactor:
+    def redactPath(path: Uri.Path): Uri.Path = path
+
+    def redactQuery(query: Query): Query =
+      if query.isEmpty then query
+      else Query(redact.REDACTED -> None)
+
+    def redactFragment(fragment: Fragment): Option[Fragment] =
+      Some(if fragment.isEmpty then fragment else redact.REDACTED)
+
   def behavior[F[+_]: {Async, ThisNode, Parallel, Logger,
-    MeterProvider}](settings: HttpServerSettings): Resource[F, HttpServerActor[F]] =
+    MeterProvider, TracerProvider}](settings: HttpServerSettings): Resource[F, HttpServerActor[F]] =
     for
-      given Network[F]    <- Resource.pure(Network.forAsync[F])
-      logger              <- Resource.pure(LoggerLog4CatsWrapper.factory[F].getLogger)
-      metricsOps          <- Resource.eval(OtelMetrics.serverMetricsOps())
+      given Network[F] <- Resource.pure(Network.forAsync[F])
+      logger           <- Resource.pure(LoggerLog4CatsWrapper.factory[F].getLogger)
+      metricsOps       <- Resource.eval(OtelMetrics.serverMetricsOps())
+      serverTracer <- Resource.eval(ServerMiddleware.builder(
+        ServerSpanDataProvider.openTelemetry(redactor)
+      ).withPerRequestTracingFilter(PerRequestFilter.alwaysEnabled).build)
       routeMapRef         <- Resource.eval(Ref.of[F, RouteMap[F]](Map.empty))
       wsRoutesMapRef      <- Resource.eval(Ref.of[F, WsRouteMap[F]](Map.empty))
       combinedRoutesRef   <- Resource.eval(Ref.of[F, HttpRoutes[F]](defaultRoutes[F]))
@@ -105,16 +128,17 @@ object HttpServerActor:
                     .withLogger(logger)
                     .withHost(settings.host)
                     .withPort(settings.port)
+                    .withHttp2
                     .withMaxConnections(settings.maxConnections.getOrElse(65536))
                     .withHttpWebSocketApp: ws =>
                       Kleisli: req =>
                         for
                           httpRoutes <- combinedRoutesRef.get
                           wsRoutes   <- combinedWsRoutesRef.get.map(_(ws))
-                          app <- (Metrics(
+                          app <- (serverTracer.wrapHttpRoutes(Metrics(
                             metricsOps,
                             classifierF = requestClassifier
-                          )(httpRoutes) <+> wsRoutes).orNotFound.pure[F]
+                          )(httpRoutes)) <+> wsRoutes).orNotFound.pure[F]
                           result <- app(req)
                         yield result
                     .build

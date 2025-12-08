@@ -2,13 +2,9 @@ package com.monadial.waygrid.common.domain.instances
 
 import cats.data.Validated
 import cats.syntax.all.*
-import com.monadial.waygrid.common.domain.value.codec.{
-  Base64Codec,
-  Base64DecodingError,
-  BytesCodec,
-  BytesDecodingError
-}
-import eu.timepit.refined.api.{ RefType, Validate }
+import com.monadial.waygrid.common.domain.algebra.value.codec.{Base64Codec, Base64DecodingError, BytesCodec, BytesDecodingError}
+import eu.timepit.refined.api.{RefType, Validate}
+import scodec.bits.ByteVector
 
 object RefinedInstances:
   given [T, P, F[_, _]](using
@@ -17,13 +13,13 @@ object RefinedInstances:
     refType: RefType[F]
   ): BytesCodec[F[T, P]] with
 
-    inline override def encode(value: F[T, P]): Array[Byte] =
-      underlying.encode(refType.unwrap(value))
+    inline override def encodeToScalar(value: F[T, P]): ByteVector =
+      underlying.encodeToScalar(refType.unwrap(value))
 
-    inline override def decode(value: Array[Byte])
+    inline override def decodeFromScalar(value: ByteVector)
       : Validated[BytesDecodingError, F[T, P]] =
       underlying
-        .decode(value)
+        .decodeFromScalar(value)
         .andThen: x =>
           refType
             .refine[P](x)

@@ -16,6 +16,7 @@
             <option value="$PROJECT_DIR$/modules/origin/origin-grpc" />
             <option value="$PROJECT_DIR$/modules/origin/origin-http" />
             <option value="$PROJECT_DIR$/modules/origin/origin-kafka" />
+            <option value="$PROJECT_DIR$/modules/processor/processor-lambda" />
             <option value="$PROJECT_DIR$/modules/processor/processor-openai" />
             <option value="$PROJECT_DIR$/modules/system/system-billing" />
             <option value="$PROJECT_DIR$/modules/system/system-common" />

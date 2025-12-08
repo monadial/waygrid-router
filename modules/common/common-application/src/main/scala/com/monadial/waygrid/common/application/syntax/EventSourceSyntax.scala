@@ -1,14 +1,19 @@
 package com.monadial.waygrid.common.application.syntax
 
+import cats.effect.Async
+import cats.effect.implicits.*
+import cats.implicits.*
 import com.monadial.waygrid.common.application.`macro`.EventRouterMacro
 import com.monadial.waygrid.common.application.algebra.EventSource
-
-import cats.effect.implicits.*
-import cats.effect.{ Async, Fiber }
-import cats.implicits.*
-import com.monadial.waygrid.common.application.domain.model.event.EventStream
+import com.monadial.waygrid.common.application.algebra.EventSource.RebalanceHandler
+import com.monadial.waygrid.common.application.util.cats.effect.{ FiberT, FiberType }
+import com.monadial.waygrid.common.domain.SystemWaygridApp
+import com.monadial.waygrid.common.domain.value.Address.Endpoint
+import com.monadial.waygrid.common.domain.value.Address.EndpointDirection.Inbound
 
 object EventSourceSyntax:
+
+  trait EventSubscriber extends FiberType
 
   /**
    * Internal helper: lift a total handler into a PartialFunction that is always defined.
@@ -26,41 +31,36 @@ object EventSourceSyntax:
       def apply(evt: EventSource[F]#Evt): F[Unit]       = handler(evt)
 
   extension [F[+_]: Async](es: EventSource[F])
-
-    /**
-     * Subscribe with a compile-time routed set of handlers.
-     *
-     * {{{
-     *   es.subscribeHandlers(EventStream("foo")) {
-     *     route[UserCreated]   { e => ... }
-     *     routeWithPriority { e => ... }
-     *   }
-     * }}}
-     *
-     * Under the hood this:
-     *  1. Invokes the `EventRouterMacro` to build an `EventRouter[F]` from your `handle[…]` definitions.
-     *  2. Wraps `router.route` in a reusable `PartialFunction` so you don't reallocate an anonymous class on each call.
-     *  3. Delegates to `es.subscribe(stream)(...)`.
-     *
-     * @param stream       the logical Kafka topic(s) to subscribe to
-     * @param buildRoutes  a context function in which you call `handle[...]` / `handleWithPriority[...]`
-     */
-    inline def subscribeRoutes(
-      stream: EventStream
-    )(inline buildRoutes: EventRouterMacro.Builder[F] ?=> Unit): F[Fiber[F, Throwable, Unit]] =
-      subscribeRoutesTo(List(stream))(buildRoutes)
-
-    /**
-     * Same as `subscribeHandlers`, but for subscribing to *multiple* streams in parallel.
-     *
-     * @param streams      a list of logical Kafka topics
-     * @param buildRoutes  DSL block of `handle[...]` / `handleWithPriority[...]`
-     */
-    inline def subscribeRoutesTo(
-      streams: List[EventStream]
-    )(inline buildRoutes: EventRouterMacro.Builder[F] ?=> Unit): F[Fiber[F, Throwable, Unit]] =
+    inline def subscribeTo(
+      endpoint: Endpoint
+    )(inline buildRoutes: EventRouterMacro.Builder[F] ?=> Unit): F[FiberT[F, EventSubscriber, Unit]] =
       for
         router     <- EventRouterMacro.build[F](buildRoutes).pure[F]
-        subscriber <- es.subscribeTo(streams)(wrapAsPF(router.route)).pure[F]
+        subscriber <- es.subscribe(endpoint)(wrapAsPF(router.route)).pure[F]
         fiber      <- subscriber.useForever.as(()).start
-      yield fiber
+      yield FiberT[F, EventSubscriber, Unit](fiber)
+
+    inline def subscribeToWithRebalance(
+      endpoint: Endpoint,
+      rebalanceHandler: RebalanceHandler[F]
+    )(inline buildRoutes: EventRouterMacro.Builder[F] ?=> Unit): F[FiberT[F, EventSubscriber, Unit]] =
+      for
+        router     <- EventRouterMacro.build[F](buildRoutes).pure[F]
+        subscriber <- es.subscribe(endpoint, rebalanceHandler)(wrapAsPF(router.route)).pure[F]
+        fiber      <- subscriber.useForever.as(()).start
+      yield FiberT[F, EventSubscriber, Unit](fiber)
+
+    inline def subscribeToWaystationInboundEvents(
+      inline buildRoutes: EventRouterMacro.Builder[F] ?=> Unit
+    ): F[FiberT[F, EventSubscriber, Unit]] =
+      subscribeTo(
+        SystemWaygridApp.Waystation.toServiceAddress.toEndpoint(Inbound)
+      )(buildRoutes)
+
+    inline def subscribeToWaystationInboundEventsWithRebalance(rebalanceHandler: RebalanceHandler[F])(
+      inline buildRoutes: EventRouterMacro.Builder[F] ?=> Unit
+    ): F[FiberT[F, EventSubscriber, Unit]] =
+      subscribeToWithRebalance(
+        SystemWaygridApp.Waystation.toServiceAddress.toEndpoint(Inbound),
+        rebalanceHandler
+      )(buildRoutes)

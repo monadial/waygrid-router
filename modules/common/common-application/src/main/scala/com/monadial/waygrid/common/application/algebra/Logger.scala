@@ -56,7 +56,8 @@ final case class LoggerContext(
   name: String,
   file: String,
   line: Int,
-  pkg: String
+  pkg: String,
+  category: Option[String] = None,
 )
 
 object LoggerContext:

@@ -1,6 +1,6 @@
 package com.monadial.waygrid.common.domain.algebra.ddd
 
-import com.monadial.waygrid.common.domain.value.long.LongValue
+import com.monadial.waygrid.common.domain.algebra.value.long.LongValue
 
 type Version = Version.Type
 object Version extends LongValue:

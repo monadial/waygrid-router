@@ -1,14 +1,12 @@
 package com.monadial.waygrid.common.domain.instances
 
-import java.util.Base64 as JavaBase64
+import scodec.bits.ByteVector
 
 object JavaBridge:
-  inline def base64Decoder: String => Array[Byte] = (base64: String) =>
-    JavaBase64
-      .getDecoder
-      .decode(base64)
+  inline def base64Decoder: String => ByteVector = (base64: String) =>
+    ByteVector
+        .fromBase64Descriptive(base64)
+        .fold(x => throw new IllegalArgumentException(x), identity)
 
-  inline def base64Encoder: Array[Byte] => String = (t: Array[Byte]) =>
-    JavaBase64
-      .getEncoder
-      .encodeToString(t)
+  inline def base64Encoder: ByteVector => String = (t: ByteVector) =>
+    t.toBase64

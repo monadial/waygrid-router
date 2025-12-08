@@ -2,7 +2,7 @@ package com.monadial.waygrid.common.domain.syntax
 
 import cats.Applicative
 import cats.implicits.*
-import com.monadial.waygrid.common.domain.value.uri.IsURI
+import com.monadial.waygrid.common.domain.algebra.value.uri.IsURI
 import org.http4s.Uri
 
 object UriSyntax:

@@ -1,7 +1,7 @@
 package com.monadial.waygrid.common.domain.model.cryptography.hashing
 
-import com.monadial.waygrid.common.domain.value.long.LongValue
-import com.monadial.waygrid.common.domain.value.string.StringValue
+import com.monadial.waygrid.common.domain.algebra.value.long.LongValue
+import com.monadial.waygrid.common.domain.algebra.value.string.StringValue
 
 object Value:
 

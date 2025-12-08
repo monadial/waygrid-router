@@ -1,7 +1,7 @@
 package com.monadial.waygrid.system.iam.domain.account
 
-import com.monadial.waygrid.common.domain.model.command.Command
-import com.monadial.waygrid.common.domain.model.command.Value.CommandId
+import com.monadial.waygrid.common.domain.algebra.messaging.command.Command
+import com.monadial.waygrid.common.domain.algebra.messaging.command.Value.CommandId
 import com.monadial.waygrid.system.iam.domain.account.Value.AccountId
 
 object Command:

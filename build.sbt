@@ -1,5 +1,6 @@
 import Dependencies.Libraries
 import sbt.Keys.scalacOptions
+import sbtprotoc.ProtocPlugin.autoImport.PB
 
 import scala.collection.Seq
 
@@ -41,14 +42,18 @@ def buildInfo(component: String, service: String) = Seq(
   buildInfoPackage := s"com.monadial.waygrid.${component}.${service}"
 )
 
+def configureOtel(component: String, service: String): Seq[Setting[?]] = Seq(
+  Compile / javaOptions ++= Seq(
+    "-Dotel.java.global-autoconfigure.enabled=true",
+    s"-Dotel.service.name=${component}-${service}",
+    "-Dotel.propagators=b3multi",
+    "-Dotel.exporter.otlp.endpoint=otel-collector-otel-collector-gateway.waygrid-observability.svc.cluster.local:8888"
+  )
+)
+
 lazy val root = (project in file("."))
   .settings(
     name := "Waygrid",
-    Compile / javaOptions ++= Seq(
-      "-Dotel.java.global-autoconfigure.enabled=true",
-      s"-Dotel.service.name=${name.value}",
-      "-Dotel.exporter.otlp.endpoint=http://localhost:4317"
-    ),
     Universal / javaOptions ++= (Compile / javaOptions).value,
     fork              := true,
     scalafmtOnCompile := true,
@@ -98,6 +103,7 @@ lazy val `common-domain` = (project in file("modules/common/common-domain"))
   }
 
 lazy val `common-application` = (project in file("modules/common/common-application"))
+  .enablePlugins(Http4sGrpcPlugin)
   .settings {
     libraryDependencies ++= List(
       // odin
@@ -128,6 +134,9 @@ lazy val `common-application` = (project in file("modules/common/common-applicat
       Libraries.http4sOtel4sMetrics,
       Libraries.http4sOtel4sTraceCore,
       Libraries.http4sOtel4sTraceServer,
+      Libraries.http4sOtel4sTraceClient,
+      // scalapb
+      Libraries.scalaPb,
       // otel4s
       Libraries.otel4sOtelJava.value,
       Libraries.otel4InstrumentationMetrics.value,
@@ -151,7 +160,23 @@ lazy val `common-application` = (project in file("modules/common/common-applicat
       Libraries.weaverCats       % Test,
       Libraries.weaverDiscipline % Test,
       Libraries.weaverScalaCheck % Test
+    ) ++ Seq(
+      // this is needed to dns resolver correctly work on Apple Silicon (M1...)
+      "io.netty" % "netty-resolver-dns-native-macos" % "4.2.7.Final" % Compile classifier "osx-aarch_64"
     )
+  }
+  .settings {
+    Compile / PB.targets ++= Seq(
+      // set grpc = false because http4s-grpc generates its own code
+      scalapb.gen(grpc = false, scala3Sources = true) -> (Compile / sourceManaged).value / "scalapb"
+    )
+    Compile / scalacOptions ++= {
+      val managed = (Compile / sourceManaged).value.getAbsolutePath
+      Seq(
+        s"-Wconf:src=$managed/.*scalapb/.*:silent",
+        s"-Wconf:src=$managed/.*http4s-grpc/.*:silent"
+      )
+    }
   }
   .dependsOn(`common-domain`)
 
@@ -171,6 +196,17 @@ lazy val `system-waystation` = (project in file("modules/system/system-waystatio
   .enablePlugins(BuildInfoPlugin, DockerPlugin, JavaAppPackaging)
   .settings(dockerImage("system", "waystation") *)
   .settings(buildInfo("system", "waystation") *)
+  .settings(configureOtel("system", "waystation") *)
+  .settings(
+    libraryDependencies ++= List(
+      Libraries.catsLaws         % Test,
+      Libraries.monocleLaw       % Test,
+      Libraries.scalacheck       % Test,
+      Libraries.weaverCats       % Test,
+      Libraries.weaverDiscipline % Test,
+      Libraries.weaverScalaCheck % Test
+    )
+  )
   .dependsOn(`system-common`)
 
 lazy val `system-history` = (project in file("modules/system/system-history"))
@@ -225,17 +261,20 @@ lazy val `system-k8s-operator` = (project in file("modules/system/system-k8s-ope
 lazy val `origin-http` = (project in file("modules/origin/origin-http"))
   .enablePlugins(DockerPlugin, JavaAppPackaging)
   .settings(dockerImage("origin", "http") *)
+  .settings(buildInfo("origin", "http") *)
+  .settings(configureOtel("origin", "http") *)
   .dependsOn(`common-application`)
 
 lazy val `origin-grpc` = (project in file("modules/origin/origin-grpc"))
   .enablePlugins(DockerPlugin, JavaAppPackaging)
   .settings(dockerImage("origin", "grpc") *)
-  .settings(buildInfo("system", "iam") *)
+  .settings(buildInfo("origin", "grpc") *)
   .dependsOn(`common-application`)
 
 lazy val `origin-kafka` = (project in file("modules/origin/origin-kafka"))
   .enablePlugins(DockerPlugin, JavaAppPackaging)
   .settings(dockerImage("origin", "kafka") *)
+  .settings(buildInfo("origin", "kafka") *)
   .dependsOn(`common-application`)
 //
 //
@@ -266,3 +305,8 @@ lazy val `processor-openai` = (project in file("modules/processor/processor-open
   .settings(dockerImage("processor", "openai") *)
   .settings(buildInfo("processor", "openai") *)
   .dependsOn(`common-application`)
+
+lazy val `processor-lambda` = (project in file("modules/processor/processor-lambda"))
+  .enablePlugins(BuildInfoPlugin, DockerPlugin, JavaAppPackaging)
+  .settings(dockerImage("processor", "lambda") *)
+  .settings(buildInfo("processor", "lambda") *)

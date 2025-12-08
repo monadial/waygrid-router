@@ -1,13 +1,13 @@
 package com.monadial.waygrid.common.domain.algebra
 
 import cats.effect.{ Resource, Sync }
-import cats.syntax.all.*
-import com.monadial.waygrid.common.domain.cryptography.hashing.Hasher
+import cats.implicits.*
+import com.monadial.waygrid.common.domain.interpreter.cryptography.HasherInterpreter
 import com.monadial.waygrid.common.domain.model.cryptography.hashing.Value.LongHash
 import com.monadial.waygrid.common.domain.model.routing.Value.RouteSalt
-import com.monadial.waygrid.common.domain.model.routing.dag.{ Dag, Edge as DagEdge, Node as DagNode }
-import com.monadial.waygrid.common.domain.model.routing.dag.Value.{ DagHash, EdgeGuard, NodeId }
-import com.monadial.waygrid.common.domain.model.routing.spec.{ Node as SpecNode, Spec }
+import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ DagHash, EdgeGuard, NodeId }
+import com.monadial.waygrid.common.domain.model.traversal.dag.{Dag, Edge as DagEdge, Node as DagNode}
+import com.monadial.waygrid.common.domain.model.traversal.spec.{Spec, Node as SpecNode}
 
 import scala.collection.mutable
 
@@ -39,7 +39,8 @@ object DagCompiler:
    * Ensures stable and unique DAG node identifiers across compiles.
    */
   def default[F[+_]: Sync]: Resource[F, DagCompiler[F]] =
-    for hasher <- Hasher.xxh3[F]
+    for
+      hasher <- HasherInterpreter.xxh3[F]
     yield new DagCompiler[F]:
 
       // --- Constants for internal logic ---
