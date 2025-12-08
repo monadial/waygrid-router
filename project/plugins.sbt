@@ -8,5 +8,5 @@ addSbtPlugin("com.eed3si9n"        % "sbt-buildinfo"       % "0.13.1")
 addSbtPlugin("com.timushev.sbt"    % "sbt-updates"         % "0.6.4")
 addSbtPlugin("org.typelevel"       % "laika-sbt"           % "1.3.2")
 addSbtPlugin("org.wartremover"     % "sbt-wartremover"     % "3.3.4")
-
+addSbtPlugin("io.chrisdavenport"   % "sbt-http4s-grpc"     % "0.0.4")
 addDependencyTreePlugin

@@ -1,12 +1,8 @@
 package com.monadial.waygrid.common.domain.instances
 
 import cats.data.Validated
-import com.monadial.waygrid.common.domain.value.codec.{
-  Base64Codec,
-  Base64DecodingError,
-  BytesCodec,
-  BytesDecodingError
-}
+import com.monadial.waygrid.common.domain.algebra.value.codec.{Base64Codec, Base64DecodingError, BytesCodec, BytesDecodingError}
+import scodec.bits.ByteVector
 
 import java.nio.ByteBuffer
 import scodec.{Attempt, codecs, Decoder as SDecoder, Encoder as SEncoder}
@@ -19,24 +15,20 @@ object IntegerInstances:
     Attempt.successful(value)
 
   given BytesCodec[Int] with
-    inline def encode(value: Int): Array[Byte] =
-      ByteBuffer
-        .allocate(4)
-        .putInt(value)
-        .array()
+    inline def encodeToScalar(value: Int): ByteVector = ByteVector(value)
 
-    inline def decode(value: Array[Byte]): Validated[BytesDecodingError, Int] =
+    inline def decodeFromScalar(value: ByteVector): Validated[BytesDecodingError, Int] =
       Validated
-        .catchNonFatal(ByteBuffer.wrap(value).getInt)
+        .catchNonFatal(ByteBuffer.wrap(value.toArrayUnsafe).getInt)
         .leftMap(x => BytesDecodingError(x.getMessage))
 
   given Base64Codec[Int] with
     inline def encode(value: Int): String =
       JavaBridge
-        .base64Encoder(BytesCodec[Int].encode(value))
+        .base64Encoder(BytesCodec[Int].encodeToScalar(value))
 
     inline def decode(value: String): Validated[Base64DecodingError, Int] =
       Validated
         .catchNonFatal(JavaBridge.base64Decoder(value))
-        .andThen(BytesCodec[Int].decode(_))
+        .andThen(BytesCodec[Int].decodeFromScalar(_))
         .leftMap(x => Base64DecodingError(x.getMessage))

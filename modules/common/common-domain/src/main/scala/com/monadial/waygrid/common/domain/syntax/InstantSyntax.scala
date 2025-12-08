@@ -2,7 +2,7 @@ package com.monadial.waygrid.common.domain.syntax
 
 import cats.Applicative
 import cats.implicits.*
-import com.monadial.waygrid.common.domain.value.instant.IsInstant
+import com.monadial.waygrid.common.domain.algebra.value.instant.IsInstant
 
 import java.time.Instant
 

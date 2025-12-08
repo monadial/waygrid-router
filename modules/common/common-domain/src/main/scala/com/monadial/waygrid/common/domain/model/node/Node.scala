@@ -3,6 +3,7 @@ package com.monadial.waygrid.common.domain.model.node
 import com.monadial.waygrid.common.domain.model.Waygrid
 import com.monadial.waygrid.common.domain.model.node.Value.*
 import com.monadial.waygrid.common.domain.syntax.StringSyntax.toDomain
+import com.monadial.waygrid.common.domain.value.Address.NodeAddress
 import io.circe.Codec
 
 import java.time.Instant
@@ -22,6 +23,6 @@ object Node:
       s"${Waygrid.appName}.${node.descriptor.component}.${node.descriptor.service}"
         .toDomain[NodeSettingsPath]
 
-    inline def address: NodeAddress = NodeAddress.fromNode(node)
+    def address: NodeAddress = NodeAddress(node.descriptor, node.id)
 
     def uptime: Long = Instant.now().toEpochMilli - node.startedAt.toEpochMilli

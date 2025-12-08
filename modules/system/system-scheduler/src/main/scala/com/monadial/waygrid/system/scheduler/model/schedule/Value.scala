@@ -1,9 +1,9 @@
 package com.monadial.waygrid.system.scheduler.model.schedule
 
 import cats.implicits.toShow
-import com.monadial.waygrid.common.domain.value.instant.InstantValue
-import com.monadial.waygrid.common.domain.value.integer.IntegerValue
-import com.monadial.waygrid.common.domain.value.ulid.ULIDValue
+import com.monadial.waygrid.common.domain.algebra.value.instant.InstantValue
+import com.monadial.waygrid.common.domain.algebra.value.integer.IntegerValue
+import com.monadial.waygrid.common.domain.algebra.value.ulid.ULIDValue
 
 object Value:
 

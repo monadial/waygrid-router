@@ -2,8 +2,8 @@ package com.monadial.waygrid.common.domain.algebra.ddd
 
 import cats.data.Kleisli
 import cats.syntax.all.*
-import com.monadial.waygrid.common.domain.model.command.Command
-import com.monadial.waygrid.common.domain.model.event.Event
+import com.monadial.waygrid.common.domain.algebra.messaging.command.Command
+import com.monadial.waygrid.common.domain.algebra.messaging.event.Event
 
 /**
  * The result of handling a command on an aggregate, producing either an error

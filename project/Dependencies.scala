@@ -20,7 +20,7 @@ object Dependencies {
     val http4s                       = "0.23.30"
     val http4sMetrics                = "0.23.30"
     val http4sWs                     = "0.23.30"
-    val http4sOtel4s                 = "0.13.0"
+    val http4sOtel4s                 = "0.15.0"
     val ip4s                         = "3.7.0"
     val kittens                      = "3.5.0"
     val laika                        = "1.3.2"
@@ -28,9 +28,9 @@ object Dependencies {
     val logbackClassic               = "1.5.18"
     val monocle                      = "3.3.0"
     val odin                         = "0.17.0"
-    val opentelemetryInstrumentation = "2.18.0-alpha"
-    val opentelemetryOtlp            = "1.49.0"
-    val otel4s                       = "0.13.1"
+    val opentelemetryInstrumentation = "2.21.0-alpha"
+    val opentelemetryOtlp            = "1.55.0"
+    val otel4s                       = "0.14.0"
     val postgres                     = "42.7.7"
     val prometheus4cats              = "3.0.0"
     val redis4Cats                   = "2.0.1"
@@ -83,6 +83,9 @@ object Dependencies {
     val http4sOtel4sMetrics     = "org.http4s" %% "http4s-otel4s-middleware-metrics"      % V.http4sOtel4s
     val http4sOtel4sTraceCore   = "org.http4s" %% "http4s-otel4s-middleware-trace-core"   % V.http4sOtel4s
     val http4sOtel4sTraceServer = "org.http4s" %% "http4s-otel4s-middleware-trace-server" % V.http4sOtel4s
+    val http4sOtel4sTraceClient = "org.http4s" %% "http4s-otel4s-middleware-trace-client" % V.http4sOtel4s
+
+    val scalaPb =  "com.thesamet.scalapb" %% "scalapb-runtime" % scalapb.compiler.Version.scalapbVersion % "protobuf"
 
     val ip4sCore = Def.setting("com.comcast" %% "ip4s-core" % V.ip4s)
 

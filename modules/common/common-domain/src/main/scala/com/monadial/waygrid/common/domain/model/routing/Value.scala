@@ -1,11 +1,11 @@
 package com.monadial.waygrid.common.domain.model.routing
 
-import com.monadial.waygrid.common.domain.model.node.Value.ServiceAddress
-import com.monadial.waygrid.common.domain.value.instant.InstantValue
-import com.monadial.waygrid.common.domain.value.long.LongValue
-import com.monadial.waygrid.common.domain.value.string.StringValue
-import com.monadial.waygrid.common.domain.value.ulid.ULIDValue
+import com.monadial.waygrid.common.domain.algebra.value.instant.InstantValue
+import com.monadial.waygrid.common.domain.algebra.value.long.LongValue
+import com.monadial.waygrid.common.domain.algebra.value.string.StringValue
+import com.monadial.waygrid.common.domain.algebra.value.ulid.ULIDValue
 
+import java.time.Instant
 import scala.concurrent.duration.FiniteDuration
 
 object Value:
@@ -27,13 +27,6 @@ object Value:
   type RepeatUntilDate = RepeatUntilDate.Type
   object RepeatUntilDate extends InstantValue
 
-  type Address = ServiceAddress
-
-  enum RetryPolicy:
-    case NoRetry
-    case Linear(delay: FiniteDuration, maxRetries: RetryMaxRetries)
-    case Exponential(baseDelay: FiniteDuration, maxRetries: RetryMaxRetries)
-
   enum RepeatPolicy:
     case NoRepeat
     case Indefinitely(every: FiniteDuration)
@@ -43,4 +36,5 @@ object Value:
   enum DeliveryStrategy:
     case Immediate
     case ScheduleAfter(delay: FiniteDuration)
+    case ScheduleAt(time: Instant)
 

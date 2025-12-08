@@ -1,4 +1,4 @@
-POST http://localhost:1337/v1/ingest
+GRPC localhost:1337/com.monadial.waygrid.common.topology.TopologyProtocol/RegisterNodePOST http://localhost:1337/v1/ingest
 Content-Type: application/json
 Authorization: Bearer dev-token
 X-TenantId: value

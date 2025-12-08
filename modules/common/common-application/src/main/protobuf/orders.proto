@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package com.monadial.waygrid.common.topology;
+
+message Item{
+  string name =1;
+  int32 qty = 2;
+}
+
+message OrderRequest {
+  int32 orderid = 1;
+  repeated Item items = 2;
+}
+
+message OrderReply {
+  int32 orderid = 1;
+  repeated Item items = 2;
+}
+
+service Order {
+  rpc SendOrderStream (stream OrderRequest) returns (stream OrderReply) {}
+}

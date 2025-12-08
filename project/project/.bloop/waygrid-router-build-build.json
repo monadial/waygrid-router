@@ -19,9 +19,16 @@
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/sbt/1.10.10/sbt-1.10.10.jar",
             "/Users/tomas/.sbt/boot/scala-2.12.20/lib/scala-library.jar",
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/ch/epfl/scala/sbt-bloop_2.12_1.0/2.0.13/sbt-bloop_2.12_1.0-2.0.13.jar",
+            "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/thesamet/sbt-protoc_2.12_1.0/1.0.6/sbt-protoc-1.0.6.jar",
+            "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/thesamet/scalapb/compilerplugin_2.12/0.11.11/compilerplugin_2.12-0.11.11.jar",
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/main_2.12/1.10.10/main_2.12-1.10.10.jar",
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/io_2.12/1.10.4/io_2.12-1.10.4.jar",
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/ch/epfl/scala/bloop-config_2.12/2.3.2/bloop-config_2.12-2.3.2.jar",
+            "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/portable-scala/sbt-platform-deps_2.12_1.0/1.0.1/sbt-platform-deps-1.0.1.jar",
+            "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/thesamet/scalapb/protoc-bridge_2.12/0.9.5/protoc-bridge_2.12-0.9.5.jar",
+            "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/google/protobuf/protobuf-java/3.19.2/protobuf-java-3.19.2.jar",
+            "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/modules/scala-collection-compat_2.12/2.12.0/scala-collection-compat_2.12-2.12.0.jar",
+            "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/thesamet/scalapb/protoc-gen_2.12/0.9.5/protoc-gen_2.12-0.9.5.jar",
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/logic_2.12/1.10.10/logic_2.12-1.10.10.jar",
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/actions_2.12/1.10.10/actions_2.12-1.10.10.jar",
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/main-settings_2.12/1.10.10/main-settings_2.12-1.10.10.jar",
@@ -45,6 +52,7 @@
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/swoval/file-tree-views/2.1.12/file-tree-views-2.1.12.jar",
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/github/plokhotnyuk/jsoniter-scala/jsoniter-scala-core_2.12/2.13.5.2/jsoniter-scala-core_2.12-2.13.5.2.jar",
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/lihaoyi/unroll-annotation_2.12/0.1.12/unroll-annotation_2.12-0.1.12.jar",
+            "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/dev/dirs/directories/26/directories-26.jar",
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/util-relation_2.12/1.10.10/util-relation_2.12-1.10.10.jar",
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/completion_2.12/1.10.10/completion_2.12-1.10.10.jar",
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/task-system_2.12/1.10.10/task-system_2.12-1.10.10.jar",
@@ -72,7 +80,6 @@
             "/Users/tomas/.sbt/boot/scala-2.12.20/lib/scala-reflect.jar",
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/checkerframework/checker-qual/3.4.1/checker-qual-3.4.1.jar",
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/google/errorprone/error_prone_annotations/2.4.0/error_prone_annotations-2.4.0.jar",
-            "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/modules/scala-collection-compat_2.12/2.12.0/scala-collection-compat_2.12-2.12.0.jar",
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar",
             "/Users/tomas/.sbt/boot/scala-2.12.20/lib/scala-compiler.jar",
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/github/mwiede/jsch/0.2.23/jsch-0.2.23.jar",
@@ -148,8 +155,8 @@
                 "import _root_.sbt._",
                 "import _root_.sbt.Keys._",
                 "import _root_.sbt.nio.Keys._",
-                "import _root_.sbt.ScriptedPlugin.autoImport._, _root_.sbt.plugins.JUnitXmlReportPlugin.autoImport._, _root_.sbt.plugins.MiniDependencyTreePlugin.autoImport._, _root_.bloop.integrations.sbt.BloopPlugin.autoImport._",
-                "import _root_.sbt.plugins.IvyPlugin, _root_.sbt.plugins.JvmPlugin, _root_.sbt.plugins.CorePlugin, _root_.sbt.ScriptedPlugin, _root_.sbt.plugins.SbtPlugin, _root_.sbt.plugins.SemanticdbPlugin, _root_.sbt.plugins.JUnitXmlReportPlugin, _root_.sbt.plugins.Giter8TemplatePlugin, _root_.sbt.plugins.MiniDependencyTreePlugin, _root_.bloop.integrations.sbt.BloopPlugin"
+                "import _root_.sbt.ScriptedPlugin.autoImport._, _root_.sbt.plugins.JUnitXmlReportPlugin.autoImport._, _root_.sbt.plugins.MiniDependencyTreePlugin.autoImport._, _root_.bloop.integrations.sbt.BloopPlugin.autoImport._, _root_.sbtprotoc.ProtocPlugin.autoImport._, _root_.org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._",
+                "import _root_.sbt.plugins.IvyPlugin, _root_.sbt.plugins.JvmPlugin, _root_.sbt.plugins.CorePlugin, _root_.sbt.ScriptedPlugin, _root_.sbt.plugins.SbtPlugin, _root_.sbt.plugins.SemanticdbPlugin, _root_.sbt.plugins.JUnitXmlReportPlugin, _root_.sbt.plugins.Giter8TemplatePlugin, _root_.sbt.plugins.MiniDependencyTreePlugin, _root_.bloop.integrations.sbt.BloopPlugin, _root_.sbtprotoc.ProtocPlugin, _root_.org.portablescala.sbtplatformdeps.PlatformDepsPlugin"
             ]
         },
         "test": {
@@ -231,10 +238,18 @@
             "classpath": [
                 "/Users/tomas/waygrid/waygrid-router/project/project/.bloop/waygrid-router-build-build/scala-2.12/sbt-1.0/classes",
                 "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/ch/epfl/scala/sbt-bloop_2.12_1.0/2.0.13/sbt-bloop_2.12_1.0-2.0.13.jar",
+                "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/thesamet/sbt-protoc_2.12_1.0/1.0.6/sbt-protoc-1.0.6.jar",
+                "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/thesamet/scalapb/compilerplugin_2.12/0.11.11/compilerplugin_2.12-0.11.11.jar",
                 "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/ch/epfl/scala/bloop-config_2.12/2.3.2/bloop-config_2.12-2.3.2.jar",
+                "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/portable-scala/sbt-platform-deps_2.12_1.0/1.0.1/sbt-platform-deps-1.0.1.jar",
+                "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/thesamet/scalapb/protoc-bridge_2.12/0.9.5/protoc-bridge_2.12-0.9.5.jar",
+                "/Users/tomas/.sbt/boot/scala-2.12.20/lib/scala-library.jar",
+                "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/google/protobuf/protobuf-java/3.19.2/protobuf-java-3.19.2.jar",
+                "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/modules/scala-collection-compat_2.12/2.7.0/scala-collection-compat_2.12-2.7.0.jar",
+                "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/thesamet/scalapb/protoc-gen_2.12/0.9.5/protoc-gen_2.12-0.9.5.jar",
                 "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/github/plokhotnyuk/jsoniter-scala/jsoniter-scala-core_2.12/2.13.5.2/jsoniter-scala-core_2.12-2.13.5.2.jar",
                 "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/lihaoyi/unroll-annotation_2.12/0.1.12/unroll-annotation_2.12-0.1.12.jar",
-                "/Users/tomas/.sbt/boot/scala-2.12.20/lib/scala-library.jar"
+                "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/dev/dirs/directories/26/directories-26.jar"
             ]
         },
         "resolution": {
@@ -257,6 +272,40 @@
                     ]
                 },
                 {
+                    "organization": "com.thesamet",
+                    "name": "sbt-protoc",
+                    "version": "1.0.6",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "sbt-protoc",
+                            "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/thesamet/sbt-protoc_2.12_1.0/1.0.6/sbt-protoc-1.0.6.jar"
+                        },
+                        {
+                            "name": "sbt-protoc",
+                            "classifier": "sources",
+                            "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/thesamet/sbt-protoc_2.12_1.0/1.0.6/sbt-protoc-1.0.6-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.thesamet.scalapb",
+                    "name": "compilerplugin_2.12",
+                    "version": "0.11.11",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "compilerplugin_2.12",
+                            "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/thesamet/scalapb/compilerplugin_2.12/0.11.11/compilerplugin_2.12-0.11.11.jar"
+                        },
+                        {
+                            "name": "compilerplugin_2.12",
+                            "classifier": "sources",
+                            "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/thesamet/scalapb/compilerplugin_2.12/0.11.11/compilerplugin_2.12-0.11.11-sources.jar"
+                        }
+                    ]
+                },
+                {
                     "organization": "ch.epfl.scala",
                     "name": "bloop-config_2.12",
                     "version": "2.3.2",
@@ -270,6 +319,91 @@
                             "name": "bloop-config_2.12",
                             "classifier": "sources",
                             "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/ch/epfl/scala/bloop-config_2.12/2.3.2/bloop-config_2.12-2.3.2-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.portable-scala",
+                    "name": "sbt-platform-deps",
+                    "version": "1.0.1",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "sbt-platform-deps",
+                            "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/portable-scala/sbt-platform-deps_2.12_1.0/1.0.1/sbt-platform-deps-1.0.1.jar"
+                        },
+                        {
+                            "name": "sbt-platform-deps",
+                            "classifier": "sources",
+                            "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/portable-scala/sbt-platform-deps_2.12_1.0/1.0.1/sbt-platform-deps-1.0.1-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.thesamet.scalapb",
+                    "name": "protoc-bridge_2.12",
+                    "version": "0.9.5",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "protoc-bridge_2.12",
+                            "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/thesamet/scalapb/protoc-bridge_2.12/0.9.5/protoc-bridge_2.12-0.9.5.jar"
+                        },
+                        {
+                            "name": "protoc-bridge_2.12",
+                            "classifier": "sources",
+                            "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/thesamet/scalapb/protoc-bridge_2.12/0.9.5/protoc-bridge_2.12-0.9.5-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.scala-lang",
+                    "name": "scala-library",
+                    "version": "2.12.20",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "scala-library",
+                            "path": "/Users/tomas/.sbt/boot/scala-2.12.20/lib/scala-library.jar"
+                        },
+                        {
+                            "name": "scala-library",
+                            "classifier": "sources",
+                            "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scala-library/2.12.20/scala-library-2.12.20-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.google.protobuf",
+                    "name": "protobuf-java",
+                    "version": "3.19.2",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "protobuf-java",
+                            "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/google/protobuf/protobuf-java/3.19.2/protobuf-java-3.19.2.jar"
+                        },
+                        {
+                            "name": "protobuf-java",
+                            "classifier": "sources",
+                            "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/google/protobuf/protobuf-java/3.19.2/protobuf-java-3.19.2-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "com.thesamet.scalapb",
+                    "name": "protoc-gen_2.12",
+                    "version": "0.9.5",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "protoc-gen_2.12",
+                            "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/thesamet/scalapb/protoc-gen_2.12/0.9.5/protoc-gen_2.12-0.9.5.jar"
+                        },
+                        {
+                            "name": "protoc-gen_2.12",
+                            "classifier": "sources",
+                            "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/thesamet/scalapb/protoc-gen_2.12/0.9.5/protoc-gen_2.12-0.9.5-sources.jar"
                         }
                     ]
                 },
@@ -308,19 +442,19 @@
                     ]
                 },
                 {
-                    "organization": "org.scala-lang",
-                    "name": "scala-library",
-                    "version": "2.12.20",
+                    "organization": "dev.dirs",
+                    "name": "directories",
+                    "version": "26",
                     "configurations": "default",
                     "artifacts": [
                         {
-                            "name": "scala-library",
-                            "path": "/Users/tomas/.sbt/boot/scala-2.12.20/lib/scala-library.jar"
+                            "name": "directories",
+                            "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/dev/dirs/directories/26/directories-26.jar"
                         },
                         {
-                            "name": "scala-library",
+                            "name": "directories",
                             "classifier": "sources",
-                            "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scala-library/2.12.20/scala-library-2.12.20-sources.jar"
+                            "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/dev/dirs/directories/26/directories-26-sources.jar"
                         }
                     ]
                 },
@@ -372,6 +506,23 @@
                             "name": "io_2.12",
                             "classifier": "sources",
                             "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/io_2.12/1.10.4/io_2.12-1.10.4-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.scala-lang.modules",
+                    "name": "scala-collection-compat_2.12",
+                    "version": "2.12.0",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "scala-collection-compat_2.12",
+                            "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/modules/scala-collection-compat_2.12/2.12.0/scala-collection-compat_2.12-2.12.0.jar"
+                        },
+                        {
+                            "name": "scala-collection-compat_2.12",
+                            "classifier": "sources",
+                            "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/modules/scala-collection-compat_2.12/2.12.0/scala-collection-compat_2.12-2.12.0-sources.jar"
                         }
                     ]
                 },
@@ -1188,23 +1339,6 @@
                             "name": "error_prone_annotations",
                             "classifier": "sources",
                             "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/google/errorprone/error_prone_annotations/2.4.0/error_prone_annotations-2.4.0-sources.jar"
-                        }
-                    ]
-                },
-                {
-                    "organization": "org.scala-lang.modules",
-                    "name": "scala-collection-compat_2.12",
-                    "version": "2.12.0",
-                    "configurations": "default",
-                    "artifacts": [
-                        {
-                            "name": "scala-collection-compat_2.12",
-                            "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/modules/scala-collection-compat_2.12/2.12.0/scala-collection-compat_2.12-2.12.0.jar"
-                        },
-                        {
-                            "name": "scala-collection-compat_2.12",
-                            "classifier": "sources",
-                            "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/modules/scala-collection-compat_2.12/2.12.0/scala-collection-compat_2.12-2.12.0-sources.jar"
                         }
                     ]
                 },

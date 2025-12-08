@@ -1,25 +1,10 @@
 package com.monadial.waygrid.common.application.algebra
 
 import cats.effect.Resource
-import com.monadial.waygrid.common.application.domain.model.envelope.Envelope
-import com.monadial.waygrid.common.application.domain.model.event.{EventStream, RawEvent}
-import fs2.Stream
-import com.monadial.waygrid.common.domain.model.event.Event
-
-/**
- * A low-level abstraction for reading raw (serialized) events from a stream.
- *
- * This is the counterpart to `RawEventSink`. Implementations typically read from
- * sources like Kafka topics or in-memory channels.
- */
-trait RawEventSource[F[+_]]:
-  /**
-   * Opens a stream to read raw events from the given source.
-   *
-   * @param stream the source event stream
-   * @return a managed resource yielding a stream of `RawEvent`s
-   */
-  def open(stream: EventStream): Resource[F, Stream[F, RawEvent]]
+import com.monadial.waygrid.common.application.algebra.EventSource.RebalanceHandler
+import com.monadial.waygrid.common.domain.algebra.messaging.event.Event
+import com.monadial.waygrid.common.domain.model.envelope.DomainEnvelope
+import com.monadial.waygrid.common.domain.value.Address.Endpoint
 
 /**
  * A high-level abstraction for subscribing to deserialized domain events.
@@ -30,7 +15,7 @@ trait EventSource[F[+_]]:
   /**
    * A type alias for domain events.
    */
-  type Evt = Envelope[? <: Event]
+  type Evt = DomainEnvelope[? <: Event]
 
   /**
    * A handler that selectively processes domain events.
@@ -40,20 +25,32 @@ trait EventSource[F[+_]]:
   /**
    * Subscribes to a single stream with the provided handler.
    *
-   * @param stream  the event stream to subscribe to
+   * @param endpoint the endpoint of the event stream
    * @param handler the handler for matching events
    * @return a managed subscription
    */
-  def subscribe(stream: EventStream)(handler: Handler): Resource[F, Unit]
+  def subscribe(endpoint: Endpoint)(handler: Handler): Resource[F, Unit]
 
   /**
-   * Subscribes to multiple streams concurrently with a single handler.
+   * subscribe to a single stream with the provided handler, and with rebalance handler.
    *
-   * @param streams list of event streams to subscribe to
-   * @param handler the handler for all matching events
+   * @param endpoint the endpoint of the event stream
+   * @param rebalanceHandler  handler for rebalance events
+   * @param handler  the handler for matching events
    * @return a managed subscription
    */
-  def subscribeTo(streams: List[EventStream])(handler: Handler): Resource[F, Unit]
+  def subscribe(endpoint: Endpoint, rebalanceHandler: RebalanceHandler[F])(handler: Handler): Resource[F, Unit]
 
 object EventSource:
+
+  /**
+   * A handler that processes rebalance events.
+   */
+  type RebalanceHandler[F[+_]] = EventSource.RebalanceEvent => F[Unit]
+
+  enum RebalanceEvent:
+    case Started
+    case Revoked(endpoint: Endpoint, oldAssignments: List[Int])
+    case Completed(endpoint: Endpoint, newAssignments: List[Int])
+
   def apply[F[+_]](using ev: EventSource[F]): EventSource[F] = ev

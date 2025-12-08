@@ -1,10 +1,10 @@
 package com.monadial.waygrid.common.application.util.circe.codecs
 
-import com.monadial.waygrid.common.domain.model.routing.spec.{Node, Spec}
 import com.monadial.waygrid.common.application.util.circe.codecs.DomainRoutingCodecs.given
 import com.monadial.waygrid.common.application.util.circe.DerivationConfiguration.given
 import com.monadial.waygrid.common.application.instances.DurationInstances.given
 import com.monadial.waygrid.common.domain.model.routing.Value.DeliveryStrategy
+import com.monadial.waygrid.common.domain.model.traversal.spec.{Node, Spec}
 import io.circe.Codec
 
 object DomainRoutingSpecCodecs:

@@ -1,95 +1,117 @@
 name: waygrid-router
 
 volumes:
-  waygrid_kafka_data_1: { }
-  waygrid_kafka_data_2: { }
-  waygrid_kafka_data_3: { }
-  waygrid_redis_data_1: { }
-  waygrid_redis_data_2: { }
-  waygrid_redis_data_3: { }
-  waygrid_redisinsight_data: { }
+  waygrid_kafka_data_1: {}
+  waygrid_kafka_data_2: {}
+  waygrid_kafka_data_3: {}
+  waygrid_redis_data_1: {}
+  waygrid_redis_data_2: {}
+  waygrid_redis_data_3: {}
+  waygrid_clickhouse_data_1: {}
+  waygrid_clickhouse_data_2: {}
+  waygrid_clickhouse_data_3: {}
+  waygrid_postgres_data_1: {}
+  waygrid_postgres_data_2: {}
+  waygrid_postgres_data_3: {}
+  waygrid_mongo_data: {}
+  waygrid_redisinsight_data: {}
+  waygrid_prometheus_data: {}
+  waygrid_traefik_data: {}
 
-x-kafka-cluster-base: &kafka-cluster-base
-  image: bitnamilegacy/kafka:latest
+x-kafka-env-base: &kafka-env-base
+  KAFKA_ENABLE_KRAFT: "yes"
+  KAFKA_CFG_PROCESS_ROLES: broker,controller
+  KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+  KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+  KAFKA_CFG_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+  KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: "false"
+  KAFKA_KRAFT_CLUSTER_ID: LelM2dIFQkiUFvXCEcqRWA
+  ALLOW_PLAINTEXT_LISTENER: "yes"
 
-x-redis-cluster-base: &redis-cluster-base
-  image: bitnamilegacy/redis-cluster:latest
+x-redis-env-base: &redis-env-base
+  ALLOW_EMPTY_PASSWORD: "yes"
+  REDIS_NODES: redis-node-1 redis-node-2 redis-node-3
+
+x-clickhouse-env: &clickhouse-env
+  CLICKHOUSE_DB: waygrid
+  CLICKHOUSE_USER: waygrid
+  CLICKHOUSE_PASSWORD: waygrid
+  CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
+
+x-postgres-env: &postgres-env
+  POSTGRESQL_USERNAME: waygrid
+  POSTGRESQL_PASSWORD: waygrid
+  POSTGRESQL_DATABASE: waygrid
+  REPMGR_PASSWORD: repmgrpass
+  REPMGR_PORT_NUMBER: 5432
+  REPMGR_PRIMARY_PORT: 5432
+  REPMGR_PARTNER_NODES: postgres-node-1,postgres-node-2,postgres-node-3
+  REPMGR_PRIMARY_HOST: postgres-node-1
+  REPMGR_USE_PG_REWIND: "yes"
+  POSTGRESQL_SHARED_PRELOAD_LIBRARIES: pg_stat_statements
 
 services:
+
+  #############################################
+  # KAFKA - 3-node KRaft cluster
+  #############################################
+
   kafka-node-1:
-    <<: *kafka-cluster-base
+    image: bitnami/kafka:3.7.0
     hostname: kafka-node-1
     container_name: kafka-node-1
-    volumes:
-      - waygrid_kafka_data_1:/var/lib/kafka/data
     user: root
     ports:
-      #      - '9092:9092'
-      - '29092:29092'
+      - "29092:29092"
+    volumes:
+      - waygrid_kafka_data_1:/var/lib/kafka/data
     environment:
-      - KAFKA_ENABLE_KRAFT=yes
-      - KAFKA_CFG_PROCESS_ROLES=broker,controller
-      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
-      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,PLAINTEXT_HOST://:29092
-      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-node-1:9092,PLAINTEXT_HOST://localhost:29092
-      - KAFKA_CFG_NODE_ID=1
-      - KAFKA_BROKER_ID=1
-      - KAFKA_KRAFT_CLUSTER_ID=LelM2dIFQkiUFvXCEcqRWA
-      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka-node-1:9093,2@kafka-node-2:9095,3@kafka-node-3:9097
-      - ALLOW_PLAINTEXT_LISTENER=yes
+      <<: *kafka-env-base
+      KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093,PLAINTEXT_HOST://:29092
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka-node-1:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_CFG_NODE_ID: 1
+      KAFKA_BROKER_ID: 1
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka-node-1:9093,2@kafka-node-2:9095,3@kafka-node-3:9097
     labels:
       - dev.orbstack.domains=kafka-node-1.router.waygrid.local
       - dev.orbstack.http-port=29092
 
   kafka-node-2:
-    <<: *kafka-cluster-base
+    image: bitnami/kafka:3.7.0
     hostname: kafka-node-2
     container_name: kafka-node-2
-    volumes:
-      - waygrid_kafka_data_2:/var/lib/kafka/data
     user: root
     ports:
-      #      - '9094:9094'
-      - '29094:29094'
+      - "29094:29094"
+    volumes:
+      - waygrid_kafka_data_2:/var/lib/kafka/data
     environment:
-      - KAFKA_ENABLE_KRAFT=yes
-      - KAFKA_CFG_PROCESS_ROLES=broker,controller
-      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
-      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9094,CONTROLLER://:9095,PLAINTEXT_HOST://:29094
-      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-node-2:9094,PLAINTEXT_HOST://localhost:29094
-      - KAFKA_CFG_NODE_ID=2
-      - KAFKA_BROKER_ID=2
-      - KAFKA_KRAFT_CLUSTER_ID=LelM2dIFQkiUFvXCEcqRWA
-      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka-node-1:9093,2@kafka-node-2:9095,3@kafka-node-3:9097
-      - ALLOW_PLAINTEXT_LISTENER=yes
+      <<: *kafka-env-base
+      KAFKA_CFG_LISTENERS: PLAINTEXT://:9094,CONTROLLER://:9095,PLAINTEXT_HOST://:29094
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka-node-2:9094,PLAINTEXT_HOST://localhost:29094
+      KAFKA_CFG_NODE_ID: 2
+      KAFKA_BROKER_ID: 2
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka-node-1:9093,2@kafka-node-2:9095,3@kafka-node-3:9097
     labels:
       - dev.orbstack.domains=kafka-node-2.router.waygrid.local
       - dev.orbstack.http-port=29094
 
   kafka-node-3:
-    <<: *kafka-cluster-base
+    image: bitnami/kafka:3.7.0
     hostname: kafka-node-3
     container_name: kafka-node-3
-    volumes:
-      - waygrid_kafka_data_3:/var/lib/kafka/data
     user: root
     ports:
-      #      - '9096:9096'
-      - '29096:29096'
+      - "29096:29096"
+    volumes:
+      - waygrid_kafka_data_3:/var/lib/kafka/data
     environment:
-      - KAFKA_ENABLE_KRAFT=yes
-      - KAFKA_CFG_PROCESS_ROLES=broker,controller
-      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
-      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9096,CONTROLLER://:9097,PLAINTEXT_HOST://:29096
-      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-node-3:9096,PLAINTEXT_HOST://localhost:29096
-      - KAFKA_CFG_NODE_ID=3
-      - KAFKA_BROKER_ID=3
-      - KAFKA_KRAFT_CLUSTER_ID=LelM2dIFQkiUFvXCEcqRWA
-      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka-node-1:9093,2@kafka-node-2:9095,3@kafka-node-3:9097
-      - ALLOW_PLAINTEXT_LISTENER=yes
+      <<: *kafka-env-base
+      KAFKA_CFG_LISTENERS: PLAINTEXT://:9096,CONTROLLER://:9097,PLAINTEXT_HOST://:29096
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka-node-3:9096,PLAINTEXT_HOST://localhost:29096
+      KAFKA_CFG_NODE_ID: 3
+      KAFKA_BROKER_ID: 3
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka-node-1:9093,2@kafka-node-2:9095,3@kafka-node-3:9097
     labels:
       - dev.orbstack.domains=kafka-node-3.router.waygrid.local
       - dev.orbstack.http-port=29096
@@ -102,16 +124,24 @@ services:
       - kafka-node-1
       - kafka-node-2
       - kafka-node-3
-    #    ports:
-    #      - "1336:8080"
     environment:
-      - KAFKA_BROKERS=kafka-node-1:9092,kafka-node-2:9094,kafka-node-3:9096
+      KAFKA_BROKERS: kafka-node-1:9092,kafka-node-2:9094,kafka-node-3:9096
+    ports:
+      - "8080:8080"
     labels:
       - dev.orbstack.domains=redpanda.router.waygrid.local
       - dev.orbstack.http-port=8080
+      - traefik.enable=true
+      - traefik.http.routers.redpanda.rule=Host(`redpanda.local.waygrid`)
+      - traefik.http.routers.redpanda.entrypoints=web
+      - traefik.http.services.redpanda.loadbalancer.server.port=8080
+
+  #############################################
+  # REDIS CLUSTER - 3 nodes
+  #############################################
 
   redis-node-1:
-    <<: *redis-cluster-base
+    image: bitnami/redis-cluster:7.2
     hostname: redis-node-1
     container_name: redis-node-1
     volumes:
@@ -120,39 +150,42 @@ services:
       - redis-node-2
       - redis-node-3
     ports:
-      - '6379:6379'
+      - "6379:6379"
     environment:
-      - 'ALLOW_EMPTY_PASSWORD=yes'
-      - 'REDIS_CLUSTER_REPLICAS=0'
-      - 'REDIS_CLUSTER_CREATOR=yes'
-      - 'REDIS_NODES=redis-node-1 redis-node-2 redis-node-3'
+      <<: *redis-env-base
+      REDIS_CLUSTER_REPLICAS: 0
+      REDIS_CLUSTER_CREATOR: "yes"
+    labels:
+      - dev.orbstack.domains=redis-node-1.router.waygrid.local
 
   redis-node-2:
-    <<: *redis-cluster-base
+    image: bitnami/redis-cluster:7.2
     hostname: redis-node-2
     container_name: redis-node-2
     volumes:
       - waygrid_redis_data_2:/bitnami/redis/data
     ports:
-      - '6380:6379'
+      - "6380:6379"
     environment:
-      - 'ALLOW_EMPTY_PASSWORD=yes'
-      - 'REDIS_NODES=redis-node-1 redis-node-2 redis-node-3'
+      <<: *redis-env-base
+    labels:
+      - dev.orbstack.domains=redis-node-2.router.waygrid.local
 
   redis-node-3:
-    <<: *redis-cluster-base
+    image: bitnami/redis-cluster:7.2
     hostname: redis-node-3
     container_name: redis-node-3
     volumes:
       - waygrid_redis_data_3:/bitnami/redis/data
     ports:
-      - '6381:6379'
+      - "6381:6379"
     environment:
-      - 'ALLOW_EMPTY_PASSWORD=yes'
-      - 'REDIS_NODES=redis-node-1 redis-node-2 redis-node-3'
+      <<: *redis-env-base
+    labels:
+      - dev.orbstack.domains=redis-node-3.router.waygrid.local
 
   redisinsight:
-    image: redis/redisinsight
+    image: redis/redisinsight:latest
     hostname: redisinsight
     container_name: redisinsight
     volumes:
@@ -161,22 +194,621 @@ services:
       - redis-node-1
       - redis-node-2
       - redis-node-3
-#    ports:
-#      - "5540:5540"
+    ports:
+      - "5540:5540"
     labels:
       - dev.orbstack.domains=redisinsight.router.waygrid.local
       - dev.orbstack.http-port=5540
+      - traefik.enable=true
+      - traefik.http.routers.redisinsight.rule=Host(`redisinsight.local.waygrid`)
+      - traefik.http.routers.redisinsight.entrypoints=web
+      - traefik.http.services.redisinsight.loadbalancer.server.port=5540
+
+  #############################################
+  # POSTGRESQL CLUSTER (repmgr) + PGPOOL
+  #############################################
+
+  postgres-node-1:
+    image: bitnami/postgresql-repmgr:16
+    hostname: postgres-node-1
+    container_name: postgres-node-1
+    ports:
+      - "5432:5432"
+    volumes:
+      - waygrid_postgres_data_1:/bitnami/postgresql
+    environment:
+      <<: *postgres-env
+      REPMGR_NODE_ID: 1
+      REPMGR_NODE_NAME: postgres-node-1
+      REPMGR_PRIMARY_ROLE_PRIORITY: 100
+    labels:
+      - dev.orbstack.domains=postgres-1.router.waygrid.local
+
+  postgres-node-2:
+    image: bitnami/postgresql-repmgr:16
+    hostname: postgres-node-2
+    container_name: postgres-node-2
+    volumes:
+      - waygrid_postgres_data_2:/bitnami/postgresql
+    environment:
+      <<: *postgres-env
+      REPMGR_NODE_ID: 2
+      REPMGR_NODE_NAME: postgres-node-2
+      REPMGR_PRIMARY_ROLE_PRIORITY: 90
+      REPMGR_UPSTREAM_NODE: postgres-node-1
+    labels:
+      - dev.orbstack.domains=postgres-2.router.waygrid.local
+
+  postgres-node-3:
+    image: bitnami/postgresql-repmgr:16
+    hostname: postgres-node-3
+    container_name: postgres-node-3
+    volumes:
+      - waygrid_postgres_data_3:/bitnami/postgresql
+    environment:
+      <<: *postgres-env
+      REPMGR_NODE_ID: 3
+      REPMGR_NODE_NAME: postgres-node-3
+      REPMGR_PRIMARY_ROLE_PRIORITY: 80
+      REPMGR_UPSTREAM_NODE: postgres-node-1
+    labels:
+      - dev.orbstack.domains=postgres-3.router.waygrid.local
+
+  pgpool:
+    image: bitnami/pgpool:4
+    hostname: pgpool
+    container_name: pgpool
+    depends_on:
+      - postgres-node-1
+      - postgres-node-2
+      - postgres-node-3
+    environment:
+      PGPOOL_BACKEND_NODES: 0:postgres-node-1:5432,1:postgres-node-2:5432,2:postgres-node-3:5432
+      PGPOOL_SR_CHECK_USER: repmgr
+      PGPOOL_SR_CHECK_PASSWORD: repmgrpass
+      PGPOOL_POSTGRES_USERNAME: waygrid
+      PGPOOL_POSTGRES_PASSWORD: waygrid
+      PGPOOL_ADMIN_USERNAME: admin
+      PGPOOL_ADMIN_PASSWORD: admin
+      PGPOOL_ENABLE_TLS: "no"
+    ports:
+      - "5433:5432"
+    labels:
+      - dev.orbstack.domains=pgpool.router.waygrid.local
+      - traefik.enable=true
+      - traefik.http.routers.pgpool.rule=Host(`pgpool.local.waygrid`)
+      - traefik.http.routers.pgpool.entrypoints=web
+      - traefik.http.services.pgpool.loadbalancer.server.port=5432
+
+  #############################################
+  # CLICKHOUSE CLUSTER (3 nodes + Keeper)
+  #############################################
+
+  clickhouse-node-1:
+    image: clickhouse/clickhouse-server:24.8
+    hostname: clickhouse-node-1
+    container_name: clickhouse-node-1
+    volumes:
+      - waygrid_clickhouse_data_1:/var/lib/clickhouse
+    ports:
+      - "9000:9000"
+      - "8123:8123"
+    environment:
+      <<: *clickhouse-env
+    entrypoint: ["/bin/bash", "-c"]
+    command: |
+      set -e
+
+      cat >/etc/clickhouse-server/config.d/keeper.xml <<EOF
+      <clickhouse>
+        <keeper_server>
+          <tcp_port>2181</tcp_port>
+          <server_id>1</server_id>
+          <log_storage_path>/var/lib/clickhouse/coordination/log</log_storage_path>
+          <snapshot_storage_path>/var/lib/clickhouse/coordination/snapshots</snapshot_storage_path>
+          <coordination_settings>
+            <raft_configuration_auto_recovery>true</raft_configuration_auto_recovery>
+          </coordination_settings>
+          <raft_config>
+            <server>
+              <id>1</id>
+              <hostname>clickhouse-node-1</hostname>
+              <port>9444</port>
+            </server>
+            <server>
+              <id>2</id>
+              <hostname>clickhouse-node-2</hostname>
+              <port>9444</port>
+            </server>
+            <server>
+              <id>3</id>
+              <hostname>clickhouse-node-3</hostname>
+              <port>9444</port>
+            </server>
+          </raft_config>
+        </keeper_server>
+      </clickhouse>
+      EOF
+
+      cat >/etc/clickhouse-server/config.d/macros.xml <<EOF
+      <clickhouse>
+        <macros>
+          <cluster>waygrid_cluster</cluster>
+          <shard>1</shard>
+          <replica>clickhouse-node-1</replica>
+        </macros>
+      </clickhouse>
+      EOF
+
+      cat >/etc/clickhouse-server/config.d/remote_servers.xml <<EOF
+      <clickhouse>
+        <remote_servers>
+          <waygrid_cluster>
+            <shard>
+              <replica>
+                <host>clickhouse-node-1</host>
+                <port>9000</port>
+              </replica>
+              <replica>
+                <host>clickhouse-node-2</host>
+                <port>9000</port>
+              </replica>
+              <replica>
+                <host>clickhouse-node-3</host>
+                <port>9000</port>
+              </replica>
+            </shard>
+          </waygrid_cluster>
+        </remote_servers>
+      </clickhouse>
+      EOF
+
+      cat >/etc/clickhouse-server/config.d/zookeeper.xml <<EOF
+      <clickhouse>
+        <zookeeper>
+          <node>
+            <host>clickhouse-node-1</host>
+            <port>2181</port>
+          </node>
+          <node>
+            <host>clickhouse-node-2</host>
+            <port>2181</port>
+          </node>
+          <node>
+            <host>clickhouse-node-3</host>
+            <port>2181</port>
+          </node>
+        </zookeeper>
+      </clickhouse>
+      EOF
+
+      exec /entrypoint.sh
+    labels:
+      - dev.orbstack.domains=clickhouse-1.router.waygrid.local
+      - dev.orbstack.http-port=8123
+
+  clickhouse-node-2:
+    image: clickhouse/clickhouse-server:24.8
+    hostname: clickhouse-node-2
+    container_name: clickhouse-node-2
+    volumes:
+      - waygrid_clickhouse_data_2:/var/lib/clickhouse
+    ports:
+      - "9001:9000"
+      - "8124:8123"
+    environment:
+      <<: *clickhouse-env
+    entrypoint: ["/bin/bash", "-c"]
+    command: |
+      set -e
+
+      cat >/etc/clickhouse-server/config.d/keeper.xml <<EOF
+      <clickhouse>
+        <keeper_server>
+          <tcp_port>2181</tcp_port>
+          <server_id>2</server_id>
+          <log_storage_path>/var/lib/clickhouse/coordination/log</log_storage_path>
+          <snapshot_storage_path>/var/lib/clickhouse/coordination/snapshots</snapshot_storage_path>
+          <coordination_settings>
+            <raft_configuration_auto_recovery>true</raft_configuration_auto_recovery>
+          </coordination_settings>
+          <raft_config>
+            <server>
+              <id>1</id>
+              <hostname>clickhouse-node-1</hostname>
+              <port>9444</port>
+            </server>
+            <server>
+              <id>2</id>
+              <hostname>clickhouse-node-2</hostname>
+              <port>9444</port>
+            </server>
+            <server>
+              <id>3</id>
+              <hostname>clickhouse-node-3</hostname>
+              <port>9444</port>
+            </server>
+          </raft_config>
+        </keeper_server>
+      </clickhouse>
+      EOF
+
+      cat >/etc/clickhouse-server/config.d/macros.xml <<EOF
+      <clickhouse>
+        <macros>
+          <cluster>waygrid_cluster</cluster>
+          <shard>1</shard>
+          <replica>clickhouse-node-2</replica>
+        </macros>
+      </clickhouse>
+      EOF
+
+      cat >/etc/clickhouse-server/config.d/remote_servers.xml <<EOF
+      <clickhouse>
+        <remote_servers>
+          <waygrid_cluster>
+            <shard>
+              <replica>
+                <host>clickhouse-node-1</host>
+                <port>9000</port>
+              </replica>
+              <replica>
+                <host>clickhouse-node-2</host>
+                <port>9000</port>
+              </replica>
+              <replica>
+                <host>clickhouse-node-3</host>
+                <port>9000</port>
+              </replica>
+            </shard>
+          </waygrid_cluster>
+        </remote_servers>
+      </clickhouse>
+      EOF
+
+      cat >/etc/clickhouse-server/config.d/zookeeper.xml <<EOF
+      <clickhouse>
+        <zookeeper>
+          <node>
+            <host>clickhouse-node-1</host>
+            <port>2181</port>
+          </node>
+          <node>
+            <host>clickhouse-node-2</host>
+            <port>2181</port>
+          </node>
+          <node>
+            <host>clickhouse-node-3</host>
+            <port>2181</port>
+          </node>
+        </zookeeper>
+      </clickhouse>
+      EOF
+
+      exec /entrypoint.sh
+    labels:
+      - dev.orbstack.domains=clickhouse-2.router.waygrid.local
+      - dev.orbstack.http-port=8124
+
+  clickhouse-node-3:
+    image: clickhouse/clickhouse-server:24.8
+    hostname: clickhouse-node-3
+    container_name: clickhouse-node-3
+    volumes:
+      - waygrid_clickhouse_data_3:/var/lib/clickhouse
+    ports:
+      - "9002:9000"
+      - "8125:8123"
+    environment:
+      <<: *clickhouse-env
+    entrypoint: ["/bin/bash", "-c"]
+    command: |
+      set -e
+
+      cat >/etc/clickhouse-server/config.d/keeper.xml <<EOF
+      <clickhouse>
+        <keeper_server>
+          <tcp_port>2181</tcp_port>
+          <server_id>3</server_id>
+          <log_storage_path>/var/lib/clickhouse/coordination/log</log_storage_path>
+          <snapshot_storage_path>/var/lib/clickhouse/coordination/snapshots</snapshot_storage_path>
+          <coordination_settings>
+            <raft_configuration_auto_recovery>true</raft_configuration_auto_recovery>
+          </coordination_settings>
+          <raft_config>
+            <server>
+              <id>1</id>
+              <hostname>clickhouse-node-1</hostname>
+              <port>9444</port>
+            </server>
+            <server>
+              <id>2</id>
+              <hostname>clickhouse-node-2</hostname>
+              <port>9444</port>
+            </server>
+            <server>
+              <id>3</id>
+              <hostname>clickhouse-node-3</hostname>
+              <port>9444</port>
+            </server>
+          </raft_config>
+        </keeper_server>
+      </clickhouse>
+      EOF
+
+      cat >/etc/clickhouse-server/config.d/macros.xml <<EOF
+      <clickhouse>
+        <macros>
+          <cluster>waygrid_cluster</cluster>
+          <shard>1</shard>
+          <replica>clickhouse-node-3</replica>
+        </macros>
+      </clickhouse>
+      EOF
+
+      cat >/etc/clickhouse-server/config.d/remote_servers.xml <<EOF
+      <clickhouse>
+        <remote_servers>
+          <waygrid_cluster>
+            <shard>
+              <replica>
+                <host>clickhouse-node-1</host>
+                <port>9000</port>
+              </replica>
+              <replica>
+                <host>clickhouse-node-2</host>
+                <port>9000</port>
+              </replica>
+              <replica>
+                <host>clickhouse-node-3</host>
+                <port>9000</port>
+              </replica>
+            </shard>
+          </waygrid_cluster>
+        </remote_servers>
+      </clickhouse>
+      EOF
+
+      cat >/etc/clickhouse-server/config.d/zookeeper.xml <<EOF
+      <clickhouse>
+        <zookeeper>
+          <node>
+            <host>clickhouse-node-1</host>
+            <port>2181</port>
+          </node>
+          <node>
+            <host>clickhouse-node-2</host>
+            <port>2181</port>
+          </node>
+          <node>
+            <host>clickhouse-node-3</host>
+            <port>2181</port>
+          </node>
+        </zookeeper>
+      </clickhouse>
+      EOF
+
+      exec /entrypoint.sh
+    labels:
+      - dev.orbstack.domains=clickhouse-3.router.waygrid.local
+      - dev.orbstack.http-port=8125
+
+  clickhouse-init:
+    image: clickhouse/clickhouse-client:24.8
+    depends_on:
+      - clickhouse-node-1
+      - clickhouse-node-2
+      - clickhouse-node-3
+    entrypoint: ["/bin/bash", "-c"]
+    command: |
+      set -e
+      echo "⏳ Waiting for ClickHouse server..."
+      until clickhouse-client --host clickhouse-node-1 --user=waygrid --password=waygrid -q "SELECT 1" 2>/dev/null; do
+        sleep 1
+      done
+
+      echo "⏳ Waiting for Keeper (system.zookeeper)..."
+      until clickhouse-client --host clickhouse-node-1 --user=waygrid --password=waygrid -q "SELECT * FROM system.zookeeper LIMIT 1" 2>/dev/null; do
+        echo "Keeper not ready yet..."
+        sleep 1
+      done
+
+      echo "🚀 Applying cluster DDL..."
+      clickhouse-client --host clickhouse-node-1 --user=waygrid --password=waygrid <<EOF
+      CREATE TABLE IF NOT EXISTS system_traversal_history ON CLUSTER waygrid_cluster
+      (
+        traversal_id           String,
+        event_id               UUID,
+        node_id                String,
+        node_address           String,
+        status                 Enum8('started' = 1, 'completed' = 2, 'failed' = 3, 'retry' = 4),
+        failure_reason         String,
+        start_ts               DateTime64(6, 'UTC'),
+        end_ts                 DateTime64(6, 'UTC'),
+        duration_ms            UInt32,
+        remaining_nodes        Array(String),
+        completed_nodes        Array(String),
+        failed_nodes           Array(String),
+        retry_attempts         UInt8,
+        vector_clock           String,
+        metadata               JSON,
+        received_at            DateTime DEFAULT now(),
+        date                   Date DEFAULT toDate(start_ts)
+      )
+      ENGINE = MergeTree
+      PARTITION BY date
+      ORDER BY (traversal_id, start_ts, node_id)
+      SETTINGS index_granularity = 8192;
+      EOF
+
+      echo "✅ Cluster schema created successfully."
+
+  #############################################
+  # MONGO + INIT JOB (required for HyperDX)
+  #############################################
+
+  mongo:
+    image: mongo:7
+    hostname: mongo
+    container_name: hyperdx-mongo
+    restart: unless-stopped
+    volumes:
+      - waygrid_mongo_data:/data/db
+    ports:
+      - "27017:27017"
+    labels:
+      - dev.orbstack.domains=mongo.router.waygrid.local
+
+  mongo-init:
+    image: mongo:7
+    depends_on:
+      - mongo
+    entrypoint: >
+      bash -c "
+        sleep 3 &&
+        mongosh mongodb://mongo:27017 --eval '
+          db = db.getSiblingDB(\"hyperdx\");
+          db.createCollection(\"init\");
+        '
+      "
+
+  #############################################
+  # HYPERDX (UI + API + OTEL ingest)
+  #############################################
+
+  hyperdx:
+    image: hyperdx/hyperdx:latest
+    hostname: hyperdx
+    container_name: hyperdx
+    depends_on:
+      - mongo
+      - mongo-init
+      - otel-lgtm
+    ports:
+      - "8081:8080"
+      - "8021:8021"
+      - "8000:8000"
+    environment:
+      MONGO_URL: mongodb://mongo:27017/hyperdx
+      MONGODB_URI: mongodb://mongo:27017/hyperdx
+      HYPERDX_API_KEY: waygrid-local
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-lgtm:4317
+      HDX_DISABLE_USAGE: "true"
+      HDX_LOG_LEVEL: info
+      HDX_INGEST_DEBUG: "false"
+    labels:
+      - dev.orbstack.domains=hyperdx.router.waygrid.local
+      - dev.orbstack.http-port=8081
+      - traefik.enable=true
+      - traefik.http.routers.hyperdx.rule=Host(`hyperdx.local.waygrid`)
+      - traefik.http.routers.hyperdx.entrypoints=web
+      - traefik.http.services.hyperdx.loadbalancer.server.port=8080
+
+  #############################################
+  # OPENTELEMETRY COLLECTOR (metrics + traces + logs aggregation)
+  #############################################
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.114.0
+    hostname: otel-collector
+    container_name: otel-collector
+    command: ["--config=/etc/otelcol-contrib/config.yaml"]
+    volumes:
+      - ./infra/observability/otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml:ro
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+      - "8888:8888"
+      - "8889:8889"
+      - "13133:13133"
+      - "55679:55679"
+    environment:
+      ENVIRONMENT: local
+    depends_on:
+      - otel-lgtm
+    labels:
+      - dev.orbstack.domains=otel.router.waygrid.local
+      - dev.orbstack.http-port=55679
+
+  #############################################
+  # PROMETHEUS (metrics collection & storage)
+  #############################################
+
+  prometheus:
+    image: prom/prometheus:v2.55.1
+    hostname: prometheus
+    container_name: prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=30d
+      - --web.enable-lifecycle
+      - --web.enable-admin-api
+    volumes:
+      - ./infra/observability/prometheus.yaml:/etc/prometheus/prometheus.yml:ro
+      - ./infra/observability/prometheus/rules:/etc/prometheus/rules:ro
+      - waygrid_prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    depends_on:
+      - otel-collector
+    labels:
+      - dev.orbstack.domains=prometheus.router.waygrid.local
+      - dev.orbstack.http-port=9090
+      - traefik.enable=true
+      - traefik.http.routers.prometheus.rule=Host(`prometheus.local.waygrid`)
+      - traefik.http.routers.prometheus.entrypoints=web
+      - traefik.http.services.prometheus.loadbalancer.server.port=9090
+
+  #############################################
+  # GRAFANA OTEL LGTM (Tempo + Loki + Prom + Grafana)
+  #############################################
 
   otel-lgtm:
-      image: grafana/otel-lgtm
-      hostname: otel-lgtm
-      container_name: otel-lgtm
-      ports:
-#        - "3000:3000"
-        - "4317:4317"
-        - "4318:4318"
-      environment :
-        - OTEL_METRIC_EXPORT_INTERVAL=500
-      labels:
-        - dev.orbstack.domains=grafana.router.waygrid.local
-        - dev.orbstack.http-port=3000
+    image: grafana/otel-lgtm:0.8.2
+    hostname: otel-lgtm
+    container_name: otel-lgtm
+    volumes:
+      - ./infra/observability/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./infra/observability/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    ports:
+      - "3000:3000"
+      - "4327:4317"
+      - "4328:4318"
+      - "3100:3100"
+      - "3200:3200"
+    environment:
+      OTEL_METRIC_EXPORT_INTERVAL: 500
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    labels:
+      - dev.orbstack.domains=grafana.router.waygrid.local
+      - dev.orbstack.http-port=3000
+      - traefik.enable=true
+      - traefik.http.routers.grafana.rule=Host(`grafana.local.waygrid`)
+      - traefik.http.routers.grafana.entrypoints=web
+      - traefik.http.services.grafana.loadbalancer.server.port=3000
+
+  #############################################
+  # TRAEFIK (ingress for local UIs)
+  #############################################
+
+  traefik:
+    image: traefik:v3.1
+    container_name: traefik
+    command:
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+      - --api.dashboard=true
+      - --log.level=INFO
+    ports:
+      - "80:80"
+      - "8082:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - waygrid_traefik_data:/etc/traefik
+    labels:
+      - dev.orbstack.domains=traefik.router.waygrid.local
+

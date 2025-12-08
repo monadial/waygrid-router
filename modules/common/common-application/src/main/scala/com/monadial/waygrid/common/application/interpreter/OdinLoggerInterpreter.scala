@@ -1,26 +1,32 @@
 package com.monadial.waygrid.common.application.interpreter
 
 import cats.effect.*
-import cats.implicits.catsSyntaxApplicativeId
 import cats.syntax.all.*
-import com.monadial.waygrid.common.application.algebra.{ ThisNode, Logger, LoggerContext }
+import com.monadial.waygrid.common.application.algebra.{ Logger, LoggerContext, ThisNode }
 import io.odin.formatter.Formatter
 import io.odin.meta.Position
 import io.odin.{ Level, consoleLogger }
+import io.odin.syntax.*
 
 object OdinLoggerInterpreter: // todo refactor
 
-  def default[F[+_]: {ThisNode, Async}](minLevel: Level): F[Logger[F]] =
+  def default[F[+_]: {ThisNode, Async}](minLevel: Level): Resource[F, Logger[F]] =
     for
-      thisNode <- ThisNode[F].get
-      nodeContext <- Map(
-        "clusterId" -> thisNode.clusterId.show,
-        "nodeId"    -> thisNode.id.show,
-        "region"    -> thisNode.region.show,
-        "component" -> thisNode.descriptor.component.show,
-        "service"   -> thisNode.descriptor.service.show
-      ).pure[F]
-      odinLogger <- consoleLogger(formatter = Formatter.colorful, minLevel = minLevel).pure[F]
+      nodeContext <- Resource
+        .eval(ThisNode[F].get)
+        .map: thisNode =>
+          Map(
+            "clusterId" -> thisNode.clusterId.show,
+            "nodeId"    -> thisNode.id.show,
+            "region"    -> thisNode.region.show,
+            "component" -> thisNode.descriptor.component.show,
+            "service"   -> thisNode.descriptor.service.show
+          )
+
+      odinLogger <-
+        consoleLogger(formatter = Formatter.colorful, minLevel = minLevel)
+          .withConstContext(nodeContext)
+          .withAsync()
     yield new Logger[F]:
       // Info
       override def info(msg: => String)(using
@@ -29,7 +35,7 @@ object OdinLoggerInterpreter: // todo refactor
         given Position =
           Position(logCtx.file, logCtx.enclosing, logCtx.pkg, logCtx.line)
         odinLogger
-          .info(msg, nodeContext)
+          .info(msg)
 
       override def info(msg: => String, ctx: Map[String, String])(using
         logCtx: LoggerContext
@@ -37,7 +43,7 @@ object OdinLoggerInterpreter: // todo refactor
         given Position =
           Position(logCtx.file, logCtx.enclosing, logCtx.pkg, logCtx.line)
         odinLogger
-          .info(msg, ctx ++ nodeContext)
+          .info(msg, ctx)
 
       override def info(msg: => String, t: Throwable)(using
         logCtx: LoggerContext
@@ -55,7 +61,7 @@ object OdinLoggerInterpreter: // todo refactor
         given Position =
           Position(logCtx.file, logCtx.enclosing, logCtx.pkg, logCtx.line)
         odinLogger
-          .info(msg, ctx ++ nodeContext, t)
+          .info(msg, ctx, t)
 
       // Error
       override def error(msg: => String)(using
@@ -64,7 +70,7 @@ object OdinLoggerInterpreter: // todo refactor
         given Position =
           Position(logCtx.file, logCtx.enclosing, logCtx.pkg, logCtx.line)
         odinLogger
-          .error(msg, nodeContext)
+          .error(msg)
 
       override def error(msg: => String, ctx: Map[String, String])(using
         logCtx: LoggerContext
@@ -72,7 +78,7 @@ object OdinLoggerInterpreter: // todo refactor
         given Position =
           Position(logCtx.file, logCtx.enclosing, logCtx.pkg, logCtx.line)
         odinLogger
-          .error(msg, ctx ++ nodeContext)
+          .error(msg, ctx)
 
       override def error(msg: => String, t: Throwable)(using
         logCtx: LoggerContext
@@ -90,7 +96,7 @@ object OdinLoggerInterpreter: // todo refactor
         given Position =
           Position(logCtx.file, logCtx.enclosing, logCtx.pkg, logCtx.line)
         odinLogger
-          .error(msg, ctx ++ nodeContext, t)
+          .error(msg, ctx, t)
 
       // Debug
       override def debug(msg: => String)(using
@@ -99,7 +105,7 @@ object OdinLoggerInterpreter: // todo refactor
         given Position =
           Position(logCtx.file, logCtx.enclosing, logCtx.pkg, logCtx.line)
         odinLogger
-          .debug(msg, nodeContext)
+          .debug(msg)
 
       override def debug(msg: => String, ctx: Map[String, String])(using
         logCtx: LoggerContext
@@ -107,7 +113,7 @@ object OdinLoggerInterpreter: // todo refactor
         given Position =
           Position(logCtx.file, logCtx.enclosing, logCtx.pkg, logCtx.line)
         odinLogger
-          .debug(msg, ctx ++ nodeContext)
+          .debug(msg, ctx)
 
       override def debug(msg: => String, t: Throwable)(using
         logCtx: LoggerContext
@@ -125,7 +131,7 @@ object OdinLoggerInterpreter: // todo refactor
         given Position =
           Position(logCtx.file, logCtx.enclosing, logCtx.pkg, logCtx.line)
         odinLogger
-          .debug(msg, ctx ++ nodeContext, t)
+          .debug(msg, ctx, t)
 
       // Warn
       override def warn(msg: => String)(using
@@ -134,7 +140,7 @@ object OdinLoggerInterpreter: // todo refactor
         given Position =
           Position(logCtx.file, logCtx.enclosing, logCtx.pkg, logCtx.line)
         odinLogger
-          .warn(msg, nodeContext)
+          .warn(msg)
 
       override def warn(msg: => String, ctx: Map[String, String])(using
         logCtx: LoggerContext
@@ -142,7 +148,7 @@ object OdinLoggerInterpreter: // todo refactor
         given Position =
           Position(logCtx.file, logCtx.enclosing, logCtx.pkg, logCtx.line)
         odinLogger
-          .warn(msg, ctx ++ nodeContext)
+          .warn(msg, ctx)
 
       override def warn(msg: => String, t: Throwable)(using
         logCtx: LoggerContext
@@ -160,7 +166,7 @@ object OdinLoggerInterpreter: // todo refactor
         given Position =
           Position(logCtx.file, logCtx.enclosing, logCtx.pkg, logCtx.line)
         odinLogger
-          .warn(msg, ctx ++ nodeContext, t)
+          .warn(msg, ctx, t)
 
       // Trace
       override def trace(msg: => String)(using
@@ -169,7 +175,7 @@ object OdinLoggerInterpreter: // todo refactor
         given Position =
           Position(logCtx.file, logCtx.enclosing, logCtx.pkg, logCtx.line)
         odinLogger
-          .trace(msg, nodeContext)
+          .trace(msg)
 
       override def trace(msg: => String, ctx: Map[String, String])(using
         logCtx: LoggerContext
@@ -177,7 +183,7 @@ object OdinLoggerInterpreter: // todo refactor
         given Position =
           Position(logCtx.file, logCtx.enclosing, logCtx.pkg, logCtx.line)
         odinLogger
-          .trace(msg, ctx ++ nodeContext)
+          .trace(msg, ctx)
 
       override def trace(msg: => String, t: Throwable)(using
         logCtx: LoggerContext
@@ -195,9 +201,4 @@ object OdinLoggerInterpreter: // todo refactor
         given Position =
           Position(logCtx.file, logCtx.enclosing, logCtx.pkg, logCtx.line)
         odinLogger
-          .trace(msg, ctx ++ nodeContext, t)
-
-  def resource[F[+_]: {ThisNode,
-    Async}](minLevel: Level): Resource[F, Logger[F]] =
-    Resource
-      .eval(default(minLevel))
+          .trace(msg, ctx, t)

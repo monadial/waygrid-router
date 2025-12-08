@@ -3,11 +3,11 @@ package com.monadial.waygrid.common.application.`macro`
 import cats.effect.Concurrent
 import cats.implicits.*
 import com.monadial.waygrid.common.application.algebra.EventRouter
-import com.monadial.waygrid.common.application.domain.model.envelope.Envelope
+import com.monadial.waygrid.common.domain.algebra.messaging.event.Event
+import com.monadial.waygrid.common.domain.model.envelope.DomainEnvelope
 import shapeless3.typeable.Typeable
 
 import scala.quoted.*
-import com.monadial.waygrid.common.domain.model.event.Event
 
 object EventRouterMacro:
 
@@ -56,7 +56,7 @@ object EventRouterMacro:
 
     private val clauses =
       scala.collection.mutable.ListBuffer.empty[
-        (Int, PartialFunction[Envelope[? <: Event], F[Unit]])
+        (Int, PartialFunction[DomainEnvelope[? <: Event], F[Unit]])
       ]
 
     /**
@@ -69,12 +69,12 @@ object EventRouterMacro:
      * @param tpe        Typeable instance to test-and-cast at runtime
      */
     def handle[E <: Event](
-      f: Envelope[E] => F[Unit],
-      priority: Int
+                              f: DomainEnvelope[E] => F[Unit],
+                              priority: Int
     )(using tpe: Typeable[E]): Unit =
-      clauses += (priority -> new PartialFunction[Envelope[? <: Event], F[Unit]]:
-        override def isDefinedAt(evt: Envelope[? <: Event]): Boolean = tpe.cast(evt.message).isDefined
-        override def apply(evt: Envelope[? <: Event]): F[Unit]       = f(evt.asInstanceOf[Envelope[E]]))
+      clauses += (priority -> new PartialFunction[DomainEnvelope[? <: Event], F[Unit]]:
+        override def isDefinedAt(evt: DomainEnvelope[? <: Event]): Boolean = tpe.cast(evt.message).isDefined
+        override def apply(evt: DomainEnvelope[? <: Event]): F[Unit]       = f(evt.asInstanceOf[DomainEnvelope[E]]))
 //
 //    /**
 //     * Turn all accumulated clauses into one EventRouter[F].
@@ -105,13 +105,13 @@ object EventRouterMacro:
      */
     def toRouter: EventRouter[F] =
       // pre‐sort your handlers once
-      val sortedPFs: Array[PartialFunction[Envelope[? <: Event], F[Unit]]] =
+      val sortedPFs: Array[PartialFunction[DomainEnvelope[? <: Event], F[Unit]]] =
         clauses
           .sortBy { case (prio, _) => -prio }
           .map(_._2)
           .toArray
 
-      (evt: Envelope[? <: Event]) =>
+      (evt: DomainEnvelope[? <: Event]) =>
         sortedPFs.foldLeft(A.unit) { (acc, pf) =>
           acc.flatMap { _ =>
             if pf.isDefinedAt(evt) then pf(evt)

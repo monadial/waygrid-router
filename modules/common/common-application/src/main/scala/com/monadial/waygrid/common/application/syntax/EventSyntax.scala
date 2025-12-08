@@ -1,32 +1,31 @@
 package com.monadial.waygrid.common.application.syntax
 
-import com.monadial.waygrid.common.application.algebra.ThisNode
-
 import cats.effect.Async
-import cats.implicits.*
-import com.monadial.waygrid.common.application.domain.model.event.{Event, EventAddress, EventId, RawEvent, RawPayload}
-import com.monadial.waygrid.common.domain.model.event.Event as DomainEvent
+import cats.syntax.all.*
+import com.monadial.waygrid.common.application.algebra.ThisNode
+import com.monadial.waygrid.common.domain.SystemWaygridApp
+import com.monadial.waygrid.common.domain.algebra.messaging.event.Event
+import com.monadial.waygrid.common.domain.model.envelope.DomainEnvelope
+import com.monadial.waygrid.common.domain.model.envelope.Value.EnvelopeId
+import com.monadial.waygrid.common.domain.value.Address.Endpoint
+import com.monadial.waygrid.common.domain.value.Address.EndpointDirection.Inbound
 
 object EventSyntax:
-  extension (raw: RawEvent)
-    def toEvent[E <: DomainEvent](payload: E): Event[E] =
-      Event(
-        id = raw.id,
-        address = raw.address,
-        event = payload
-      )
+  extension [E <: Event](evt: E)
+    def wrapIntoWaystationEnvelope[F[+_]: {Async, ThisNode}]: F[DomainEnvelope[E]] =
+      wrapIntoEnvelope(SystemWaygridApp.Waystation.toServiceAddress.toEndpoint(Inbound))
 
-  extension [E <: DomainEvent](event: Event[E])
-    def toRawEvent(rawPayload: RawPayload): RawEvent =
-      RawEvent(
-        id = event.id,
-        address = event.address,
-        payload = rawPayload
-      )
+    def wrapIntoSchedulerEnvelope[F[+_]: {Async, ThisNode}]: F[DomainEnvelope[E]] =
+      wrapIntoEnvelope(SystemWaygridApp.Scheduler.toServiceAddress.toEndpoint(Inbound))
 
-  extension [E <: DomainEvent](event: E)
-    def fromDomainEvent[F[+_]: {Async, ThisNode}](address: EventAddress): F[Event[E]] =
+    def wrapIntoEnvelope[F[+_]: {Async, ThisNode}](endpoint: Endpoint): F[DomainEnvelope[E]] =
       for
-        id   <- EventId.next[F]
-        node <- ThisNode[F].get
-      yield Event(id, address, event)
+        envelopeId <- EnvelopeId.next[F]
+        node       <- ThisNode[F].get
+      yield DomainEnvelope(
+        envelopeId,
+        node.address,
+        endpoint,
+        evt,
+        Map.empty
+      )

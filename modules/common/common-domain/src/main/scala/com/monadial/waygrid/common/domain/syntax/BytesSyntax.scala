@@ -2,7 +2,7 @@ package com.monadial.waygrid.common.domain.syntax
 
 import cats.Applicative
 import cats.implicits.*
-import com.monadial.waygrid.common.domain.value.bytes.IsBytes
+import com.monadial.waygrid.common.domain.algebra.value.bytes.IsBytes
 import scodec.bits.ByteVector
 
 object BytesSyntax:

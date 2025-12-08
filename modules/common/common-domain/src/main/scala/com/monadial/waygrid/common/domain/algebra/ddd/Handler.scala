@@ -1,8 +1,8 @@
 package com.monadial.waygrid.common.domain.algebra.ddd
 
 import cats.data.Kleisli
-import com.monadial.waygrid.common.domain.model.command.Command
-import com.monadial.waygrid.common.domain.model.event.Event
+import com.monadial.waygrid.common.domain.algebra.messaging.command.Command
+import com.monadial.waygrid.common.domain.algebra.messaging.event.Event
 
 object Handler:
 

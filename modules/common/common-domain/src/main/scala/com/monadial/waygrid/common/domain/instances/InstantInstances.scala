@@ -2,9 +2,9 @@ package com.monadial.waygrid.common.domain.instances
 
 import cats.data.Validated
 import cats.{Eq, Order, Show}
+import com.monadial.waygrid.common.domain.algebra.value.codec.{Base64Codec, Base64DecodingError, BytesCodec, BytesDecodingError}
 import com.monadial.waygrid.common.domain.instances.LongInstances.given
-import com.monadial.waygrid.common.domain.value.codec.{Base64Codec, Base64DecodingError, BytesCodec, BytesDecodingError}
-import scodec.bits.BitVector
+import scodec.bits.{BitVector, ByteVector}
 import scodec.{Attempt, DecodeResult, SizeBound, Codec as SCodec}
 
 import java.time.Instant
@@ -23,13 +23,13 @@ object InstantInstances:
 
 
   given BytesCodec[Instant] with
-    inline def encode(value: Instant): Array[Byte] =
+    inline def encodeToScalar(value: Instant): ByteVector =
       BytesCodec[Long]
-        .encode(value.toEpochMilli)
+          .encodeToScalar(value.toEpochMilli)
 
-    inline def decode(value: Array[Byte]): Validated[BytesDecodingError, Instant] =
+    inline def decodeFromScalar(value: ByteVector): Validated[BytesDecodingError, Instant] =
       BytesCodec[Long]
-        .decode(value)
+        .decodeFromScalar(value)
         .map(Instant.ofEpochMilli)
 
   given Base64Codec[Instant] with

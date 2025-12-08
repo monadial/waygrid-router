@@ -1,10 +1,15 @@
 package com.monadial.waygrid.common.application.algebra
 
-import com.monadial.waygrid.common.application.domain.model.envelope.Envelope
-import com.monadial.waygrid.common.application.domain.model.transport.TransportEnvelope
-import com.monadial.waygrid.common.domain.model.message.Message
+import com.monadial.waygrid.common.application.domain.model.envelope.TransportEnvelope
+import com.monadial.waygrid.common.domain.algebra.messaging.message.Message
+import com.monadial.waygrid.common.domain.model.envelope.DomainEnvelope
 
-trait TransportEnvelopeCodec[F[+_], T <: TransportEnvelope]:
-  def encode[M <: Message](envelope: Envelope[M]): F[T]
-  def decode(decode: T): F[Envelope[? <: Message]]
+trait TransportEnvelopeCodec[F[+_]]:
+  def encode[M <: Message](envelope: DomainEnvelope[M]): F[TransportEnvelope]
+  def decode(envelope: TransportEnvelope): F[DomainEnvelope[? <: Message]]
+
+
+
+
+
 

@@ -1,6 +1,6 @@
 package com.monadial.waygrid.common.domain.algebra.ddd
 
-import com.monadial.waygrid.common.domain.model.command.Command
+import com.monadial.waygrid.common.domain.algebra.messaging.command.Command
 
 sealed trait AggregateHandlerError
 
