@@ -221,7 +221,7 @@
         "platform": {
             "name": "jvm",
             "config": {
-                "home": "/Users/tomas/Library/Java/JavaVirtualMachines/corretto-23.0.2/Contents/Home",
+                "home": "/Users/tomas/Library/Java/JavaVirtualMachines/temurin-23.0.2/Contents/Home",
                 "options": [
                     "-Duser.dir=/Users/tomas/waygrid/waygrid-router/project/project"
                 ]
@@ -230,7 +230,7 @@
                 
             ],
             "runtimeConfig": {
-                "home": "/Users/tomas/Library/Java/JavaVirtualMachines/corretto-23.0.2/Contents/Home",
+                "home": "/Users/tomas/Library/Java/JavaVirtualMachines/temurin-23.0.2/Contents/Home",
                 "options": [
                     "-Duser.dir=/Users/tomas/waygrid/waygrid-router/project/project"
                 ]

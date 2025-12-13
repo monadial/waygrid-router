@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package waygrid.content.v1;
+
+option java_package = "com.monadial.waygrid.common.application.protocol.pb";
+
+// Core content-addressable store.
+// Content is immutable, identified by content_hash (BLAKE3, SHA-256, etc.)
+service BlobStore {
+  // Store small/medium content in one shot.
+  rpc PutContent (PutContentRequest) returns (PutContentResponse);
+
+  // Retrieve content by hash (full payload in one response).
+  rpc GetContent (GetContentRequest) returns (GetContentResponse);
+
+  // Check if content exists (for idempotency / probing).
+  rpc Exists (ExistsRequest) returns (ExistsResponse);
+
+  // Streaming upload for large payloads (recommended for > 512KB).
+  rpc PutContentStream (stream ContentChunk) returns (PutContentResponse);
+
+  // Streaming download for large payloads.
+  rpc GetContentStream (GetContentRequest) returns (stream ContentChunk);
+}
+
+// ---------- Requests / Responses ----------
+
+message PutContentRequest {
+  bytes data = 1;          // full payload
+  string schema = 2;       // optional: "json:OrderPlaced", "proto:Foo.Bar"
+}
+
+message PutContentResponse {
+  string content_hash = 1; // BLAKE3 or SHA-256 hex string
+  uint64 size = 2;         // bytes
+  string schema = 3;       // echo schema if provided
+}
+
+message GetContentRequest {
+  string content_hash = 1;
+}
+
+message GetContentResponse {
+  bytes data = 1;
+  string schema = 2;
+  uint64 size = 3;
+}
+
+message ExistsRequest {
+  string content_hash = 1;
+}
+
+message ExistsResponse {
+  bool exists = 1;
+}
+
+// Used for streaming upload/download.
+message ContentChunk {
+  bytes data = 1;
+}

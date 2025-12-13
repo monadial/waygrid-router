@@ -1,4 +1,6 @@
-i w# Claude Code Guidelines for Waygrid Router
+IMPORTANT: When applicable, prefer using jetbrains-index MCP tools for code navigation and refactoring.
+
+# Claude Code Guidelines for Waygrid Router
 
 This document provides specific guidance for Claude Code when working with the Waygrid Router codebase.
 

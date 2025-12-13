@@ -1,51 +1,76 @@
 import http from 'k6/http';
-import { check, sleep } from 'k6';
 
-// === CONFIGURATION ===
-// Burst-style test: short, high-intensity spikes
+/**
+ * WAYGRID – HTTP ORIGIN CONSTANT ARRIVAL RATE TEST
+ *
+ * Purpose:
+ *  - push a fixed number of requests per second
+ *  - find the real throughput ceiling
+ *  - verify stability under sustained pressure
+ *
+ * This test intentionally:
+ *  - removes checks (performance > correctness)
+ *  - minimizes JS overhead
+ */
+
 export const options = {
   scenarios: {
-    bursts: {
-      executor: 'per-vu-iterations',
-      vus: 5000,                  // number of concurrent virtual users
-      iterations: 100,             // how many requests each VU sends
-      maxDuration: '30s',        // stop after 30s
+    constant_rate: {
+      executor: 'constant-arrival-rate',
+
+      // 🔥 TARGET LOAD (tune this)
+      rate: 30_000,          // requests per second
+      timeUnit: '1s',
+      duration: '10m',
+
+      // VU pool (k6 will use as many as needed)
+      preAllocatedVUs: 2000,
+      maxVUs: 5000,
     },
   },
+
   thresholds: {
-    http_req_failed: ['rate<0.01'],      // <1% errors
-    http_req_duration: ['p(95)<100'],   // 95% under 1s
+    http_req_failed: ['rate<0.01'],   // <1% errors
+    http_req_duration: [
+      'p(95)<100',                    // relaxed on purpose
+      'p(99)<250',
+    ],
   },
 };
 
-// === TEST BODY ===
-export default function () {
-  const url = 'http://localhost:1337/v1/ingest';
+/* =========================
+   REQUEST DEFINITION
+   ========================= */
 
-  const payload = JSON.stringify({
-    graph: {
-      entryPoint: {
-        address: 'waygrid://test/service',
-        retryPolicy: {type: 'None'},
-        deliveryStrategy: {
-          delay: '1 minute',
-          type: 'ScheduleAfter',
-        },
-        onSuccess: null,
-        onFailure: null,
-        label: null,
+const URL = 'http://localhost:1337/v1/ingest';
+
+const PAYLOAD = JSON.stringify({
+  graph: {
+    entryPoint: {
+      address: 'waygrid://test/service',
+      retryPolicy: { type: 'None' },
+      deliveryStrategy: {
+        type: 'ScheduleAfter',
+        delay: '1 minute',
       },
-      repeatPolicy: {type: 'NoRepeat'},
+      onSuccess: null,
+      onFailure: null,
+      label: null,
     },
-  });
+    repeatPolicy: { type: 'NoRepeat' },
+  },
+});
 
-  const params = {
-    headers: {'Content-Type': 'application/json'},
-  };
+const PARAMS = {
+  headers: {
+    'Content-Type': 'application/json',
+  },
+};
 
-  const res = http.post(url, payload, params);
+/* =========================
+   TEST EXECUTION
+   ========================= */
 
-  check(res, {
-    'status is 200': (r) => r.status === 200,
-  });
+export default function () {
+  http.post(URL, PAYLOAD, PARAMS);
 }
