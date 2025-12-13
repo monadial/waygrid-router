@@ -3,10 +3,11 @@ import sbt.*
 object Dependencies {
   object V {
     val airframeUlid                 = "2025.1.14"
+    val fs2Aws                       = "6.3.0"
     val bouncyCastleVersion          = "1.81"
     val cats                         = "2.13.0"
     val catsActors                   = "2.0.0"
-    val catsEffect                   = "3.6.2"
+    val catsEffect                   = "3.6.3"
     val circe                        = "0.14.10"
     val jsonsKema                    = "0.25.0"
     val circeConfig                  = "0.10.1"
@@ -14,12 +15,12 @@ object Dependencies {
     val cloudEvents                  = "2.5.0"
     val doobie                       = "1.0.0-RC10"
     val doobieFlyway                 = "0.5.3"
-    val flyway                        = "11.10.3"
+    val flyway                       = "11.10.3"
     val fs2core                      = "3.12.0"
     val fs2Kafka                     = "3.8.0"
-    val http4s                       = "0.23.30"
-    val http4sMetrics                = "0.23.30"
-    val http4sWs                     = "0.23.30"
+    val http4s                       = "0.23.33"
+    val http4sMetrics                = "0.23.33"
+    val http4sWs                     = "0.23.33"
     val http4sOtel4s                 = "0.15.0"
     val ip4s                         = "3.7.0"
     val kittens                      = "3.5.0"
@@ -31,6 +32,7 @@ object Dependencies {
     val opentelemetryInstrumentation = "2.21.0-alpha"
     val opentelemetryOtlp            = "1.55.0"
     val otel4s                       = "0.14.0"
+    val otel4sExperimentalMetrics    = "0.8.1"
     val postgres                     = "42.7.7"
     val prometheus4cats              = "3.0.0"
     val redis4Cats                   = "2.0.1"
@@ -59,6 +61,11 @@ object Dependencies {
     val fs2Scodec = Def.setting("co.fs2" %% "fs2-scodec" % V.fs2core)
     val fs2Kafka  = Def.setting("com.github.fd4s" %% "fs2-kafka" % V.fs2Kafka)
 
+    // AWS fs2 integrations
+    val fs2AwsCore      = Def.setting("io.laserdisc" %% "fs2-aws-core" % V.fs2Aws)
+    val fs2AwsS3        = Def.setting("io.laserdisc" %% "fs2-aws-s3" % V.fs2Aws)
+    val fs2AwsS3Tagless = Def.setting("io.laserdisc" %% "pure-s3-tagless" % V.fs2Aws)
+
     val kittens = Def.setting("org.typelevel" %% "kittens" % V.kittens)
 
     val monocleCore  = Def.setting("dev.optics" %% "monocle-core" % V.monocle)
@@ -85,7 +92,7 @@ object Dependencies {
     val http4sOtel4sTraceServer = "org.http4s" %% "http4s-otel4s-middleware-trace-server" % V.http4sOtel4s
     val http4sOtel4sTraceClient = "org.http4s" %% "http4s-otel4s-middleware-trace-client" % V.http4sOtel4s
 
-    val scalaPb =  "com.thesamet.scalapb" %% "scalapb-runtime" % scalapb.compiler.Version.scalapbVersion % "protobuf"
+    val scalaPb = "com.thesamet.scalapb" %% "scalapb-runtime" % scalapb.compiler.Version.scalapbVersion % "protobuf"
 
     val ip4sCore = Def.setting("com.comcast" %% "ip4s-core" % V.ip4s)
 
@@ -109,6 +116,7 @@ object Dependencies {
     )
 
     val otel4sOtelJava              = Def.setting("org.typelevel" %% "otel4s-oteljava" % V.otel4s)
+    val otel4sExperimentalMetrics          = Def.setting("org.typelevel" %% "otel4s-experimental-metrics" % V.otel4sExperimentalMetrics)
     val otel4InstrumentationMetrics = Def.setting("org.typelevel" %% "otel4s-instrumentation-metrics" % V.otel4s)
     val opentelemetryExporterOtlp =
       Def.setting("io.opentelemetry" % "opentelemetry-exporter-otlp" % V.opentelemetryOtlp)
@@ -130,7 +138,7 @@ object Dependencies {
     val doobiePostgres      = Def.setting("org.tpolecat" %% "doobie-postgres" % V.doobie)
     val doobiePostgresCirce = Def.setting("org.tpolecat" %% "doobie-postgres-circe" % V.doobie)
     val doobieFlyway        = Def.setting("de.lhns" %% "doobie-flyway" % V.doobieFlyway)
-    val flywayPostgres    = Def.setting("org.flywaydb" % "flyway-database-postgresql" % V.flyway)
+    val flywayPostgres      = Def.setting("org.flywaydb" % "flyway-database-postgresql" % V.flyway)
 
     val catsActors = Def.setting("com.github.suprnation.cats-actors" %% "cats-actors" % V.catsActors)
 

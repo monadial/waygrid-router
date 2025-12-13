@@ -1,12 +1,11 @@
 import Dependencies.Libraries
 import sbt.Keys.scalacOptions
-import sbtprotoc.ProtocPlugin.autoImport.PB
 
 import scala.collection.Seq
 
 ThisBuild / version := "1.0.0-SNAPSHOT"
 
-ThisBuild / scalaVersion     := "3.7.0" // update to 3.7.+ when libraries are ready
+ThisBuild / scalaVersion     := "3.7.4"
 ThisBuild / organization     := "com.monadial"
 ThisBuild / organizationName := "Monadial"
 
@@ -21,6 +20,10 @@ ThisBuild / developers := List(
 ThisBuild / scalacOptions ++= Seq(
   "-source:3.7", // @see https://scala-lang.org/2024/08/19/given-priority-change-3.7.html#migrating-to-the-new-prioritization
   "-Xprint-suspension"
+)
+
+ThisBuild / javaOptions ++= Seq(
+  "--sun-misc-unsafe-memory-access=allow" //todo resolve this issue with java 24
 )
 
 ThisBuild / semanticdbEnabled := true
@@ -38,16 +41,14 @@ def dockerImage(component: String, service: String): Seq[Setting[?]] = Seq(
 )
 
 def buildInfo(component: String, service: String) = Seq(
-  buildInfoKeys    := Seq[BuildInfoKey](name, version, scalaVersion),
-  buildInfoPackage := s"com.monadial.waygrid.${component}.${service}"
+  buildInfoKeys    := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
+  buildInfoPackage := s"com.monadial.waygrid.${component}.${service.replace("-", ".")}"
 )
 
 def configureOtel(component: String, service: String): Seq[Setting[?]] = Seq(
-  Compile / javaOptions ++= Seq(
+  ThisBuild / javaOptions ++= Seq(
     "-Dotel.java.global-autoconfigure.enabled=true",
-    s"-Dotel.service.name=${component}-${service}",
-    "-Dotel.propagators=b3multi",
-    "-Dotel.exporter.otlp.endpoint=otel-collector-otel-collector-gateway.waygrid-observability.svc.cluster.local:8888"
+    s"-Dotel.service.name=${component}-${service.replace("-", ".")}",
   )
 )
 
@@ -63,7 +64,7 @@ lazy val root = (project in file("."))
 //
 //
 // COMMON
-lazy val `common-domain` = (project in file("modules/common/common-domain"))
+lazy val `common-domain` = (project in file("modules/common/domain"))
   .settings {
     libraryDependencies ++= List(
       // cats
@@ -82,6 +83,7 @@ lazy val `common-domain` = (project in file("modules/common/common-domain"))
       Libraries.circeRefined.value,
       // scodec
       Libraries.scodecCore.value,
+      // skunk
       // jsoniter
       Libraries.jsoniterScalaCore.value,
       Libraries.jsoniterScalaMacros.value,
@@ -102,10 +104,12 @@ lazy val `common-domain` = (project in file("modules/common/common-domain"))
     )
   }
 
-lazy val `common-application` = (project in file("modules/common/common-application"))
+lazy val `common-application` = (project in file("modules/common/application"))
   .enablePlugins(Http4sGrpcPlugin)
   .settings {
     libraryDependencies ++= List(
+      // bouncy castle
+      Libraries.bouncyCastle.value,
       // odin
       Libraries.odinCore.value,
       // cats
@@ -124,6 +128,8 @@ lazy val `common-application` = (project in file("modules/common/common-applicat
       Libraries.shapeless3Typeable.value,
       // fs2
       Libraries.fs2Kafka.value,
+      // aws
+      Libraries.fs2AwsCore.value,
       // scodec
       Libraries.scodecBits.value,
       // http4s
@@ -139,6 +145,7 @@ lazy val `common-application` = (project in file("modules/common/common-applicat
       Libraries.scalaPb,
       // otel4s
       Libraries.otel4sOtelJava.value,
+      Libraries.otel4sExperimentalMetrics.value,
       Libraries.otel4InstrumentationMetrics.value,
       Libraries.opentelemetryExporterOtlp.value,
       Libraries.opentelemetrySdkExtensionAutoconfigure.value,
@@ -183,16 +190,16 @@ lazy val `common-application` = (project in file("modules/common/common-applicat
 //
 //
 // SYSTEM
-lazy val `system-common` = (project in file("modules/system/system-common"))
+lazy val `system-common` = (project in file("modules/system/common"))
   .dependsOn(`common-application`)
 
-lazy val `system-topology` = (project in file("modules/system/system-topology"))
+lazy val `system-topology` = (project in file("modules/system/topology"))
   .enablePlugins(BuildInfoPlugin, DockerPlugin, JavaAppPackaging)
   .settings(dockerImage("system", "topology") *)
   .settings(buildInfo("system", "topology") *)
   .dependsOn(`system-common`)
 
-lazy val `system-waystation` = (project in file("modules/system/system-waystation"))
+lazy val `system-waystation` = (project in file("modules/system/waystation"))
   .enablePlugins(BuildInfoPlugin, DockerPlugin, JavaAppPackaging)
   .settings(dockerImage("system", "waystation") *)
   .settings(buildInfo("system", "waystation") *)
@@ -209,69 +216,81 @@ lazy val `system-waystation` = (project in file("modules/system/system-waystatio
   )
   .dependsOn(`system-common`)
 
-lazy val `system-history` = (project in file("modules/system/system-history"))
+lazy val `system-history` = (project in file("modules/system/history"))
   .enablePlugins(BuildInfoPlugin, DockerPlugin, JavaAppPackaging)
   .settings(dockerImage("system", "history") *)
   .settings(buildInfo("system", "history") *)
   .dependsOn(`system-common`)
 
-lazy val `system-scheduler` = (project in file("modules/system/system-scheduler"))
+lazy val `system-scheduler` = (project in file("modules/system/scheduler"))
   .enablePlugins(BuildInfoPlugin, DockerPlugin, JavaAppPackaging)
   .settings(dockerImage("system", "scheduler") *)
   .settings(buildInfo("system", "scheduler") *)
   .dependsOn(`system-common`)
 
-lazy val `system-dag-registry` = (project in file("modules/system/system-dag-registry"))
+lazy val `system-dag-registry` = (project in file("modules/system/dag-registry"))
   .enablePlugins(BuildInfoPlugin, DockerPlugin, JavaAppPackaging)
   .settings(dockerImage("system", "dag-registry") *)
   .settings(buildInfo("system", "dag-registry") *)
   .dependsOn(`system-common`)
 
-lazy val `system-secure-store` = (project in file("modules/system/system-secure-store"))
+lazy val `system-secure-store` = (project in file("modules/system/secure-store"))
   .enablePlugins(BuildInfoPlugin, DockerPlugin, JavaAppPackaging)
   .settings(dockerImage("system", "secure-store") *)
   .settings(buildInfo("system", "secure-store") *)
   .dependsOn(`system-common`)
 
-lazy val `system-iam` = (project in file("modules/system/system-iam"))
+lazy val `system-blob-store` = (project in file("modules/system/blob-store"))
+  .enablePlugins(BuildInfoPlugin, DockerPlugin, JavaAppPackaging)
+  .settings(dockerImage("system", "secure-blob-store") *)
+  .settings(buildInfo("system", "secure-blob-store") *)
+  .dependsOn(`system-common`)
+  .settings(
+    libraryDependencies ++= List(
+      Libraries.fs2AwsS3.value,
+      Libraries.fs2AwsS3Tagless.value
+    )
+  )
+
+lazy val `system-iam` = (project in file("modules/system/iam"))
   .enablePlugins(BuildInfoPlugin, DockerPlugin, JavaAppPackaging)
   .settings(dockerImage("system", "iam") *)
   .settings(buildInfo("system", "iam") *)
   .dependsOn(`system-common`)
 
-lazy val `system-billing` = (project in file("modules/system/system-billing"))
+lazy val `system-billing` = (project in file("modules/system/billing"))
   .enablePlugins(BuildInfoPlugin, DockerPlugin, JavaAppPackaging)
   .settings(dockerImage("system", "billing") *)
   .settings(buildInfo("system", "billing") *)
   .dependsOn(`system-common`)
 
-lazy val `system-kms` = (project in file("modules/system/system-kms"))
+lazy val `system-kms` = (project in file("modules/system/kms"))
   .enablePlugins(BuildInfoPlugin, DockerPlugin, JavaAppPackaging)
   .settings(dockerImage("system", "kms") *)
   .settings(buildInfo("system", "kms") *)
   .dependsOn(`system-common`)
 
-lazy val `system-k8s-operator` = (project in file("modules/system/system-k8s-operator"))
+lazy val `infrastructure-k8s-operator` = (project in file("modules/infrastructure/k8s-operator"))
   .enablePlugins(BuildInfoPlugin, DockerPlugin, JavaAppPackaging)
   .dependsOn(`system-common`)
 
 //
 //
 // ORIGIN
-lazy val `origin-http` = (project in file("modules/origin/origin-http"))
+lazy val `origin-http` = (project in file("modules/origin/http"))
   .enablePlugins(DockerPlugin, JavaAppPackaging)
   .settings(dockerImage("origin", "http") *)
   .settings(buildInfo("origin", "http") *)
   .settings(configureOtel("origin", "http") *)
   .dependsOn(`common-application`)
 
-lazy val `origin-grpc` = (project in file("modules/origin/origin-grpc"))
+lazy val `origin-grpc` = (project in file("modules/origin/grpc"))
   .enablePlugins(DockerPlugin, JavaAppPackaging)
   .settings(dockerImage("origin", "grpc") *)
   .settings(buildInfo("origin", "grpc") *)
   .dependsOn(`common-application`)
 
-lazy val `origin-kafka` = (project in file("modules/origin/origin-kafka"))
+lazy val `origin-kafka` = (project in file("modules/origin/kafka"))
   .enablePlugins(DockerPlugin, JavaAppPackaging)
   .settings(dockerImage("origin", "kafka") *)
   .settings(buildInfo("origin", "kafka") *)
@@ -279,19 +298,19 @@ lazy val `origin-kafka` = (project in file("modules/origin/origin-kafka"))
 //
 //
 // DESTINATION
-lazy val `destination-webhook` = (project in file("modules/destination/destination-webhook"))
+lazy val `destination-webhook` = (project in file("modules/destination/webhook"))
   .enablePlugins(BuildInfoPlugin, DockerPlugin, JavaAppPackaging)
   .settings(dockerImage("destination", "webhook") *)
   .settings(buildInfo("destination", "webhook") *)
   .dependsOn(`common-application`)
 
-lazy val `destination-websocket` = (project in file("modules/destination/destination-websocket"))
+lazy val `destination-websocket` = (project in file("modules/destination/websocket"))
   .enablePlugins(BuildInfoPlugin, DockerPlugin, JavaAppPackaging)
   .settings(dockerImage("destination", "websocket") *)
   .settings(buildInfo("destination", "websocket") *)
   .dependsOn(`common-application`)
 
-lazy val `destination-blackhole` = (project in file("modules/destination/destination-blackhole"))
+lazy val `destination-blackhole` = (project in file("modules/destination/blackhole"))
   .enablePlugins(BuildInfoPlugin, DockerPlugin, JavaAppPackaging)
   .settings(dockerImage("destination", "blackhole") *)
   .settings(buildInfo("destination", "blackhole") *)
@@ -300,13 +319,13 @@ lazy val `destination-blackhole` = (project in file("modules/destination/destina
 //
 //
 // PROCESSOR
-lazy val `processor-openai` = (project in file("modules/processor/processor-openai"))
+lazy val `processor-openai` = (project in file("modules/processor/openai"))
   .enablePlugins(BuildInfoPlugin, DockerPlugin, JavaAppPackaging)
   .settings(dockerImage("processor", "openai") *)
   .settings(buildInfo("processor", "openai") *)
   .dependsOn(`common-application`)
 
-lazy val `processor-lambda` = (project in file("modules/processor/processor-lambda"))
+lazy val `processor-lambda` = (project in file("modules/processor/lambda"))
   .enablePlugins(BuildInfoPlugin, DockerPlugin, JavaAppPackaging)
   .settings(dockerImage("processor", "lambda") *)
   .settings(buildInfo("processor", "lambda") *)

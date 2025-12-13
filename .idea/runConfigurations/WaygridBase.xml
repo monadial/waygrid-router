@@ -1,8 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="WaygridBase" type="CompoundRunConfigurationType">
-    <toRun name="origin.Http" type="Application" />
-    <toRun name="system.Scheduler" type="Application" />
-    <toRun name="system.Waystation" type="Application" />
-    <method v="2" />
-  </configuration>
-</component>
