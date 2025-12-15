@@ -4,14 +4,15 @@ import cats.Monad
 import cats.implicits.*
 import com.monadial.waygrid.common.domain.model.fsm.FSM
 import com.monadial.waygrid.common.domain.model.fsm.Value.Result
-import com.monadial.waygrid.common.domain.model.resiliency.{ Backoff, RetryPolicy }
+import com.monadial.waygrid.common.domain.model.resiliency.{Backoff, RetryPolicy}
 import com.monadial.waygrid.common.domain.model.routing.Value.DeliveryStrategy
-import com.monadial.waygrid.common.domain.model.traversal.dag.{ Dag, JoinStrategy, NodeType }
-import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ BranchId, EdgeGuard, ForkId, NodeId }
+import com.monadial.waygrid.common.domain.model.traversal.dag.{Dag, JoinStrategy, NodeType}
+import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{BranchId, EdgeGuard, ForkId, NodeId}
 import com.monadial.waygrid.common.domain.model.traversal.fsm.TraversalEffect.*
 import com.monadial.waygrid.common.domain.model.traversal.condition.Condition
-import com.monadial.waygrid.common.domain.model.traversal.state.{ BranchResult, PendingJoin, TraversalState }
+import com.monadial.waygrid.common.domain.model.traversal.state.{BranchResult, PendingJoin, TraversalState}
 import com.monadial.waygrid.common.domain.model.traversal.state.Value.RetryAttempt
+import com.monadial.waygrid.common.domain.model.vectorclock.VectorClock
 import com.monadial.waygrid.common.domain.value.Address.NodeAddress
 
 import java.time.Instant
@@ -47,7 +48,7 @@ object TraversalFSM:
    * @param now         Current timestamp for scheduling decisions (passed explicitly for purity)
    * @return FSM that processes TraversalSignals and produces TraversalEffects
    */
-  def stateless[F[+_]: Monad](dag: Dag, nodeAddress: NodeAddress, now: Instant): FSM[F, TraversalState, TraversalSignal, TraversalError, TraversalEffect] =
+  def stateless[F[+_]: Monad](dag: Dag, nodeAddress: NodeAddress, now: Instant, foreignVectorClock: Option[VectorClock]): FSM[F, TraversalState, TraversalSignal, TraversalError, TraversalEffect] =
 
     // -------------------------------------------------------------------------
     // Helper Functions

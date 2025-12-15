@@ -2,6 +2,7 @@ package com.monadial.waygrid.common.domain.model.traversal.dag
 
 import com.monadial.waygrid.common.domain.algebra.value.string.StringValue
 import com.monadial.waygrid.common.domain.algebra.value.ulid.ULIDValue
+import com.monadial.waygrid.common.domain.model.traversal.condition.Condition
 
 object Value:
   type NodeId = NodeId.Type
@@ -32,5 +33,4 @@ object Value:
     /** Execute when upstream node times out */
     case OnTimeout
     /** Execute when predicate evaluates to true */
-    case Conditional(predicate: String)
-
+    case Conditional(condition: Condition)

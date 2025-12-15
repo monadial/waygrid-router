@@ -4,6 +4,7 @@ import com.monadial.waygrid.common.domain.algebra.value.string.StringValue
 import com.monadial.waygrid.common.domain.algebra.value.ulid.ULIDValue
 import com.monadial.waygrid.common.domain.model.routing.Value.TraversalId
 import com.monadial.waygrid.common.domain.model.traversal.dag.Dag
+import com.monadial.waygrid.common.domain.model.traversal.dag.Value.DagHash
 import com.monadial.waygrid.common.domain.model.traversal.state.TraversalState
 import com.monadial.waygrid.common.domain.value.Address.NodeAddress
 
@@ -18,6 +19,9 @@ object Value:
   final case class TraversalStamp(state: TraversalState, dag: Dag) extends Stamp:
     def update(fn: TraversalState => TraversalState): TraversalStamp =
       copy(state = fn(state))
+
+  /** Lightweight stamp carried across envelopes to let the waystation restore traversal context. */
+  final case class TraversalRefStamp(dagHash: DagHash) extends Stamp
 
   object TraversalStamp:
     def initial(traversalId: TraversalId, actor: NodeAddress, dag: Dag): TraversalStamp =

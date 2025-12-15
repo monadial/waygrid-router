@@ -103,6 +103,17 @@ object Event:
   ) extends StateEvent
 
   /**
+   * A running branch advanced to the next node.
+   */
+  final case class BranchAdvanced(
+    node: NodeId,
+    branchId: BranchId,
+    forkId: ForkId,
+    actor: NodeAddress,
+    vectorClock: VectorClock
+  ) extends StateEvent
+
+  /**
    * A branch within a fork has completed (successfully or with failure).
    */
   final case class BranchCompleted(
@@ -166,6 +177,33 @@ object Event:
     node: NodeId,
     forkId: ForkId,
     pendingBranches: Set[BranchId],
+    actor: NodeAddress,
+    vectorClock: VectorClock
+  ) extends StateEvent
+
+  // ---------------------------------------------------------------------------
+  // Traversal-Level Events
+  // ---------------------------------------------------------------------------
+
+  /**
+   * A traversal-level timeout was scheduled.
+   */
+  final case class TraversalTimeoutScheduled(
+    node: NodeId,
+    timeoutId: String,
+    deadline: Instant,
+    actor: NodeAddress,
+    vectorClock: VectorClock
+  ) extends StateEvent
+
+  /**
+   * The entire traversal has timed out.
+   * All active work is canceled and the traversal fails.
+   */
+  final case class TraversalTimedOut(
+    node: NodeId,
+    activeNodes: Set[NodeId],
+    activeBranches: Set[BranchId],
     actor: NodeAddress,
     vectorClock: VectorClock
   ) extends StateEvent

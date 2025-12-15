@@ -142,11 +142,15 @@ final case class TraversalState(
     val evt = TraversalEvent.FailedTraversal(node, actor, vc, at, reason)
     record(evt)
 
-  /** Determine next nodes based on edge guard condition (success/failure). */
+  /** Determine next nodes based on edge guard condition. */
   def nextNodes(guard: EdgeGuard, dag: Dag): List[NodeId] =
     val traversed = guard match
-      case EdgeGuard.OnSuccess => completed
-      case EdgeGuard.OnFailure => failed
+      case EdgeGuard.OnSuccess              => completed
+      case EdgeGuard.OnFailure              => failed
+      case EdgeGuard.Always                 => completed ++ failed ++ current
+      case EdgeGuard.OnAny                  => completed ++ failed
+      case EdgeGuard.OnTimeout              => failed // Timeout is a type of failure
+      case EdgeGuard.Conditional(_)         => completed // Conditionals apply to completed nodes
     dag.edges.collect { case Edge(from, to, g) if traversed.contains(from) && g == guard => to }
 
   /** Automatically start all next nodes reachable from successful nodes. */

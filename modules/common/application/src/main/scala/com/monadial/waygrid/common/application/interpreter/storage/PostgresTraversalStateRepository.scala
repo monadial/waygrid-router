@@ -5,12 +5,10 @@ import cats.implicits.*
 import com.monadial.waygrid.common.application.util.circe.codecs.DomainTraversalStateCodecs.given
 import com.monadial.waygrid.common.domain.algebra.storage.TraversalStateRepository
 import com.monadial.waygrid.common.domain.model.routing.Value.TraversalId
-import com.monadial.waygrid.common.domain.model.traversal.fsm.ConcurrentModification
 import com.monadial.waygrid.common.domain.model.traversal.state.TraversalState
 import com.monadial.waygrid.common.domain.model.traversal.state.Value.StateVersion
 import doobie.*
 import doobie.implicits.*
-import doobie.postgres.implicits.*
 import io.circe.parser.*
 import io.circe.syntax.*
 
@@ -36,7 +34,7 @@ class PostgresTraversalStateRepository[F[_]: Async](
 
     val query = sql"""
       INSERT INTO traversal_states (traversal_id, state, version, created_at, updated_at)
-      VALUES (${state.traversalId.unwrap}, $stateJson::jsonb, ${newVersion.unwrap}, NOW(), NOW())
+      VALUES (${state.traversalId.unwrap.toString}, $stateJson::jsonb, ${newVersion.unwrap}, NOW(), NOW())
       ON CONFLICT (traversal_id) DO UPDATE SET
         state = EXCLUDED.state,
         version = EXCLUDED.version,
@@ -63,7 +61,7 @@ class PostgresTraversalStateRepository[F[_]: Async](
             // State didn't exist before, insert fresh
             val insertQuery = sql"""
               INSERT INTO traversal_states (traversal_id, state, version, created_at, updated_at)
-              VALUES (${state.traversalId.unwrap}, $stateJson::jsonb, ${newVersion.unwrap}, NOW(), NOW())
+              VALUES (${state.traversalId.unwrap.toString}, $stateJson::jsonb, ${newVersion.unwrap}, NOW(), NOW())
             """.update.run
 
             insertQuery.transact(xa).as(state.copy(stateVersion = newVersion))
@@ -73,7 +71,7 @@ class PostgresTraversalStateRepository[F[_]: Async](
   override def load(traversalId: TraversalId): F[Option[TraversalState]] =
     sql"""
       SELECT state FROM traversal_states
-      WHERE traversal_id = ${traversalId.unwrap}
+      WHERE traversal_id = ${traversalId.unwrap.toString}
     """.query[String]
       .option
       .transact(xa)
@@ -86,11 +84,11 @@ class PostgresTraversalStateRepository[F[_]: Async](
       }
 
   override def delete(traversalId: TraversalId): F[Unit] =
-    sql"DELETE FROM traversal_states WHERE traversal_id = ${traversalId.unwrap}"
+    sql"DELETE FROM traversal_states WHERE traversal_id = ${traversalId.unwrap.toString}"
       .update.run.transact(xa).void
 
   override def exists(traversalId: TraversalId): F[Boolean] =
-    sql"SELECT 1 FROM traversal_states WHERE traversal_id = ${traversalId.unwrap}"
+    sql"SELECT 1 FROM traversal_states WHERE traversal_id = ${traversalId.unwrap.toString}"
       .query[Int].option.transact(xa).map(_.isDefined)
 
   override def update(
@@ -119,13 +117,13 @@ class PostgresTraversalStateRepository[F[_]: Async](
     """.query[String]
       .to[List]
       .transact(xa)
-      .map(_.map(TraversalId(_)))
+      .map(_.map(s => TraversalId.fromStringUnsafe[cats.Id](s)))
 
   override def acquireLock(traversalId: TraversalId, ttl: FiniteDuration): F[Boolean] =
     val ttlSeconds = ttl.toSeconds
     sql"""
       INSERT INTO traversal_locks (traversal_id, locked_at, expires_at)
-      VALUES (${traversalId.unwrap}, NOW(), NOW() + INTERVAL '1 second' * $ttlSeconds)
+      VALUES (${traversalId.unwrap.toString}, NOW(), NOW() + INTERVAL '1 second' * $ttlSeconds)
       ON CONFLICT (traversal_id) DO UPDATE SET
         locked_at = EXCLUDED.locked_at,
         expires_at = EXCLUDED.expires_at
@@ -133,7 +131,7 @@ class PostgresTraversalStateRepository[F[_]: Async](
     """.update.run.transact(xa).map(_ > 0)
 
   override def releaseLock(traversalId: TraversalId): F[Unit] =
-    sql"DELETE FROM traversal_locks WHERE traversal_id = ${traversalId.unwrap}"
+    sql"DELETE FROM traversal_locks WHERE traversal_id = ${traversalId.unwrap.toString}"
       .update.run.transact(xa).void
 
   override def extendLock(traversalId: TraversalId, ttl: FiniteDuration): F[Boolean] =
@@ -141,7 +139,7 @@ class PostgresTraversalStateRepository[F[_]: Async](
     sql"""
       UPDATE traversal_locks
       SET expires_at = NOW() + INTERVAL '1 second' * $ttlSeconds
-      WHERE traversal_id = ${traversalId.unwrap}
+      WHERE traversal_id = ${traversalId.unwrap.toString}
         AND expires_at > NOW()
     """.update.run.transact(xa).map(_ > 0)
 

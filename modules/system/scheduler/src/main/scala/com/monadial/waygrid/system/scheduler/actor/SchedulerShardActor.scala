@@ -5,7 +5,6 @@ import cats.effect.{Async, Resource}
 import cats.syntax.all.*
 import com.monadial.waygrid.common.application.algebra.SupervisedRequest.{Start, Stop}
 import com.monadial.waygrid.common.application.algebra.{Logger, SupervisedActor, SupervisedActorRef, SupervisedRequest}
-import com.monadial.waygrid.common.application.syntax.FSMSyntax
 import com.monadial.waygrid.system.scheduler.model.schedule.Value.{ScheduleTime, ScheduleToken}
 import com.suprnation.actor.Actor.ReplyingReceive
 
@@ -19,12 +18,7 @@ type SchedulerShardActor[F[+_]]    = SupervisedActor[F, SchedulerShardActorReque
 type SchedulerShardActorRef[F[+_]] = SupervisedActorRef[F, SchedulerShardActorRequest]
 
 object SchedulerShardActor:
-  
-  def fsm = FSMSyntax
-  
-  
-  
-  
+
   def behavior[F[+_]: {Async, Logger, Parallel}](partition: Int): Resource[F, SchedulerShardActor[F]] =
     Resource
       .pure:
