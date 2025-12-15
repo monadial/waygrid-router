@@ -9,18 +9,16 @@ import com.monadial.waygrid.common.application.syntax.EventRouterSyntax.event
 import com.monadial.waygrid.common.application.syntax.EventSourceSyntax.{EventSubscriber, subscribeToWaystationInboundEvents}
 import com.monadial.waygrid.common.application.util.cats.effect.FiberT
 import com.monadial.waygrid.common.domain.model.envelope.DomainEnvelope
-import com.monadial.waygrid.common.domain.model.envelope.Value.TraversalStamp
+import com.monadial.waygrid.common.domain.model.envelope.Value.TraversalRefStamp
 import com.monadial.waygrid.common.domain.model.traversal.Event.*
-import com.monadial.waygrid.common.domain.model.traversal.dag.Dag
-import com.monadial.waygrid.common.domain.model.traversal.state.TraversalState
+import com.monadial.waygrid.common.domain.model.traversal.dag.Value.DagHash
 import com.suprnation.actor.Actor.ReplyingReceive
 import com.suprnation.actor.ActorSystem
 import org.typelevel.otel4s.trace.SpanContext
 
 sealed trait TraversalListenerRequest
 final case class Handle[E <: TraversalEvent](
-  state: TraversalState,
-  dag: Dag,
+  dagHash: DagHash,
   event: E,
   spanCtx: SpanContext
 ) extends TraversalListenerRequest
@@ -41,7 +39,8 @@ type TraversalListenerActorRef[F[+_]] = SupervisedActorRef[F, TraversalListenerR
 object TraversalListenerActor:
 
   def behavior[F[+_]: {Async, Concurrent, Parallel, Logger, ThisNode,
-    EventSink, EventSource}](actorSystem: ActorSystem[F]): Resource[F, TraversalListenerActor[F]] =
+    EventSink, EventSource, com.monadial.waygrid.common.domain.algebra.storage.TraversalStateRepository,
+    com.monadial.waygrid.common.domain.algebra.storage.DagRepository}](actorSystem: ActorSystem[F]): Resource[F, TraversalListenerActor[F]] =
     for
       traversalExecutorActor <- TraversalExecutorActor
         .behavior[F]
@@ -94,19 +93,18 @@ object TraversalListenerActor:
         spanCtx: SpanContext,
       ): F[Unit] = traversalExecutorActor ! ExecuteTraversal[E](
         handle.event.traversalId,
-        handle.state,
-        handle.dag,
+        handle.dagHash,
         handle.event,
         spanCtx
       )
 
       private def dispatch[E <: TraversalEvent](envelope: DomainEnvelope[E]): F[Unit] =
         for
-          traversalStamp <- envelope
-              .findStamp[TraversalStamp]
-              .pure[F]
-              .map(_.getOrElse(throw new RuntimeException(s"No traversal stamp found in envelope: $envelope")))
-          _ <- self ! Handle(traversalStamp.state, traversalStamp.dag, envelope.message)
+          traversalRef <- envelope
+            .findStamp[TraversalRefStamp]
+            .pure[F]
+            .map(_.getOrElse(throw new RuntimeException(s"No traversal ref stamp found in envelope: $envelope")))
+          _ <- self ! Handle(traversalRef.dagHash, envelope.message, SpanContext.invalid)
         yield ()
 
       private def onActorStop: F[Unit] =

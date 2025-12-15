@@ -1,11 +1,41 @@
 package com.monadial.waygrid.common.application.util.circe.codecs
 
+import cats.data.NonEmptyList
+import com.monadial.waygrid.common.application.instances.DurationInstances.given
+import com.monadial.waygrid.common.application.util.circe.DerivationConfiguration.given
 import com.monadial.waygrid.common.application.util.circe.codecs.DomainRoutingCodecs.given
-import com.monadial.waygrid.common.domain.model.traversal.dag.{Dag, Edge, Node}
-import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{EdgeGuard, NodeId}
-import io.circe.{Codec, Decoder, Encoder}
+import com.monadial.waygrid.common.domain.model.traversal.condition.Condition
+import com.monadial.waygrid.common.domain.model.traversal.dag.{ Dag, Edge, JoinStrategy, Node, NodeType }
+import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ BranchId, EdgeGuard, ForkId, NodeId }
+import io.circe.{ Codec, Decoder, Encoder }
 
 object DomainRoutingDagCodecs:
+
+  // ---------------------------------------------------------------------------
+  // ULID-based value codecs
+  // ---------------------------------------------------------------------------
+
+  given Codec[ForkId] = Codec.from(
+    Decoder[String].map(ForkId.fromStringUnsafe[cats.Id](_)),
+    Encoder[String].contramap(_.unwrap.toString)
+  )
+
+  given Codec[BranchId] = Codec.from(
+    Decoder[String].map(BranchId.fromStringUnsafe[cats.Id](_)),
+    Encoder[String].contramap(_.unwrap.toString)
+  )
+
+  // ---------------------------------------------------------------------------
+  // Enum codecs
+  // ---------------------------------------------------------------------------
+
+  given Codec[Condition] = Codec.derived[Condition]
+  given Codec[JoinStrategy] = Codec.derived[JoinStrategy]
+  given Codec[NodeType] = Codec.derived[NodeType]
+
+  // ---------------------------------------------------------------------------
+  // DAG node and structure codecs
+  // ---------------------------------------------------------------------------
 
   given Codec[Node] = Codec.derived[Node]
 
@@ -24,4 +54,8 @@ object DomainRoutingDagCodecs:
 
   given Codec[EdgeGuard] = Codec.derived[EdgeGuard]
   given Codec[Edge] = Codec.derived[Edge]
-  given Codec[Dag]  = Codec.derived[Dag]
+
+  given [A: Decoder]: Decoder[NonEmptyList[A]] = Decoder.decodeNonEmptyList[A]
+  given [A: Encoder]: Encoder[NonEmptyList[A]] = Encoder.encodeNonEmptyList[A]
+
+  given Codec[Dag] = Codec.derived[Dag]

@@ -73,7 +73,7 @@ class RedisTraversalStateRepository[F[_]: Async](
     redis.del(stateKey(traversalId), versionKey(traversalId)).void
 
   override def exists(traversalId: TraversalId): F[Boolean] =
-    redis.exists(stateKey(traversalId)).map(_ > 0)
+    redis.exists(stateKey(traversalId))
 
   override def update(
     traversalId: TraversalId,
@@ -101,7 +101,7 @@ class RedisTraversalStateRepository[F[_]: Async](
       keys
         .filterNot(_.endsWith(":version"))
         .map(_.stripPrefix(keyPrefix))
-        .map(TraversalId(_))
+        .map(s => TraversalId.fromStringUnsafe[cats.Id](s))
         .slice(offset, offset + limit)
         .toList
     }

@@ -30,6 +30,8 @@ import java.time.Instant
  * @param forkScopes Active fork scopes (created on Fork, removed on Join)
  * @param branchStates State of each branch within active forks
  * @param pendingJoins Join nodes waiting for branches to complete
+ * @param nodeToBranch Reverse index for O(1) lookup of which branch a node belongs to
+ * @param traversalTimeoutId Optional ID of a scheduled traversal-level timeout (for cancellation)
  * @param stateVersion Version for optimistic locking in storage
  */
 final case class TraversalState(
@@ -44,6 +46,8 @@ final case class TraversalState(
   forkScopes: Map[ForkId, ForkScope] = Map.empty,
   branchStates: Map[BranchId, BranchState] = Map.empty,
   pendingJoins: Map[NodeId, PendingJoin] = Map.empty,
+  nodeToBranch: Map[NodeId, BranchId] = Map.empty,
+  traversalTimeoutId: Option[String] = None,
   stateVersion: StateVersion = StateVersion.Initial
 ):
 
@@ -233,6 +237,8 @@ final case class TraversalState(
 
   /**
    * Start a fork by creating a new ForkScope and initializing branches.
+   *
+   * @param now Current timestamp for recording fork start time (passed explicitly for purity)
    */
   def startFork(
     forkNode: NodeId,
@@ -241,7 +247,8 @@ final case class TraversalState(
     parentScope: Option[ForkId],
     timeout: Option[Instant],
     actor: NodeAddress,
-    foreignVectorClock: Option[VectorClock]
+    foreignVectorClock: Option[VectorClock],
+    now: Instant
   ): TraversalState =
     val vc = advanceClock(actor, foreignVectorClock)
     val branches = branchEntries.keySet
@@ -252,7 +259,7 @@ final case class TraversalState(
       forkNodeId = forkNode,
       branches = branches,
       parentScope = parentScope,
-      startedAt = Instant.now(),
+      startedAt = now,
       timeout = timeout
     )
 
@@ -261,14 +268,13 @@ final case class TraversalState(
     }
 
     copy(
-      active = active - forkNode + forkNode, // Keep fork node as active until branches start
-      completed = completed + forkNode,      // Fork node itself is "completed" once branches start
       forkScopes = forkScopes + (forkId -> scope),
       branchStates = branchStates ++ initialBranchStates
     ).record(event)
 
   /**
    * Start a branch within a fork.
+   * Updates nodeToBranch index for O(1) lookup.
    */
   def startBranch(
     node: NodeId,
@@ -284,11 +290,40 @@ final case class TraversalState(
 
     copy(
       active = active + node,
-      branchStates = updatedBranch.fold(branchStates)(b => branchStates.updated(branchId, b))
+      branchStates = updatedBranch.fold(branchStates)(b => branchStates.updated(branchId, b)),
+      nodeToBranch = nodeToBranch + (node -> branchId)
+    ).record(event)
+
+  /**
+   * Advance a running branch to its next node.
+   * Updates the branch's current node, marks that node as active,
+   * and maintains the nodeToBranch index.
+   */
+  def advanceBranch(
+    node: NodeId,
+    branchId: BranchId,
+    forkId: ForkId,
+    actor: NodeAddress,
+    foreignVectorClock: Option[VectorClock]
+  ): TraversalState =
+    val vc = advanceClock(actor, foreignVectorClock)
+    val event = Event.BranchAdvanced(node, branchId, forkId, actor, vc)
+
+    val oldNode = branchStates.get(branchId).flatMap(_.currentNode)
+    val updatedBranch = branchStates.get(branchId).map(_.advanceTo(node))
+
+    // Update index: remove old node mapping (if exists), add new node mapping
+    val updatedIndex = oldNode.fold(nodeToBranch)(old => nodeToBranch - old) + (node -> branchId)
+
+    copy(
+      active = active + node,
+      branchStates = updatedBranch.fold(branchStates)(b => branchStates.updated(branchId, b)),
+      nodeToBranch = updatedIndex
     ).record(event)
 
   /**
    * Complete a branch successfully.
+   * Removes the node from nodeToBranch index.
    */
   def completeBranch(
     node: NodeId,
@@ -309,11 +344,13 @@ final case class TraversalState(
     copy(
       active = active - node,
       branchStates = updatedBranch.fold(branchStates)(b => branchStates.updated(branchId, b)),
-      pendingJoins = updatedPendingJoins
+      pendingJoins = updatedPendingJoins,
+      nodeToBranch = nodeToBranch - node
     ).record(event)
 
   /**
    * Fail a branch.
+   * Removes the node from nodeToBranch index.
    */
   def failBranch(
     node: NodeId,
@@ -335,11 +372,13 @@ final case class TraversalState(
     copy(
       active = active - node,
       branchStates = updatedBranch.fold(branchStates)(b => branchStates.updated(branchId, b)),
-      pendingJoins = updatedPendingJoins
+      pendingJoins = updatedPendingJoins,
+      nodeToBranch = nodeToBranch - node
     ).record(event)
 
   /**
    * Cancel a branch (e.g., when OR join completes).
+   * Removes the node from nodeToBranch index.
    */
   def cancelBranch(
     node: NodeId,
@@ -361,11 +400,14 @@ final case class TraversalState(
     copy(
       active = active - node,
       branchStates = updatedBranch.fold(branchStates)(b => branchStates.updated(branchId, b)),
-      pendingJoins = updatedPendingJoins
+      pendingJoins = updatedPendingJoins,
+      nodeToBranch = nodeToBranch - node
     ).record(event)
 
   /**
    * Mark a branch as timed out.
+   * Removes the node from nodeToBranch index and notifies pending joins
+   * that this branch has failed (timeout is treated as failure for join purposes).
    */
   def timeoutBranch(
     node: NodeId,
@@ -379,9 +421,17 @@ final case class TraversalState(
 
     val updatedBranch = branchStates.get(branchId).map(_.timeout)
 
+    // Notify pending joins that this branch has failed (timeout = failure for join logic)
+    val updatedPendingJoins = pendingJoins.map { case (joinNode, pj) =>
+      if pj.forkId == forkId then joinNode -> pj.branchFailed(branchId)
+      else joinNode -> pj
+    }
+
     copy(
       active = active - node,
-      branchStates = updatedBranch.fold(branchStates)(b => branchStates.updated(branchId, b))
+      branchStates = updatedBranch.fold(branchStates)(b => branchStates.updated(branchId, b)),
+      pendingJoins = updatedPendingJoins,
+      nodeToBranch = nodeToBranch - node
     ).record(event)
 
   /**
@@ -404,6 +454,7 @@ final case class TraversalState(
 
   /**
    * Complete a join when its condition is satisfied.
+   * Cleans up fork scope, branch states, and nodeToBranch index.
    */
   def completeJoin(
     joinNode: NodeId,
@@ -418,12 +469,15 @@ final case class TraversalState(
     // Clean up fork scope and branch states
     val branchesToRemove = forkScopes.get(forkId).map(_.branches).getOrElse(Set.empty)
 
+    // Clean up nodeToBranch index - remove all entries pointing to branches being removed
+    val nodesToRemove = nodeToBranch.filter { case (_, branchId) => branchesToRemove.contains(branchId) }.keySet
+
     copy(
-      active = active + joinNode,
       completed = completed + joinNode,
       forkScopes = forkScopes - forkId,
       branchStates = branchStates -- branchesToRemove,
-      pendingJoins = pendingJoins - joinNode
+      pendingJoins = pendingJoins - joinNode,
+      nodeToBranch = nodeToBranch -- nodesToRemove
     ).record(event)
 
   /**
@@ -442,6 +496,56 @@ final case class TraversalState(
     copy(
       failed = failed + joinNode,
       pendingJoins = pendingJoins - joinNode
+    ).record(event)
+
+  // ---------------------------------------------------------------------------
+  // Traversal-Level Timeout
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Schedule a traversal-level timeout.
+   * Records the timeout ID for later cancellation and logs the scheduling event.
+   *
+   * @param entryNode The entry node ID (used for event logging)
+   * @param timeoutId Unique identifier for this timeout (for cancellation)
+   * @param deadline When the timeout should fire
+   */
+  def scheduleTraversalTimeout(
+    entryNode: NodeId,
+    timeoutId: String,
+    deadline: Instant,
+    actor: NodeAddress,
+    foreignVectorClock: Option[VectorClock]
+  ): TraversalState =
+    val vc = advanceClock(actor, foreignVectorClock)
+    val event = TraversalTimeoutScheduled(entryNode, timeoutId, deadline, actor, vc)
+    copy(traversalTimeoutId = Some(timeoutId)).record(event)
+
+  /**
+   * Clear a previously scheduled traversal timeout.
+   * Called when traversal completes before timeout fires.
+   */
+  def clearTraversalTimeout: TraversalState =
+    copy(traversalTimeoutId = None)
+
+  /**
+   * Handle a traversal-level timeout.
+   * Cancels all active work and fails the traversal.
+   *
+   * @param fallbackNode Node to use in event if no active nodes (typically entry node)
+   */
+  def timeoutTraversal(
+    fallbackNode: NodeId,
+    actor: NodeAddress,
+    foreignVectorClock: Option[VectorClock]
+  ): TraversalState =
+    val vc = advanceClock(actor, foreignVectorClock)
+    val node = active.headOption.getOrElse(fallbackNode)
+    val activeBranches = branchStates.values.filter(_.isActive).map(_.branchId).toSet
+    val event = TraversalTimedOut(node, active, activeBranches, actor, vc)
+    copy(
+      active = Set.empty,
+      traversalTimeoutId = None
     ).record(event)
 
   // ---------------------------------------------------------------------------
@@ -492,11 +596,15 @@ final case class TraversalState(
   // DAG Navigation
   // ---------------------------------------------------------------------------
 
-  /** Determine next nodes based on edge guard condition (success/failure). */
+  /** Determine next nodes based on edge guard condition. */
   def nextNodes(guard: EdgeGuard, dag: Dag): List[NodeId] =
     val traversed = guard match
-      case EdgeGuard.OnSuccess => completed
-      case EdgeGuard.OnFailure => failed
+      case EdgeGuard.OnSuccess              => completed
+      case EdgeGuard.OnFailure              => failed
+      case EdgeGuard.Always                 => completed ++ failed ++ active
+      case EdgeGuard.OnAny                  => completed ++ failed
+      case EdgeGuard.OnTimeout              => failed // Timeout is a type of failure
+      case EdgeGuard.Conditional(_)         => completed // Conditionals apply to completed nodes
     dag.edges.collect {
       case edge if traversed.contains(edge.from) && edge.guard == guard => edge.to
     }
@@ -548,9 +656,12 @@ object TraversalState:
         case Some(id) => 1 + depth(state.forkScopes.get(id).flatMap(_.parentScope))
       state.forkScopes.values.map(s => depth(Some(s.forkId))).maxOption.getOrElse(0)
 
-    /** Get branch for a node if it's within a fork */
+    /**
+     * Get branch for a node if it's within a fork.
+     * Uses the nodeToBranch reverse index for O(1) lookup.
+     */
     def branchForNode(nodeId: NodeId): Option[BranchState] =
-      state.branchStates.values.find(_.currentNode.contains(nodeId))
+      state.nodeToBranch.get(nodeId).flatMap(state.branchStates.get)
 
     /** Check if a join is ready to complete */
     def isJoinReady(joinNodeId: NodeId): Boolean =

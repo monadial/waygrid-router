@@ -3,6 +3,7 @@ package com.monadial.waygrid.common.domain.model.traversal.fsm
 import com.monadial.waygrid.common.domain.model.routing.Value.TraversalId
 import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ BranchId, ForkId, NodeId }
 import com.monadial.waygrid.common.domain.model.traversal.state.BranchResult
+import io.circe.Json
 
 /**
  * Signals that drive the TraversalFSM state machine.
@@ -22,7 +23,8 @@ object TraversalSignal:
    * This is the initial signal to start processing.
    */
   final case class Begin(
-    traversalId: TraversalId
+    traversalId: TraversalId,
+    entryNodeId: Option[NodeId] = None
   ) extends TraversalSignal
 
   /**
@@ -65,7 +67,8 @@ object TraversalSignal:
    */
   final case class NodeSuccess(
     traversalId: TraversalId,
-    nodeId: NodeId
+    nodeId: NodeId,
+    output: Option[Json] = None
   ) extends TraversalSignal
 
   /**
@@ -148,4 +151,20 @@ object TraversalSignal:
     forkId: ForkId,
     branchIds: Set[BranchId],
     reason: String
+  ) extends TraversalSignal
+
+  // ---------------------------------------------------------------------------
+  // Traversal-Level Signals
+  // ---------------------------------------------------------------------------
+
+  /**
+   * The entire traversal has timed out.
+   * Sent by the scheduler when the traversal's deadline has passed.
+   * The FSM should cancel all active work and fail the traversal.
+   *
+   * This is distinct from node-level Timeout which handles individual
+   * node/join timeouts. TraversalTimeout is a global safety net.
+   */
+  final case class TraversalTimeout(
+    traversalId: TraversalId
   ) extends TraversalSignal

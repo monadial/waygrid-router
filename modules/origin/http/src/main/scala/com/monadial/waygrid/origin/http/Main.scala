@@ -8,8 +8,10 @@ import com.monadial.waygrid.common.application.actor.HttpServerActor
 import com.monadial.waygrid.common.application.actor.HttpServerActorCommand.RegisterRoute
 import com.monadial.waygrid.common.application.algebra.*
 import com.monadial.waygrid.common.application.algebra.SupervisedRequest.Start
+import com.monadial.waygrid.common.application.interpreter.storage.InMemoryDagRepository
 import com.monadial.waygrid.common.application.program.WaygridApp
 import com.monadial.waygrid.common.domain.algebra.DagCompiler
+import com.monadial.waygrid.common.domain.algebra.storage.DagRepository
 import com.monadial.waygrid.common.domain.model.node.Value.{ NodeDescriptor, NodeService }
 import com.monadial.waygrid.origin.http.http.resource.v1.IngestResource
 import com.monadial.waygrid.origin.http.settings.HttpSettings
@@ -36,6 +38,8 @@ object Main extends WaygridApp[HttpSettings](NodeDescriptor.Origin(NodeService("
     settings: HttpSettings,
   ): Resource[F, Unit] =
     for
+      dagRepo <- Resource.eval(InMemoryDagRepository.make[F])
+      given DagRepository[F] = dagRepo
       httpServer <- HttpServerActor
         .behavior(settings.httpServer)
         .evalMap(actorSystem.actorOf(_, "http-server"))

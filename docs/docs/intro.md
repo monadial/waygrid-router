@@ -2,46 +2,109 @@
 sidebar_position: 1
 ---
 
-# Tutorial Intro
+# Introduction to Waygrid Router
 
-Let's discover **Docusaurus in less than 5 minutes**.
+Waygrid Router is an event-driven graph routing system that enables sophisticated workflow orchestration through DAG (Directed Acyclic Graph) traversal. Built with Scala 3, it provides a robust foundation for routing events through complex processing pipelines.
 
-## Getting Started
+## Key Features
 
-Get started by **creating a new site**.
+- **DAG-based Routing**: Define complex workflows as directed acyclic graphs
+- **Fork/Join Parallelism**: Execute branches in parallel with flexible synchronization strategies
+- **Event Sourcing**: Full state history with vector clocks for distributed systems
+- **Resilient Execution**: Built-in retry policies with exponential backoff
+- **Pure Functional**: Deterministic FSM for testing and replay capabilities
 
-Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
+## Architecture Overview
 
-### What you'll need
-
-- [Node.js](https://nodejs.org/en/download/) version 18.0 or above:
-  - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
-
-## Generate a new site
-
-Generate a new Docusaurus site using the **classic template**.
-
-The classic template will automatically be added to your project after you run the command:
-
-```bash
-npm init docusaurus@latest my-website classic
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        Waygrid Router                          │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  ┌─────────┐    ┌──────────────┐    ┌─────────────────────┐    │
+│  │ Origins │───►│   Scheduler  │───►│     Waystations     │    │
+│  └─────────┘    └──────────────┘    └─────────────────────┘    │
+│       │                                        │                │
+│       ▼                                        ▼                │
+│  ┌─────────┐                           ┌─────────────┐         │
+│  │  HTTP   │                           │  TraversalFSM │        │
+│  │  gRPC   │                           │  (Pure Logic) │        │
+│  │  Kafka  │                           └─────────────┘         │
+│  └─────────┘                                   │                │
+│                                                ▼                │
+│                                         ┌───────────────┐      │
+│                                         │  Destinations │      │
+│                                         │  (Webhook,WS) │      │
+│                                         └───────────────┘      │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
-You can type this command into Command Prompt, Powershell, Terminal, or any other integrated terminal of your code editor.
+## Quick Start
 
-The command also installs all necessary dependencies you need to run Docusaurus.
+### Understanding the Traversal System
 
-## Start your site
+The traversal system is the core of Waygrid Router. It processes events through a DAG of nodes, where each node represents a processing step:
 
-Run the development server:
+1. **DAG Definition**: Create a graph defining your workflow
+2. **Traversal Execution**: The FSM processes signals and produces effects
+3. **State Management**: Track progress with event sourcing
 
-```bash
-cd my-website
-npm run start
+### Example: Simple Linear Workflow
+
+```json
+{
+  "hash": "simple-workflow-v1",
+  "entryPoints": ["validate"],
+  "repeatPolicy": { "type": "NoRepeat" },
+  "nodes": {
+    "validate": {
+      "id": "validate",
+      "label": "Validate Input",
+      "retryPolicy": { "type": "Linear", "delay": "1s", "maxRetries": 3 },
+      "deliveryStrategy": { "type": "Immediate" },
+      "address": "waygrid://processor/validator"
+    },
+    "process": {
+      "id": "process",
+      "label": "Process Data",
+      "retryPolicy": { "type": "NoRetry" },
+      "deliveryStrategy": { "type": "Immediate" },
+      "address": "waygrid://processor/transformer"
+    },
+    "notify": {
+      "id": "notify",
+      "label": "Send Notification",
+      "retryPolicy": { "type": "Exponential", "baseDelay": "1s", "maxRetries": 5 },
+      "deliveryStrategy": { "type": "Immediate" },
+      "address": "waygrid://destination/webhook"
+    }
+  },
+  "edges": [
+    { "from": "validate", "to": "process", "guard": "OnSuccess" },
+    { "from": "process", "to": "notify", "guard": "OnSuccess" }
+  ]
+}
 ```
 
-The `cd` command changes the directory you're working with. In order to work with your newly created Docusaurus site, you'll need to navigate the terminal there.
+This workflow:
+1. Validates input with 3 linear retries
+2. On success, processes the data
+3. Finally sends a notification with exponential backoff
 
-The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at http://localhost:3000/.
+## Core Concepts
 
-Open `docs/intro.md` (this page) and edit some lines: the site **reloads automatically** and displays your changes.
+| Concept | Description |
+|---------|-------------|
+| **DAG** | Directed Acyclic Graph defining the workflow |
+| **Node** | A processing step with retry and delivery policies |
+| **Edge** | Connection between nodes with conditional guards |
+| **Signal** | External events driving the FSM |
+| **Effect** | Actions produced by the FSM for execution |
+| **TraversalState** | Immutable state tracking execution progress |
+
+## What's Next?
+
+- [**Traversal System Overview**](/docs/traversal/overview) - Deep dive into the traversal architecture
+- [**DAG Model**](/docs/traversal/dag-model) - Understanding the DAG structure
+- [**Fork/Join Parallelism**](/docs/traversal/node-types) - Parallel execution patterns
+- [**Examples**](/docs/traversal/examples) - Real-world usage patterns

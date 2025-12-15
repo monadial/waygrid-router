@@ -23,7 +23,7 @@ import fs2.kafka.*
 import io.circe.Json
 import org.typelevel.otel4s.context.propagation.TextMapGetter
 import org.typelevel.otel4s.metrics.{Counter, Histogram, Meter, UpDownCounter}
-import org.typelevel.otel4s.trace.{SpanContext, Tracer}
+import org.typelevel.otel4s.trace.Tracer
 import scodec.bits.ByteVector
 
 import java.nio.charset.Charset
@@ -189,8 +189,8 @@ object KafkaEventSource:
                     metrics.messagesReceived.inc() *>
                       metrics.inFlightMessages.add(1) *>
                       Tracer[F].joinOrRoot(record.record.headers):
-                          Tracer[F].span("[kafka-event-source] Processing event").use: span =>
-                              processRecord(record, codec, metrics, handler, messageStart, span.context)
+                          Tracer[F].span("[kafka-event-source] Processing event").use: _ =>
+                              processRecord(record, codec, metrics, handler, messageStart)
                         .guarantee(metrics.inFlightMessages.add(-1))
               .parJoin(settings.batch.maxParallelBatchConcurrency)
               .through(commitBatchWithin[F](settings.batch.maxEvents, settings.batch.maxDuration))
@@ -212,7 +212,6 @@ object KafkaEventSource:
         metrics: KafkaEventSourceMetrics[F],
         handler: Handler,
         messageStart: Long,
-        spanCtx: SpanContext,
       ): F[CommittableOffset[F]] =
             for
               decodeStart    <- Clock[F].monotonic

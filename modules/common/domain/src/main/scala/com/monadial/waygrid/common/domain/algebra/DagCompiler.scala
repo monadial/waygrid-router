@@ -5,9 +5,10 @@ import cats.implicits.*
 import com.monadial.waygrid.common.domain.interpreter.cryptography.HasherInterpreter
 import com.monadial.waygrid.common.domain.model.cryptography.hashing.Value.LongHash
 import com.monadial.waygrid.common.domain.model.routing.Value.RouteSalt
-import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ DagHash, EdgeGuard, NodeId }
-import com.monadial.waygrid.common.domain.model.traversal.dag.{Dag, Edge as DagEdge, Node as DagNode}
-import com.monadial.waygrid.common.domain.model.traversal.spec.{Spec, Node as SpecNode}
+import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ DagHash, EdgeGuard, ForkId, NodeId }
+import com.monadial.waygrid.common.domain.model.traversal.dag.{ Dag, Edge as DagEdge, Node as DagNode, NodeType }
+import com.monadial.waygrid.common.domain.model.traversal.spec.{ Node as SpecNode, Spec }
+import cats.data.NonEmptyList
 
 import scala.collection.mutable
 
@@ -19,6 +20,12 @@ type DagHex = String
 /**
  * DAG compiler that transforms a high-level routing spec into a unique,
  * address-aware DAG with stable node IDs and deterministic hashing.
+ *
+ * Supports:
+ * - Linear nodes with success/failure edges
+ * - Fork nodes for parallel branch execution
+ * - Join nodes for branch synchronization
+ * - Multiple entry points for multi-origin routing
  *
  * @tparam F Effect type (e.g., IO, Sync)
  */
@@ -75,15 +82,26 @@ object DagCompiler:
             (a + b).take(idLen)
 
       /**
+       * Generate a deterministic ForkId from a joinNodeId string.
+       * Uses hashing to produce a stable ULID-like identifier.
+       */
+      private def forkIdFromJoinNodeId(joinNodeId: String, salt: LongHash): F[ForkId] =
+        for
+          hash <- hasher.hashChars(joinNodeId + salt.unwrap.toString)
+          hex  <- toHex(26, hash.unwrap) // ULID is 26 characters
+        yield ForkId.fromStringUnsafe[cats.Id](hex.toUpperCase)
+
+      /**
        * Converts a SpecNode into a DagNode with a known ID and metadata.
        */
-      private def toDagNode(id: NodeId, node: SpecNode): DagNode =
+      private def toDagNode(id: NodeId, node: SpecNode, nodeType: NodeType): DagNode =
         DagNode(
           id = id,
           label = node.label,
           retryPolicy = node.retryPolicy,
           deliveryStrategy = node.deliveryStrategy,
-          address = node.address
+          address = node.address,
+          nodeType = nodeType
         )
 
       /**
@@ -106,12 +124,15 @@ object DagCompiler:
 
       // --- Internal Types for Traversal ---
 
-      private final case class Frame(n: SpecNode, bits: Long, depth: Int)      // DFS stack frame
-      private final case class EdgeL(from: DagId, to: DagId, guard: EdgeGuard) // Internal edge
+      private final case class Frame(n: SpecNode, bits: Long, depth: Int)       // DFS stack frame
+      private final case class EdgeL(from: DagId, to: DagId, guard: EdgeGuard)  // Internal edge
+      private final case class NodeInfo(node: DagNode, rawId: DagId)            // Node with its raw ID
+
       private final case class CompilerState(
-        nodes: mutable.LongMap[DagNode],   // Collected nodes (deduplicated)
-        edges: mutable.ArrayBuffer[EdgeL], // Collected edges
-        stack: mutable.ArrayDeque[Frame]   // DFS traversal stack
+        nodes: mutable.LongMap[NodeInfo],      // Collected nodes (deduplicated)
+        edges: mutable.ArrayBuffer[EdgeL],     // Collected edges
+        stack: mutable.ArrayDeque[Frame],      // DFS traversal stack
+        forkIdMap: mutable.Map[String, ForkId] // joinNodeId -> ForkId mapping
       )
 
       /**
@@ -122,8 +143,33 @@ object DagCompiler:
         val state = CompilerState(
           nodes = mutable.LongMap.empty,
           edges = mutable.ArrayBuffer.empty,
-          stack = mutable.ArrayDeque.empty
+          stack = mutable.ArrayDeque.empty,
+          forkIdMap = mutable.Map.empty
         )
+
+        /**
+         * Get or create a ForkId for the given joinNodeId.
+         * Ensures Fork and Join nodes with the same joinNodeId get the same ForkId.
+         */
+        def getForkId(joinNodeId: String): F[ForkId] =
+          state.forkIdMap.get(joinNodeId) match
+            case Some(fid) => fid.pure[F]
+            case None =>
+              for
+                fid <- forkIdFromJoinNodeId(joinNodeId, saltH)
+                _   <- Sync[F].delay(state.forkIdMap.update(joinNodeId, fid))
+              yield fid
+
+        /**
+         * Determines the NodeType for a SpecNode.
+         */
+        def nodeTypeFor(n: SpecNode): F[NodeType] =
+          n match
+            case _: SpecNode.Standard => NodeType.Standard.pure[F]
+            case f: SpecNode.Fork =>
+              getForkId(f.joinNodeId).map(NodeType.Fork(_))
+            case j: SpecNode.Join =>
+              getForkId(j.joinNodeId).map(fid => NodeType.Join(fid, j.strategy, j.timeout))
 
         /**
          * Ensures a node is registered in the internal state.
@@ -134,27 +180,109 @@ object DagCompiler:
             fail(s"Max recursion depth ($MaxDepth) exceeded at node '${n.address.show}'")
           else
             for
-              id    <- nodeIdF(saltH, n, bits, depth)
-              hexId <- toHex(HashLen, id)
-              dagNode = toDagNode(NodeId(hexId), n)
+              id       <- nodeIdF(saltH, n, bits, depth)
+              hexId    <- toHex(HashLen, id)
+              nodeType <- nodeTypeFor(n)
+              dagNode   = toDagNode(NodeId(hexId), n, nodeType)
               _ <- Sync[F].defer:
                   state.nodes.get(id) match
-                    case Some(existing) if existing.address != n.address =>
+                    case Some(existing) if existing.node.address != n.address =>
                       fail(
                         "Hash collision detected between nodes " +
-                          s"'${existing.id.show}' and '${dagNode.id.show}' with differing addresses: " +
-                          s"'${existing.address.show}' vs '${dagNode.address.show}'"
+                          s"'${existing.node.id.show}' and '${dagNode.id.show}' with differing addresses: " +
+                          s"'${existing.node.address.show}' vs '${dagNode.address.show}'"
                       )
                     case Some(_) =>
                       Sync[F].unit // already present
                     case None =>
-                      state.nodes.update(id, dagNode)
+                      state.nodes.update(id, NodeInfo(dagNode, id))
                       Sync[F].unit
             yield id
 
         /**
+         * Process children of a node based on its type.
+         */
+        def processChildren(me: DagId, bits: Long, depth: Int, n: SpecNode): F[Unit] =
+          n match
+            case std: SpecNode.Standard =>
+              // Standard node: traverse onSuccess, onFailure, and conditional edges
+              for
+                // Traverse onFailure branch (left)
+                _ <- std.onFailure.traverse { f =>
+                  val b = bits << 1
+                  for
+                    cid <- ensureNode(b, depth + 1, f)
+                    _   <- Sync[F].delay(state.edges += EdgeL(me, cid, EdgeGuard.OnFailure))
+                    _   <- Sync[F].delay(state.stack.prepend(Frame(f, b, depth + 1)))
+                  yield ()
+                }
+                // Traverse onSuccess branch (right)
+                _ <- std.onSuccess.traverse { s =>
+                  val b = (bits << 1) | 1L
+                  for
+                    cid <- ensureNode(b, depth + 1, s)
+                    _   <- Sync[F].delay(state.edges += EdgeL(me, cid, EdgeGuard.OnSuccess))
+                    _   <- Sync[F].delay(state.stack.prepend(Frame(s, b, depth + 1)))
+                  yield ()
+                }
+                // Traverse conditional branches (stable per index)
+                _ <- std.onConditions.zipWithIndex.traverse_ { case (c, idx) =>
+                  val b = (bits << 8) | (64L + idx.toLong)
+                  for
+                    cid <- ensureNode(b, depth + 1, c.to)
+                    _   <- Sync[F].delay(state.edges += EdgeL(me, cid, EdgeGuard.Conditional(c.condition)))
+                    _   <- Sync[F].delay(state.stack.prepend(Frame(c.to, b, depth + 1)))
+                  yield ()
+                }
+              yield ()
+
+            case fork: SpecNode.Fork =>
+              // Fork node: create edges to all branches
+              fork.branches.toList.sortBy(_._1).zipWithIndex.traverse_ { case ((branchName, branchNode), idx) =>
+                val branchBits = (bits << 8) | idx.toLong // Support up to 256 branches
+                for
+                  cid <- ensureNode(branchBits, depth + 1, branchNode)
+                  // Fork branches use OnSuccess guard - they all execute on fork completion
+                  _   <- Sync[F].delay(state.edges += EdgeL(me, cid, EdgeGuard.OnSuccess))
+                  _   <- Sync[F].delay(state.stack.prepend(Frame(branchNode, branchBits, depth + 1)))
+                yield ()
+              }
+
+            case join: SpecNode.Join =>
+              // Join node: traverse onSuccess, onFailure, and onTimeout
+              for
+                // Traverse onSuccess branch
+                _ <- join.onSuccess.traverse { s =>
+                  val b = (bits << 1) | 1L
+                  for
+                    cid <- ensureNode(b, depth + 1, s)
+                    _   <- Sync[F].delay(state.edges += EdgeL(me, cid, EdgeGuard.OnSuccess))
+                    _   <- Sync[F].delay(state.stack.prepend(Frame(s, b, depth + 1)))
+                  yield ()
+                }
+                // Traverse onFailure branch
+                _ <- join.onFailure.traverse { f =>
+                  val b = bits << 1
+                  for
+                    cid <- ensureNode(b, depth + 1, f)
+                    _   <- Sync[F].delay(state.edges += EdgeL(me, cid, EdgeGuard.OnFailure))
+                    _   <- Sync[F].delay(state.stack.prepend(Frame(f, b, depth + 1)))
+                  yield ()
+                }
+                // Traverse onTimeout branch
+                _ <- join.onTimeout.traverse { t =>
+                  val b = (bits << 2) | 2L
+                  for
+                    cid <- ensureNode(b, depth + 1, t)
+                    _   <- Sync[F].delay(state.edges += EdgeL(me, cid, EdgeGuard.OnTimeout))
+                    _   <- Sync[F].delay(state.stack.prepend(Frame(t, b, depth + 1)))
+                  yield ()
+                }
+              yield ()
+
+        /**
          * Depth-first traversal using a mutable stack.
-         * Visits each node and pushes children (onFailure / onSuccess) recursively.
+         * Visits each node and pushes children recursively.
          */
         def loop: F[Unit] =
           Sync[F].tailRecM(()): _ =>
@@ -163,37 +291,26 @@ object DagCompiler:
                 val Frame(n, bits, depth) = state.stack.removeHead()
                 for
                   me <- ensureNode(bits, depth, n)
-
-                  // Traverse onFailure branch (left)
-                  _ <- n.onFailure.traverse { f =>
-                    val b = bits << 1
-                    for
-                      cid <- ensureNode(b, depth + 1, f)
-                      _   <- Sync[F].delay(state.edges += EdgeL(me, cid, EdgeGuard.OnFailure))
-                      _   <- Sync[F].delay(state.stack.prepend(Frame(f, b, depth + 1)))
-                    yield ()
-                  }
-
-                  // Traverse onSuccess branch (right)
-                  _ <- n.onSuccess.traverse { s =>
-                    val b = (bits << 1) | 1L
-                    for
-                      cid <- ensureNode(b, depth + 1, s)
-                      _   <- Sync[F].delay(state.edges += EdgeL(me, cid, EdgeGuard.OnSuccess))
-                      _   <- Sync[F].delay(state.stack.prepend(Frame(s, b, depth + 1)))
-                    yield ()
-                  }
+                  _  <- processChildren(me, bits, depth, n)
                 yield Left(())
 
+        // Process all entry points
         for
-          // Initialize stack with entry point
-          _          <- Sync[F].delay(state.stack.prepend(Frame(spec.entryPoint, 1L, 0)))
-          entryRawId <- ensureNode(1L, 0, spec.entryPoint)
-          _          <- loop
+          // Initialize stack with all entry points
+          entryRawIds <- spec.entryPoints.toList.zipWithIndex.traverse { case (entryNode, idx) =>
+            val entryBits = 1L | (idx.toLong << 56) // High bits for entry point index
+            for
+              _   <- Sync[F].delay(state.stack.prepend(Frame(entryNode, entryBits, 0)))
+              eid <- ensureNode(entryBits, 0, entryNode)
+            yield eid
+          }
+
+          // Run the DFS loop
+          _ <- loop
 
           // Convert numeric IDs → external NodeId
-          idPairs <- state.nodes.iterator.map { case (k, node) =>
-            toHex(HashLen, k).map(hex => (k, NodeId(hex), node))
+          idPairs <- state.nodes.iterator.map { case (k, info) =>
+            toHex(HashLen, k).map(hex => (k, NodeId(hex), info.node))
           }.toList.sequence
 
           // Rebuild final ID ↔ Node maps
@@ -217,13 +334,13 @@ object DagCompiler:
                 DagEdge(idMap(e.from), idMap(e.to), e.guard)
               ).toList
 
-          // Resolve entry point NodeId
-          entryId <- Sync[F].fromOption(
-            idMap.get(entryRawId),
-            RouteCompilerError(s"Entry point NodeId mapping failed for ID $entryRawId")
+          // Resolve first entry point NodeId (primary entry)
+          entryPointsNel <- Sync[F].fromOption(
+            NonEmptyList.fromList(entryRawIds.flatMap(idMap.get)),
+            RouteCompilerError("Entry point NodeId mapping failed")
           )
         yield Dag(
-          entry = entryId,
+          entryPoints = entryPointsNel,
           hash = dagHash,
           repeatPolicy = spec.repeatPolicy,
           nodes = nodesM.result().toMap,

@@ -8,7 +8,8 @@ import com.monadial.waygrid.common.application.syntax.EventSyntax.packIntoWaysta
 import com.monadial.waygrid.common.application.util.circe.codecs.DomainRoutingSpecCodecs.given
 import com.monadial.waygrid.common.domain.algebra.DagCompiler
 import com.monadial.waygrid.common.domain.algebra.messaging.message.Value.MessageId
-import com.monadial.waygrid.common.domain.model.envelope.Value.TraversalStamp
+import com.monadial.waygrid.common.domain.algebra.storage.DagRepository
+import com.monadial.waygrid.common.domain.model.envelope.Value.TraversalRefStamp
 import com.monadial.waygrid.common.domain.model.routing.Value.{RouteSalt, TraversalId}
 import com.monadial.waygrid.common.domain.model.traversal.Event.TraversalRequested
 import com.monadial.waygrid.common.domain.model.traversal.dag.Value.DagHash
@@ -33,7 +34,7 @@ object IngestResource:
   ) derives Codec.AsObject
 
   @nowarn("msg=unused implicit parameter")
-  def ingest[F[+_]: {Async, ThisNode, EventSink, Tracer, Logger}](compiler: DagCompiler[F]): HttpRoutes[F] =
+  def ingest[F[+_]: {Async, ThisNode, EventSink, Tracer, Logger, DagRepository}](compiler: DagCompiler[F]): HttpRoutes[F] =
     object serverDsl extends Http4sDsl[F]
     import serverDsl.*
 
@@ -53,11 +54,12 @@ object IngestResource:
                 thisNode    <- ThisNode[F].get
                 compiledDag <-
                   Tracer[F].span("compiling_dag").surround(compiler.compile(request.graph, RouteSalt("test")))
+                _ <- DagRepository[F].save(compiledDag)
                 _ <- Tracer[F].span("dispatching_signal").use: span =>
                     TraversalRequested(messageId, traversalId)
                       .pure[F]
                       .flatMap(_.packIntoWaystationEnvelope)
-                      .map(_.addStamp(TraversalStamp.initial(traversalId, thisNode.address, compiledDag)))
+                      .map(_.addStamp(TraversalRefStamp(compiledDag.hash)))
                       .flatMap(_.send(Some(span.context)))
                 response <- EndpointResponse(traversalId, compiledDag.hash)
                   .pure[F]
