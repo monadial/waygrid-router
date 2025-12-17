@@ -49,12 +49,19 @@ jobs:
       - name: Generate Docker module matrix
         id: modules
         run: |
-          # Install yq
-          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          # Detect architecture and download correct yq binary
+          ARCH=$(uname -m)
+          case $ARCH in
+            x86_64)  YQ_ARCH="amd64" ;;
+            aarch64) YQ_ARCH="arm64" ;;
+            arm64)   YQ_ARCH="arm64" ;;
+            *)       echo "Unsupported architecture: $ARCH"; exit 1 ;;
+          esac
+          sudo wget -qO /usr/local/bin/yq "https://github.com/mikefarah/yq/releases/latest/download/yq_linux_${YQ_ARCH}"
           sudo chmod +x /usr/local/bin/yq
 
-          # Get only modules with docker: true
-          MATRIX=$(yq -o=json '.modules | map(select(.docker == true)) | {"include": .}' .github/modules.yml)
+          # Get only modules with docker: true - use jq -c for compact single-line JSON
+          MATRIX=$(yq -o=json '.modules | map(select(.docker == true)) | {"include": .}' .github/modules.yml | jq -c)
           echo "matrix=$MATRIX" >> $GITHUB_OUTPUT
 
           echo "🐳 Docker modules to build:"
