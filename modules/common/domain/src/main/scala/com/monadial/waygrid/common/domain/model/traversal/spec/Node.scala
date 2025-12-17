@@ -1,5 +1,6 @@
 package com.monadial.waygrid.common.domain.model.traversal.spec
 
+import com.monadial.waygrid.common.domain.model.parameter.ParameterValue
 import com.monadial.waygrid.common.domain.model.resiliency.RetryPolicy
 import com.monadial.waygrid.common.domain.model.routing.Value.DeliveryStrategy
 import com.monadial.waygrid.common.domain.model.traversal.condition.Condition
@@ -15,14 +16,21 @@ import scala.concurrent.duration.FiniteDuration
  * - Standard: Linear node with optional success/failure continuations
  * - Fork: Fan-out node that initiates parallel branches
  * - Join: Fan-in node that synchronizes branches with configurable strategy
+ *
+ * Each node can carry parameters that are passed to the service at invocation time.
+ * Parameters can be literal values or references to secrets in the secure store.
  */
 sealed trait Node:
   def address: ServiceAddress
   def retryPolicy: RetryPolicy
   def deliveryStrategy: DeliveryStrategy
+  def parameters: Node.NodeParameters
   def label: Option[String]
 
 object Node:
+
+  /** Type alias for node parameters map */
+  type NodeParameters = Map[String, ParameterValue]
 
   final case class ConditionalEdge(
     condition: Condition,
@@ -38,14 +46,17 @@ object Node:
    * @param address          Service address to invoke
    * @param retryPolicy      Retry policy for this node
    * @param deliveryStrategy Delivery timing (immediate, scheduled)
+   * @param parameters       Parameters to pass to the service
    * @param onSuccess        Next node on successful completion
    * @param onFailure        Next node on failure (after retries exhausted)
+   * @param onConditions     Conditional edges evaluated on success
    * @param label            Optional human-readable label
    */
   final case class Standard(
     address: ServiceAddress,
     retryPolicy: RetryPolicy,
     deliveryStrategy: DeliveryStrategy,
+    parameters: NodeParameters = Map.empty,
     onSuccess: Option[Node],
     onFailure: Option[Node],
     onConditions: List[ConditionalEdge] = Nil,
@@ -61,6 +72,7 @@ object Node:
    * @param address          Service address for the fork coordination point
    * @param retryPolicy      Retry policy for the fork node itself
    * @param deliveryStrategy Delivery timing
+   * @param parameters       Parameters to pass to the fork service
    * @param branches         Named branches to execute in parallel (name -> entry node)
    * @param joinNodeId       Identifier linking this Fork to its corresponding Join
    * @param label            Optional human-readable label
@@ -69,6 +81,7 @@ object Node:
     address: ServiceAddress,
     retryPolicy: RetryPolicy,
     deliveryStrategy: DeliveryStrategy,
+    parameters: NodeParameters = Map.empty,
     branches: Map[String, Node],
     joinNodeId: String,
     label: Option[String] = None
@@ -86,6 +99,7 @@ object Node:
    * @param address          Service address for the join coordination point
    * @param retryPolicy      Retry policy for the join node itself
    * @param deliveryStrategy Delivery timing for continuation after join
+   * @param parameters       Parameters to pass to the join service
    * @param joinNodeId       Identifier linking this Join to its corresponding Fork
    * @param strategy         Join completion strategy (And, Or, Quorum)
    * @param timeout          Optional timeout for branch completion
@@ -98,6 +112,7 @@ object Node:
     address: ServiceAddress,
     retryPolicy: RetryPolicy,
     deliveryStrategy: DeliveryStrategy,
+    parameters: NodeParameters = Map.empty,
     joinNodeId: String,
     strategy: JoinStrategy,
     timeout: Option[FiniteDuration],
@@ -119,12 +134,14 @@ object Node:
     onSuccess: Option[Node] = None,
     onFailure: Option[Node] = None,
     onConditions: List[ConditionalEdge] = Nil,
+    parameters: NodeParameters = Map.empty,
     label: Option[String] = None
   ): Standard =
     Standard(
       address = address,
       retryPolicy = RetryPolicy.None,
       deliveryStrategy = DeliveryStrategy.Immediate,
+      parameters = parameters,
       onSuccess = onSuccess,
       onFailure = onFailure,
       onConditions = onConditions,
@@ -141,12 +158,14 @@ object Node:
     address: ServiceAddress,
     branches: Map[String, Node],
     joinNodeId: String,
+    parameters: NodeParameters = Map.empty,
     label: Option[String] = None
   ): Fork =
     Fork(
       address = address,
       retryPolicy = RetryPolicy.None,
       deliveryStrategy = DeliveryStrategy.Immediate,
+      parameters = parameters,
       branches = branches,
       joinNodeId = joinNodeId,
       label = label
@@ -163,12 +182,14 @@ object Node:
     onSuccess: Option[Node] = None,
     onFailure: Option[Node] = None,
     onTimeout: Option[Node] = None,
+    parameters: NodeParameters = Map.empty,
     label: Option[String] = None
   ): Join =
     Join(
       address = address,
       retryPolicy = RetryPolicy.None,
       deliveryStrategy = DeliveryStrategy.Immediate,
+      parameters = parameters,
       joinNodeId = joinNodeId,
       strategy = strategy,
       timeout = timeout,

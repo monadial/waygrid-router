@@ -1,36 +1,206 @@
+# =============================================================================
+# Waygrid Router - PR Auto-Labeler Configuration
+# =============================================================================
+#
+# This file configures automatic labels for Pull Requests based on changed files.
+# Labels are automatically applied by the labeler workflow (.github/workflows/labeler.yml)
+#
+# IMPORTANT: When adding a new module:
+#   1. First add it to .github/modules.yml (the source of truth)
+#   2. Then add a corresponding label entry below
+#
+# DOCUMENTATION:
+#   - GitHub Labeler: https://github.com/actions/labeler
+#   - Glob patterns: https://github.com/actions/labeler#common-examples
+#
+# LABEL TYPES:
+#   - General:     module, docs, infra, ci, deps, lints
+#   - Components:  common-*, system-*, origin-*, destination-*, processor-*, infrastructure-*
+#
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# General Labels
+# -----------------------------------------------------------------------------
+
+# Applied to any PR that touches module code
 module:
   - changed-files:
       - any-glob-to-any-file: modules/**/*
 
+# Applied to documentation changes
 docs:
   - changed-files:
-      - any-glob-to-any-file: docs
+      - any-glob-to-any-file:
+          - docs/**/*
+          - '**/*.md'
+          - CLAUDE.md
+          - AGENTS.md
 
+# Applied to infrastructure/deployment changes
 infra:
   - changed-files:
-      - any-glob-to-any-file: infra
+      - any-glob-to-any-file:
+          - compose.yaml
+          - docker-compose*.yml
+          - Dockerfile*
+          - '**/*.dockerfile'
+          - k8s/**/*
+          - helm/**/*
 
-readme:
+# Applied to CI/CD configuration changes
+ci:
   - changed-files:
-      - any-glob-to-any-file: README.md
+      - any-glob-to-any-file:
+          - .github/**/*
 
+# Applied to dependency changes
 deps:
   - changed-files:
-      - any-glob-to-any-file: [ 'build.sbt', 'project/**/*' ]
+      - any-glob-to-any-file:
+          - build.sbt
+          - project/**/*
+          - '*.conf'
 
+# Applied to linting/formatting config changes
 lints:
   - changed-files:
-      - any-glob-to-any-file: [ '.scalafmt.conf', '.scalafix.conf' ]
+      - any-glob-to-any-file:
+          - .scalafmt.conf
+          - .scalafix.conf
+          - .scala-steward.conf
 
-gitignore:
+# -----------------------------------------------------------------------------
+# Common Modules (Shared Libraries)
+# -----------------------------------------------------------------------------
+
+common-domain:
   - changed-files:
-      - any-glob-to-any-file: .gitignore
+      - any-glob-to-any-file: modules/common/domain/**/*
 
-common/application:
+common-application:
   - changed-files:
-      - any-glob-to-any-file: modules/common/common-application/**/*
+      - any-glob-to-any-file: modules/common/application/**/*
 
-common/model:
+# -----------------------------------------------------------------------------
+# System Modules (Core Services)
+# -----------------------------------------------------------------------------
+
+system-common:
   - changed-files:
-      - any-glob-to-any-file: modules/common/common-model/**/*
+      - any-glob-to-any-file: modules/system/common/**/*
 
+system-topology:
+  - changed-files:
+      - any-glob-to-any-file: modules/system/topology/**/*
+
+system-waystation:
+  - changed-files:
+      - any-glob-to-any-file: modules/system/waystation/**/*
+
+system-history:
+  - changed-files:
+      - any-glob-to-any-file: modules/system/history/**/*
+
+system-scheduler:
+  - changed-files:
+      - any-glob-to-any-file: modules/system/scheduler/**/*
+
+system-dag-registry:
+  - changed-files:
+      - any-glob-to-any-file: modules/system/dag-registry/**/*
+
+system-secure-store:
+  - changed-files:
+      - any-glob-to-any-file: modules/system/secure-store/**/*
+
+system-blob-store:
+  - changed-files:
+      - any-glob-to-any-file: modules/system/blob-store/**/*
+
+system-iam:
+  - changed-files:
+      - any-glob-to-any-file: modules/system/iam/**/*
+
+system-billing:
+  - changed-files:
+      - any-glob-to-any-file: modules/system/billing/**/*
+
+system-kms:
+  - changed-files:
+      - any-glob-to-any-file: modules/system/kms/**/*
+
+# -----------------------------------------------------------------------------
+# Origin Modules (Event Ingestion)
+# -----------------------------------------------------------------------------
+
+origin-http:
+  - changed-files:
+      - any-glob-to-any-file: modules/origin/http/**/*
+
+origin-grpc:
+  - changed-files:
+      - any-glob-to-any-file: modules/origin/grpc/**/*
+
+origin-kafka:
+  - changed-files:
+      - any-glob-to-any-file: modules/origin/kafka/**/*
+
+# -----------------------------------------------------------------------------
+# Destination Modules (Event Egress)
+# -----------------------------------------------------------------------------
+
+destination-webhook:
+  - changed-files:
+      - any-glob-to-any-file: modules/destination/webhook/**/*
+
+destination-websocket:
+  - changed-files:
+      - any-glob-to-any-file: modules/destination/websocket/**/*
+
+destination-blackhole:
+  - changed-files:
+      - any-glob-to-any-file: modules/destination/blackhole/**/*
+
+# -----------------------------------------------------------------------------
+# Processor Modules (Event Transformation)
+# -----------------------------------------------------------------------------
+
+processor-openai:
+  - changed-files:
+      - any-glob-to-any-file: modules/processor/openai/**/*
+
+processor-lambda:
+  - changed-files:
+      - any-glob-to-any-file: modules/processor/lambda/**/*
+
+# -----------------------------------------------------------------------------
+# Infrastructure Modules (Platform Services)
+# -----------------------------------------------------------------------------
+
+infrastructure-k8s-operator:
+  - changed-files:
+      - any-glob-to-any-file: modules/infrastructure/k8s-operator/**/*
+
+# =============================================================================
+# HOW TO ADD A NEW MODULE:
+# =============================================================================
+#
+# 1. Add the module to .github/modules.yml:
+#
+#    - name: my-new-module
+#      path: component/my-new-module
+#      component: component
+#      service: my-new-module
+#      docker: true
+#      description: Description of the module
+#
+# 2. Add the label below:
+#
+#    my-new-module:
+#      - changed-files:
+#          - any-glob-to-any-file: modules/component/my-new-module/**/*
+#
+# 3. Create the label in GitHub (Settings > Labels) with appropriate color
+#
+# =============================================================================

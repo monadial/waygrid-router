@@ -7,3 +7,4 @@ object DerivationConfiguration:
     .default
     .withDiscriminator("type")
     .withStrictDecoding
+    .withDefaults

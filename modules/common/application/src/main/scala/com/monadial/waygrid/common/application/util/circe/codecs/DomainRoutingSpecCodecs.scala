@@ -3,6 +3,7 @@ package com.monadial.waygrid.common.application.util.circe.codecs
 import cats.data.NonEmptyList
 import com.monadial.waygrid.common.application.instances.DurationInstances.given
 import com.monadial.waygrid.common.application.util.circe.DerivationConfiguration.given
+import com.monadial.waygrid.common.application.util.circe.codecs.DomainParameterCodecs.given
 import com.monadial.waygrid.common.application.util.circe.codecs.DomainRoutingCodecs.given
 import com.monadial.waygrid.common.domain.model.routing.Value.DeliveryStrategy
 import com.monadial.waygrid.common.domain.model.traversal.condition.Condition

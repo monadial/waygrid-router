@@ -1,0 +1,194 @@
+# =============================================================================
+# Waygrid Router - Module Configuration
+# =============================================================================
+#
+# This file is the SINGLE SOURCE OF TRUTH for all modules in the project.
+# When adding a new module, add it here and all workflows will automatically
+# pick it up (CI, Docker, labeler, etc.)
+#
+# USAGE:
+#   1. Add new module to the appropriate section below
+#   2. Commit and push - all workflows will automatically include the new module
+#
+# SCHEMA:
+#   - name: string          # sbt module name (e.g., "common-domain")
+#     path: string          # Path relative to modules/ directory
+#     component: string     # Component type: common, system, origin, destination, processor, infrastructure
+#     service: string       # Service name within component
+#     docker: boolean       # Whether this module produces a Docker image
+#     description: string   # Human-readable description
+#
+# =============================================================================
+
+modules:
+  # ---------------------------------------------------------------------------
+  # COMMON - Shared libraries and domain models
+  # ---------------------------------------------------------------------------
+  - name: common-domain
+    path: common/domain
+    component: common
+    service: domain
+    docker: false
+    description: Core domain models, types, algebras, and value objects
+
+  - name: common-application
+    path: common/application
+    component: common
+    service: application
+    docker: false
+    description: Application logic, interpreters, Kafka integration, and gRPC
+
+  # ---------------------------------------------------------------------------
+  # SYSTEM - Core system services
+  # ---------------------------------------------------------------------------
+  - name: system-common
+    path: system/common
+    component: system
+    service: common
+    docker: false
+    description: Shared system module utilities
+
+  - name: system-topology
+    path: system/topology
+    component: system
+    service: topology
+    docker: true
+    description: Network topology management service
+
+  - name: system-waystation
+    path: system/waystation
+    component: system
+    service: waystation
+    docker: true
+    description: Routing waypoints and event forwarding
+
+  - name: system-history
+    path: system/history
+    component: system
+    service: history
+    docker: true
+    description: Event history and audit logging
+
+  - name: system-scheduler
+    path: system/scheduler
+    component: system
+    service: scheduler
+    docker: true
+    description: Job scheduling and delayed execution
+
+  - name: system-dag-registry
+    path: system/dag-registry
+    component: system
+    service: dag-registry
+    docker: true
+    description: DAG storage and management
+
+  - name: system-secure-store
+    path: system/secure-store
+    component: system
+    service: secure-store
+    docker: true
+    description: Secrets management service
+
+  - name: system-blob-store
+    path: system/blob-store
+    component: system
+    service: blob-store
+    docker: true
+    description: Binary large object storage (S3-compatible)
+
+  - name: system-iam
+    path: system/iam
+    component: system
+    service: iam
+    docker: true
+    description: Identity and access management
+
+  - name: system-billing
+    path: system/billing
+    component: system
+    service: billing
+    docker: true
+    description: Usage tracking and billing
+
+  - name: system-kms
+    path: system/kms
+    component: system
+    service: kms
+    docker: true
+    description: Key management service
+
+  # ---------------------------------------------------------------------------
+  # ORIGIN - Event ingestion services
+  # ---------------------------------------------------------------------------
+  - name: origin-http
+    path: origin/http
+    component: origin
+    service: http
+    docker: true
+    description: REST API event ingestion
+
+  - name: origin-grpc
+    path: origin/grpc
+    component: origin
+    service: grpc
+    docker: true
+    description: gRPC event ingestion
+
+  - name: origin-kafka
+    path: origin/kafka
+    component: origin
+    service: kafka
+    docker: true
+    description: Kafka consumer event ingestion
+
+  # ---------------------------------------------------------------------------
+  # DESTINATION - Event egress services
+  # ---------------------------------------------------------------------------
+  - name: destination-webhook
+    path: destination/webhook
+    component: destination
+    service: webhook
+    docker: true
+    description: HTTP webhook event delivery
+
+  - name: destination-websocket
+    path: destination/websocket
+    component: destination
+    service: websocket
+    docker: true
+    description: WebSocket streaming delivery
+
+  - name: destination-blackhole
+    path: destination/blackhole
+    component: destination
+    service: blackhole
+    docker: true
+    description: No-op destination for testing
+
+  # ---------------------------------------------------------------------------
+  # PROCESSOR - Event transformation services
+  # ---------------------------------------------------------------------------
+  - name: processor-openai
+    path: processor/openai
+    component: processor
+    service: openai
+    docker: true
+    description: OpenAI integration processor
+
+  - name: processor-lambda
+    path: processor/lambda
+    component: processor
+    service: lambda
+    docker: true
+    description: AWS Lambda integration processor
+
+  # ---------------------------------------------------------------------------
+  # INFRASTRUCTURE - Platform services
+  # ---------------------------------------------------------------------------
+  - name: infrastructure-k8s-operator
+    path: infrastructure/k8s-operator
+    component: infrastructure
+    service: k8s-operator
+    docker: true
+    description: Kubernetes operator for Waygrid deployment

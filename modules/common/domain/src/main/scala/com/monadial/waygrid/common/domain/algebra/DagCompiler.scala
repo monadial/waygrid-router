@@ -6,8 +6,9 @@ import com.monadial.waygrid.common.domain.interpreter.cryptography.HasherInterpr
 import com.monadial.waygrid.common.domain.model.cryptography.hashing.Value.LongHash
 import com.monadial.waygrid.common.domain.model.routing.Value.RouteSalt
 import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ DagHash, EdgeGuard, ForkId, NodeId }
-import com.monadial.waygrid.common.domain.model.traversal.dag.{ Dag, DagValidationError, Edge as DagEdge, Node as DagNode, NodeType }
+import com.monadial.waygrid.common.domain.model.traversal.dag.{ CompiledDag, Dag, DagValidationError, Edge as DagEdge, Node as DagNode, NodeType }
 import com.monadial.waygrid.common.domain.model.traversal.spec.{ Node as SpecNode, Spec }
+import com.monadial.waygrid.common.domain.model.traversal.spec.Node.NodeParameters
 import cats.data.NonEmptyList
 
 import scala.collection.mutable
@@ -33,11 +34,18 @@ trait DagCompiler[F[_]]:
   /**
    * Compiles the provided routing specification into a directed acyclic graph.
    *
+   * The result separates the cacheable DAG structure from variable parameters:
+   * - DAG: The structural definition (nodes, edges, policies) - cacheable by hash
+   * - Parameters: Node-to-parameters mapping - variable per invocation
+   *
+   * This separation allows DAG caching while supporting different parameter
+   * configurations per traversal (different API keys, model settings, etc.)
+   *
    * @param spec High-level routing specification
    * @param salt Optional salt to differentiate structurally identical specs
-   * @return A compiled and hashed DAG
+   * @return A compiled DAG with separate parameters mapping
    */
-  def compile(spec: Spec, salt: RouteSalt): F[Dag]
+  def compile(spec: Spec, salt: RouteSalt): F[CompiledDag]
 
 object DagCompiler:
 
@@ -152,22 +160,25 @@ object DagCompiler:
       private final case class NodeInfo(node: DagNode, rawId: DagId)            // Node with its raw ID
 
       private final case class CompilerState(
-        nodes: mutable.LongMap[NodeInfo],      // Collected nodes (deduplicated)
-        edges: mutable.ArrayBuffer[EdgeL],     // Collected edges
-        stack: mutable.ArrayDeque[Frame],      // DFS traversal stack
-        forkIdMap: mutable.Map[String, ForkId] // joinNodeId -> ForkId mapping
+        nodes: mutable.LongMap[NodeInfo],               // Collected nodes (deduplicated)
+        edges: mutable.ArrayBuffer[EdgeL],              // Collected edges
+        stack: mutable.ArrayDeque[Frame],               // DFS traversal stack
+        forkIdMap: mutable.Map[String, ForkId],         // joinNodeId -> ForkId mapping
+        parameters: mutable.Map[Long, NodeParameters]   // rawId -> parameters mapping
       )
 
       /**
        * Builds the DAG from the given Spec and salt hash.
        * Ensures stable, deterministic node IDs and detects hash collisions.
+       * Returns both the DAG structure and the extracted parameters mapping.
        */
-      private def buildDagFromSpec(spec: Spec, saltH: LongHash): F[Dag] =
+      private def buildDagFromSpec(spec: Spec, saltH: LongHash): F[(Dag, Map[NodeId, NodeParameters])] =
         val state = CompilerState(
           nodes = mutable.LongMap.empty,
           edges = mutable.ArrayBuffer.empty,
           stack = mutable.ArrayDeque.empty,
-          forkIdMap = mutable.Map.empty
+          forkIdMap = mutable.Map.empty,
+          parameters = mutable.Map.empty
         )
 
         /**
@@ -197,6 +208,7 @@ object DagCompiler:
         /**
          * Ensures a node is registered in the internal state.
          * Assigns unique hash-based ID and detects collisions.
+         * Also extracts and stores parameters for the node.
          *
          * Fork and Join nodes use identity-based IDs (based on joinNodeId) to ensure
          * all paths converge to the same logical node. Standard nodes use path-based IDs.
@@ -225,6 +237,9 @@ object DagCompiler:
                       Sync[F].unit // already present
                     case None =>
                       state.nodes.update(id, NodeInfo(dagNode, id))
+                      // Store parameters if non-empty (extracted from spec node)
+                      if n.parameters.nonEmpty then
+                        state.parameters.update(id, n.parameters)
                       Sync[F].unit
             yield id
 
@@ -368,18 +383,28 @@ object DagCompiler:
             NonEmptyList.fromList(entryRawIds.flatMap(idMap.get)),
             RouteCompilerError("Entry point NodeId mapping failed")
           )
-        yield Dag(
-          entryPoints = entryPointsNel,
-          hash = dagHash,
-          repeatPolicy = spec.repeatPolicy,
-          nodes = nodesM.result().toMap,
-          edges = edgesM
+
+          // Build final parameters map with NodeId keys
+          paramsM <- Sync[F].delay:
+            state.parameters.iterator.flatMap { case (rawId, params) =>
+              idMap.get(rawId).map(nodeId => nodeId -> params)
+            }.toMap
+
+        yield (
+          Dag(
+            entryPoints = entryPointsNel,
+            hash = dagHash,
+            repeatPolicy = spec.repeatPolicy,
+            nodes = nodesM.result().toMap,
+            edges = edgesM
+          ),
+          paramsM
         )
 
-      override def compile(spec: Spec, salt: RouteSalt): F[Dag] =
+      override def compile(spec: Spec, salt: RouteSalt): F[CompiledDag] =
         for
-          saltH <- hasher.hashChars(salt)
-          dag   <- buildDagFromSpec(spec, saltH)
+          saltH            <- hasher.hashChars(salt)
+          (dag, paramsMap) <- buildDagFromSpec(spec, saltH)
           // Validate the compiled DAG - FSM expects only valid DAGs
           _ <- dag.validate match
             case Nil => Sync[F].unit
@@ -401,4 +426,4 @@ object DagCompiler:
                   s"Cycle detected: ${cycle.map(_.show).mkString(" -> ")}"
               }
               fail(s"Invalid DAG structure:\n  ${errorMessages.mkString("\n  ")}")
-        yield dag
+        yield CompiledDag(dag, paramsMap)
