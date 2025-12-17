@@ -19,11 +19,9 @@ import com.suprnation.actor.ActorSystem
 import org.typelevel.otel4s.metrics.MeterProvider
 import org.typelevel.otel4s.trace.{ Tracer, TracerProvider }
 
-import scala.annotation.nowarn
-
 object Main extends WaygridApp[HttpSettings](NodeDescriptor.Origin(NodeService("http"))):
 
-  @nowarn("msg=unused implicit parameter")
+
   def programBuilder[F[+_]: {Async,
     Parallel,
     Console,
