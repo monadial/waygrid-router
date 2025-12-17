@@ -3,8 +3,11 @@ import sbt.Keys.scalacOptions
 
 import scala.collection.Seq
 
-ThisBuild / version := "1.0.0-SNAPSHOT"
+// ======================================================
+// Global build settings
+// ======================================================
 
+ThisBuild / version          := "1.0.0-SNAPSHOT"
 ThisBuild / scalaVersion     := "3.7.4"
 ThisBuild / organization     := "com.monadial"
 ThisBuild / organizationName := "Monadial"
@@ -12,96 +15,117 @@ ThisBuild / organizationName := "Monadial"
 ThisBuild / resolvers += "jitpack" at "https://jitpack.io"
 
 ThisBuild / homepage := Some(url("https://waygrid.dev"))
-ThisBuild / licenses := Seq(License.GPL3_or_later) // see LICENSE file in the root of the project
+ThisBuild / licenses := Seq(License.GPL3_or_later)
 ThisBuild / developers := List(
-  Developer("tmihalicka", "Tomas Mihalicka", "tomas@monadial.com", url("https://monadial.com"))
+  Developer(
+    "tmihalicka",
+    "Tomas Mihalicka",
+    "tomas@monadial.com",
+    url("https://monadial.com")
+  )
 )
 
 ThisBuild / scalacOptions ++= Seq(
-  "-source:3.7", // @see https://scala-lang.org/2024/08/19/given-priority-change-3.7.html#migrating-to-the-new-prioritization
+  "-source:3.7",
   "-Xprint-suspension"
 )
 
 ThisBuild / javaOptions ++= Seq(
-  "--sun-misc-unsafe-memory-access=allow" //todo resolve this issue with java 24
+  "--sun-misc-unsafe-memory-access=allow" // TODO: resolve for Java 24
 )
 
 ThisBuild / semanticdbEnabled := true
 
-// Coverage settings
-ThisBuild / coverageEnabled := false // Enable via `sbt coverage test coverageReport`
-ThisBuild / coverageFailOnMinimum := false
-ThisBuild / coverageHighlighting := true
-ThisBuild / coverageExcludedPackages := "<empty>;.*BuildInfo.*;.*scalapb.*"
+// ======================================================
+// Coverage
+// ======================================================
 
-//
-//
-// UTIL
-def dockerImage(component: String, service: String): Seq[Setting[?]] = Seq(
-  Docker / packageName     := s"waygrid-$component-$service",
-  Docker / maintainer      := "Monadial",
-  Docker / daemonUser      := "monadial",
-  Docker / dockerBaseImage := "eclipse-temurin:23",
-  Docker / dockerUsername  := Some("monadial"),
-  Docker / dockerExposedPorts ++= Seq(1337) // 1337 is default port for all Waygrid services
-)
+ThisBuild / coverageEnabled           := false
+ThisBuild / coverageFailOnMinimum     := false
+ThisBuild / coverageHighlighting      := true
+ThisBuild / coverageExcludedPackages  := "<empty>;.*BuildInfo.*;.*scalapb.*"
 
-def buildInfo(component: String, service: String) = Seq(
-  buildInfoKeys    := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
-  buildInfoPackage := s"com.monadial.waygrid.${component}.${service.replace("-", ".")}"
-)
+// ======================================================
+// Global Docker defaults
+// ======================================================
 
-def configureOtel(component: String, service: String): Seq[Setting[?]] = Seq(
-  ThisBuild / javaOptions ++= Seq(
-    "-Dotel.java.global-autoconfigure.enabled=true",
-    s"-Dotel.service.name=${component}-${service.replace("-", ".")}",
+ThisBuild / Docker / dockerBaseImage  := "eclipse-temurin:23"
+ThisBuild / Docker / maintainer       := "Monadial"
+ThisBuild / Docker / daemonUser       := "monadial"
+ThisBuild / Docker / dockerUsername   := Some("monadial")
+ThisBuild / Docker / dockerExposedPorts ++= Seq(1337)
+
+// ======================================================
+// sbt lint exclusions
+// ======================================================
+
+Global / excludeLintKeys ++= Set(
+  buildInfoKeys,
+  buildInfoPackage,
+  Docker / dockerBaseImage,
+  Docker / maintainer,
+  Docker / daemonUser
+).map(_.scopedKey)
+
+// ======================================================
+// Helpers
+// ======================================================
+
+def dockerImage(component: String, service: String): Seq[Setting[?]] =
+  Seq(
+    Docker / packageName := s"waygrid-$component-$service"
   )
-)
+
+def buildInfo(component: String, service: String): Seq[Setting[?]] =
+  Seq(
+    buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
+    buildInfoPackage :=
+      s"com.monadial.waygrid.$component.${service.replace("-", ".")}"
+  )
+
+def configureOtel(component: String, service: String): Seq[Setting[?]] =
+  Seq(
+    Compile / javaOptions ++= Seq(
+      "-Dotel.java.global-autoconfigure.enabled=true",
+      s"-Dotel.service.name=$component-$service"
+    )
+  )
+
+// ======================================================
+// Root project (aggregator only)
+// ======================================================
 
 lazy val root = (project in file("."))
   .settings(
     name := "Waygrid",
-    Universal / javaOptions ++= (Compile / javaOptions).value,
-    fork              := true,
+    fork := true,
     scalafmtOnCompile := true,
     scalafixOnCompile := true
   )
 
-//
-//
+// ======================================================
 // COMMON
+// ======================================================
+
 lazy val `common-domain` = (project in file("modules/common/domain"))
-  .settings {
+  .settings(
     libraryDependencies ++= List(
-      // cats
       Libraries.cats.value,
       Libraries.catsParse.value,
       Libraries.kittens.value,
-      // monocle
       Libraries.monocleCore.value,
       Libraries.monocleMacro.value,
-      // misc
       Libraries.airframeUlid.value,
       Libraries.ip4sCore.value,
-      // fs2
       Libraries.fs2Core.value,
-      // circe
       Libraries.circeCore.value,
       Libraries.circeRefined.value,
-      // scodec
-      Libraries.scodecCore.value,
-      // skunk
-      // jsoniter
       Libraries.jsoniterScalaCore.value,
       Libraries.jsoniterScalaMacros.value,
-      // refined
       Libraries.refined.value,
       Libraries.refinedCats.value,
-      // uri
       Libraries.http4sCore,
-      // crypto
       Libraries.zeroAllocationHashing.value,
-      // tests
       Libraries.catsLaws         % Test,
       Libraries.monocleLaw       % Test,
       Libraries.scalacheck       % Test,
@@ -109,91 +133,75 @@ lazy val `common-domain` = (project in file("modules/common/domain"))
       Libraries.weaverDiscipline % Test,
       Libraries.weaverScalaCheck % Test
     )
-  }
+  )
 
-lazy val `common-application` = (project in file("modules/common/application"))
-  .enablePlugins(Http4sGrpcPlugin)
-  .settings {
-    libraryDependencies ++= List(
-      // bouncy castle
-      Libraries.bouncyCastle.value,
-      // odin
-      Libraries.odinCore.value,
-      // cats
-      Libraries.catsEffect.value,
-      // circe
-      Libraries.circeCore.value,
-      Libraries.circeGeneric.value,
-      Libraries.circeParser.value,
-      Libraries.circeRefined.value,
-      Libraries.circeConfig.value,
-      // sKema
-      Libraries.jsonsKema.value,
-      // actors
-      Libraries.catsActors.value,
-      // shapeless
-      Libraries.shapeless3Typeable.value,
-      // fs2
-      Libraries.fs2Kafka.value,
-      // aws
-      Libraries.fs2AwsCore.value,
-      // scodec
-      Libraries.scodecBits.value,
-      // http4s
-      Libraries.http4sDsl,
-      Libraries.http4sServer,
-      Libraries.http4sCirce,
-      Libraries.http4sOtel4sCore,
-      Libraries.http4sOtel4sMetrics,
-      Libraries.http4sOtel4sTraceCore,
-      Libraries.http4sOtel4sTraceServer,
-      Libraries.http4sOtel4sTraceClient,
-      // scalapb
-      Libraries.scalaPb,
-      // otel4s
-      Libraries.otel4sOtelJava.value,
-      Libraries.otel4sExperimentalMetrics.value,
-      Libraries.otel4InstrumentationMetrics.value,
-      Libraries.opentelemetryExporterOtlp.value,
-      Libraries.opentelemetrySdkExtensionAutoconfigure.value,
-      Libraries.opentelemetryInstrumentation.value,
-      // redis
-      Libraries.redis4CatsEffects.value,
-      Libraries.redis4CatsStream.value,
-      // database
-      Libraries.doobieCore.value,
-      Libraries.doobieHikari.value,
-      Libraries.doobiePostgres.value,
-      Libraries.doobiePostgresCirce.value,
-      Libraries.doobieFlyway.value,
-      Libraries.flywayPostgres.value,
-      Libraries.clickhouseJdbc.value,
-      // tests
-      Libraries.catsLaws         % Test,
-      Libraries.monocleLaw       % Test,
-      Libraries.scalacheck       % Test,
-      Libraries.weaverCats       % Test,
-      Libraries.weaverDiscipline % Test,
-      Libraries.weaverScalaCheck % Test
-    ) ++ Seq(
-      // this is needed to dns resolver correctly work on Apple Silicon (M1...)
-      "io.netty" % "netty-resolver-dns-native-macos" % "4.2.7.Final" % Compile classifier "osx-aarch_64"
-    )
-  }
-  .settings {
-    Compile / PB.targets ++= Seq(
-      // set grpc = false because http4s-grpc generates its own code
-      scalapb.gen(grpc = false, scala3Sources = true) -> (Compile / sourceManaged).value / "scalapb"
-    )
-    Compile / scalacOptions ++= {
-      val managed = (Compile / sourceManaged).value.getAbsolutePath
-      Seq(
-        s"-Wconf:src=$managed/.*scalapb/.*:silent",
-        s"-Wconf:src=$managed/.*http4s-grpc/.*:silent"
+lazy val `common-application` =
+  (project in file("modules/common/application"))
+    .enablePlugins(Http4sGrpcPlugin)
+    .settings(
+      libraryDependencies ++= List(
+        Libraries.bouncyCastle.value,
+        Libraries.odinCore.value,
+        Libraries.catsEffect.value,
+        Libraries.circeCore.value,
+        Libraries.circeGeneric.value,
+        Libraries.circeParser.value,
+        Libraries.circeRefined.value,
+        Libraries.circeConfig.value,
+        Libraries.jsonsKema.value,
+        Libraries.catsActors.value,
+        Libraries.shapeless3Typeable.value,
+        Libraries.fs2Kafka.value,
+        Libraries.fs2AwsCore.value,
+        Libraries.scodecBits.value,
+        Libraries.http4sDsl,
+        Libraries.http4sServer,
+        Libraries.http4sCirce,
+        Libraries.http4sOtel4sCore,
+        Libraries.http4sOtel4sMetrics,
+        Libraries.http4sOtel4sTraceCore,
+        Libraries.http4sOtel4sTraceServer,
+        Libraries.http4sOtel4sTraceClient,
+        Libraries.scalaPb,
+        Libraries.otel4sOtelJava.value,
+        Libraries.otel4sExperimentalMetrics.value,
+        Libraries.otel4InstrumentationMetrics.value,
+        Libraries.opentelemetryExporterOtlp.value,
+        Libraries.opentelemetrySdkExtensionAutoconfigure.value,
+        Libraries.opentelemetryInstrumentation.value,
+        Libraries.redis4CatsEffects.value,
+        Libraries.redis4CatsStream.value,
+        Libraries.doobieCore.value,
+        Libraries.doobieHikari.value,
+        Libraries.doobiePostgres.value,
+        Libraries.doobiePostgresCirce.value,
+        Libraries.doobieFlyway.value,
+        Libraries.flywayPostgres.value,
+        Libraries.clickhouseJdbc.value,
+        Libraries.catsLaws         % Test,
+        Libraries.monocleLaw       % Test,
+        Libraries.scalacheck       % Test,
+        Libraries.weaverCats       % Test,
+        Libraries.weaverDiscipline % Test,
+        Libraries.weaverScalaCheck % Test,
+        "io.netty" % "netty-resolver-dns-native-macos" % "4.2.7.Final" %
+          Compile classifier "osx-aarch_64"
       )
-    }
-  }
-  .dependsOn(`common-domain`)
+    )
+    .settings(
+      Compile / PB.targets ++= Seq(
+        scalapb.gen(grpc = false, scala3Sources = true) ->
+          (Compile / sourceManaged).value / "scalapb"
+      ),
+      Compile / scalacOptions ++= {
+        val managed = (Compile / sourceManaged).value.getAbsolutePath
+        Seq(
+          s"-Wconf:src=$managed/.*scalapb/.*:silent",
+          s"-Wconf:src=$managed/.*http4s-grpc/.*:silent"
+        )
+      }
+    )
+    .dependsOn(`common-domain`)
 
 //
 //
