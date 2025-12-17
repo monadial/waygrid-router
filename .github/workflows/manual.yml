@@ -97,17 +97,26 @@ jobs:
       - name: Parse modules
         id: modules
         run: |
-          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          # Detect architecture and download correct yq binary
+          ARCH=$(uname -m)
+          case $ARCH in
+            x86_64)  YQ_ARCH="amd64" ;;
+            aarch64) YQ_ARCH="arm64" ;;
+            arm64)   YQ_ARCH="arm64" ;;
+            *)       echo "Unsupported architecture: $ARCH"; exit 1 ;;
+          esac
+          sudo wget -qO /usr/local/bin/yq "https://github.com/mikefarah/yq/releases/latest/download/yq_linux_${YQ_ARCH}"
           sudo chmod +x /usr/local/bin/yq
 
           MODULE="${{ github.event.inputs.module }}"
 
+          # Use jq -c for compact single-line JSON (required for GITHUB_OUTPUT)
           if [[ "$MODULE" == "ALL" ]]; then
-            MATRIX=$(yq -o=json '.modules | {"include": .}' .github/modules.yml)
-            DOCKER_MATRIX=$(yq -o=json '.modules | map(select(.docker == true)) | {"include": .}' .github/modules.yml)
+            MATRIX=$(yq -o=json '.modules | {"include": .}' .github/modules.yml | jq -c)
+            DOCKER_MATRIX=$(yq -o=json '.modules | map(select(.docker == true)) | {"include": .}' .github/modules.yml | jq -c)
           else
-            MATRIX=$(yq -o=json '.modules | map(select(.name == "'"$MODULE"'")) | {"include": .}' .github/modules.yml)
-            DOCKER_MATRIX=$(yq -o=json '.modules | map(select(.name == "'"$MODULE"'" and .docker == true)) | {"include": .}' .github/modules.yml)
+            MATRIX=$(yq -o=json '.modules | map(select(.name == "'"$MODULE"'")) | {"include": .}' .github/modules.yml | jq -c)
+            DOCKER_MATRIX=$(yq -o=json '.modules | map(select(.name == "'"$MODULE"'" and .docker == true)) | {"include": .}' .github/modules.yml | jq -c)
           fi
 
           echo "matrix=$MATRIX" >> $GITHUB_OUTPUT

@@ -171,18 +171,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7697e996-c24f-4ea1-a7ee-bf168edbe1e9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.github/dependabot.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/dependabot.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/labeler.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/labeler.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/ci.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/ci.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/docker.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/docker.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/manual.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/manual.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/release.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/release.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.scala-steward.conf" beforeDir="false" afterPath="$PROJECT_DIR$/.scala-steward.conf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/DerivationConfiguration.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/DerivationConfiguration.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainRoutingSpecCodecs.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainRoutingSpecCodecs.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/application/src/test/scala/com/monadial/waygrid/common/application/util/circe/codecs/SpecJsonCodecSuite.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/test/scala/com/monadial/waygrid/common/application/util/circe/codecs/SpecJsonCodecSuite.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/algebra/DagCompiler.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/algebra/DagCompiler.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/model/traversal/spec/Node.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/model/traversal/spec/Node.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/model/traversal/spec/Spec.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/model/traversal/spec/Spec.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/domain/src/test/scala/com/monadial/waygrid/common/domain/algebra/DagCompilerSuite.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/domain/src/test/scala/com/monadial/waygrid/common/domain/algebra/DagCompilerSuite.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/plugins.sbt" beforeDir="false" afterPath="$PROJECT_DIR$/project/plugins.sbt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -491,7 +484,7 @@
       <workItem from="1765491390761" duration="38102000" />
       <workItem from="1765806194819" duration="5004000" />
       <workItem from="1765837790966" duration="43987000" />
-      <workItem from="1765981873712" duration="1835000" />
+      <workItem from="1765981873712" duration="2636000" />
     </task>
     <servers />
   </component>
