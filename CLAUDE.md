@@ -460,7 +460,15 @@ sbt scalafmtAll               # Format all code
 sbt scalafixAll               # Apply scalafix rules
 sbt 'testOnly *SpecName'      # Run specific test
 sbt clean                     # Clean build artifacts
+
+# Test Coverage (scoverage)
+sbt coverage test coverageReport          # Run tests with coverage & generate report
+sbt coverage test coverageAggregate       # Aggregate coverage across all modules
+sbt <module>/coverage <module>/test <module>/coverageReport  # Coverage for specific module
 ```
+
+Coverage reports are generated in `target/scala-3.7.4/scoverage-report/index.html` for each module.
+For aggregated reports: `target/scala-3.7.4/scoverage-report/index.html` at project root.
 
 ### Module Naming Convention
 - Main source: `modules/<component>/<module>/src/main/scala/com/monadial/waygrid/<component>/<module>/`

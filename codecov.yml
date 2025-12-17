@@ -1,0 +1,138 @@
+# Codecov Configuration
+# https://docs.codecov.com/docs/codecov-yaml
+
+coverage:
+  precision: 2
+  round: down
+  range: "60...100"
+
+  status:
+    project:
+      default:
+        target: auto        # Use coverage from base commit as target
+        threshold: 1%       # Allow 1% decrease without failing
+        if_ci_failed: error # Fail if CI fails
+    patch:
+      default:
+        target: auto        # Coverage target for changed lines
+        threshold: 0%       # New code should maintain coverage
+
+# Group coverage by component for better visibility
+flags:
+  # Common modules
+  common-domain:
+    paths:
+      - modules/common/domain/
+    carryforward: true
+  common-application:
+    paths:
+      - modules/common/application/
+    carryforward: true
+
+  # System modules
+  system-common:
+    paths:
+      - modules/system/common/
+    carryforward: true
+  system-topology:
+    paths:
+      - modules/system/topology/
+    carryforward: true
+  system-waystation:
+    paths:
+      - modules/system/waystation/
+    carryforward: true
+  system-history:
+    paths:
+      - modules/system/history/
+    carryforward: true
+  system-scheduler:
+    paths:
+      - modules/system/scheduler/
+    carryforward: true
+  system-dag-registry:
+    paths:
+      - modules/system/dag-registry/
+    carryforward: true
+  system-secure-store:
+    paths:
+      - modules/system/secure-store/
+    carryforward: true
+  system-blob-store:
+    paths:
+      - modules/system/blob-store/
+    carryforward: true
+  system-iam:
+    paths:
+      - modules/system/iam/
+    carryforward: true
+  system-billing:
+    paths:
+      - modules/system/billing/
+    carryforward: true
+  system-kms:
+    paths:
+      - modules/system/kms/
+    carryforward: true
+
+  # Origin modules
+  origin-http:
+    paths:
+      - modules/origin/http/
+    carryforward: true
+  origin-grpc:
+    paths:
+      - modules/origin/grpc/
+    carryforward: true
+  origin-kafka:
+    paths:
+      - modules/origin/kafka/
+    carryforward: true
+
+  # Destination modules
+  destination-webhook:
+    paths:
+      - modules/destination/webhook/
+    carryforward: true
+  destination-websocket:
+    paths:
+      - modules/destination/websocket/
+    carryforward: true
+  destination-blackhole:
+    paths:
+      - modules/destination/blackhole/
+    carryforward: true
+
+  # Processor modules
+  processor-openai:
+    paths:
+      - modules/processor/openai/
+    carryforward: true
+  processor-lambda:
+    paths:
+      - modules/processor/lambda/
+    carryforward: true
+
+  # Infrastructure modules
+  infrastructure-k8s-operator:
+    paths:
+      - modules/infrastructure/k8s-operator/
+    carryforward: true
+
+# PR comment settings
+comment:
+  layout: "reach,diff,flags,files"
+  behavior: default
+  require_changes: true      # Only comment if coverage changed
+  require_base: false        # Comment even without base coverage
+  require_head: true         # Require coverage on head commit
+
+# Ignore paths that shouldn't count toward coverage
+ignore:
+  - "**/*Spec.scala"         # Test files
+  - "**/*Test.scala"         # Test files
+  - "**/test/**"             # Test directories
+  - "**/BuildInfo.scala"     # Generated build info
+  - "**/*.pb.scala"          # Generated protobuf files
+  - "**/scalapb/**"          # ScalaPB generated code
+  - "project/**"             # sbt build files
