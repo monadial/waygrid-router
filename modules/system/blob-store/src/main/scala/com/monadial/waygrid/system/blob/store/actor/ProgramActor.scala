@@ -27,9 +27,6 @@ object ProgramActor:
       override def onProgramStart: F[Unit] =
         for
           _ <- httpServerActor ! Start
-          
-          
-          
         yield ()
 
       override def onProgramStop: F[Unit] =

@@ -24,12 +24,12 @@ object DomainParameterCodecs:
   /** SecretPath is an opaque String type */
   given Encoder[SecretPath] = Encoder.encodeString.contramap(_.value)
   given Decoder[SecretPath] = Decoder.decodeString.map(SecretPath(_))
-  given Codec[SecretPath] = Codec.from(summon[Decoder[SecretPath]], summon[Encoder[SecretPath]])
+  given Codec[SecretPath]   = Codec.from(summon[Decoder[SecretPath]], summon[Encoder[SecretPath]])
 
   /** SecretVersion is an opaque String type */
   given Encoder[SecretVersion] = Encoder.encodeString.contramap(_.value)
   given Decoder[SecretVersion] = Decoder.decodeString.map(SecretVersion(_))
-  given Codec[SecretVersion] = Codec.from(summon[Decoder[SecretVersion]], summon[Encoder[SecretVersion]])
+  given Codec[SecretVersion]   = Codec.from(summon[Decoder[SecretVersion]], summon[Encoder[SecretVersion]])
 
   /** SecretReference case class */
   given Codec[SecretReference] = Codec.derived[SecretReference]

@@ -56,8 +56,8 @@ object SpecValidator:
     case Combined(parameterErrors: List[ServiceValidationError], schemaErrors: List[MissingSchemaError])
 
     def messages: List[String] = this match
-      case ParameterErrors(errs) => errs.flatMap(_.messages)
-      case SchemaErrors(errs) => errs.map(_.message)
+      case ParameterErrors(errs)  => errs.flatMap(_.messages)
+      case SchemaErrors(errs)     => errs.map(_.message)
       case Combined(pErrs, sErrs) => pErrs.flatMap(_.messages) ++ sErrs.map(_.message)
 
   type SpecValidationResult = ValidatedNel[SpecValidationError, Unit]
@@ -113,7 +113,7 @@ object SpecValidator:
     val parametersByService = spec.collectParameters
 
     var parameterErrors: List[ServiceValidationError] = Nil
-    var schemaErrors: List[MissingSchemaError] = Nil
+    var schemaErrors: List[MissingSchemaError]        = Nil
 
     parametersByService.foreach { case (address, params) =>
       schemas.get(address) match
@@ -130,7 +130,7 @@ object SpecValidator:
     }
 
     (parameterErrors.isEmpty, schemaErrors.isEmpty) match
-      case (true, true) => ().validNel
+      case (true, true)  => ().validNel
       case (false, true) => SpecValidationError.ParameterErrors(parameterErrors.reverse).invalidNel
       case (true, false) => SpecValidationError.SchemaErrors(schemaErrors.reverse).invalidNel
       case (false, false) =>

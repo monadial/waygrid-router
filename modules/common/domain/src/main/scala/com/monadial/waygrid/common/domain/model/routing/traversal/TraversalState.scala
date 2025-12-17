@@ -2,7 +2,7 @@ package com.monadial.waygrid.common.domain.model.routing.traversal
 
 import com.monadial.waygrid.common.domain.model.routing.Value.TraversalId
 import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ EdgeGuard, NodeId }
-import com.monadial.waygrid.common.domain.model.traversal.dag.{Dag, Edge}
+import com.monadial.waygrid.common.domain.model.traversal.dag.{ Dag, Edge }
 import com.monadial.waygrid.common.domain.model.vectorclock.VectorClock
 import com.monadial.waygrid.common.domain.value.Address.NodeAddress
 
@@ -59,12 +59,12 @@ final case class TraversalState(
     copy(current = current + node).record(evt)
 
   def scheduleStart(
-                       node: NodeId,
-                       actor: NodeAddress,
-                       otherVc: Option[VectorClock],
-                       at: Instant = Instant.now()
-                   ): TraversalState =
-    val vc = otherVc.fold(vectorClock.tick(actor))(ovc => vectorClock.merge(ovc).tick(actor))
+    node: NodeId,
+    actor: NodeAddress,
+    otherVc: Option[VectorClock],
+    at: Instant = Instant.now()
+  ): TraversalState =
+    val vc  = otherVc.fold(vectorClock.tick(actor))(ovc => vectorClock.merge(ovc).tick(actor))
     val evt = TraversalEvent.ScheduledStart(node, actor, vc, at)
     record(evt)
 
@@ -145,12 +145,12 @@ final case class TraversalState(
   /** Determine next nodes based on edge guard condition. */
   def nextNodes(guard: EdgeGuard, dag: Dag): List[NodeId] =
     val traversed = guard match
-      case EdgeGuard.OnSuccess              => completed
-      case EdgeGuard.OnFailure              => failed
-      case EdgeGuard.Always                 => completed ++ failed ++ current
-      case EdgeGuard.OnAny                  => completed ++ failed
-      case EdgeGuard.OnTimeout              => failed // Timeout is a type of failure
-      case EdgeGuard.Conditional(_)         => completed // Conditionals apply to completed nodes
+      case EdgeGuard.OnSuccess      => completed
+      case EdgeGuard.OnFailure      => failed
+      case EdgeGuard.Always         => completed ++ failed ++ current
+      case EdgeGuard.OnAny          => completed ++ failed
+      case EdgeGuard.OnTimeout      => failed    // Timeout is a type of failure
+      case EdgeGuard.Conditional(_) => completed // Conditionals apply to completed nodes
     dag.edges.collect { case Edge(from, to, g) if traversed.contains(from) && g == guard => to }
 
   /** Automatically start all next nodes reachable from successful nodes. */

@@ -3,14 +3,19 @@ package com.monadial.waygrid.common.domain.instances
 import cats.Show
 import cats.data.Validated
 import cats.kernel.Order
-import com.monadial.waygrid.common.domain.algebra.value.codec.{Base64Codec, Base64DecodingError, BytesCodec, BytesDecodingError}
+import com.monadial.waygrid.common.domain.algebra.value.codec.{
+  Base64Codec,
+  Base64DecodingError,
+  BytesCodec,
+  BytesDecodingError
+}
 import com.monadial.waygrid.common.domain.instances.StringInstances.given
-import io.circe.{Decoder as JsonDecoder, Encoder as JsonEncoder}
+import io.circe.{ Decoder as JsonDecoder, Encoder as JsonEncoder }
 import scodec.bits.ByteVector
-import scodec.{Attempt, Err, Decoder as SDecoder, Encoder as SEncoder}
+import scodec.{ Attempt, Decoder as SDecoder, Encoder as SEncoder, Err }
 import wvlet.airframe.ulid.ULID
 
-import scala.util.{Failure, Success, Try}
+import scala.util.{ Failure, Success, Try }
 
 object ULIDInstances:
   given Order[ULID] = (x: ULID, y: ULID) => x.compareTo(y)

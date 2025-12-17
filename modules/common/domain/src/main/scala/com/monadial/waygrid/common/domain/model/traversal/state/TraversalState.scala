@@ -92,7 +92,7 @@ final case class TraversalState(
     actor: NodeAddress,
     foreignVectorClock: Option[VectorClock]
   ): TraversalState =
-    val vc = advanceClock(actor, foreignVectorClock)
+    val vc    = advanceClock(actor, foreignVectorClock)
     val event = TraversalStarted(node, actor, vc)
     copy(active = active + node).record(event)
 
@@ -106,7 +106,7 @@ final case class TraversalState(
     scheduledAt: Instant,
     foreignVectorClock: Option[VectorClock]
   ): TraversalState =
-    val vc = advanceClock(actor, foreignVectorClock)
+    val vc    = advanceClock(actor, foreignVectorClock)
     val event = TraversalScheduled(node, actor, scheduledAt, vc)
     record(event)
 
@@ -119,7 +119,7 @@ final case class TraversalState(
     actor: NodeAddress,
     foreignVectorClock: Option[VectorClock]
   ): TraversalState =
-    val vc = advanceClock(actor, foreignVectorClock)
+    val vc    = advanceClock(actor, foreignVectorClock)
     val event = TraversalResumed(node, actor, vc)
     copy(active = active + node).record(event)
 
@@ -133,8 +133,8 @@ final case class TraversalState(
     actor: NodeAddress,
     foreignVectorClock: Option[VectorClock]
   ): TraversalState =
-    val vc = advanceClock(actor, foreignVectorClock)
-    val event = NodeTraversalSucceeded(node, actor, vc)
+    val vc             = advanceClock(actor, foreignVectorClock)
+    val event          = NodeTraversalSucceeded(node, actor, vc)
     val alreadyCounted = completed.contains(node) || failed.contains(node)
     val newRemaining =
       if alreadyCounted then remainingNodes
@@ -156,7 +156,7 @@ final case class TraversalState(
     foreignVectorClock: Option[VectorClock],
     reason: Option[String] = None
   ): TraversalState =
-    val vc = advanceClock(actor, foreignVectorClock)
+    val vc    = advanceClock(actor, foreignVectorClock)
     val event = NodeTraversalFailed(node, actor, vc, reason)
     val newRemaining =
       if completed.contains(node) || failed.contains(node)
@@ -179,10 +179,10 @@ final case class TraversalState(
     actor: NodeAddress,
     foreignVectorClock: Option[VectorClock]
   ): TraversalState =
-    val vc = advanceClock(actor, foreignVectorClock)
+    val vc             = advanceClock(actor, foreignVectorClock)
     val currentAttempt = retries.getOrElse(node, RetryAttempt(0))
-    val nextAttempt = currentAttempt.increment
-    val event = NodeTraversalRetried(node, actor, nextAttempt, vc)
+    val nextAttempt    = currentAttempt.increment
+    val event          = NodeTraversalRetried(node, actor, nextAttempt, vc)
     copy(
       retries = retries.updated(node, nextAttempt)
       // Keep node in failed set to track it was already counted
@@ -198,7 +198,7 @@ final case class TraversalState(
     actor: NodeAddress,
     foreignVectorClock: Option[VectorClock]
   ): TraversalState =
-    val vc = advanceClock(actor, foreignVectorClock)
+    val vc    = advanceClock(actor, foreignVectorClock)
     val event = TraversalCompleted(node, actor, vc)
     copy(
       active = Set.empty,
@@ -215,7 +215,7 @@ final case class TraversalState(
     foreignVectorClock: Option[VectorClock],
     reason: Option[String] = None
   ): TraversalState =
-    val vc = advanceClock(actor, foreignVectorClock)
+    val vc    = advanceClock(actor, foreignVectorClock)
     val event = TraversalFailed(node, actor, vc, reason)
     record(event)
 
@@ -227,7 +227,7 @@ final case class TraversalState(
     actor: NodeAddress,
     foreignVectorClock: Option[VectorClock]
   ): TraversalState =
-    val vc = advanceClock(actor, foreignVectorClock)
+    val vc    = advanceClock(actor, foreignVectorClock)
     val event = TraversalCanceled(node, actor, vc)
     copy(active = Set.empty).record(event)
 
@@ -260,9 +260,9 @@ final case class TraversalState(
     foreignVectorClock: Option[VectorClock],
     now: Instant
   ): TraversalState =
-    val vc = advanceClock(actor, foreignVectorClock)
+    val vc       = advanceClock(actor, foreignVectorClock)
     val branches = branchEntries.keySet
-    val event = Event.ForkStarted(forkNode, forkId, branches, actor, vc)
+    val event    = Event.ForkStarted(forkNode, forkId, branches, actor, vc)
 
     val scope = ForkScope(
       forkId = forkId,
@@ -294,7 +294,7 @@ final case class TraversalState(
     actor: NodeAddress,
     foreignVectorClock: Option[VectorClock]
   ): TraversalState =
-    val vc = advanceClock(actor, foreignVectorClock)
+    val vc    = advanceClock(actor, foreignVectorClock)
     val event = Event.BranchStarted(node, branchId, forkId, actor, vc)
 
     val updatedBranch = branchStates.get(branchId).map(_.start(node))
@@ -317,10 +317,10 @@ final case class TraversalState(
     actor: NodeAddress,
     foreignVectorClock: Option[VectorClock]
   ): TraversalState =
-    val vc = advanceClock(actor, foreignVectorClock)
+    val vc    = advanceClock(actor, foreignVectorClock)
     val event = Event.BranchAdvanced(node, branchId, forkId, actor, vc)
 
-    val oldNode = branchStates.get(branchId).flatMap(_.currentNode)
+    val oldNode       = branchStates.get(branchId).flatMap(_.currentNode)
     val updatedBranch = branchStates.get(branchId).map(_.advanceTo(node))
 
     // Update index: remove old node mapping (if exists), add new node mapping
@@ -343,13 +343,13 @@ final case class TraversalState(
     actor: NodeAddress,
     foreignVectorClock: Option[VectorClock]
   ): TraversalState =
-    val vc = advanceClock(actor, foreignVectorClock)
+    val vc    = advanceClock(actor, foreignVectorClock)
     val event = Event.BranchCompleted(node, branchId, forkId, BranchResult.Success(None), actor, vc)
 
     val updatedBranch = branchStates.get(branchId).map(_.complete())
     val updatedPendingJoins = pendingJoins.map { case (joinNode, pj) =>
       if pj.forkId == forkId then joinNode -> pj.branchCompleted(branchId)
-      else joinNode -> pj
+      else joinNode                        -> pj
     }
 
     copy(
@@ -371,13 +371,13 @@ final case class TraversalState(
     actor: NodeAddress,
     foreignVectorClock: Option[VectorClock]
   ): TraversalState =
-    val vc = advanceClock(actor, foreignVectorClock)
+    val vc    = advanceClock(actor, foreignVectorClock)
     val event = Event.BranchCompleted(node, branchId, forkId, BranchResult.Failure(reason), actor, vc)
 
     val updatedBranch = branchStates.get(branchId).map(_.fail(reason))
     val updatedPendingJoins = pendingJoins.map { case (joinNode, pj) =>
       if pj.forkId == forkId then joinNode -> pj.branchFailed(branchId)
-      else joinNode -> pj
+      else joinNode                        -> pj
     }
 
     copy(
@@ -399,13 +399,13 @@ final case class TraversalState(
     actor: NodeAddress,
     foreignVectorClock: Option[VectorClock]
   ): TraversalState =
-    val vc = advanceClock(actor, foreignVectorClock)
+    val vc    = advanceClock(actor, foreignVectorClock)
     val event = Event.BranchCanceled(node, branchId, forkId, reason, actor, vc)
 
     val updatedBranch = branchStates.get(branchId).map(_.cancel)
     val updatedPendingJoins = pendingJoins.map { case (joinNode, pj) =>
       if pj.forkId == forkId then joinNode -> pj.branchCanceled(branchId)
-      else joinNode -> pj
+      else joinNode                        -> pj
     }
 
     copy(
@@ -427,7 +427,7 @@ final case class TraversalState(
     actor: NodeAddress,
     foreignVectorClock: Option[VectorClock]
   ): TraversalState =
-    val vc = advanceClock(actor, foreignVectorClock)
+    val vc    = advanceClock(actor, foreignVectorClock)
     val event = Event.BranchTimedOut(node, branchId, forkId, actor, vc)
 
     val updatedBranch = branchStates.get(branchId).map(_.timeout)
@@ -435,7 +435,7 @@ final case class TraversalState(
     // Notify pending joins that this branch has failed (timeout = failure for join logic)
     val updatedPendingJoins = pendingJoins.map { case (joinNode, pj) =>
       if pj.forkId == forkId then joinNode -> pj.branchFailed(branchId)
-      else joinNode -> pj
+      else joinNode                        -> pj
     }
 
     copy(
@@ -456,7 +456,7 @@ final case class TraversalState(
     actor: NodeAddress,
     foreignVectorClock: Option[VectorClock]
   ): TraversalState =
-    val vc = advanceClock(actor, foreignVectorClock)
+    val vc    = advanceClock(actor, foreignVectorClock)
     val event = Event.JoinReached(joinNode, branchId, forkId, actor, vc)
 
     copy(
@@ -474,7 +474,7 @@ final case class TraversalState(
     actor: NodeAddress,
     foreignVectorClock: Option[VectorClock]
   ): TraversalState =
-    val vc = advanceClock(actor, foreignVectorClock)
+    val vc    = advanceClock(actor, foreignVectorClock)
     val event = Event.JoinCompleted(joinNode, forkId, completedBranches, actor, vc)
 
     // Clean up fork scope and branch states
@@ -501,7 +501,7 @@ final case class TraversalState(
     actor: NodeAddress,
     foreignVectorClock: Option[VectorClock]
   ): TraversalState =
-    val vc = advanceClock(actor, foreignVectorClock)
+    val vc    = advanceClock(actor, foreignVectorClock)
     val event = Event.JoinTimedOut(joinNode, forkId, pendingBranches, actor, vc)
 
     copy(
@@ -528,7 +528,7 @@ final case class TraversalState(
     actor: NodeAddress,
     foreignVectorClock: Option[VectorClock]
   ): TraversalState =
-    val vc = advanceClock(actor, foreignVectorClock)
+    val vc    = advanceClock(actor, foreignVectorClock)
     val event = TraversalTimeoutScheduled(entryNode, timeoutId, deadline, actor, vc)
     copy(traversalTimeoutId = Some(timeoutId)).record(event)
 
@@ -550,10 +550,10 @@ final case class TraversalState(
     actor: NodeAddress,
     foreignVectorClock: Option[VectorClock]
   ): TraversalState =
-    val vc = advanceClock(actor, foreignVectorClock)
-    val node = active.headOption.getOrElse(fallbackNode)
+    val vc             = advanceClock(actor, foreignVectorClock)
+    val node           = active.headOption.getOrElse(fallbackNode)
     val activeBranches = branchStates.values.filter(_.isActive).map(_.branchId).toSet
-    val event = TraversalTimedOut(node, active, activeBranches, actor, vc)
+    val event          = TraversalTimedOut(node, active, activeBranches, actor, vc)
     copy(
       active = Set.empty,
       traversalTimeoutId = None
@@ -610,12 +610,12 @@ final case class TraversalState(
   /** Determine next nodes based on edge guard condition. */
   def nextNodes(guard: EdgeGuard, dag: Dag): List[NodeId] =
     val traversed = guard match
-      case EdgeGuard.OnSuccess              => completed
-      case EdgeGuard.OnFailure              => failed
-      case EdgeGuard.Always                 => completed ++ failed ++ active
-      case EdgeGuard.OnAny                  => completed ++ failed
-      case EdgeGuard.OnTimeout              => failed // Timeout is a type of failure
-      case EdgeGuard.Conditional(_)         => completed // Conditionals apply to completed nodes
+      case EdgeGuard.OnSuccess      => completed
+      case EdgeGuard.OnFailure      => failed
+      case EdgeGuard.Always         => completed ++ failed ++ active
+      case EdgeGuard.OnAny          => completed ++ failed
+      case EdgeGuard.OnTimeout      => failed    // Timeout is a type of failure
+      case EdgeGuard.Conditional(_) => completed // Conditionals apply to completed nodes
     dag.edges.collect {
       case edge if traversed.contains(edge.from) && edge.guard == guard => edge.to
     }

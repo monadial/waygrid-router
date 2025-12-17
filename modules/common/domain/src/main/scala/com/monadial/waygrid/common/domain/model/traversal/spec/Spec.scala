@@ -17,7 +17,7 @@ import com.monadial.waygrid.common.domain.value.Address.ServiceAddress
  */
 final case class Spec(
   entryPoints: NonEmptyList[Node],
-  repeatPolicy: RepeatPolicy,
+  repeatPolicy: RepeatPolicy
 ):
 
   /**

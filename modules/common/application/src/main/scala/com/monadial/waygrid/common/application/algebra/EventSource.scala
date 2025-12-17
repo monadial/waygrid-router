@@ -6,7 +6,6 @@ import com.monadial.waygrid.common.domain.algebra.messaging.event.Event
 import com.monadial.waygrid.common.domain.model.envelope.DomainEnvelope
 import com.monadial.waygrid.common.domain.value.Address.Endpoint
 
-
 /**
  * A high-level abstraction for subscribing to deserialized domain events.
  *

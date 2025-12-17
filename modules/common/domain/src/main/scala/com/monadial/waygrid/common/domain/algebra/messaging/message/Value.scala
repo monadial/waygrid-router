@@ -15,6 +15,6 @@ object Value:
   object MessageType extends StringValue:
     def fromMessage[M <: Message](message: M): MessageType =
       message
-          .getClass
-          .getCanonicalName
-          .toDomain[MessageType]
+        .getClass
+        .getCanonicalName
+        .toDomain[MessageType]

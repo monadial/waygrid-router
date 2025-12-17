@@ -2,7 +2,7 @@ package com.monadial.waygrid.common.domain.model.traversal.dag
 
 import cats.data.NonEmptyList
 import com.monadial.waygrid.common.domain.model.routing.Value.RepeatPolicy
-import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{DagHash, EdgeGuard, ForkId, NodeId}
+import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ DagHash, EdgeGuard, ForkId, NodeId }
 
 import scala.concurrent.duration.FiniteDuration
 
@@ -41,8 +41,7 @@ final case class Dag(
       grouped.forall { case ((_, guard), es) =>
         es.size <= 1 && (guard match
           case Value.EdgeGuard.Conditional(_) => false
-          case _                              => true
-        )
+          case _                              => true)
       }
 
   /** Returns the node corresponding to a given ID, if present. */
@@ -77,9 +76,10 @@ final case class Dag(
   def joinNodeIdFor(forkId: ForkId): Option[NodeId] =
     nodes.values.collectFirst {
       case n if n.nodeType match
-          case NodeType.Join(fid, _, _) if fid == forkId => true
-          case _                                         => false
-        => n.id
+            case NodeType.Join(fid, _, _) if fid == forkId => true
+            case _ =>
+              false
+          => n.id
     }
 
   // ---------------------------------------------------------------------------
@@ -109,14 +109,14 @@ final case class Dag(
     val forkIdToNode: Map[ForkId, Node] = forkNodes.flatMap { n =>
       n.nodeType match
         case NodeType.Fork(forkId) => Some(forkId -> n)
-        case _ => None
+        case _                     => None
     }.toMap
 
     // Extract fork IDs from Join nodes
     val joinsByForkId: Map[ForkId, List[Node]] = joinNodes.flatMap { n =>
       n.nodeType match
         case NodeType.Join(forkId, _, _) => Some(forkId -> n)
-        case _ => None
+        case _                           => None
     }.groupMap(_._1)(_._2)
 
     // Check each Fork has exactly one Join
@@ -170,7 +170,7 @@ final case class Dag(
 
     val visited = mutable.Set.empty[NodeId]
     val inStack = mutable.Set.empty[NodeId]
-    val parent = mutable.Map.empty[NodeId, NodeId]
+    val parent  = mutable.Map.empty[NodeId, NodeId]
 
     def dfs(nodeId: NodeId): Option[List[NodeId]] =
       if inStack.contains(nodeId) then

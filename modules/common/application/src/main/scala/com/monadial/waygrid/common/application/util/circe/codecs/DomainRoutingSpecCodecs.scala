@@ -15,14 +15,14 @@ import io.circe.syntax.*
 object DomainRoutingSpecCodecs:
 
   given Codec[DeliveryStrategy] = Codec.derived[DeliveryStrategy]
-  given Codec[JoinStrategy] = Codec.derived[JoinStrategy]
-  given Codec[Condition] = Codec.derived[Condition]
+  given Codec[JoinStrategy]     = Codec.derived[JoinStrategy]
+  given Codec[Condition]        = Codec.derived[Condition]
 
   // Codecs for each Node variant
   given Codec[Node.ConditionalEdge] = Codec.derived[Node.ConditionalEdge]
-  given Codec[Node.Standard] = Codec.derived[Node.Standard]
-  given Codec[Node.Fork] = Codec.derived[Node.Fork]
-  given Codec[Node.Join] = Codec.derived[Node.Join]
+  given Codec[Node.Standard]        = Codec.derived[Node.Standard]
+  given Codec[Node.Fork]            = Codec.derived[Node.Fork]
+  given Codec[Node.Join]            = Codec.derived[Node.Join]
 
   // Sealed trait codec with discriminator
   given Encoder[Node] = Encoder.instance {

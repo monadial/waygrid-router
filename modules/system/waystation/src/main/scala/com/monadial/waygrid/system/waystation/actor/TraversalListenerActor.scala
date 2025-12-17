@@ -1,12 +1,15 @@
 package com.monadial.waygrid.system.waystation.actor
 
 import cats.Parallel
-import cats.effect.{Async, Concurrent, Ref, Resource}
+import cats.effect.{ Async, Concurrent, Ref, Resource }
 import cats.implicits.*
 import com.monadial.waygrid.common.application.algebra.*
 import com.monadial.waygrid.common.application.algebra.SupervisedRequest.Stop
 import com.monadial.waygrid.common.application.syntax.EventRouterSyntax.event
-import com.monadial.waygrid.common.application.syntax.EventSourceSyntax.{EventSubscriber, subscribeToWaystationInboundEvents}
+import com.monadial.waygrid.common.application.syntax.EventSourceSyntax.{
+  EventSubscriber,
+  subscribeToWaystationInboundEvents
+}
 import com.monadial.waygrid.common.application.util.cats.effect.FiberT
 import com.monadial.waygrid.common.domain.model.envelope.DomainEnvelope
 import com.monadial.waygrid.common.domain.model.envelope.Value.TraversalRefStamp
@@ -40,7 +43,8 @@ object TraversalListenerActor:
 
   def behavior[F[+_]: {Async, Concurrent, Parallel, Logger, ThisNode,
     EventSink, EventSource, com.monadial.waygrid.common.domain.algebra.storage.TraversalStateRepository,
-    com.monadial.waygrid.common.domain.algebra.storage.DagRepository}](actorSystem: ActorSystem[F]): Resource[F, TraversalListenerActor[F]] =
+    com.monadial.waygrid.common.domain.algebra.storage.DagRepository}](actorSystem: ActorSystem[F])
+    : Resource[F, TraversalListenerActor[F]] =
     for
       traversalExecutorActor <- TraversalExecutorActor
         .behavior[F]
@@ -90,7 +94,7 @@ object TraversalListenerActor:
 
       private def executeTraversal[E <: TraversalEvent](
         handle: Handle[E],
-        spanCtx: SpanContext,
+        spanCtx: SpanContext
       ): F[Unit] = traversalExecutorActor ! ExecuteTraversal[E](
         handle.event.traversalId,
         handle.dagHash,

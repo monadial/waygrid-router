@@ -13,25 +13,25 @@ import io.circe.syntax.*
 
 object ApplicationTransportEnvelopeCodecs:
   given Encoder[EnvelopeStamps] = Encoder
-      .encodeJson
-      .contramap: stamps =>
-        Json.obj(
-          stamps.map { case (cls, values) =>
-            cls.getName -> values.asJson
-          }.toSeq *
-        )
+    .encodeJson
+    .contramap: stamps =>
+      Json.obj(
+        stamps.map { case (cls, values) =>
+          cls.getName -> values.asJson
+        }.toSeq*
+      )
 
   given Decoder[EnvelopeStamps] =
     Decoder.decodeJson.emap: json =>
-      json.asObject
+        json.asObject
           .map { obj =>
             obj.toMap.map { case (className, valuesJson) =>
               Either
-                  .catchNonFatal(Class.forName(className).asInstanceOf[Class[? <: Stamp]])
-                  .leftMap(_.getMessage)
-                  .flatMap { clazz =>
-                    valuesJson.as[List[Stamp]].leftMap(_.getMessage).map(clazz -> _)
-                  }
+                .catchNonFatal(Class.forName(className).asInstanceOf[Class[? <: Stamp]])
+                .leftMap(_.getMessage)
+                .flatMap { clazz =>
+                  valuesJson.as[List[Stamp]].leftMap(_.getMessage).map(clazz -> _)
+                }
             }.toList.sequence.map(_.toMap)
           }
           .getOrElse(Left("Expected JSON object for EnvelopeStamps"))
@@ -42,6 +42,5 @@ object ApplicationTransportEnvelopeCodecs:
   given Encoder[Endpoint] = semiauto.deriveCodec
   given Decoder[Endpoint] = semiauto.deriveCodec
 
-  given Codec[MessageContent] = semiauto.deriveCodec
+  given Codec[MessageContent]    = semiauto.deriveCodec
   given Codec[TransportEnvelope] = semiauto.deriveCodec
-

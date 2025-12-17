@@ -67,7 +67,7 @@ final case class BranchState(
   /** Returns true if the branch has finished (any terminal state) */
   inline def isTerminal: Boolean = status match
     case BranchStatus.Completed | BranchStatus.Failed |
-         BranchStatus.Canceled | BranchStatus.TimedOut => true
+        BranchStatus.Canceled | BranchStatus.TimedOut => true
     case _ => false
 
   /** Transition to running state with the given node */
@@ -136,14 +136,19 @@ object BranchState:
 enum BranchStatus:
   /** Branch created but not yet started */
   case Pending
+
   /** Branch is currently executing */
   case Running
+
   /** Branch completed successfully */
   case Completed
+
   /** Branch failed (after retries exhausted) */
   case Failed
+
   /** Branch was canceled (e.g., OR join completed with another branch) */
   case Canceled
+
   /** Branch exceeded its timeout */
   case TimedOut
 
@@ -153,8 +158,10 @@ enum BranchStatus:
 enum BranchResult:
   /** Branch completed successfully, optionally with output data */
   case Success(output: Option[Json])
+
   /** Branch failed with a reason */
   case Failure(reason: String)
+
   /** Branch timed out */
   case Timeout
 

@@ -4,7 +4,6 @@ import com.monadial.waygrid.common.application.`macro`.CirceMessageCodecRegistry
 import com.monadial.waygrid.common.domain.model.scheduling.Event.SchedulingEvent
 import com.monadial.waygrid.common.domain.model.traversal.Event.TraversalEvent
 
-
 object AllEventCodecs:
   /**
    * Registers all Circe codecs for domain events.
@@ -27,5 +26,3 @@ object AllEventCodecs:
     import com.monadial.waygrid.common.application.util.circe.AllDomainEventCodecs.given
     CirceMessageCodecRegistryMacro.registerAll[TraversalEvent]()
     CirceMessageCodecRegistryMacro.registerAll[SchedulingEvent]()
-
-

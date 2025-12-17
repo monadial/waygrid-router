@@ -41,29 +41,50 @@ case class ParameterDef(
 object ParameterDef:
   /** Create a required string parameter */
   def requiredString(name: String, description: String = ""): ParameterDef =
-    ParameterDef(name, ParameterType.StringType, required = true,
-      description = if description.isEmpty then None else Some(description))
+    ParameterDef(
+      name,
+      ParameterType.StringType,
+      required = true,
+      description = if description.isEmpty then None else Some(description)
+    )
 
   /** Create a required sensitive parameter (should use SecretRef) */
   def requiredSecret(name: String, description: String = ""): ParameterDef =
-    ParameterDef(name, ParameterType.StringType, required = true, sensitive = true,
-      description = if description.isEmpty then None else Some(description))
+    ParameterDef(
+      name,
+      ParameterType.StringType,
+      required = true,
+      sensitive = true,
+      description = if description.isEmpty then None else Some(description)
+    )
 
   /** Create an optional string parameter with default */
   def optionalString(name: String, default: String): ParameterDef =
-    ParameterDef(name, ParameterType.StringType, required = false,
-      defaultValue = Some(ParameterValue.StringVal(default)))
+    ParameterDef(
+      name,
+      ParameterType.StringType,
+      required = false,
+      defaultValue = Some(ParameterValue.StringVal(default))
+    )
 
   /** Create an optional int parameter with default */
   def optionalInt(name: String, default: Int): ParameterDef =
-    ParameterDef(name, ParameterType.IntType, required = false,
-      defaultValue = Some(ParameterValue.IntVal(default)))
+    ParameterDef(
+      name,
+      ParameterType.IntType,
+      required = false,
+      defaultValue = Some(ParameterValue.IntVal(default))
+    )
 
   /** Create an optional float parameter with default and constraints */
   def optionalFloat(name: String, default: Double, min: Double, max: Double): ParameterDef =
-    ParameterDef(name, ParameterType.FloatType, required = false,
+    ParameterDef(
+      name,
+      ParameterType.FloatType,
+      required = false,
       defaultValue = Some(ParameterValue.FloatVal(default)),
-      constraint = Some(ParameterConstraint(min = Some(BigDecimal(min)), max = Some(BigDecimal(max)))))
+      constraint = Some(ParameterConstraint(min = Some(BigDecimal(min)), max = Some(BigDecimal(max))))
+    )
 
   /** Create a required enum parameter */
   def requiredEnum(name: String, values: String*): ParameterDef =

@@ -6,7 +6,7 @@ import com.monadial.waygrid.system.topology.domain.model.election.Value.FencingT
 
 import scala.concurrent.duration.Duration
 
-type NodeWon = FencingToken
+type NodeWon  = FencingToken
 type NodeLost = (fencingToken: FencingToken, leader: NodeAddress)
 
 trait LeadershipProvider[F[+_]]:

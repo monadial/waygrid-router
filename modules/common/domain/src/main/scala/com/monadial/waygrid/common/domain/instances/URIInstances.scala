@@ -1,12 +1,17 @@
 package com.monadial.waygrid.common.domain.instances
 
 import cats.data.Validated
-import com.monadial.waygrid.common.domain.algebra.value.codec.{Base64Codec, Base64DecodingError, BytesCodec, BytesDecodingError}
+import com.monadial.waygrid.common.domain.algebra.value.codec.{
+  Base64Codec,
+  Base64DecodingError,
+  BytesCodec,
+  BytesDecodingError
+}
 import com.monadial.waygrid.common.domain.instances.StringInstances.given
-import io.circe.{Decoder as JsonDecoder, Encoder as JsonEncoder}
+import io.circe.{ Decoder as JsonDecoder, Encoder as JsonEncoder }
 import org.http4s.Uri
 import scodec.bits.ByteVector
-import scodec.{Attempt, Err, Decoder as SDecoder, Encoder as SEncoder}
+import scodec.{ Attempt, Decoder as SDecoder, Encoder as SEncoder, Err }
 
 object URIInstances:
 
@@ -28,7 +33,7 @@ object URIInstances:
   given SDecoder[Uri] = scodec.codecs.utf8.asDecoder.emap(raw =>
     Uri.fromString(raw) match
       case Right(uri) => Attempt.successful(uri)
-      case Left(err) => Attempt.failure(Err(err.message))
+      case Left(err)  => Attempt.failure(Err(err.message))
   )
 
   given BytesCodec[Uri] with

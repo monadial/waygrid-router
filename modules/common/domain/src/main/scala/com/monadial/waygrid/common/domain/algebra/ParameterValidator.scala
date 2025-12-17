@@ -71,16 +71,16 @@ object ParameterValidator:
       case OutOfRange(name, value, constraint) =>
         val range = (constraint.min, constraint.max) match
           case (Some(min), Some(max)) => s"[$min, $max]"
-          case (Some(min), None) => s">= $min"
-          case (None, Some(max)) => s"<= $max"
-          case _ => "unknown"
+          case (Some(min), None)      => s">= $min"
+          case (None, Some(max))      => s"<= $max"
+          case _                      => "unknown"
         s"Parameter '$name' value $value is out of range $range"
       case LengthViolation(name, len, constraint) =>
         val range = (constraint.minLength, constraint.maxLength) match
           case (Some(min), Some(max)) => s"[$min, $max]"
-          case (Some(min), None) => s">= $min"
-          case (None, Some(max)) => s"<= $max"
-          case _ => "unknown"
+          case (Some(min), None)      => s">= $min"
+          case (None, Some(max))      => s"<= $max"
+          case _                      => "unknown"
         s"Parameter '$name' length $len is out of range $range"
       case PatternViolation(name, value, pattern) =>
         s"Parameter '$name' value '$value' does not match pattern '$pattern'"
@@ -107,9 +107,9 @@ object ParameterValidator:
     val requiredCheck = validateRequired(schema, params)
     val typeChecks = params.toList.traverse { case (name, value) =>
       schema.get(name) match
-        case Some(paramDef) => validateParameter(name, value, paramDef)
+        case Some(paramDef)       => validateParameter(name, value, paramDef)
         case None if allowUnknown => (name, value).validNel
-        case None => ValidationError.UnknownParameter(name).invalidNel
+        case None                 => ValidationError.UnknownParameter(name).invalidNel
     }
 
     (requiredCheck, typeChecks).mapN { (_, validatedParams) =>
@@ -130,9 +130,10 @@ object ParameterValidator:
   ): ValidationResult[Unit] =
     val missing = schema.requiredNames -- params.keySet
     if missing.isEmpty then ().validNel
-    else missing.toList.map(ValidationError.MissingRequired(_)).foldLeft(().validNel[ValidationError]) {
-      (acc, err) => acc *> err.invalidNel
-    }
+    else
+      missing.toList.map(ValidationError.MissingRequired(_)).foldLeft(().validNel[ValidationError]) {
+        (acc, err) => acc *> err.invalidNel
+      }
 
   /**
    * Validate a single parameter value against its definition.
@@ -143,7 +144,7 @@ object ParameterValidator:
     paramDef: ParameterDef
   ): ValidationResult[(String, ParameterValue)] =
     val sensitiveCheck = validateSensitive(name, value, paramDef)
-    val typeCheck = validateType(name, value, paramDef.paramType)
+    val typeCheck      = validateType(name, value, paramDef.paramType)
     val constraintCheck = paramDef.constraint.fold(().validNel[ValidationError])(c =>
       validateConstraint(name, value, c)
     )
@@ -161,7 +162,7 @@ object ParameterValidator:
     if paramDef.sensitive then
       value match
         case ParameterValue.Secret(_) => ().validNel
-        case _ => ValidationError.SensitiveNotSecret(name).invalidNel
+        case _                        => ValidationError.SensitiveNotSecret(name).invalidNel
     else ().validNel
 
   /**
@@ -174,9 +175,9 @@ object ParameterValidator:
   ): ValidationResult[Unit] =
     (value, expectedType) match
       case (ParameterValue.StringVal(_), ParameterType.StringType) => ().validNel
-      case (ParameterValue.IntVal(_), ParameterType.IntType) => ().validNel
-      case (ParameterValue.FloatVal(_), ParameterType.FloatType) => ().validNel
-      case (ParameterValue.BoolVal(_), ParameterType.BoolType) => ().validNel
+      case (ParameterValue.IntVal(_), ParameterType.IntType)       => ().validNel
+      case (ParameterValue.FloatVal(_), ParameterType.FloatType)   => ().validNel
+      case (ParameterValue.BoolVal(_), ParameterType.BoolType)     => ().validNel
       case (ParameterValue.StringVal(v), ParameterType.EnumType(allowed)) =>
         if allowed.toList.contains(v) then ().validNel
         else ValidationError.InvalidEnumValue(name, v, allowed.toList).invalidNel
@@ -196,7 +197,7 @@ object ParameterValidator:
   ): ValidationResult[Unit] =
     value match
       case ParameterValue.StringVal(s) =>
-        val lengthCheck = validateStringLength(name, s, constraint)
+        val lengthCheck  = validateStringLength(name, s, constraint)
         val patternCheck = validatePattern(name, s, constraint)
         (lengthCheck, patternCheck).mapN((_, _) => ())
 
@@ -213,7 +214,7 @@ object ParameterValidator:
     value: String,
     constraint: ParameterConstraint
   ): ValidationResult[Unit] =
-    val len = value.length
+    val len   = value.length
     val minOk = constraint.minLength.forall(len >= _)
     val maxOk = constraint.maxLength.forall(len <= _)
     if minOk && maxOk then ().validNel

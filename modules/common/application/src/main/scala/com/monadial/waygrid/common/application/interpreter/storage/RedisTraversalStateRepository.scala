@@ -31,13 +31,13 @@ class RedisTraversalStateRepository[F[_]: Async](
   defaultTtl: FiniteDuration
 ) extends TraversalStateRepository[F]:
 
-  private def stateKey(id: TraversalId): String = s"$keyPrefix${id.unwrap}"
+  private def stateKey(id: TraversalId): String   = s"$keyPrefix${id.unwrap}"
   private def versionKey(id: TraversalId): String = s"$keyPrefix${id.unwrap}:version"
-  private def lockKey(id: TraversalId): String = s"$lockPrefix${id.unwrap}"
+  private def lockKey(id: TraversalId): String    = s"$lockPrefix${id.unwrap}"
 
   override def save(state: TraversalState): F[TraversalState] =
     val newVersion = state.stateVersion.increment
-    val stateJson = state.copy(stateVersion = newVersion).asJson.noSpaces
+    val stateJson  = state.copy(stateVersion = newVersion).asJson.noSpaces
 
     for
       // Check current version using Redis WATCH for optimistic locking

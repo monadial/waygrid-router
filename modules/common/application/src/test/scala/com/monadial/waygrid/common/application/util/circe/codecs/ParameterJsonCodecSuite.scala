@@ -15,36 +15,36 @@ object ParameterJsonCodecSuite extends SimpleIOSuite:
   // ---------------------------------------------------------------------------
 
   pureTest("ParameterValue.StringVal roundtrips through JSON") {
-    val value = ParameterValue.StringVal("hello")
-    val json = value.asJson
+    val value   = ParameterValue.StringVal("hello")
+    val json    = value.asJson
     val decoded = json.as[ParameterValue]
     expect(decoded == Right(value))
   }
 
   pureTest("ParameterValue.IntVal roundtrips through JSON") {
-    val value = ParameterValue.IntVal(42)
-    val json = value.asJson
+    val value   = ParameterValue.IntVal(42)
+    val json    = value.asJson
     val decoded = json.as[ParameterValue]
     expect(decoded == Right(value))
   }
 
   pureTest("ParameterValue.FloatVal roundtrips through JSON") {
-    val value = ParameterValue.FloatVal(3.14)
-    val json = value.asJson
+    val value   = ParameterValue.FloatVal(3.14)
+    val json    = value.asJson
     val decoded = json.as[ParameterValue]
     expect(decoded == Right(value))
   }
 
   pureTest("ParameterValue.BoolVal roundtrips through JSON") {
-    val value = ParameterValue.BoolVal(true)
-    val json = value.asJson
+    val value   = ParameterValue.BoolVal(true)
+    val json    = value.asJson
     val decoded = json.as[ParameterValue]
     expect(decoded == Right(value))
   }
 
   pureTest("ParameterValue.Secret roundtrips through JSON") {
-    val value = ParameterValue.Secret(SecretReference("tenant-123/api-keys/openai"))
-    val json = value.asJson
+    val value   = ParameterValue.Secret(SecretReference("tenant-123/api-keys/openai"))
+    val json    = value.asJson
     val decoded = json.as[ParameterValue]
     expect(decoded == Right(value))
   }
@@ -55,7 +55,7 @@ object ParameterJsonCodecSuite extends SimpleIOSuite:
       Some("apiKey"),
       None
     ))
-    val json = value.asJson
+    val json    = value.asJson
     val decoded = json.as[ParameterValue]
     expect(decoded == Right(value))
   }
@@ -66,7 +66,7 @@ object ParameterJsonCodecSuite extends SimpleIOSuite:
       None,
       Some(SecretVersion("v2"))
     ))
-    val json = value.asJson
+    val json    = value.asJson
     val decoded = json.as[ParameterValue]
     expect(decoded == Right(value))
   }
@@ -76,8 +76,8 @@ object ParameterJsonCodecSuite extends SimpleIOSuite:
   // ---------------------------------------------------------------------------
 
   pureTest("SecretReference minimal roundtrips through JSON") {
-    val ref = SecretReference("tenant/key")
-    val json = ref.asJson
+    val ref     = SecretReference("tenant/key")
+    val json    = ref.asJson
     val decoded = json.as[SecretReference]
     expect(decoded == Right(ref))
   }
@@ -88,7 +88,7 @@ object ParameterJsonCodecSuite extends SimpleIOSuite:
       Some("token"),
       Some(SecretVersion("v3"))
     )
-    val json = ref.asJson
+    val json    = ref.asJson
     val decoded = json.as[SecretReference]
     expect(decoded == Right(ref))
   }
@@ -98,36 +98,36 @@ object ParameterJsonCodecSuite extends SimpleIOSuite:
   // ---------------------------------------------------------------------------
 
   pureTest("ParameterType.StringType roundtrips through JSON") {
-    val pt = ParameterType.StringType
-    val json = pt.asJson
+    val pt      = ParameterType.StringType
+    val json    = pt.asJson
     val decoded = json.as[ParameterType]
     expect(decoded == Right(pt))
   }
 
   pureTest("ParameterType.IntType roundtrips through JSON") {
-    val pt = ParameterType.IntType
-    val json = pt.asJson
+    val pt      = ParameterType.IntType
+    val json    = pt.asJson
     val decoded = json.as[ParameterType]
     expect(decoded == Right(pt))
   }
 
   pureTest("ParameterType.FloatType roundtrips through JSON") {
-    val pt = ParameterType.FloatType
-    val json = pt.asJson
+    val pt      = ParameterType.FloatType
+    val json    = pt.asJson
     val decoded = json.as[ParameterType]
     expect(decoded == Right(pt))
   }
 
   pureTest("ParameterType.BoolType roundtrips through JSON") {
-    val pt = ParameterType.BoolType
-    val json = pt.asJson
+    val pt      = ParameterType.BoolType
+    val json    = pt.asJson
     val decoded = json.as[ParameterType]
     expect(decoded == Right(pt))
   }
 
   pureTest("ParameterType.EnumType roundtrips through JSON") {
-    val pt = ParameterType.oneOf("gpt-4", "gpt-3.5-turbo", "claude-3")
-    val json = pt.asJson
+    val pt      = ParameterType.oneOf("gpt-4", "gpt-3.5-turbo", "claude-3")
+    val json    = pt.asJson
     val decoded = json.as[ParameterType]
     expect(decoded == Right(pt))
   }
@@ -138,22 +138,22 @@ object ParameterJsonCodecSuite extends SimpleIOSuite:
 
   pureTest("ParameterConstraint.length roundtrips through JSON") {
     val constraint = ParameterConstraint.length(3, 10)
-    val json = constraint.asJson
-    val decoded = json.as[ParameterConstraint]
+    val json       = constraint.asJson
+    val decoded    = json.as[ParameterConstraint]
     expect(decoded == Right(constraint))
   }
 
   pureTest("ParameterConstraint.range roundtrips through JSON") {
     val constraint = ParameterConstraint.range(BigDecimal(0), BigDecimal(100))
-    val json = constraint.asJson
-    val decoded = json.as[ParameterConstraint]
+    val json       = constraint.asJson
+    val decoded    = json.as[ParameterConstraint]
     expect(decoded == Right(constraint))
   }
 
   pureTest("ParameterConstraint.regex roundtrips through JSON") {
     val constraint = ParameterConstraint.regex("^[a-z]+$")
-    val json = constraint.asJson
-    val decoded = json.as[ParameterConstraint]
+    val json       = constraint.asJson
+    val decoded    = json.as[ParameterConstraint]
     expect(decoded == Right(constraint))
   }
 
@@ -163,36 +163,36 @@ object ParameterJsonCodecSuite extends SimpleIOSuite:
 
   pureTest("ParameterDef.requiredString roundtrips through JSON") {
     val paramDef = ParameterDef.requiredString("name", "User's name")
-    val json = paramDef.asJson
-    val decoded = json.as[ParameterDef]
+    val json     = paramDef.asJson
+    val decoded  = json.as[ParameterDef]
     expect(decoded == Right(paramDef))
   }
 
   pureTest("ParameterDef.requiredSecret roundtrips through JSON") {
     val paramDef = ParameterDef.requiredSecret("apiKey", "API key")
-    val json = paramDef.asJson
-    val decoded = json.as[ParameterDef]
+    val json     = paramDef.asJson
+    val decoded  = json.as[ParameterDef]
     expect(decoded == Right(paramDef))
   }
 
   pureTest("ParameterDef.optionalInt roundtrips through JSON") {
     val paramDef = ParameterDef.optionalInt("maxRetries", 3)
-    val json = paramDef.asJson
-    val decoded = json.as[ParameterDef]
+    val json     = paramDef.asJson
+    val decoded  = json.as[ParameterDef]
     expect(decoded == Right(paramDef))
   }
 
   pureTest("ParameterDef.optionalFloat with constraints roundtrips through JSON") {
     val paramDef = ParameterDef.optionalFloat("temperature", default = 0.7, min = 0.0, max = 2.0)
-    val json = paramDef.asJson
-    val decoded = json.as[ParameterDef]
+    val json     = paramDef.asJson
+    val decoded  = json.as[ParameterDef]
     expect(decoded == Right(paramDef))
   }
 
   pureTest("ParameterDef.requiredEnum roundtrips through JSON") {
     val paramDef = ParameterDef.requiredEnum("model", "gpt-4", "gpt-3.5-turbo")
-    val json = paramDef.asJson
-    val decoded = json.as[ParameterDef]
+    val json     = paramDef.asJson
+    val decoded  = json.as[ParameterDef]
     expect(decoded == Right(paramDef))
   }
 
@@ -212,7 +212,7 @@ object ParameterJsonCodecSuite extends SimpleIOSuite:
         ParameterDef.optionalFloat("temperature", default = 0.7, min = 0.0, max = 2.0)
       )
     )
-    val json = schema.asJson
+    val json    = schema.asJson
     val decoded = json.as[ServiceParameterSchema]
     expect(decoded == Right(schema))
   }
@@ -251,19 +251,19 @@ object ParameterJsonCodecSuite extends SimpleIOSuite:
 
   pureTest("Map of parameters roundtrips through JSON") {
     val params: Map[String, ParameterValue] = Map(
-      "name" -> ParameterValue.StringVal("test"),
-      "count" -> ParameterValue.IntVal(5),
+      "name"    -> ParameterValue.StringVal("test"),
+      "count"   -> ParameterValue.IntVal(5),
       "enabled" -> ParameterValue.BoolVal(true),
-      "apiKey" -> ParameterValue.Secret(SecretReference("tenant/key"))
+      "apiKey"  -> ParameterValue.Secret(SecretReference("tenant/key"))
     )
-    val json = params.asJson
+    val json    = params.asJson
     val decoded = json.as[Map[String, ParameterValue]]
     expect(decoded == Right(params))
   }
 
   pureTest("Empty parameter map roundtrips through JSON") {
     val params: Map[String, ParameterValue] = Map.empty
-    val json = params.asJson
-    val decoded = json.as[Map[String, ParameterValue]]
+    val json                                = params.asJson
+    val decoded                             = json.as[Map[String, ParameterValue]]
     expect(decoded == Right(params))
   }

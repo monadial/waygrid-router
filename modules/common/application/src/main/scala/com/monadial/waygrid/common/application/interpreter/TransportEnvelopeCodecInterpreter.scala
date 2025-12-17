@@ -1,6 +1,6 @@
 package com.monadial.waygrid.common.application.interpreter
 
-import cats.data.Validated.{Invalid, Valid}
+import cats.data.Validated.{ Invalid, Valid }
 import cats.effect.Async
 import cats.implicits.catsSyntaxApplicativeId
 import cats.syntax.all.*
@@ -8,13 +8,17 @@ import com.monadial.waygrid.common.application.`macro`.CirceMessageCodecRegistry
 import com.monadial.waygrid.common.application.`macro`.CirceMessageCodecRegistryMacro.CodecMap
 import com.monadial.waygrid.common.application.algebra.TransportEnvelopeCodec
 import com.monadial.waygrid.common.application.domain.model.envelope.TransportEnvelope
-import com.monadial.waygrid.common.application.domain.model.envelope.Value.{MessageContent, MessageContentData, MessageContentType}
+import com.monadial.waygrid.common.application.domain.model.envelope.Value.{
+  MessageContent,
+  MessageContentData,
+  MessageContentType
+}
 import com.monadial.waygrid.common.application.instances.CirceInstances.given
 import com.monadial.waygrid.common.domain.algebra.messaging.message.Message
 import com.monadial.waygrid.common.domain.model.envelope.DomainEnvelope
 import com.monadial.waygrid.common.domain.algebra.messaging.message.Value.MessageType
 import com.monadial.waygrid.common.domain.algebra.value.codec.BytesCodec
-import io.circe.{Decoder, Encoder, Json}
+import io.circe.{ Decoder, Encoder, Json }
 
 object TransportEnvelopeCodecInterpreter:
 
@@ -31,27 +35,26 @@ object TransportEnvelopeCodecInterpreter:
             Async[F].raiseError(encoderMissingError(messageType))
 
           case Some(codec) => {
-            for
-              messageContentData <- codec
+              for
+                messageContentData <- codec
                   .asInstanceOf[Encoder[M]]
                   .apply(envelope.message)
                   .pure[F]
                   .map(BytesCodec[Json].encodeToValue[MessageContentData])
 
-              transportEnvelope <- TransportEnvelope(
-                envelope.id,
-                envelope.sender,
-                envelope.endpoint,
-                MessageContent(
-                  MessageContentType(messageType.unwrap),
-                  messageContentData
-                ),
-                envelope.stamps
-              ).pure[F]
-            yield transportEnvelope
-          }.handleErrorWith: err =>
-            Async[F].raiseError(encodeFailure(messageType, err))
-
+                transportEnvelope <- TransportEnvelope(
+                  envelope.id,
+                  envelope.sender,
+                  envelope.endpoint,
+                  MessageContent(
+                    MessageContentType(messageType.unwrap),
+                    messageContentData
+                  ),
+                  envelope.stamps
+                ).pure[F]
+              yield transportEnvelope
+            }.handleErrorWith: err =>
+                Async[F].raiseError(encodeFailure(messageType, err))
 
       override def decode(envelope: TransportEnvelope): F[DomainEnvelope[? <: Message]] =
         val messageType = MessageType(envelope.message.contentType.unwrap)

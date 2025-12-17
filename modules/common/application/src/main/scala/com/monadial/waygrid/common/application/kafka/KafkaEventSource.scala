@@ -2,18 +2,18 @@ package com.monadial.waygrid.common.application.kafka
 
 import cats.effect.kernel.Ref
 import cats.effect.syntax.all.*
-import cats.effect.{Async, Clock, Concurrent, Resource}
+import cats.effect.{ Async, Clock, Concurrent, Resource }
 import cats.implicits.*
-import com.monadial.waygrid.common.application.algebra.EventSource.{RebalanceEvent, RebalanceHandler}
-import com.monadial.waygrid.common.application.algebra.{EventSource, Logger, ThisNode, TransportEnvelopeCodec}
+import com.monadial.waygrid.common.application.algebra.EventSource.{ RebalanceEvent, RebalanceHandler }
+import com.monadial.waygrid.common.application.algebra.{ EventSource, Logger, ThisNode, TransportEnvelopeCodec }
 import com.monadial.waygrid.common.application.domain.model.envelope.TransportEnvelope
 import com.monadial.waygrid.common.application.domain.model.settings.Kafka
 import com.monadial.waygrid.common.application.instances.CirceInstances.given
 import com.monadial.waygrid.common.application.interpreter.TransportEnvelopeCodecInterpreter
-import com.monadial.waygrid.common.application.kafka.KafkaUtils.{toEndpoint, toTopic}
-import com.monadial.waygrid.common.application.kafka.Tags.{Consumer, RebalanceListener}
+import com.monadial.waygrid.common.application.kafka.KafkaUtils.{ toEndpoint, toTopic }
+import com.monadial.waygrid.common.application.kafka.Tags.{ Consumer, RebalanceListener }
 import com.monadial.waygrid.common.application.kafka.Value.Key
-import com.monadial.waygrid.common.application.util.cats.effect.{FiberT, FiberType}
+import com.monadial.waygrid.common.application.util.cats.effect.{ FiberT, FiberType }
 import com.monadial.waygrid.common.application.util.circe.codecs.ApplicationTransportEnvelopeCodecs.given
 import com.monadial.waygrid.common.domain.algebra.messaging.event.Event
 import com.monadial.waygrid.common.domain.algebra.value.codec.BytesCodec
@@ -22,7 +22,7 @@ import com.monadial.waygrid.common.domain.value.Address.Endpoint
 import fs2.kafka.*
 import io.circe.Json
 import org.typelevel.otel4s.context.propagation.TextMapGetter
-import org.typelevel.otel4s.metrics.{Counter, Histogram, Meter, UpDownCounter}
+import org.typelevel.otel4s.metrics.{ Counter, Histogram, Meter, UpDownCounter }
 import org.typelevel.otel4s.trace.Tracer
 import scodec.bits.ByteVector
 
@@ -211,38 +211,38 @@ object KafkaEventSource:
         codec: TransportEnvelopeCodec[F],
         metrics: KafkaEventSourceMetrics[F],
         handler: Handler,
-        messageStart: Long,
+        messageStart: Long
       ): F[CommittableOffset[F]] =
-            for
-              decodeStart    <- Clock[F].monotonic
-              decodedEnvelope <- codec.decode(record.record.value).attempt
-              domainEnvelope <- decodedEnvelope
-                  .fold(fa => fa.raiseError[F, DomainEnvelope[? <: Event]], _.pure[F])
-              decodeEnd      <- Clock[F].monotonic
-              _              <- metrics.decodeLatency.record((decodeEnd - decodeStart).toMillis)
-              _ <- Logger[F].trace(
-                s"[kafka-event-source] Processing event ${domainEnvelope.id.show} " +
-                  s"from partition ${record.offset.topicPartition.partition}"
-              )
-              processStart <- Clock[F].monotonic
-              processResult <- handler
-                .applyOrElse(
-                  domainEnvelope.asInstanceOf[DomainEnvelope[? <: Event]],
-                  (_: DomainEnvelope[? <: Event]) =>
-                    Logger[F].warn(s"[kafka-event-source] Unhandled event: ${domainEnvelope.id.show}")
-                )
-                .as(true)
-                .handleErrorWith: ex =>
-                  Logger[F].error(
-                    s"[kafka-event-source] Handler failed for ${domainEnvelope.id.show}: ${ex.getMessage}"
-                  ) *> false.pure[F]
-              processEnd <- Clock[F].monotonic
-              _          <- metrics.processLatency.record((processEnd - processStart).toMillis)
-              _ <- if processResult then metrics.messagesProcessed.inc()
-              else metrics.messagesFailed.inc()
-              messageEnd <- Clock[F].realTime
-              _          <- metrics.endToEndLatency.record(messageEnd.toMillis - messageStart)
-            yield record.offset
+        for
+          decodeStart     <- Clock[F].monotonic
+          decodedEnvelope <- codec.decode(record.record.value).attempt
+          domainEnvelope <- decodedEnvelope
+            .fold(fa => fa.raiseError[F, DomainEnvelope[? <: Event]], _.pure[F])
+          decodeEnd <- Clock[F].monotonic
+          _         <- metrics.decodeLatency.record((decodeEnd - decodeStart).toMillis)
+          _ <- Logger[F].trace(
+            s"[kafka-event-source] Processing event ${domainEnvelope.id.show} " +
+              s"from partition ${record.offset.topicPartition.partition}"
+          )
+          processStart <- Clock[F].monotonic
+          processResult <- handler
+            .applyOrElse(
+              domainEnvelope.asInstanceOf[DomainEnvelope[? <: Event]],
+              (_: DomainEnvelope[? <: Event]) =>
+                Logger[F].warn(s"[kafka-event-source] Unhandled event: ${domainEnvelope.id.show}")
+            )
+            .as(true)
+            .handleErrorWith: ex =>
+              Logger[F].error(
+                s"[kafka-event-source] Handler failed for ${domainEnvelope.id.show}: ${ex.getMessage}"
+              ) *> false.pure[F]
+          processEnd <- Clock[F].monotonic
+          _          <- metrics.processLatency.record((processEnd - processStart).toMillis)
+          _ <- if processResult then metrics.messagesProcessed.inc()
+          else metrics.messagesFailed.inc()
+          messageEnd <- Clock[F].realTime
+          _          <- metrics.endToEndLatency.record(messageEnd.toMillis - messageStart)
+        yield record.offset
 
       private def runRebalanceListener(
         consumer: KafkaConsumer[F, Key, TransportEnvelope],

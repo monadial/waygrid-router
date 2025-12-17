@@ -1,6 +1,11 @@
 package com.monadial.waygrid.system.topology.settings
 
-import com.monadial.waygrid.common.application.domain.model.settings.{EventStreamSettings, HttpServerSettings, NodeSettings, WithServiceSettings}
+import com.monadial.waygrid.common.application.domain.model.settings.{
+  EventStreamSettings,
+  HttpServerSettings,
+  NodeSettings,
+  WithServiceSettings
+}
 import com.monadial.waygrid.common.application.instances.DurationInstances.given
 import com.monadial.waygrid.common.application.instances.OdinLoggerInstances.given
 import io.circe.Codec

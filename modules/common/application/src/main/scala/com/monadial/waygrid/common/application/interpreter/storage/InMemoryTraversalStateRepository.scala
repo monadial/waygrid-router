@@ -28,24 +28,27 @@ class InMemoryTraversalStateRepository[F[_]: Sync](
 ) extends TraversalStateRepository[F]:
 
   override def save(state: TraversalState): F[TraversalState] =
-    val newVersion = state.stateVersion.increment
+    val newVersion   = state.stateVersion.increment
     val updatedState = state.copy(stateVersion = newVersion)
 
     states.modify { currentStates =>
       currentStates.get(state.traversalId) match
         case Some(existing) if existing.stateVersion != state.stateVersion =>
           // Concurrent modification detected
-          (currentStates, Left(ConcurrentModification(
-            state.traversalId,
-            state.stateVersion,
-            existing.stateVersion
-          )))
+          (
+            currentStates,
+            Left(ConcurrentModification(
+              state.traversalId,
+              state.stateVersion,
+              existing.stateVersion
+            ))
+          )
         case _ =>
           // Either new entry or version matches - update state
           (currentStates.updated(state.traversalId, updatedState), Right(updatedState))
     }.flatMap {
       case Right(result) => Sync[F].pure(result)
-      case Left(error) => Sync[F].raiseError(error)
+      case Left(error)   => Sync[F].raiseError(error)
     }
 
   override def load(traversalId: TraversalId): F[Option[TraversalState]] =
@@ -65,22 +68,25 @@ class InMemoryTraversalStateRepository[F[_]: Sync](
     states.modify { currentStates =>
       currentStates.get(traversalId) match
         case Some(state) if state.stateVersion == expectedVersion =>
-          val updated = updateFn(state)
+          val updated    = updateFn(state)
           val newVersion = updated.stateVersion.increment
           val finalState = updated.copy(stateVersion = newVersion)
           (currentStates.updated(traversalId, finalState), Right(finalState))
         case Some(state) =>
-          (currentStates, Left(ConcurrentModification(
-            traversalId,
-            expectedVersion,
-            state.stateVersion
-          )))
+          (
+            currentStates,
+            Left(ConcurrentModification(
+              traversalId,
+              expectedVersion,
+              state.stateVersion
+            ))
+          )
         case None =>
           (currentStates, Left(new RuntimeException(s"State not found: $traversalId")))
     }.flatMap {
-      case Right(result) => Sync[F].pure(result)
+      case Right(result)                       => Sync[F].pure(result)
       case Left(error: ConcurrentModification) => Sync[F].raiseError(error)
-      case Left(error: Throwable) => Sync[F].raiseError(error)
+      case Left(error: Throwable)              => Sync[F].raiseError(error)
     }
 
   override def listActive(limit: Int, offset: Int): F[List[TraversalId]] =
@@ -91,7 +97,7 @@ class InMemoryTraversalStateRepository[F[_]: Sync](
     }
 
   override def acquireLock(traversalId: TraversalId, ttl: FiniteDuration): F[Boolean] =
-    val now = Instant.now()
+    val now       = Instant.now()
     val expiresAt = now.plusNanos(ttl.toNanos)
 
     locks.modify { currentLocks =>
@@ -108,7 +114,7 @@ class InMemoryTraversalStateRepository[F[_]: Sync](
     locks.update(_ - traversalId)
 
   override def extendLock(traversalId: TraversalId, ttl: FiniteDuration): F[Boolean] =
-    val now = Instant.now()
+    val now       = Instant.now()
     val newExpiry = now.plusNanos(ttl.toNanos)
 
     locks.modify { currentLocks =>

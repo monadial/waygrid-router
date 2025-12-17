@@ -14,4 +14,3 @@ trait DagRepository[F[_]]:
 
 object DagRepository:
   def apply[F[_]](using repo: DagRepository[F]): DagRepository[F] = repo
-

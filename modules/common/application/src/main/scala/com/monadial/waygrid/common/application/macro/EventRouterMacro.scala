@@ -69,8 +69,8 @@ object EventRouterMacro:
      * @param tpe        Typeable instance to test-and-cast at runtime
      */
     def handle[E <: Event](
-                              f: DomainEnvelope[E] => F[Unit],
-                              priority: Int
+      f: DomainEnvelope[E] => F[Unit],
+      priority: Int
     )(using tpe: Typeable[E]): Unit =
       clauses += (priority -> new PartialFunction[DomainEnvelope[? <: Event], F[Unit]]:
         override def isDefinedAt(evt: DomainEnvelope[? <: Event]): Boolean = tpe.cast(evt.message).isDefined

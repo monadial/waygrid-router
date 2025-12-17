@@ -10,4 +10,3 @@ trait Hasher[F[+_], +V]:
   def hashBytes[I: IsBytes](input: I): F[V]
   def hashLong[I: IsLong](input: I): F[V]
   def hashUri[I: IsURI](input: I): F[V]
-

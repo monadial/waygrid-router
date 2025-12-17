@@ -28,7 +28,7 @@ object ParameterValidatorSuite extends SimpleIOSuite:
   pureTest("validates successfully when all required parameters provided") {
     val params = Map(
       "apiKey" -> ParameterValue.Secret(SecretReference("tenant-123/openai")),
-      "model" -> ParameterValue.StringVal("gpt-4")
+      "model"  -> ParameterValue.StringVal("gpt-4")
     )
 
     val result = ParameterValidator.validate(openAiSchema, params)
@@ -45,7 +45,7 @@ object ParameterValidatorSuite extends SimpleIOSuite:
     expect(result.isInvalid) &&
     expect(result.toEither.left.toOption.exists(_.exists {
       case ValidationError.MissingRequired("apiKey") => true
-      case _ => false
+      case _                                         => false
     }))
   }
 
@@ -72,7 +72,7 @@ object ParameterValidatorSuite extends SimpleIOSuite:
     expect(result.isInvalid) &&
     expect(result.toEither.left.toOption.exists(_.exists {
       case ValidationError.TypeMismatch("count", ParameterType.IntType, _) => true
-      case _ => false
+      case _                                                               => false
     }))
   }
 
@@ -87,7 +87,7 @@ object ParameterValidatorSuite extends SimpleIOSuite:
     expect(result.isInvalid) &&
     expect(result.toEither.left.toOption.exists(_.exists {
       case ValidationError.TypeMismatch("name", ParameterType.StringType, _) => true
-      case _ => false
+      case _                                                                 => false
     }))
   }
 
@@ -98,7 +98,7 @@ object ParameterValidatorSuite extends SimpleIOSuite:
   pureTest("validates enum value when in allowed list") {
     val params = Map(
       "apiKey" -> ParameterValue.Secret(SecretReference("tenant-123/openai")),
-      "model" -> ParameterValue.StringVal("gpt-4")
+      "model"  -> ParameterValue.StringVal("gpt-4")
     )
 
     val result = ParameterValidator.validate(openAiSchema, params)
@@ -108,14 +108,14 @@ object ParameterValidatorSuite extends SimpleIOSuite:
   pureTest("fails when enum value not in allowed list") {
     val params = Map(
       "apiKey" -> ParameterValue.Secret(SecretReference("tenant-123/openai")),
-      "model" -> ParameterValue.StringVal("invalid-model")
+      "model"  -> ParameterValue.StringVal("invalid-model")
     )
 
     val result = ParameterValidator.validate(openAiSchema, params)
     expect(result.isInvalid) &&
     expect(result.toEither.left.toOption.exists(_.exists {
       case ValidationError.InvalidEnumValue("model", "invalid-model", _) => true
-      case _ => false
+      case _                                                             => false
     }))
   }
 
@@ -126,7 +126,7 @@ object ParameterValidatorSuite extends SimpleIOSuite:
   pureTest("validates sensitive parameter when using SecretReference") {
     val params = Map(
       "apiKey" -> ParameterValue.Secret(SecretReference("tenant-123/openai")),
-      "model" -> ParameterValue.StringVal("gpt-4")
+      "model"  -> ParameterValue.StringVal("gpt-4")
     )
 
     val result = ParameterValidator.validate(openAiSchema, params)
@@ -136,14 +136,14 @@ object ParameterValidatorSuite extends SimpleIOSuite:
   pureTest("fails when sensitive parameter uses literal value") {
     val params = Map(
       "apiKey" -> ParameterValue.StringVal("sk-plaintext-key"),
-      "model" -> ParameterValue.StringVal("gpt-4")
+      "model"  -> ParameterValue.StringVal("gpt-4")
     )
 
     val result = ParameterValidator.validate(openAiSchema, params)
     expect(result.isInvalid) &&
     expect(result.toEither.left.toOption.exists(_.exists {
       case ValidationError.SensitiveNotSecret("apiKey") => true
-      case _ => false
+      case _                                            => false
     }))
   }
 
@@ -153,8 +153,8 @@ object ParameterValidatorSuite extends SimpleIOSuite:
 
   pureTest("validates float within range constraints") {
     val params = Map(
-      "apiKey" -> ParameterValue.Secret(SecretReference("tenant-123/openai")),
-      "model" -> ParameterValue.StringVal("gpt-4"),
+      "apiKey"      -> ParameterValue.Secret(SecretReference("tenant-123/openai")),
+      "model"       -> ParameterValue.StringVal("gpt-4"),
       "temperature" -> ParameterValue.FloatVal(1.5)
     )
 
@@ -164,8 +164,8 @@ object ParameterValidatorSuite extends SimpleIOSuite:
 
   pureTest("fails when float below minimum") {
     val params = Map(
-      "apiKey" -> ParameterValue.Secret(SecretReference("tenant-123/openai")),
-      "model" -> ParameterValue.StringVal("gpt-4"),
+      "apiKey"      -> ParameterValue.Secret(SecretReference("tenant-123/openai")),
+      "model"       -> ParameterValue.StringVal("gpt-4"),
       "temperature" -> ParameterValue.FloatVal(-0.5)
     )
 
@@ -173,14 +173,14 @@ object ParameterValidatorSuite extends SimpleIOSuite:
     expect(result.isInvalid) &&
     expect(result.toEither.left.toOption.exists(_.exists {
       case ValidationError.OutOfRange("temperature", _, _) => true
-      case _ => false
+      case _                                               => false
     }))
   }
 
   pureTest("fails when float above maximum") {
     val params = Map(
-      "apiKey" -> ParameterValue.Secret(SecretReference("tenant-123/openai")),
-      "model" -> ParameterValue.StringVal("gpt-4"),
+      "apiKey"      -> ParameterValue.Secret(SecretReference("tenant-123/openai")),
+      "model"       -> ParameterValue.StringVal("gpt-4"),
       "temperature" -> ParameterValue.FloatVal(2.5)
     )
 
@@ -188,7 +188,7 @@ object ParameterValidatorSuite extends SimpleIOSuite:
     expect(result.isInvalid) &&
     expect(result.toEither.left.toOption.exists(_.exists {
       case ValidationError.OutOfRange("temperature", _, _) => true
-      case _ => false
+      case _                                               => false
     }))
   }
 
@@ -224,7 +224,7 @@ object ParameterValidatorSuite extends SimpleIOSuite:
     expect(result.isInvalid) &&
     expect(result.toEither.left.toOption.exists(_.exists {
       case ValidationError.LengthViolation("code", 2, _) => true
-      case _ => false
+      case _                                             => false
     }))
   }
 
@@ -244,7 +244,7 @@ object ParameterValidatorSuite extends SimpleIOSuite:
     expect(result.isInvalid) &&
     expect(result.toEither.left.toOption.exists(_.exists {
       case ValidationError.LengthViolation("code", 10, _) => true
-      case _ => false
+      case _                                              => false
     }))
   }
 
@@ -280,7 +280,7 @@ object ParameterValidatorSuite extends SimpleIOSuite:
     expect(result.isInvalid) &&
     expect(result.toEither.left.toOption.exists(_.exists {
       case ValidationError.PatternViolation("email", "invalid-email", _) => true
-      case _ => false
+      case _                                                             => false
     }))
   }
 
@@ -291,7 +291,7 @@ object ParameterValidatorSuite extends SimpleIOSuite:
   pureTest("applies default values for missing optional parameters") {
     val params = Map(
       "apiKey" -> ParameterValue.Secret(SecretReference("tenant-123/openai")),
-      "model" -> ParameterValue.StringVal("gpt-4")
+      "model"  -> ParameterValue.StringVal("gpt-4")
     )
 
     val result = ParameterValidator.validate(openAiSchema, params)
@@ -308,8 +308,8 @@ object ParameterValidatorSuite extends SimpleIOSuite:
 
   pureTest("fails on unknown parameter by default") {
     val params = Map(
-      "apiKey" -> ParameterValue.Secret(SecretReference("tenant-123/openai")),
-      "model" -> ParameterValue.StringVal("gpt-4"),
+      "apiKey"       -> ParameterValue.Secret(SecretReference("tenant-123/openai")),
+      "model"        -> ParameterValue.StringVal("gpt-4"),
       "unknownParam" -> ParameterValue.StringVal("value")
     )
 
@@ -317,14 +317,14 @@ object ParameterValidatorSuite extends SimpleIOSuite:
     expect(result.isInvalid) &&
     expect(result.toEither.left.toOption.exists(_.exists {
       case ValidationError.UnknownParameter("unknownParam") => true
-      case _ => false
+      case _                                                => false
     }))
   }
 
   pureTest("allows unknown parameters when allowUnknown is true") {
     val params = Map(
-      "apiKey" -> ParameterValue.Secret(SecretReference("tenant-123/openai")),
-      "model" -> ParameterValue.StringVal("gpt-4"),
+      "apiKey"       -> ParameterValue.Secret(SecretReference("tenant-123/openai")),
+      "model"        -> ParameterValue.StringVal("gpt-4"),
       "unknownParam" -> ParameterValue.StringVal("value")
     )
 
@@ -338,10 +338,10 @@ object ParameterValidatorSuite extends SimpleIOSuite:
 
   pureTest("accumulates all validation errors") {
     val params = Map(
-      "apiKey" -> ParameterValue.StringVal("plaintext-key"), // Should be secret
-      "model" -> ParameterValue.StringVal("invalid-model"), // Invalid enum
-      "temperature" -> ParameterValue.FloatVal(5.0), // Out of range
-      "unknown" -> ParameterValue.StringVal("value") // Unknown
+      "apiKey"      -> ParameterValue.StringVal("plaintext-key"), // Should be secret
+      "model"       -> ParameterValue.StringVal("invalid-model"), // Invalid enum
+      "temperature" -> ParameterValue.FloatVal(5.0),              // Out of range
+      "unknown"     -> ParameterValue.StringVal("value")          // Unknown
     )
 
     val result = ParameterValidator.validate(openAiSchema, params)
@@ -375,7 +375,7 @@ object ParameterValidatorSuite extends SimpleIOSuite:
     expect(result.isInvalid) &&
     expect(result.toEither.left.toOption.exists(_.exists {
       case ValidationError.TypeMismatch("enabled", ParameterType.BoolType, _) => true
-      case _ => false
+      case _                                                                  => false
     }))
   }
 

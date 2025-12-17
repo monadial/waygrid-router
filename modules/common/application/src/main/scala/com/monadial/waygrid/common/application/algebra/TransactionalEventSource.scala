@@ -1,7 +1,7 @@
 package com.monadial.waygrid.common.application.algebra
 
 import cats.effect.{ Fiber, Resource }
-import com.monadial.waygrid.common.application.domain.model.event.{Event, EventStream}
+import com.monadial.waygrid.common.application.domain.model.event.{ Event, EventStream }
 import com.monadial.waygrid.common.domain.algebra.messaging.event.Event as DomainEvent
 
 trait TransactionalEventSource[F[+_]]:

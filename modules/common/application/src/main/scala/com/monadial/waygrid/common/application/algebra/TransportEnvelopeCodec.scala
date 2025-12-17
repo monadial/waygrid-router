@@ -7,9 +7,3 @@ import com.monadial.waygrid.common.domain.model.envelope.DomainEnvelope
 trait TransportEnvelopeCodec[F[+_]]:
   def encode[M <: Message](envelope: DomainEnvelope[M]): F[TransportEnvelope]
   def decode(envelope: TransportEnvelope): F[DomainEnvelope[? <: Message]]
-
-
-
-
-
-

@@ -1,7 +1,12 @@
 package com.monadial.waygrid.common.domain.instances
 
 import cats.data.Validated
-import com.monadial.waygrid.common.domain.algebra.value.codec.{Base64Codec, Base64DecodingError, BytesCodec, BytesDecodingError}
+import com.monadial.waygrid.common.domain.algebra.value.codec.{
+  Base64Codec,
+  Base64DecodingError,
+  BytesCodec,
+  BytesDecodingError
+}
 import com.monadial.waygrid.common.domain.instances.ByteVectorInstances.given
 import scodec.bits.ByteVector
 import scodec.{ Attempt, Decoder as SDecoder, Encoder as SEncoder, codecs }

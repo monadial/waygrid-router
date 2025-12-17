@@ -29,7 +29,7 @@ object Event:
   final case class TraversalResumed(
     id: MessageId,
     traversalId: TraversalId,
-    nodeId: NodeId,
+    nodeId: NodeId
   ) extends TraversalEvent
 
   final case class TraversalFailed(

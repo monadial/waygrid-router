@@ -29,9 +29,9 @@ object DomainRoutingDagCodecs:
   // Enum codecs
   // ---------------------------------------------------------------------------
 
-  given Codec[Condition] = Codec.derived[Condition]
+  given Codec[Condition]    = Codec.derived[Condition]
   given Codec[JoinStrategy] = Codec.derived[JoinStrategy]
-  given Codec[NodeType] = Codec.derived[NodeType]
+  given Codec[NodeType]     = Codec.derived[NodeType]
 
   // ---------------------------------------------------------------------------
   // DAG node and structure codecs
@@ -53,7 +53,7 @@ object DomainRoutingDagCodecs:
   )
 
   given Codec[EdgeGuard] = Codec.derived[EdgeGuard]
-  given Codec[Edge] = Codec.derived[Edge]
+  given Codec[Edge]      = Codec.derived[Edge]
 
   given [A: Decoder]: Decoder[NonEmptyList[A]] = Decoder.decodeNonEmptyList[A]
   given [A: Encoder]: Encoder[NonEmptyList[A]] = Encoder.encodeNonEmptyList[A]

@@ -1,6 +1,6 @@
 package com.monadial.waygrid.system.waystation.model.traversal
 
-import com.monadial.waygrid.common.domain.model.routing.Value.{DeliveryStrategy, TraversalId}
+import com.monadial.waygrid.common.domain.model.routing.Value.{ DeliveryStrategy, TraversalId }
 import com.monadial.waygrid.common.domain.model.traversal.dag.Value.NodeId
 import com.monadial.waygrid.common.domain.model.routing.traversal.TraversalState
 import com.monadial.waygrid.common.domain.model.traversal.dag.Node
@@ -29,7 +29,9 @@ final case class CompleteTraversal(state: TraversalState) extends TraversalResul
 final case class ScheduleRepeatTraversal(traversalId: TraversalId, delay: FiniteDuration) extends TraversalResult
 
 /** Schedule repeat traversal until specific time */
-final case class ScheduleRepeatUntil(traversalId: TraversalId, delay: FiniteDuration, until: Instant) extends TraversalResult
+final case class ScheduleRepeatUntil(traversalId: TraversalId, delay: FiniteDuration, until: Instant)
+    extends TraversalResult
 
 /** Schedule repeat traversal for N times */
-final case class ScheduleRepeatTimes(traversalId: TraversalId, delay: FiniteDuration, remaining: Long) extends TraversalResult
+final case class ScheduleRepeatTimes(traversalId: TraversalId, delay: FiniteDuration, remaining: Long)
+    extends TraversalResult

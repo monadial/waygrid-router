@@ -1,8 +1,8 @@
 package com.monadial.waygrid.common.domain.model.envelope
 
 import com.monadial.waygrid.common.domain.algebra.messaging.message.Message
-import com.monadial.waygrid.common.domain.model.envelope.Value.{EnvelopeId, Stamp}
-import com.monadial.waygrid.common.domain.value.Address.{Endpoint, NodeAddress}
+import com.monadial.waygrid.common.domain.model.envelope.Value.{ EnvelopeId, Stamp }
+import com.monadial.waygrid.common.domain.value.Address.{ Endpoint, NodeAddress }
 
 import scala.reflect.ClassTag
 
@@ -30,4 +30,3 @@ final case class DomainEnvelope[M <: Message](
     stamps
       .get(tag.runtimeClass.asInstanceOf[Class[? <: Stamp]])
       .flatMap(_.collectFirst { case s: T => s })
-

@@ -21,7 +21,6 @@ import org.typelevel.otel4s.trace.{ Tracer, TracerProvider }
 
 object Main extends WaygridApp[HttpSettings](NodeDescriptor.Origin(NodeService("http"))):
 
-
   def programBuilder[F[+_]: {Async,
     Parallel,
     Console,
@@ -33,7 +32,7 @@ object Main extends WaygridApp[HttpSettings](NodeDescriptor.Origin(NodeService("
     EventSource,
     Tracer}](
     actorSystem: ActorSystem[F],
-    settings: HttpSettings,
+    settings: HttpSettings
   ): Resource[F, Unit] =
     for
       dagRepo <- Resource.eval(InMemoryDagRepository.make[F])

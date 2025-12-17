@@ -30,7 +30,7 @@ class PostgresTraversalStateRepository[F[_]: Async](
 
   override def save(state: TraversalState): F[TraversalState] =
     val newVersion = state.stateVersion.increment
-    val stateJson = state.copy(stateVersion = newVersion).asJson.noSpaces
+    val stateJson  = state.copy(stateVersion = newVersion).asJson.noSpaces
 
     val query = sql"""
       INSERT INTO traversal_states (traversal_id, state, version, created_at, updated_at)
@@ -55,7 +55,9 @@ class PostgresTraversalStateRepository[F[_]: Async](
         load(state.traversalId).flatMap {
           case Some(current) =>
             Async[F].raiseError(
-              new RuntimeException(s"Concurrent modification: expected ${state.stateVersion.unwrap}, current is ${current.stateVersion.unwrap}")
+              new RuntimeException(
+                s"Concurrent modification: expected ${state.stateVersion.unwrap}, current is ${current.stateVersion.unwrap}"
+              )
             )
           case None =>
             // State didn't exist before, insert fresh
@@ -103,7 +105,9 @@ class PostgresTraversalStateRepository[F[_]: Async](
           save(updateFn(state))
         case Some(state) =>
           Async[F].raiseError(
-            new RuntimeException(s"Concurrent modification: expected ${expectedVersion.unwrap}, actual ${state.stateVersion.unwrap}")
+            new RuntimeException(
+              s"Concurrent modification: expected ${expectedVersion.unwrap}, actual ${state.stateVersion.unwrap}"
+            )
           )
         case None =>
           Async[F].raiseError(new RuntimeException(s"State not found: $traversalId"))

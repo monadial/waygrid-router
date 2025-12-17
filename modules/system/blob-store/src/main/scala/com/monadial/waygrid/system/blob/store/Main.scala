@@ -30,7 +30,7 @@ object Main extends WaygridApp[BlobStoreSettings](SystemWaygridApp.BlobStore):
     EventSource,
     Tracer}](
     actorSystem: ActorSystem[F],
-    settings: BlobStoreSettings,
+    settings: BlobStoreSettings
   ): Resource[F, Unit] =
     for
       _ <- Resource.eval(Logger[F].info(s"Starting Blob Store Service."))

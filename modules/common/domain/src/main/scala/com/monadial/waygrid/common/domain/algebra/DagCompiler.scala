@@ -6,7 +6,14 @@ import com.monadial.waygrid.common.domain.interpreter.cryptography.HasherInterpr
 import com.monadial.waygrid.common.domain.model.cryptography.hashing.Value.LongHash
 import com.monadial.waygrid.common.domain.model.routing.Value.RouteSalt
 import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ DagHash, EdgeGuard, ForkId, NodeId }
-import com.monadial.waygrid.common.domain.model.traversal.dag.{ CompiledDag, Dag, DagValidationError, Edge as DagEdge, Node as DagNode, NodeType }
+import com.monadial.waygrid.common.domain.model.traversal.dag.{
+  CompiledDag,
+  Dag,
+  DagValidationError,
+  Edge as DagEdge,
+  Node as DagNode,
+  NodeType
+}
 import com.monadial.waygrid.common.domain.model.traversal.spec.{ Node as SpecNode, Spec }
 import com.monadial.waygrid.common.domain.model.traversal.spec.Node.NodeParameters
 import cats.data.NonEmptyList
@@ -155,16 +162,16 @@ object DagCompiler:
 
       // --- Internal Types for Traversal ---
 
-      private final case class Frame(n: SpecNode, bits: Long, depth: Int)       // DFS stack frame
-      private final case class EdgeL(from: DagId, to: DagId, guard: EdgeGuard)  // Internal edge
-      private final case class NodeInfo(node: DagNode, rawId: DagId)            // Node with its raw ID
+      private final case class Frame(n: SpecNode, bits: Long, depth: Int)      // DFS stack frame
+      private final case class EdgeL(from: DagId, to: DagId, guard: EdgeGuard) // Internal edge
+      private final case class NodeInfo(node: DagNode, rawId: DagId)           // Node with its raw ID
 
       private final case class CompilerState(
-        nodes: mutable.LongMap[NodeInfo],               // Collected nodes (deduplicated)
-        edges: mutable.ArrayBuffer[EdgeL],              // Collected edges
-        stack: mutable.ArrayDeque[Frame],               // DFS traversal stack
-        forkIdMap: mutable.Map[String, ForkId],         // joinNodeId -> ForkId mapping
-        parameters: mutable.Map[Long, NodeParameters]   // rawId -> parameters mapping
+        nodes: mutable.LongMap[NodeInfo],             // Collected nodes (deduplicated)
+        edges: mutable.ArrayBuffer[EdgeL],            // Collected edges
+        stack: mutable.ArrayDeque[Frame],             // DFS traversal stack
+        forkIdMap: mutable.Map[String, ForkId],       // joinNodeId -> ForkId mapping
+        parameters: mutable.Map[Long, NodeParameters] // rawId -> parameters mapping
       )
 
       /**
@@ -224,7 +231,7 @@ object DagCompiler:
                 case _                => nodeIdF(saltH, n, bits, depth)
               hexId    <- toHex(HashLen, id)
               nodeType <- nodeTypeFor(n)
-              dagNode   = toDagNode(NodeId(hexId), n, nodeType)
+              dagNode = toDagNode(NodeId(hexId), n, nodeType)
               _ <- Sync[F].defer:
                   state.nodes.get(id) match
                     case Some(existing) if existing.node.address != n.address =>
@@ -287,8 +294,8 @@ object DagCompiler:
                 for
                   cid <- ensureNode(branchBits, depth + 1, branchNode)
                   // Fork branches use OnSuccess guard - they all execute on fork completion
-                  _   <- Sync[F].delay(state.edges += EdgeL(me, cid, EdgeGuard.OnSuccess))
-                  _   <- Sync[F].delay(state.stack.prepend(Frame(branchNode, branchBits, depth + 1)))
+                  _ <- Sync[F].delay(state.edges += EdgeL(me, cid, EdgeGuard.OnSuccess))
+                  _ <- Sync[F].delay(state.stack.prepend(Frame(branchNode, branchBits, depth + 1)))
                 yield ()
               }
 
@@ -386,10 +393,9 @@ object DagCompiler:
 
           // Build final parameters map with NodeId keys
           paramsM <- Sync[F].delay:
-            state.parameters.iterator.flatMap { case (rawId, params) =>
-              idMap.get(rawId).map(nodeId => nodeId -> params)
-            }.toMap
-
+              state.parameters.iterator.flatMap { case (rawId, params) =>
+                idMap.get(rawId).map(nodeId => nodeId -> params)
+              }.toMap
         yield (
           Dag(
             entryPoints = entryPointsNel,

@@ -58,7 +58,7 @@ object SecretPath:
   def apply(path: String): SecretPath = path
 
   extension (p: SecretPath)
-    def value: String = p
+    def value: String          = p
     def segments: List[String] = p.split('/').toList
 
 /**

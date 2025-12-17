@@ -10,4 +10,3 @@ object IsInteger:
   given IsInteger[Int] with
     inline def iso: monocle.Iso[Int, Int] =
       monocle.Iso[Int, Int](identity)(identity)
-

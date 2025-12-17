@@ -19,4 +19,3 @@ final class InMemoryDagRepository[F[_]: Async] private (
 object InMemoryDagRepository:
   def make[F[_]: Async]: F[DagRepository[F]] =
     Ref.of[F, Map[DagHash, Dag]](Map.empty).map(new InMemoryDagRepository[F](_))
-

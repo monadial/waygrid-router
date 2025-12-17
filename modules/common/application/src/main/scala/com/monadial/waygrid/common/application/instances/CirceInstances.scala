@@ -3,7 +3,7 @@ package com.monadial.waygrid.common.application.instances
 import com.monadial.waygrid.common.domain.instances.StringInstances.given
 import cats.data.Validated
 import cats.syntax.all.*
-import com.monadial.waygrid.common.domain.algebra.value.codec.{BytesCodec, BytesDecodingError}
+import com.monadial.waygrid.common.domain.algebra.value.codec.{ BytesCodec, BytesDecodingError }
 import io.circe.*
 import io.circe.parser.*
 import scodec.bits.ByteVector

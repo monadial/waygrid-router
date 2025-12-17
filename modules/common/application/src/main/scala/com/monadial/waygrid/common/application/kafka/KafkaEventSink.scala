@@ -1,9 +1,9 @@
 package com.monadial.waygrid.common.application.kafka
 
 import cats.effect.implicits.*
-import cats.effect.{Async, Clock, Resource}
+import cats.effect.{ Async, Clock, Resource }
 import cats.implicits.*
-import com.monadial.waygrid.common.application.algebra.{EventSink, Logger, ThisNode}
+import com.monadial.waygrid.common.application.algebra.{ EventSink, Logger, ThisNode }
 import com.monadial.waygrid.common.application.domain.model.envelope.TransportEnvelope
 import com.monadial.waygrid.common.application.domain.model.settings.Kafka
 import com.monadial.waygrid.common.application.instances.CirceInstances.given
@@ -12,8 +12,8 @@ import com.monadial.waygrid.common.application.kafka.KafkaUtils.toTopic
 import com.monadial.waygrid.common.application.kafka.Value.Key
 import com.monadial.waygrid.common.application.util.circe.codecs.ApplicationTransportEnvelopeCodecs.given
 import com.monadial.waygrid.common.domain.algebra.messaging.event.Event
-import com.monadial.waygrid.common.domain.algebra.messaging.message.Value.{MessageGroupId, MessageId}
-import com.monadial.waygrid.common.domain.algebra.messaging.message.{Groupable, Message}
+import com.monadial.waygrid.common.domain.algebra.messaging.message.Value.{ MessageGroupId, MessageId }
+import com.monadial.waygrid.common.domain.algebra.messaging.message.{ Groupable, Message }
 import com.monadial.waygrid.common.domain.algebra.value.codec.BytesCodec
 import com.monadial.waygrid.common.domain.model.envelope.DomainEnvelope
 import com.monadial.waygrid.common.domain.value.Address.Endpoint
@@ -23,8 +23,8 @@ import io.circe.Json
 import io.circe.syntax.given
 import org.typelevel.otel4s.context.propagation.TextMapUpdater
 import org.typelevel.otel4s.experimental.metrics.InstrumentedQueue
-import org.typelevel.otel4s.metrics.{Counter, Histogram, Meter, UpDownCounter}
-import org.typelevel.otel4s.trace.{SpanContext, Tracer}
+import org.typelevel.otel4s.metrics.{ Counter, Histogram, Meter, UpDownCounter }
+import org.typelevel.otel4s.trace.{ SpanContext, Tracer }
 
 import scala.concurrent.duration.*
 
@@ -135,9 +135,9 @@ object KafkaEventSink:
             Tracer[F].childOrContinue(spanCtx):
                 Tracer[F].span("encode_event").surround:
                     for
-                      _ <- metrics.eventDequeued.inc()
-                      _ <- metrics.realtimeQueueCounter.add(-1)
-                      _ <- Logger[F].trace(s"[event-sink] Encoding event: ${domainEnvelope.id}")
+                      _             <- metrics.eventDequeued.inc()
+                      _             <- metrics.realtimeQueueCounter.add(-1)
+                      _             <- Logger[F].trace(s"[event-sink] Encoding event: ${domainEnvelope.id}")
                       startEncoding <- Clock[F].monotonic
                       maybeEnvelope <- codec.encode(domainEnvelope).attempt
                       endEncoding   <- Clock[F].monotonic

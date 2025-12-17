@@ -66,9 +66,9 @@ object DomainTraversalStateCodecs:
   given Codec[JoinStrategy] = Codec.derived[JoinStrategy]
   given Codec[BranchStatus] = Codec.derived[BranchStatus]
   given Codec[BranchResult] = Codec.derived[BranchResult]
-  given Codec[ForkScope] = Codec.derived[ForkScope]
-  given Codec[BranchState] = Codec.derived[BranchState]
-  given Codec[PendingJoin] = Codec.derived[PendingJoin]
+  given Codec[ForkScope]    = Codec.derived[ForkScope]
+  given Codec[BranchState]  = Codec.derived[BranchState]
+  given Codec[PendingJoin]  = Codec.derived[PendingJoin]
 
   // ---------------------------------------------------------------------------
   // Map Codecs

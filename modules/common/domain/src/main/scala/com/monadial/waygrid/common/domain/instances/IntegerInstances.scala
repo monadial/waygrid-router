@@ -1,18 +1,23 @@
 package com.monadial.waygrid.common.domain.instances
 
 import cats.data.Validated
-import com.monadial.waygrid.common.domain.algebra.value.codec.{Base64Codec, Base64DecodingError, BytesCodec, BytesDecodingError}
+import com.monadial.waygrid.common.domain.algebra.value.codec.{
+  Base64Codec,
+  Base64DecodingError,
+  BytesCodec,
+  BytesDecodingError
+}
 import scodec.bits.ByteVector
 
 import java.nio.ByteBuffer
-import scodec.{Attempt, codecs, Decoder as SDecoder, Encoder as SEncoder}
+import scodec.{ Attempt, Decoder as SDecoder, Encoder as SEncoder, codecs }
 
 object IntegerInstances:
 
   given SEncoder[Int] = codecs.int32.asEncoder.contramap(identity)
 
   given SDecoder[Int] = codecs.int32.asDecoder.emap: value =>
-    Attempt.successful(value)
+      Attempt.successful(value)
 
   given BytesCodec[Int] with
     inline def encodeToScalar(value: Int): ByteVector = ByteVector(value)
