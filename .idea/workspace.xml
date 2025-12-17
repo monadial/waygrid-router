@@ -171,12 +171,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7697e996-c24f-4ea1-a7ee-bf168edbe1e9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/ci.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/ci.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.sbt" beforeDir="false" afterPath="$PROJECT_DIR$/build.sbt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/.bloop/waygrid-router-build.json" beforeDir="false" afterPath="$PROJECT_DIR$/project/.bloop/waygrid-router-build.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/project/.bloop/waygrid-router-build-build.json" beforeDir="false" afterPath="$PROJECT_DIR$/project/project/.bloop/waygrid-router-build-build.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -200,7 +196,34 @@
         </task>
         <projects_view>
           <tree_state>
-            <expand />
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="waygrid-router" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="waygrid-router" type="f1a62948:ProjectNode" />
+                <item name="common-domain" type="2d1252cf:ModuleNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="waygrid-router" type="f1a62948:ProjectNode" />
+                <item name="common-domain" type="2d1252cf:ModuleNode" />
+                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="waygrid-router" type="f1a62948:ProjectNode" />
+                <item name="root" type="2d1252cf:ModuleNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="waygrid-router" type="f1a62948:ProjectNode" />
+                <item name="root" type="2d1252cf:ModuleNode" />
+                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
+              </path>
+            </expand>
             <select />
           </tree_state>
         </projects_view>
@@ -332,7 +355,7 @@
       <recent name="$PROJECT_DIR$/modules/system/blob-store/src/main" />
     </key>
   </component>
-  <component name="RunManager" selected="sbt Task.Unnamed (1)">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true">
       <envs>
         <env name="WAYGRID_REGION" value="lc-dev-01" />
@@ -487,11 +510,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Main" />
         <item itemvalue="Scala REPL.Scala REPL" />
         <item itemvalue="JUnit.SpecDslSuite$" />
         <item itemvalue="JUnit.SpecJsonCodecSuite" />
         <item itemvalue="JUnit.TraversalFSMSuite$" />
-        <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
   </component>
@@ -520,7 +543,7 @@
       <workItem from="1765491390761" duration="38102000" />
       <workItem from="1765806194819" duration="5004000" />
       <workItem from="1765837790966" duration="43987000" />
-      <workItem from="1765981873712" duration="8479000" />
+      <workItem from="1765981873712" duration="9148000" />
     </task>
     <servers />
   </component>

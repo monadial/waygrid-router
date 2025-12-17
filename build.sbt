@@ -110,22 +110,35 @@ lazy val root = (project in file("."))
 lazy val `common-domain` = (project in file("modules/common/domain"))
   .settings(
     libraryDependencies ++= List(
+      // cats
       Libraries.cats.value,
       Libraries.catsParse.value,
       Libraries.kittens.value,
+      // monocle
       Libraries.monocleCore.value,
       Libraries.monocleMacro.value,
+      // misc
       Libraries.airframeUlid.value,
       Libraries.ip4sCore.value,
+      // fs2
       Libraries.fs2Core.value,
+      // circe
       Libraries.circeCore.value,
       Libraries.circeRefined.value,
+      // scodec
+      Libraries.scodecCore.value,
+      // skunk
+      // jsoniter
       Libraries.jsoniterScalaCore.value,
       Libraries.jsoniterScalaMacros.value,
+      // refined
       Libraries.refined.value,
       Libraries.refinedCats.value,
+      // uri
       Libraries.http4sCore,
+      // crypto
       Libraries.zeroAllocationHashing.value,
+      // tests
       Libraries.catsLaws         % Test,
       Libraries.monocleLaw       % Test,
       Libraries.scalacheck       % Test,
@@ -140,20 +153,31 @@ lazy val `common-application` =
     .enablePlugins(Http4sGrpcPlugin)
     .settings(
       libraryDependencies ++= List(
+        // bouncy castle
         Libraries.bouncyCastle.value,
+        // odin
         Libraries.odinCore.value,
+        // cats
         Libraries.catsEffect.value,
+        // circe
         Libraries.circeCore.value,
         Libraries.circeGeneric.value,
         Libraries.circeParser.value,
         Libraries.circeRefined.value,
         Libraries.circeConfig.value,
+        // sKema
         Libraries.jsonsKema.value,
+        // actors
         Libraries.catsActors.value,
+        // shapeless
         Libraries.shapeless3Typeable.value,
+        // fs2
         Libraries.fs2Kafka.value,
+        // aws
         Libraries.fs2AwsCore.value,
+        // scodec
         Libraries.scodecBits.value,
+        // http4s
         Libraries.http4sDsl,
         Libraries.http4sServer,
         Libraries.http4sCirce,
@@ -162,15 +186,19 @@ lazy val `common-application` =
         Libraries.http4sOtel4sTraceCore,
         Libraries.http4sOtel4sTraceServer,
         Libraries.http4sOtel4sTraceClient,
+        // scalapb
         Libraries.scalaPb,
+        // otel4s
         Libraries.otel4sOtelJava.value,
         Libraries.otel4sExperimentalMetrics.value,
         Libraries.otel4InstrumentationMetrics.value,
         Libraries.opentelemetryExporterOtlp.value,
         Libraries.opentelemetrySdkExtensionAutoconfigure.value,
         Libraries.opentelemetryInstrumentation.value,
+        // redis
         Libraries.redis4CatsEffects.value,
         Libraries.redis4CatsStream.value,
+        // database
         Libraries.doobieCore.value,
         Libraries.doobieHikari.value,
         Libraries.doobiePostgres.value,
@@ -178,14 +206,16 @@ lazy val `common-application` =
         Libraries.doobieFlyway.value,
         Libraries.flywayPostgres.value,
         Libraries.clickhouseJdbc.value,
+        // tests
         Libraries.catsLaws         % Test,
         Libraries.monocleLaw       % Test,
         Libraries.scalacheck       % Test,
         Libraries.weaverCats       % Test,
         Libraries.weaverDiscipline % Test,
-        Libraries.weaverScalaCheck % Test,
-        "io.netty" % "netty-resolver-dns-native-macos" % "4.2.7.Final" %
-          Compile classifier "osx-aarch_64"
+        Libraries.weaverScalaCheck % Test
+      ) ++ Seq(
+        // this is needed to dns resolver correctly work on Apple Silicon (M1...)
+        "io.netty" % "netty-resolver-dns-native-macos" % "4.2.7.Final" % Compile classifier "osx-aarch_64"
       )
     )
     .settings(
