@@ -69,6 +69,7 @@ lazy val `common-domain` = (project in file("modules/common/domain"))
     libraryDependencies ++= List(
       // cats
       Libraries.cats.value,
+      Libraries.catsParse.value,
       Libraries.kittens.value,
       // monocle
       Libraries.monocleCore.value,
@@ -160,6 +161,7 @@ lazy val `common-application` = (project in file("modules/common/application"))
       Libraries.doobiePostgresCirce.value,
       Libraries.doobieFlyway.value,
       Libraries.flywayPostgres.value,
+      Libraries.clickhouseJdbc.value,
       // tests
       Libraries.catsLaws         % Test,
       Libraries.monocleLaw       % Test,

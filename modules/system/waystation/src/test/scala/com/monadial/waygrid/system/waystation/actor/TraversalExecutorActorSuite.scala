@@ -61,7 +61,7 @@ object TraversalExecutorActorSuite extends SimpleIOSuite:
   )
 
   private val forkId: ForkId =
-    ForkId.fromStringUnsafe[cats.Id]("01ARZ3NDEKTSV4RRFFQ69G5FAV")
+    ForkId.unsafeFrom("exec-fork")
 
   private val forkDag = Dag(
     hash = DagHash("executor-fork-dag"),

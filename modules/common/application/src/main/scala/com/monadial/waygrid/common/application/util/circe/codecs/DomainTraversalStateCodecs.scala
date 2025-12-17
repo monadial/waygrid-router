@@ -30,7 +30,7 @@ object DomainTraversalStateCodecs:
   given KeyDecoder[NodeId] = KeyDecoder.instance(s => Some(NodeId(s)))
 
   given KeyEncoder[ForkId] = KeyEncoder.instance(_.unwrap.toString)
-  given KeyDecoder[ForkId] = KeyDecoder.instance(s => Some(ForkId.fromStringUnsafe[cats.Id](s)))
+  given KeyDecoder[ForkId] = KeyDecoder.instance(s => Some(ForkId.unsafeFrom(s)))
 
   given KeyEncoder[BranchId] = KeyEncoder.instance(_.unwrap.toString)
   given KeyDecoder[BranchId] = KeyDecoder.instance(s => Some(BranchId.fromStringUnsafe[cats.Id](s)))
@@ -80,7 +80,7 @@ object DomainTraversalStateCodecs:
   )
 
   given forkScopesMapCodec: Codec[Map[ForkId, ForkScope]] = Codec.from(
-    Decoder[Map[String, ForkScope]].map(_.map { case (k, v) => ForkId.fromStringUnsafe[cats.Id](k) -> v }),
+    Decoder[Map[String, ForkScope]].map(_.map { case (k, v) => ForkId.unsafeFrom(k) -> v }),
     Encoder[Map[String, ForkScope]].contramap(_.map { case (k, v) => k.unwrap.toString -> v })
   )
 

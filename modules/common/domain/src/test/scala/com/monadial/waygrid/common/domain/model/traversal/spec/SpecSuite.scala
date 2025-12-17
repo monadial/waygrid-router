@@ -6,7 +6,6 @@ import com.monadial.waygrid.common.domain.model.routing.Value.{ DeliveryStrategy
 import com.monadial.waygrid.common.domain.model.traversal.condition.Condition
 import com.monadial.waygrid.common.domain.model.traversal.dag.JoinStrategy
 import com.monadial.waygrid.common.domain.value.Address.ServiceAddress
-import io.circe.Json
 import org.http4s.Uri
 import weaver.SimpleIOSuite
 
@@ -60,8 +59,8 @@ object SpecSuite extends SimpleIOSuite:
       onSuccess = Some(no),
       onFailure = None,
       onConditions = List(
-        Node.when(Condition.JsonEquals("/approved", Json.fromBoolean(true)), yes),
-        Node.when(Condition.JsonExists("/force"), yes)
+        Node.when(Condition.Always, yes),
+        Node.when(Condition.Not(Condition.Always), yes)
       )
     )
 

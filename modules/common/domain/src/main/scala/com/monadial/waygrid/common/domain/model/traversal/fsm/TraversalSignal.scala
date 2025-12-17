@@ -63,7 +63,11 @@ object TraversalSignal:
 
   /**
    * A node has completed successfully.
-   * Triggers transition to the next node via OnSuccess edge.
+   * Triggers transition to the next node via OnSuccess or Conditional edges.
+   *
+   * @param output Optional JSON output from the node. Reserved for future use
+   *               with JSON-based conditional routing. Currently not used for
+   *               condition evaluation.
    */
   final case class NodeSuccess(
     traversalId: TraversalId,

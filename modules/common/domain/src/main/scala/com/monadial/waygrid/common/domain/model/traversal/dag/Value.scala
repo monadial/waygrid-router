@@ -1,8 +1,9 @@
 package com.monadial.waygrid.common.domain.model.traversal.dag
 
-import com.monadial.waygrid.common.domain.algebra.value.string.StringValue
+import com.monadial.waygrid.common.domain.algebra.value.string.{StringValue, StringValueRefined}
 import com.monadial.waygrid.common.domain.algebra.value.ulid.ULIDValue
 import com.monadial.waygrid.common.domain.model.traversal.condition.Condition
+import eu.timepit.refined.collection.MaxSize
 
 object Value:
   type NodeId = NodeId.Type
@@ -11,8 +12,9 @@ object Value:
   type DagHash = DagHash.Type
   object DagHash extends StringValue
 
+  /** ForkId correlates Fork and Join nodes. Max 16 characters for compact storage. */
   type ForkId = ForkId.Type
-  object ForkId extends ULIDValue
+  object ForkId extends StringValueRefined[MaxSize[16]]
 
   type BranchId = BranchId.Type
   object BranchId extends ULIDValue

@@ -21,8 +21,27 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
+      label: 'SDKs',
+      link: {
+        type: 'doc',
+        id: 'sdk/overview',
+      },
+      items: [
+        'sdk/scala',
+        'sdk/php',
+        'sdk/csharp',
+        'sdk/python',
+        'sdk/rust',
+        'sdk/cpp',
+        'sdk/swift',
+        'sdk/go',
+      ],
+    },
+    {
+      type: 'category',
       label: 'API Reference',
       items: [
+        'api/spec-schema',
         'api/json-schema',
         'api/error-codes',
       ],

@@ -14,6 +14,9 @@ import java.time.Instant
  * @param forkNodeId The Fork node that created this scope
  * @param branches All branch IDs that belong to this fork
  * @param parentScope For nested forks, the parent fork's ID
+ * @param parentBranchId For nested forks, the branch ID of the parent branch that spawned this fork.
+ *                       This is stored explicitly to avoid reverse-lookup issues when the inner fork's
+ *                       join completes and the nodeToBranch index has been cleared.
  * @param startedAt When the fork was initiated
  * @param timeout Optional deadline for all branches to complete
  */
@@ -22,6 +25,7 @@ final case class ForkScope(
   forkNodeId: NodeId,
   branches: Set[BranchId],
   parentScope: Option[ForkId],
+  parentBranchId: Option[BranchId],
   startedAt: Instant,
   timeout: Option[Instant]
 ):
