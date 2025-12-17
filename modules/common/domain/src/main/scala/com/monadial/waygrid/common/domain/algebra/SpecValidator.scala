@@ -4,7 +4,7 @@ import cats.data.ValidatedNel
 import cats.syntax.all.*
 import com.monadial.waygrid.common.domain.algebra.ParameterValidator.ValidationError
 import com.monadial.waygrid.common.domain.model.parameter.*
-import com.monadial.waygrid.common.domain.model.traversal.spec.{ Node, Spec }
+import com.monadial.waygrid.common.domain.model.traversal.spec.Spec
 import com.monadial.waygrid.common.domain.value.Address.ServiceAddress
 
 /**

@@ -1,7 +1,6 @@
 package com.monadial.waygrid.common.domain.model.traversal.spec
 
 import cats.data.NonEmptyList
-import com.monadial.waygrid.common.domain.model.parameter.ParameterValue
 import com.monadial.waygrid.common.domain.model.routing.Value.RepeatPolicy
 import com.monadial.waygrid.common.domain.model.traversal.spec.Node.NodeParameters
 import com.monadial.waygrid.common.domain.value.Address.ServiceAddress

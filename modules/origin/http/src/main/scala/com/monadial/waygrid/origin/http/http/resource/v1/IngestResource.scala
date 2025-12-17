@@ -3,15 +3,11 @@ package com.monadial.waygrid.origin.http.http.resource.v1
 import cats.effect.Async
 import cats.implicits.*
 import com.monadial.waygrid.common.application.algebra.{EventSink, Logger, ThisNode}
-import com.monadial.waygrid.common.application.syntax.EnvelopeSyntax.send
-import com.monadial.waygrid.common.application.syntax.EventSyntax.packIntoWaystationEnvelope
 import com.monadial.waygrid.common.application.util.circe.codecs.DomainRoutingSpecCodecs.given
 import com.monadial.waygrid.common.domain.algebra.DagCompiler
 import com.monadial.waygrid.common.domain.algebra.messaging.message.Value.MessageId
 import com.monadial.waygrid.common.domain.algebra.storage.DagRepository
-import com.monadial.waygrid.common.domain.model.envelope.Value.TraversalRefStamp
 import com.monadial.waygrid.common.domain.model.routing.Value.{RouteSalt, TraversalId}
-import com.monadial.waygrid.common.domain.model.traversal.Event.TraversalRequested
 import com.monadial.waygrid.common.domain.model.traversal.dag.Value.DagHash
 import com.monadial.waygrid.common.domain.model.traversal.spec.Spec
 import io.circe.{Codec, Json}
@@ -54,14 +50,7 @@ object IngestResource:
                 thisNode    <- ThisNode[F].get
                 compiledDag <-
                   Tracer[F].span("compiling_dag").surround(compiler.compile(request.graph, RouteSalt("test")))
-                _ <- DagRepository[F].save(compiledDag)
-                _ <- Tracer[F].span("dispatching_signal").use: span =>
-                    TraversalRequested(messageId, traversalId)
-                      .pure[F]
-                      .flatMap(_.packIntoWaystationEnvelope)
-                      .map(_.addStamp(TraversalRefStamp(compiledDag.hash)))
-                      .flatMap(_.send(Some(span.context)))
-                response <- EndpointResponse(traversalId, compiledDag.hash)
+                response <- EndpointResponse(traversalId, compiledDag.dag.hash)
                   .pure[F]
                   .flatMap(Ok(_))
               yield response

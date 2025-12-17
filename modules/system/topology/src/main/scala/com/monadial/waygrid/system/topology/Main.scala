@@ -8,7 +8,6 @@ import com.monadial.waygrid.common.application.algebra.*
 import com.monadial.waygrid.common.application.algebra.SupervisedRequest.Stop
 import com.monadial.waygrid.common.application.program.WaygridApp
 import com.monadial.waygrid.common.domain.SystemWaygridApp
-import com.monadial.waygrid.common.domain.model.node.Node
 import com.monadial.waygrid.system.topology.actor.TopologyServerActor
 import com.monadial.waygrid.system.topology.settings.TopologySettings
 import com.suprnation.actor.ActorSystem
