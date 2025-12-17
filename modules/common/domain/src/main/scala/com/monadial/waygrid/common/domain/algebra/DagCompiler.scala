@@ -6,7 +6,7 @@ import com.monadial.waygrid.common.domain.interpreter.cryptography.HasherInterpr
 import com.monadial.waygrid.common.domain.model.cryptography.hashing.Value.LongHash
 import com.monadial.waygrid.common.domain.model.routing.Value.RouteSalt
 import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ DagHash, EdgeGuard, ForkId, NodeId }
-import com.monadial.waygrid.common.domain.model.traversal.dag.{ Dag, Edge as DagEdge, Node as DagNode, NodeType }
+import com.monadial.waygrid.common.domain.model.traversal.dag.{ Dag, DagValidationError, Edge as DagEdge, Node as DagNode, NodeType }
 import com.monadial.waygrid.common.domain.model.traversal.spec.{ Node as SpecNode, Spec }
 import cats.data.NonEmptyList
 
@@ -83,13 +83,13 @@ object DagCompiler:
 
       /**
        * Generate a deterministic ForkId from a joinNodeId string.
-       * Uses hashing to produce a stable ULID-like identifier.
+       * Uses hashing to produce a stable 16-character hex identifier.
        */
       private def forkIdFromJoinNodeId(joinNodeId: String, salt: LongHash): F[ForkId] =
         for
           hash <- hasher.hashChars(joinNodeId + salt.unwrap.toString)
-          hex  <- toHex(26, hash.unwrap) // ULID is 26 characters
-        yield ForkId.fromStringUnsafe[cats.Id](hex.toUpperCase)
+          hex  <- toHex(HashLen, hash.unwrap) // 16-character hex string
+        yield ForkId.unsafeFrom(hex.toUpperCase)
 
       /**
        * Converts a SpecNode into a DagNode with a known ID and metadata.
@@ -120,6 +120,29 @@ object DagCompiler:
         for
           addrH <- hasher.hashUri(n.address)
           idH   <- hasher.hashLong(bits ^ (depth.toLong << 32) ^ addrH.unwrap ^ salt.unwrap)
+        yield idH.unwrap
+
+      /**
+       * Computes a deterministic numeric DagId for Join nodes.
+       * Uses joinNodeId instead of path bits to ensure all paths to the same
+       * logical join converge to a single node.
+       */
+      private def joinNodeIdF(salt: LongHash, j: SpecNode.Join): F[DagId] =
+        for
+          addrH <- hasher.hashUri(j.address)
+          joinH <- hasher.hashChars(j.joinNodeId)
+          idH   <- hasher.hashLong(addrH.unwrap ^ joinH.unwrap ^ salt.unwrap)
+        yield idH.unwrap
+
+      /**
+       * Computes a deterministic numeric DagId for Fork nodes.
+       * Uses joinNodeId instead of path bits to ensure consistent fork identification.
+       */
+      private def forkNodeIdF(salt: LongHash, f: SpecNode.Fork): F[DagId] =
+        for
+          addrH <- hasher.hashUri(f.address)
+          forkH <- hasher.hashChars(f.joinNodeId)
+          idH   <- hasher.hashLong(addrH.unwrap ^ forkH.unwrap ^ PHI ^ salt.unwrap)
         yield idH.unwrap
 
       // --- Internal Types for Traversal ---
@@ -174,13 +197,19 @@ object DagCompiler:
         /**
          * Ensures a node is registered in the internal state.
          * Assigns unique hash-based ID and detects collisions.
+         *
+         * Fork and Join nodes use identity-based IDs (based on joinNodeId) to ensure
+         * all paths converge to the same logical node. Standard nodes use path-based IDs.
          */
         def ensureNode(bits: Long, depth: Int, n: SpecNode): F[DagId] =
           if depth > MaxDepth then
             fail(s"Max recursion depth ($MaxDepth) exceeded at node '${n.address.show}'")
           else
             for
-              id       <- nodeIdF(saltH, n, bits, depth)
+              id <- n match
+                case j: SpecNode.Join => joinNodeIdF(saltH, j)
+                case f: SpecNode.Fork => forkNodeIdF(saltH, f)
+                case _                => nodeIdF(saltH, n, bits, depth)
               hexId    <- toHex(HashLen, id)
               nodeType <- nodeTypeFor(n)
               dagNode   = toDagNode(NodeId(hexId), n, nodeType)
@@ -351,4 +380,25 @@ object DagCompiler:
         for
           saltH <- hasher.hashChars(salt)
           dag   <- buildDagFromSpec(spec, saltH)
+          // Validate the compiled DAG - FSM expects only valid DAGs
+          _ <- dag.validate match
+            case Nil => Sync[F].unit
+            case errors =>
+              val errorMessages = errors.map {
+                case DagValidationError.ForkWithoutJoin(forkId, forkNodeId) =>
+                  s"Fork ${forkNodeId.show} (forkId=${forkId.show}) has no matching Join node"
+                case DagValidationError.MultiplJoinsForFork(forkId, joinNodeIds) =>
+                  s"Fork ${forkId.show} has multiple Join nodes: ${joinNodeIds.map(_.show).mkString(", ")}"
+                case DagValidationError.JoinWithoutMatchingFork(forkId, joinNodeId) =>
+                  s"Join ${joinNodeId.show} references non-existent Fork ${forkId.show}"
+                case DagValidationError.ForkWithInsufficientBranches(forkNodeId, branchCount) =>
+                  s"Fork ${forkNodeId.show} has only ${branchCount} branch(es) - must have at least 2"
+                case DagValidationError.EdgeTargetNotFound(from, to, _) =>
+                  s"Edge from ${from.show} to non-existent node ${to.show}"
+                case DagValidationError.EdgeSourceNotFound(from, to, _) =>
+                  s"Edge from non-existent node ${from.show} to ${to.show}"
+                case DagValidationError.CycleDetected(cycle) =>
+                  s"Cycle detected: ${cycle.map(_.show).mkString(" -> ")}"
+              }
+              fail(s"Invalid DAG structure:\n  ${errorMessages.mkString("\n  ")}")
         yield dag

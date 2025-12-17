@@ -16,7 +16,7 @@ object DomainRoutingDagCodecs:
   // ---------------------------------------------------------------------------
 
   given Codec[ForkId] = Codec.from(
-    Decoder[String].map(ForkId.fromStringUnsafe[cats.Id](_)),
+    Decoder[String].map(ForkId.unsafeFrom),
     Encoder[String].contramap(_.unwrap.toString)
   )
 

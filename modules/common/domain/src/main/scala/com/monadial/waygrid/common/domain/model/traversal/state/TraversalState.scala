@@ -238,6 +238,15 @@ final case class TraversalState(
   /**
    * Start a fork by creating a new ForkScope and initializing branches.
    *
+   * @param forkNode The fork node ID
+   * @param forkId Unique ID for this fork scope
+   * @param branchEntries Map of branch IDs to their entry nodes
+   * @param parentScope For nested forks, the parent fork's ID
+   * @param parentBranchId For nested forks, the branch ID of the parent branch that spawned this fork.
+   *                       This is stored explicitly to restore context when the inner fork's join completes.
+   * @param timeout Optional deadline for the fork
+   * @param actor Node address performing this operation
+   * @param foreignVectorClock Optional foreign clock to merge
    * @param now Current timestamp for recording fork start time (passed explicitly for purity)
    */
   def startFork(
@@ -245,6 +254,7 @@ final case class TraversalState(
     forkId: ForkId,
     branchEntries: Map[BranchId, NodeId],
     parentScope: Option[ForkId],
+    parentBranchId: Option[BranchId],
     timeout: Option[Instant],
     actor: NodeAddress,
     foreignVectorClock: Option[VectorClock],
@@ -259,6 +269,7 @@ final case class TraversalState(
       forkNodeId = forkNode,
       branches = branches,
       parentScope = parentScope,
+      parentBranchId = parentBranchId,
       startedAt = now,
       timeout = timeout
     )

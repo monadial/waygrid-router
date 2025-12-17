@@ -8,6 +8,7 @@ object Dependencies {
     val cats                         = "2.13.0"
     val catsActors                   = "2.0.0"
     val catsEffect                   = "3.6.3"
+    val catsParse                    = "1.1.0"
     val circe                        = "0.14.10"
     val jsonsKema                    = "0.25.0"
     val circeConfig                  = "0.10.1"
@@ -33,6 +34,7 @@ object Dependencies {
     val opentelemetryOtlp            = "1.55.0"
     val otel4s                       = "0.14.0"
     val otel4sExperimentalMetrics    = "0.8.1"
+    val clickhouse                   = "0.7.1"
     val postgres                     = "42.7.7"
     val prometheus4cats              = "3.0.0"
     val redis4Cats                   = "2.0.1"
@@ -56,6 +58,7 @@ object Dependencies {
 
     val cats       = Def.setting("org.typelevel" %% "cats-core" % V.cats)
     val catsEffect = Def.setting("org.typelevel" %% "cats-effect" % V.catsEffect)
+    val catsParse  = Def.setting("org.typelevel" %% "cats-parse" % V.catsParse)
 
     val fs2Core   = Def.setting("co.fs2" %% "fs2-core" % V.fs2core)
     val fs2Scodec = Def.setting("co.fs2" %% "fs2-scodec" % V.fs2core)
@@ -139,6 +142,8 @@ object Dependencies {
     val doobiePostgresCirce = Def.setting("org.tpolecat" %% "doobie-postgres-circe" % V.doobie)
     val doobieFlyway        = Def.setting("de.lhns" %% "doobie-flyway" % V.doobieFlyway)
     val flywayPostgres      = Def.setting("org.flywaydb" % "flyway-database-postgresql" % V.flyway)
+
+    val clickhouseJdbc = Def.setting("com.clickhouse" % "clickhouse-jdbc" % V.clickhouse classifier "all")
 
     val catsActors = Def.setting("com.github.suprnation.cats-actors" %% "cats-actors" % V.catsActors)
 
