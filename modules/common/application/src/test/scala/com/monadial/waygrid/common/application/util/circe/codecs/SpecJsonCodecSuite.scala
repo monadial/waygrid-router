@@ -2,15 +2,12 @@ package com.monadial.waygrid.common.application.util.circe.codecs
 
 import cats.effect.IO
 import com.monadial.waygrid.common.application.util.circe.codecs.DomainRoutingSpecCodecs.given
-import com.monadial.waygrid.common.domain.algebra.DagCompiler
 import com.monadial.waygrid.common.domain.model.routing.Value.RepeatPolicy
-import com.monadial.waygrid.common.domain.model.routing.Value.RouteSalt
 import com.monadial.waygrid.common.domain.model.traversal.condition.Condition
 import com.monadial.waygrid.common.domain.model.traversal.dag.JoinStrategy
-import com.monadial.waygrid.common.domain.model.traversal.dag.Value.EdgeGuard
 import com.monadial.waygrid.common.domain.model.traversal.spec.{ Node, Spec }
+import com.monadial.waygrid.common.domain.model.parameter.ParameterValue
 import com.monadial.waygrid.common.domain.value.Address.ServiceAddress
-import io.circe.Json
 import io.circe.parser.decode
 import io.circe.syntax.*
 import org.http4s.Uri
@@ -219,54 +216,6 @@ object SpecJsonCodecSuite extends SimpleIOSuite:
         |}
         |""".stripMargin
     IO.pure(expect(decode[Spec](json).isLeft))
-
-  test("Compile decoded Spec JSON into Dag (fork/join + conditional)"):
-    DagCompiler.default[IO].use { compiler =>
-      decode[Spec](jsonForkJoinWithCondition) match
-        case Left(err) => IO.pure(failure(s"decode failed: $err"))
-        case Right(spec) =>
-          compiler.compile(spec, RouteSalt("json-salt")).map { dag =>
-            val svcFork  = ServiceAddress(Uri.unsafeFromString("waygrid://processor/fork"))
-            val svcJoin  = ServiceAddress(Uri.unsafeFromString("waygrid://processor/join"))
-            val svcB     = ServiceAddress(Uri.unsafeFromString("waygrid://processor/b"))
-            val svcYes   = ServiceAddress(Uri.unsafeFromString("waygrid://processor/yes"))
-
-            val forkNode = dag.nodes.values.find(_.address == svcFork)
-            val joinNode = dag.nodes.values.find(_.address == svcJoin)
-            val bNode    = dag.nodes.values.find(_.address == svcB)
-            val yesNode  = dag.nodes.values.find(_.address == svcYes)
-
-            val hasConditionalEdge =
-              (bNode, yesNode) match
-                case (Some(b), Some(y)) =>
-                  dag.edges.exists(e =>
-                    e.from == b.id &&
-                      e.to == y.id &&
-                      (e.guard match
-                        case EdgeGuard.Conditional(Condition.Always) => true
-                        case _                                                                  => false
-                      )
-                  )
-                case _ => false
-
-            val forkJoinIdsMatch =
-              (forkNode, joinNode) match
-                case (Some(f), Some(j)) => expect.same(f.forkId, j.forkId)
-                case _                  => failure("expected fork and join nodes present")
-
-            forkJoinIdsMatch && expect(hasConditionalEdge)
-          }
-    }
-
-  test("Compile decoded Spec JSON into Dag (multi-entry)"):
-    DagCompiler.default[IO].use { compiler =>
-      decode[Spec](jsonMultiEntry) match
-        case Left(err) => IO.pure(failure(s"decode failed: $err"))
-        case Right(spec) =>
-          compiler.compile(spec, RouteSalt("json-multi")).map { dag =>
-            expect(dag.entryPoints.length == 2)
-          }
-    }
 
   // ===========================================================================
   // EASY EXAMPLES - Single Node & Simple Chains
@@ -1255,4 +1204,109 @@ object SpecJsonCodecSuite extends SimpleIOSuite:
       }
 
       expect(results.forall(identity))
+    }
+
+  // ===========================================================================
+  // PARAMETER TESTS - Node parameters extraction
+  // ===========================================================================
+
+  /**
+   * Spec with parameters on nodes - demonstrates OpenAI processor with config
+   *
+   * Diagram:
+   *   [origin/http] --> [processor/openai] --> [destination/websocket]
+   *                     (with parameters)       (with channelId)
+   */
+  private val jsonWithParameters =
+    """
+      |{
+      |  "entryPoints": [
+      |    {
+      |      "type": "standard",
+      |      "address": "waygrid://origin/http",
+      |      "retryPolicy": { "type": "None" },
+      |      "deliveryStrategy": { "type": "Immediate" },
+      |      "parameters": {},
+      |      "onSuccess": {
+      |        "type": "standard",
+      |        "address": "waygrid://processor/openai",
+      |        "retryPolicy": { "type": "None" },
+      |        "deliveryStrategy": { "type": "Immediate" },
+      |        "parameters": {
+      |          "apiKey": { "type": "Secret", "ref": { "path": "tenant-123/openai", "field": "apiKey" } },
+      |          "model": { "type": "StringVal", "value": "gpt-4" },
+      |          "temperature": { "type": "FloatVal", "value": 0.7 },
+      |          "maxTokens": { "type": "IntVal", "value": 1000 }
+      |        },
+      |        "onSuccess": {
+      |          "type": "standard",
+      |          "address": "waygrid://destination/websocket",
+      |          "retryPolicy": { "type": "None" },
+      |          "deliveryStrategy": { "type": "Immediate" },
+      |          "parameters": {
+      |            "channelId": { "type": "StringVal", "value": "channel-456" },
+      |            "broadcast": { "type": "BoolVal", "value": true }
+      |          },
+      |          "onSuccess": null,
+      |          "onFailure": null,
+      |          "onConditions": [],
+      |          "label": "websocket"
+      |        },
+      |        "onFailure": null,
+      |        "onConditions": [],
+      |        "label": "openai"
+      |      },
+      |      "onFailure": null,
+      |      "onConditions": [],
+      |      "label": "entry"
+      |    }
+      |  ],
+      |  "repeatPolicy": { "type": "NoRepeat" }
+      |}
+      |""".stripMargin
+
+  test("Decode Spec with parameters"):
+    IO {
+      decode[Spec](jsonWithParameters) match
+        case Left(err) => failure(s"Decode failed: $err")
+        case Right(spec) =>
+          val entry = spec.entryPoints.head.asInstanceOf[Node.Standard]
+          val openai = entry.onSuccess.get.asInstanceOf[Node.Standard]
+          val ws = openai.onSuccess.get.asInstanceOf[Node.Standard]
+
+          // Check OpenAI processor parameters
+          val openaiParams = openai.parameters
+          val hasApiKey = openaiParams.get("apiKey") match
+            case Some(ParameterValue.Secret(ref)) => ref.path.value == "tenant-123/openai"
+            case _ => false
+          val hasModel = openaiParams.get("model") == Some(ParameterValue.StringVal("gpt-4"))
+          val hasTemp = openaiParams.get("temperature") == Some(ParameterValue.FloatVal(0.7))
+          val hasTokens = openaiParams.get("maxTokens") == Some(ParameterValue.IntVal(1000))
+
+          // Check WebSocket destination parameters
+          val wsParams = ws.parameters
+          val hasChannelId = wsParams.get("channelId") == Some(ParameterValue.StringVal("channel-456"))
+          val hasBroadcast = wsParams.get("broadcast") == Some(ParameterValue.BoolVal(true))
+
+          expect(hasApiKey) &&
+          expect(hasModel) &&
+          expect(hasTemp) &&
+          expect(hasTokens) &&
+          expect(hasChannelId) &&
+          expect(hasBroadcast)
+    }
+
+  test("Roundtrip: Spec with parameters"):
+    IO {
+      decode[Spec](jsonWithParameters) match
+        case Left(err) => failure(s"Decode failed: $err")
+        case Right(spec) =>
+          val reEncoded = spec.asJson
+          val reDecoded = reEncoded.as[Spec]
+          reDecoded match
+            case Left(err) => failure(s"Re-decode failed: $err")
+            case Right(decoded) =>
+              val origOpenai = spec.entryPoints.head.asInstanceOf[Node.Standard].onSuccess.get.asInstanceOf[Node.Standard]
+              val decodedOpenai = decoded.entryPoints.head.asInstanceOf[Node.Standard].onSuccess.get.asInstanceOf[Node.Standard]
+              expect(origOpenai.parameters == decodedOpenai.parameters)
     }

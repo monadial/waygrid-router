@@ -1,0 +1,38 @@
+# CODEOWNERS - Define code ownership for automatic review requests
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owners for everything in the repo
+* @tmihalicka
+
+# Common modules - core team required
+modules/common/ @tmihalicka
+
+# System modules
+modules/system/topology/ @tmihalicka
+modules/system/waystation/ @tmihalicka
+modules/system/iam/ @tmihalicka
+modules/system/kms/ @tmihalicka
+modules/system/secure-store/ @tmihalicka
+
+# Origin modules
+modules/origin/ @tmihalicka
+
+# Destination modules
+modules/destination/ @tmihalicka
+
+# Processor modules
+modules/processor/ @tmihalicka
+
+# Infrastructure
+modules/infrastructure/ @tmihalicka
+
+# Build configuration
+build.sbt @tmihalicka
+project/ @tmihalicka
+
+# CI/CD configuration
+.github/ @tmihalicka
+
+# Documentation
+docs/ @tmihalicka
+*.md @tmihalicka

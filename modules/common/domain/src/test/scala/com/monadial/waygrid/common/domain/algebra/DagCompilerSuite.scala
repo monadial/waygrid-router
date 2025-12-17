@@ -94,7 +94,8 @@ object DagCompilerSuite extends SimpleIOSuite:
     val spec = Spec.multiple(entry1, entry2)(RepeatPolicy.NoRepeat)
 
     DagCompiler.default[IO].use { compiler =>
-      compiler.compile(spec, RouteSalt("test-salt")).map { dag =>
+      compiler.compile(spec, RouteSalt("test-salt")).map { compiled =>
+        val dag = compiled.dag
         val forkNode = dag.nodes.values.find(_.address == svcFork)
         val joinNode = dag.nodes.values.find(_.address == svcJoin)
         val entryNodes = dag.nodes.values.filter(n => n.address == svcEntry1 || n.address == svcEntry2).map(_.id).toList
@@ -121,7 +122,8 @@ object DagCompilerSuite extends SimpleIOSuite:
     val spec   = Spec.multiple(entry1, entry2)(RepeatPolicy.NoRepeat)
 
     DagCompiler.default[IO].use { compiler =>
-      compiler.compile(spec, RouteSalt("entry-order")).map { dag =>
+      compiler.compile(spec, RouteSalt("entry-order")).map { compiled =>
+        val dag = compiled.dag
         val entryAddresses =
           dag.entryPoints.toList.flatMap(id => dag.nodes.get(id).map(_.address))
         expect.same(entryAddresses, List(svcEntry1, svcEntry2))
@@ -155,7 +157,8 @@ object DagCompilerSuite extends SimpleIOSuite:
     val spec  = Spec.single(entry, RepeatPolicy.NoRepeat)
 
     DagCompiler.default[IO].use { compiler =>
-      compiler.compile(spec, RouteSalt("cond-salt")).map { dag =>
+      compiler.compile(spec, RouteSalt("cond-salt")).map { compiled =>
+        val dag = compiled.dag
         val routerId = dag.nodes.values.find(_.address == svcRoute).map(_.id)
         val yesId    = dag.nodes.values.find(_.address == svcYes).map(_.id)
         val condEdge =
@@ -206,8 +209,10 @@ object DagCompilerSuite extends SimpleIOSuite:
 
     DagCompiler.default[IO].use { compiler =>
       for
-        dag1 <- compiler.compile(spec1, RouteSalt("det-salt"))
-        dag2 <- compiler.compile(spec2, RouteSalt("det-salt"))
+        compiled1 <- compiler.compile(spec1, RouteSalt("det-salt"))
+        compiled2 <- compiler.compile(spec2, RouteSalt("det-salt"))
+        dag1 = compiled1.dag
+        dag2 = compiled2.dag
       yield expect.same(dag1.hash, dag2.hash) && expect.same(dag1.nodes.keySet, dag2.nodes.keySet) && expect.same(dag1.edges, dag2.edges)
     }
 
@@ -215,8 +220,10 @@ object DagCompilerSuite extends SimpleIOSuite:
     val spec = Spec.single(Node.standard(svcEntry1), RepeatPolicy.NoRepeat)
     DagCompiler.default[IO].use { compiler =>
       for
-        dag1 <- compiler.compile(spec, RouteSalt("salt-1"))
-        dag2 <- compiler.compile(spec, RouteSalt("salt-2"))
+        compiled1 <- compiler.compile(spec, RouteSalt("salt-1"))
+        compiled2 <- compiler.compile(spec, RouteSalt("salt-2"))
+        dag1 = compiled1.dag
+        dag2 = compiled2.dag
       yield expect(dag1.hash != dag2.hash)
     }
 
@@ -289,7 +296,8 @@ object DagCompilerSuite extends SimpleIOSuite:
     val spec = Spec.single(entry, RepeatPolicy.NoRepeat)
 
     DagCompiler.default[IO].use { compiler =>
-      compiler.compile(spec, RouteSalt("nested-fork-salt")).map { dag =>
+      compiler.compile(spec, RouteSalt("nested-fork-salt")).map { compiled =>
+        val dag = compiled.dag
         // Find all fork and join nodes
         val forkNodes = dag.nodes.values.filter(_.nodeType match
           case NodeType.Fork(_) => true
@@ -355,7 +363,8 @@ object DagCompilerSuite extends SimpleIOSuite:
     val spec = Spec.single(entry, RepeatPolicy.NoRepeat)
 
     DagCompiler.default[IO].use { compiler =>
-      compiler.compile(spec, RouteSalt("dedup-salt")).map { dag =>
+      compiler.compile(spec, RouteSalt("dedup-salt")).map { compiled =>
+        val dag = compiled.dag
         // Should have exactly one join node (not duplicated)
         val joinNodes = dag.nodes.values.filter(_.nodeType match
           case NodeType.Join(_, _, _) => true
@@ -403,8 +412,8 @@ object DagCompilerSuite extends SimpleIOSuite:
           expect(err.msg.contains("Fork") && err.msg.contains("no matching Join"))
         case Left(other) =>
           failure(s"Expected RouteCompilerError, got: ${other.getClass.getSimpleName}: ${other.getMessage}")
-        case Right(dag) =>
-          failure(s"Expected compilation to fail, but got valid DAG with hash: ${dag.hash}")
+        case Right(compiled) =>
+          failure(s"Expected compilation to fail, but got valid DAG with hash: ${compiled.dag.hash}")
       }
     }
 
@@ -432,8 +441,8 @@ object DagCompilerSuite extends SimpleIOSuite:
           expect(err.msg.contains("Join") && err.msg.contains("non-existent Fork"))
         case Left(other) =>
           failure(s"Expected RouteCompilerError, got: ${other.getClass.getSimpleName}: ${other.getMessage}")
-        case Right(dag) =>
-          failure(s"Expected compilation to fail, but got valid DAG with hash: ${dag.hash}")
+        case Right(compiled) =>
+          failure(s"Expected compilation to fail, but got valid DAG with hash: ${compiled.dag.hash}")
       }
     }
 
@@ -489,7 +498,8 @@ object DagCompilerSuite extends SimpleIOSuite:
     )
 
     DagCompiler.default[IO].use { compiler =>
-      compiler.compile(validSpec, RouteSalt("valid-salt")).map { dag =>
+      compiler.compile(validSpec, RouteSalt("valid-salt")).map { compiled =>
+        val dag = compiled.dag
         // Valid DAG should pass validation
         expect(dag.validate.isEmpty) &&
           expect(dag.isValid)
@@ -529,7 +539,8 @@ object DagCompilerSuite extends SimpleIOSuite:
     val spec = Spec.single(entry, RepeatPolicy.NoRepeat)
 
     DagCompiler.default[IO].use { compiler =>
-      compiler.compile(spec, RouteSalt("or-join-salt")).map { dag =>
+      compiler.compile(spec, RouteSalt("or-join-salt")).map { compiled =>
+        val dag = compiled.dag
         val joinNode = dag.nodes.values.find(_.nodeType match
           case NodeType.Join(_, com.monadial.waygrid.common.domain.model.traversal.dag.JoinStrategy.Or, _) => true
           case _ => false
@@ -569,7 +580,8 @@ object DagCompilerSuite extends SimpleIOSuite:
     val spec = Spec.single(entry, RepeatPolicy.NoRepeat)
 
     DagCompiler.default[IO].use { compiler =>
-      compiler.compile(spec, RouteSalt("quorum-join-salt")).map { dag =>
+      compiler.compile(spec, RouteSalt("quorum-join-salt")).map { compiled =>
+        val dag = compiled.dag
         val joinNode = dag.nodes.values.find(_.nodeType match
           case NodeType.Join(_, com.monadial.waygrid.common.domain.model.traversal.dag.JoinStrategy.Quorum(2), _) => true
           case _ => false
@@ -623,7 +635,8 @@ object DagCompilerSuite extends SimpleIOSuite:
     val spec = Spec.single(entry, RepeatPolicy.NoRepeat)
 
     DagCompiler.default[IO].use { compiler =>
-      compiler.compile(spec, RouteSalt("timeout-join-salt")).map { dag =>
+      compiler.compile(spec, RouteSalt("timeout-join-salt")).map { compiled =>
+        val dag = compiled.dag
         val joinNode = dag.nodes.values.find(_.nodeType match
           case NodeType.Join(_, _, Some(timeout)) if timeout == 5.seconds => true
           case _ => false
@@ -679,7 +692,8 @@ object DagCompilerSuite extends SimpleIOSuite:
     val spec = Spec.single(entry, RepeatPolicy.NoRepeat)
 
     DagCompiler.default[IO].use { compiler =>
-      compiler.compile(spec, RouteSalt("many-branches-salt")).map { dag =>
+      compiler.compile(spec, RouteSalt("many-branches-salt")).map { compiled =>
+        val dag = compiled.dag
         val forkNode = dag.nodes.values.find(_.nodeType match
           case NodeType.Fork(_) => true
           case _ => false
@@ -709,7 +723,8 @@ object DagCompilerSuite extends SimpleIOSuite:
     val spec = Spec.single(entry, RepeatPolicy.NoRepeat)
 
     DagCompiler.default[IO].use { compiler =>
-      compiler.compile(spec, RouteSalt("failure-edge-salt")).map { dag =>
+      compiler.compile(spec, RouteSalt("failure-edge-salt")).map { compiled =>
+        val dag = compiled.dag
         val nodeB = dag.nodes.values.find(_.address == svcB)
         val failureEdges = nodeB match
           case Some(n) => dag.outgoingEdges(n.id, EdgeGuard.OnFailure)
@@ -741,7 +756,8 @@ object DagCompilerSuite extends SimpleIOSuite:
     val spec = Spec.single(entry, RepeatPolicy.NoRepeat)
 
     DagCompiler.default[IO].use { compiler =>
-      compiler.compile(spec, RouteSalt("mixed-edges-salt")).map { dag =>
+      compiler.compile(spec, RouteSalt("mixed-edges-salt")).map { compiled =>
+        val dag = compiled.dag
         val routerNode = dag.nodes.values.find(_.address == svcB)
         val edgeCounts = routerNode match
           case Some(n) =>
@@ -781,7 +797,8 @@ object DagCompilerSuite extends SimpleIOSuite:
     val spec = Spec.single(entry, RepeatPolicy.NoRepeat)
 
     DagCompiler.default[IO].use { compiler =>
-      compiler.compile(spec, RouteSalt("unlabeled-salt")).map { dag =>
+      compiler.compile(spec, RouteSalt("unlabeled-salt")).map { compiled =>
+        val dag = compiled.dag
         // Should compile successfully with no labels
         expect(dag.isValid) &&
           expect(dag.nodes.size == 2)
@@ -804,8 +821,10 @@ object DagCompilerSuite extends SimpleIOSuite:
 
     DagCompiler.default[IO].use { compiler =>
       for
-        dagIndefinite <- compiler.compile(indefiniteSpec, RouteSalt("indefinite-salt"))
-        dagTimed <- compiler.compile(timedSpec, RouteSalt("timed-salt"))
+        compiledIndefinite <- compiler.compile(indefiniteSpec, RouteSalt("indefinite-salt"))
+        compiledTimed <- compiler.compile(timedSpec, RouteSalt("timed-salt"))
+        dagIndefinite = compiledIndefinite.dag
+        dagTimed = compiledTimed.dag
       yield
         val indefinitePolicy = dagIndefinite.repeatPolicy match
           case RepeatPolicy.Indefinitely(every) => every == 1.hour
@@ -900,7 +919,8 @@ object DagCompilerSuite extends SimpleIOSuite:
     val spec = Spec.single(entry, RepeatPolicy.NoRepeat)
 
     DagCompiler.default[IO].use { compiler =>
-      compiler.compile(spec, RouteSalt("triple-nested-salt")).map { dag =>
+      compiler.compile(spec, RouteSalt("triple-nested-salt")).map { compiled =>
+        val dag = compiled.dag
         // Should have 3 forks and 3 joins
         val forkCount = dag.nodes.values.count(_.nodeType match
           case NodeType.Fork(_) => true
@@ -949,7 +969,8 @@ object DagCompilerSuite extends SimpleIOSuite:
     val spec = Spec.multiple(entry1, entry2)(RepeatPolicy.NoRepeat)
 
     DagCompiler.default[IO].use { compiler =>
-      compiler.compile(spec, RouteSalt("shared-fork-salt")).map { dag =>
+      compiler.compile(spec, RouteSalt("shared-fork-salt")).map { compiled =>
+        val dag = compiled.dag
         // Should have exactly 1 fork node (deduplicated)
         val forkCount = dag.nodes.values.count(_.nodeType match
           case NodeType.Fork(_) => true
@@ -985,7 +1006,8 @@ object DagCompilerSuite extends SimpleIOSuite:
     val spec = Spec.single(entry, RepeatPolicy.NoRepeat)
 
     DagCompiler.default[IO].use { compiler =>
-      compiler.compile(spec, RouteSalt("retry-policy-salt")).map { dag =>
+      compiler.compile(spec, RouteSalt("retry-policy-salt")).map { compiled =>
+        val dag = compiled.dag
         val compiledNode = dag.nodes.values.find(_.address == svcB)
         val hasCorrectPolicy = compiledNode match
           case Some(n) => n.retryPolicy match
@@ -1013,7 +1035,8 @@ object DagCompilerSuite extends SimpleIOSuite:
     val spec = Spec.single(entry, RepeatPolicy.NoRepeat)
 
     DagCompiler.default[IO].use { compiler =>
-      compiler.compile(spec, RouteSalt("delivery-strategy-salt")).map { dag =>
+      compiler.compile(spec, RouteSalt("delivery-strategy-salt")).map { compiled =>
+        val dag = compiled.dag
         val compiledNode = dag.nodes.values.find(_.address == svcB)
         val hasCorrectStrategy = compiledNode match
           case Some(n) => n.deliveryStrategy match

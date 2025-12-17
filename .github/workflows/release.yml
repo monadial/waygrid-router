@@ -1,0 +1,108 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  JAVA_VERSION: '23'
+  REGISTRY: ghcr.io
+  IMAGE_PREFIX: ${{ github.repository_owner }}/waygrid
+
+jobs:
+  # ============================================
+  # Run full CI before release
+  # ============================================
+  ci:
+    name: CI
+    uses: ./.github/workflows/ci.yml
+
+  # ============================================
+  # Create GitHub Release
+  # ============================================
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs: [ci]
+    permissions:
+      contents: write
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract version from tag
+        id: version
+        run: echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Generate module list from modules.yml
+        id: modules
+        run: |
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+
+          # Generate markdown list grouped by component
+          echo "## Docker Images" > /tmp/images.md
+          echo "" >> /tmp/images.md
+          echo "All images available at \`ghcr.io/${{ github.repository_owner }}/waygrid-<component>-<service>:${{ steps.version.outputs.version }}\`" >> /tmp/images.md
+          echo "" >> /tmp/images.md
+
+          # Get components and their modules
+          for component in system origin destination processor infrastructure; do
+            MODULES=$(yq -r ".modules[] | select(.component == \"$component\" and .docker == true) | \"- \`waygrid-\" + .component + \"-\" + .service + \"`\"" .github/modules.yml)
+            if [[ -n "$MODULES" ]]; then
+              echo "### ${component^} Services" >> /tmp/images.md
+              echo "$MODULES" >> /tmp/images.md
+              echo "" >> /tmp/images.md
+            fi
+          done
+
+          # Output as multiline
+          echo "images<<EOF" >> $GITHUB_OUTPUT
+          cat /tmp/images.md >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Generate changelog
+        id: changelog
+        uses: orhun/git-cliff-action@v4
+        with:
+          config: cliff.toml
+          args: --current --strip header
+        env:
+          OUTPUT: CHANGELOG.md
+        continue-on-error: true
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Release ${{ steps.version.outputs.version }}
+          body: |
+            ## Waygrid Router ${{ steps.version.outputs.version }}
+
+            ${{ steps.modules.outputs.images }}
+
+            ---
+
+            ${{ steps.changelog.outputs.content || 'See commit history for changes.' }}
+          draft: false
+          prerelease: ${{ contains(steps.version.outputs.version, '-') }}
+          generate_release_notes: true
+
+  # ============================================
+  # Build and push Docker images
+  # ============================================
+  docker:
+    name: Docker Release
+    needs: [release]
+    uses: ./.github/workflows/docker.yml
+    permissions:
+      contents: read
+      packages: write
