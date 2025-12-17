@@ -11,7 +11,7 @@ ThisBuild / organizationName := "Monadial"
 
 ThisBuild / resolvers += "jitpack" at "https://jitpack.io"
 
-ThisBuild / homepage := Some(url("https://waygrid.monadial.com"))
+ThisBuild / homepage := Some(url("https://waygrid.dev"))
 ThisBuild / licenses := Seq(License.GPL3_or_later) // see LICENSE file in the root of the project
 ThisBuild / developers := List(
   Developer("tmihalicka", "Tomas Mihalicka", "tomas@monadial.com", url("https://monadial.com"))
@@ -27,6 +27,12 @@ ThisBuild / javaOptions ++= Seq(
 )
 
 ThisBuild / semanticdbEnabled := true
+
+// Coverage settings
+ThisBuild / coverageEnabled := false // Enable via `sbt coverage test coverageReport`
+ThisBuild / coverageFailOnMinimum := false
+ThisBuild / coverageHighlighting := true
+ThisBuild / coverageExcludedPackages := "<empty>;.*BuildInfo.*;.*scalapb.*"
 
 //
 //

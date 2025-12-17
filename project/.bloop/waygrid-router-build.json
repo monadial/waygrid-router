@@ -33,9 +33,8 @@
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/laika-sbt_2.12_1.0/1.3.2/laika-sbt_2.12_1.0-1.3.2.jar",
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/wartremover/sbt-wartremover_2.12_1.0/3.4.2/sbt-wartremover_2.12_1.0-3.4.2.jar",
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/io/chrisdavenport/sbt-http4s-grpc_2.12_1.0/0.0.4/sbt-http4s-grpc_2.12_1.0-0.0.4.jar",
+            "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scoverage/sbt-scoverage_2.12_1.0/2.2.2/sbt-scoverage_2.12_1.0-2.2.2.jar",
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/sbt-dependency-tree_2.12_1.0/1.10.10/sbt-dependency-tree_2.12_1.0-1.10.10.jar",
-            "/Users/tomas/Library/Application Support/JetBrains/IntelliJIdea2025.3/plugins/Scala/repo/org/jetbrains/scala/sbt-structure-extractor_2.12_1.3/2025.3.5/sbt-structure-extractor_2.12_1.3-2025.3.5.jar",
-            "/Users/tomas/Library/Application Support/JetBrains/IntelliJIdea2025.3/plugins/Scala/repo/org/jetbrains/scala/sbt-idea-shell_2.12_1.0/2025.3.0/sbt-idea-shell_2.12_1.0-2025.3.0.jar",
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/main_2.12/1.10.10/main_2.12-1.10.10.jar",
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/io_2.12/1.10.4/io_2.12-1.10.4.jar",
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/ch/epfl/scala/bloop-config_2.12/2.3.2/bloop-config_2.12-2.3.2.jar",
@@ -61,6 +60,7 @@
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/thesamet/scalapb/compilerplugin_2.12/0.11.14/compilerplugin_2.12-0.11.14.jar",
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/thesamet/sbt-protoc_2.12_1.0/1.0.6/sbt-protoc-1.0.6.jar",
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/portable-scala/sbt-platform-deps_2.12_1.0/1.0.2/sbt-platform-deps_2.12_1.0-1.0.2.jar",
+            "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scoverage/scalac-scoverage-reporter_2.12/2.2.1/scalac-scoverage-reporter_2.12-2.2.1.jar",
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/logic_2.12/1.10.10/logic_2.12-1.10.10.jar",
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/actions_2.12/1.10.10/actions_2.12-1.10.10.jar",
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/main-settings_2.12/1.10.10/main-settings_2.12-1.10.10.jar",
@@ -130,6 +130,8 @@
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/google/protobuf/protobuf-java/3.19.6/protobuf-java-3.19.6.jar",
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/thesamet/scalapb/protoc-gen_2.12/0.9.6/protoc-gen_2.12-0.9.6.jar",
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/thesamet/scalapb/protoc-bridge_2.12/0.9.6/protoc-bridge_2.12-0.9.6.jar",
+            "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scoverage/scalac-scoverage-domain_2.12/2.2.1/scalac-scoverage-domain_2.12-2.2.1.jar",
+            "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scoverage/scalac-scoverage-serializer_2.12/2.2.1/scalac-scoverage-serializer_2.12-2.2.1.jar",
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/util-relation_2.12/1.10.10/util-relation_2.12-1.10.10.jar",
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/completion_2.12/1.10.10/completion_2.12-1.10.10.jar",
             "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/task-system_2.12/1.10.10/task-system_2.12-1.10.10.jar",
@@ -304,8 +306,8 @@
                 "import _root_.sbt._",
                 "import _root_.sbt.Keys._",
                 "import _root_.sbt.nio.Keys._",
-                "import _root_.sbt.ScriptedPlugin.autoImport._, _root_.sbt.plugins.JUnitXmlReportPlugin.autoImport._, _root_.sbt.plugins.MiniDependencyTreePlugin.autoImport._, _root_.bloop.integrations.sbt.BloopPlugin.autoImport._, _root_.sbtprotoc.ProtocPlugin.autoImport._, _root_.sbtide.ConfigPlugin.autoImport._, _root_.org.typelevel.sbt.tpolecat.TpolecatPlugin.autoImport._, _root_.spray.revolver.RevolverPlugin.autoImport._, _root_.com.typesafe.sbt.SbtNativePackager.autoImport._, _root_.com.typesafe.sbt.packager.archetypes.JavaAppPackaging.autoImport._, _root_.com.typesafe.sbt.packager.archetypes.JavaServerAppPackaging.autoImport._, _root_.com.typesafe.sbt.packager.archetypes.jar.ClasspathJarPlugin.autoImport._, _root_.com.typesafe.sbt.packager.archetypes.jar.LauncherJarPlugin.autoImport._, _root_.com.typesafe.sbt.packager.archetypes.jlink.JlinkPlugin.autoImport._, _root_.com.typesafe.sbt.packager.archetypes.scripts.BashStartScriptPlugin.autoImport._, _root_.com.typesafe.sbt.packager.archetypes.scripts.BatStartScriptPlugin.autoImport._, _root_.com.typesafe.sbt.packager.archetypes.systemloader.SystemdPlugin.autoImport._, _root_.com.typesafe.sbt.packager.archetypes.systemloader.SystemloaderPlugin.autoImport._, _root_.com.typesafe.sbt.packager.debian.DebianPlugin.autoImport._, _root_.com.typesafe.sbt.packager.docker.DockerPlugin.autoImport._, _root_.com.typesafe.sbt.packager.graalvmnativeimage.GraalVMNativeImagePlugin.autoImport._, _root_.com.typesafe.sbt.packager.jdkpackager.JDKPackagerPlugin.autoImport._, _root_.com.typesafe.sbt.packager.linux.LinuxPlugin.autoImport._, _root_.com.typesafe.sbt.packager.rpm.RpmPlugin.autoImport._, _root_.com.typesafe.sbt.packager.universal.UniversalPlugin.autoImport._, _root_.com.typesafe.sbt.packager.windows.WindowsPlugin.autoImport._, _root_.org.scalafmt.sbt.ScalafmtPlugin.autoImport._, _root_.scalafix.sbt.ScalafixPlugin.autoImport._, _root_.scalafix.sbt.ScalafixTestkitPlugin.autoImport._, _root_.sbtbuildinfo.BuildInfoPlugin.autoImport._, _root_.com.timushev.sbt.updates.UpdatesPlugin.autoImport._, _root_.net.vonbuchholtz.sbt.dependencycheck.DependencyCheckPlugin.autoImport._, _root_.laika.sbt.LaikaPlugin.autoImport._, _root_.wartremover.WartRemover.autoImport._, _root_.org.http4s.grpc.sbt.Http4sGrpcPlugin.autoImport._, _root_.sbt.plugins.DependencyTreePlugin.autoImport._, _root_.org.jetbrains.sbt.GenerateAllManagedSourcesPlugin.autoImport._, _root_.org.jetbrains.sbt.IdeaShellPlugin.autoImport._, _root_.org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._",
-                "import _root_.sbt.plugins.IvyPlugin, _root_.sbt.plugins.JvmPlugin, _root_.sbt.plugins.CorePlugin, _root_.sbt.ScriptedPlugin, _root_.sbt.plugins.SbtPlugin, _root_.sbt.plugins.SemanticdbPlugin, _root_.sbt.plugins.JUnitXmlReportPlugin, _root_.sbt.plugins.Giter8TemplatePlugin, _root_.sbt.plugins.MiniDependencyTreePlugin, _root_.bloop.integrations.sbt.BloopPlugin, _root_.sbtprotoc.ProtocPlugin, _root_.sbtide.ConfigPlugin, _root_.org.typelevel.sbt.tpolecat.TpolecatPlugin, _root_.spray.revolver.RevolverPlugin, _root_.com.typesafe.sbt.SbtNativePackager, _root_.com.typesafe.sbt.packager.archetypes.JavaAppPackaging, _root_.com.typesafe.sbt.packager.archetypes.JavaServerAppPackaging, _root_.com.typesafe.sbt.packager.archetypes.jar.ClasspathJarPlugin, _root_.com.typesafe.sbt.packager.archetypes.jar.LauncherJarPlugin, _root_.com.typesafe.sbt.packager.archetypes.jlink.JlinkPlugin, _root_.com.typesafe.sbt.packager.archetypes.scripts.AshScriptPlugin, _root_.com.typesafe.sbt.packager.archetypes.scripts.BashStartScriptPlugin, _root_.com.typesafe.sbt.packager.archetypes.scripts.BatStartScriptPlugin, _root_.com.typesafe.sbt.packager.archetypes.systemloader.SystemVPlugin, _root_.com.typesafe.sbt.packager.archetypes.systemloader.SystemdPlugin, _root_.com.typesafe.sbt.packager.archetypes.systemloader.SystemloaderPlugin, _root_.com.typesafe.sbt.packager.archetypes.systemloader.UpstartPlugin, _root_.com.typesafe.sbt.packager.debian.DebianDeployPlugin, _root_.com.typesafe.sbt.packager.debian.DebianPlugin, _root_.com.typesafe.sbt.packager.debian.JDebPackaging, _root_.com.typesafe.sbt.packager.docker.DockerPlugin, _root_.com.typesafe.sbt.packager.docker.DockerSpotifyClientPlugin, _root_.com.typesafe.sbt.packager.graalvmnativeimage.GraalVMNativeImagePlugin, _root_.com.typesafe.sbt.packager.jdkpackager.JDKPackagerDeployPlugin, _root_.com.typesafe.sbt.packager.jdkpackager.JDKPackagerPlugin, _root_.com.typesafe.sbt.packager.linux.LinuxPlugin, _root_.com.typesafe.sbt.packager.rpm.RpmDeployPlugin, _root_.com.typesafe.sbt.packager.rpm.RpmPlugin, _root_.com.typesafe.sbt.packager.universal.UniversalDeployPlugin, _root_.com.typesafe.sbt.packager.universal.UniversalPlugin, _root_.com.typesafe.sbt.packager.windows.WindowsDeployPlugin, _root_.com.typesafe.sbt.packager.windows.WindowsPlugin, _root_.org.scalafmt.sbt.ScalafmtPlugin, _root_.scalafix.sbt.ScalafixPlugin, _root_.scalafix.sbt.ScalafixTestkitPlugin, _root_.sbtbuildinfo.BuildInfoPlugin, _root_.com.timushev.sbt.updates.UpdatesPlugin, _root_.net.vonbuchholtz.sbt.dependencycheck.DependencyCheckPlugin, _root_.laika.sbt.LaikaPlugin, _root_.wartremover.WartRemover, _root_.org.http4s.grpc.sbt.Http4sGrpcPlugin, _root_.sbt.plugins.DependencyTreePlugin, _root_.org.jetbrains.sbt.GenerateAllManagedSourcesPlugin, _root_.org.jetbrains.sbt.StructurePlugin, _root_.org.jetbrains.sbt.IdeaShellPlugin, _root_.org.portablescala.sbtplatformdeps.PlatformDepsPlugin"
+                "import _root_.sbt.ScriptedPlugin.autoImport._, _root_.sbt.plugins.JUnitXmlReportPlugin.autoImport._, _root_.sbt.plugins.MiniDependencyTreePlugin.autoImport._, _root_.bloop.integrations.sbt.BloopPlugin.autoImport._, _root_.sbtprotoc.ProtocPlugin.autoImport._, _root_.sbtide.ConfigPlugin.autoImport._, _root_.org.typelevel.sbt.tpolecat.TpolecatPlugin.autoImport._, _root_.spray.revolver.RevolverPlugin.autoImport._, _root_.com.typesafe.sbt.SbtNativePackager.autoImport._, _root_.com.typesafe.sbt.packager.archetypes.JavaAppPackaging.autoImport._, _root_.com.typesafe.sbt.packager.archetypes.JavaServerAppPackaging.autoImport._, _root_.com.typesafe.sbt.packager.archetypes.jar.ClasspathJarPlugin.autoImport._, _root_.com.typesafe.sbt.packager.archetypes.jar.LauncherJarPlugin.autoImport._, _root_.com.typesafe.sbt.packager.archetypes.jlink.JlinkPlugin.autoImport._, _root_.com.typesafe.sbt.packager.archetypes.scripts.BashStartScriptPlugin.autoImport._, _root_.com.typesafe.sbt.packager.archetypes.scripts.BatStartScriptPlugin.autoImport._, _root_.com.typesafe.sbt.packager.archetypes.systemloader.SystemdPlugin.autoImport._, _root_.com.typesafe.sbt.packager.archetypes.systemloader.SystemloaderPlugin.autoImport._, _root_.com.typesafe.sbt.packager.debian.DebianPlugin.autoImport._, _root_.com.typesafe.sbt.packager.docker.DockerPlugin.autoImport._, _root_.com.typesafe.sbt.packager.graalvmnativeimage.GraalVMNativeImagePlugin.autoImport._, _root_.com.typesafe.sbt.packager.jdkpackager.JDKPackagerPlugin.autoImport._, _root_.com.typesafe.sbt.packager.linux.LinuxPlugin.autoImport._, _root_.com.typesafe.sbt.packager.rpm.RpmPlugin.autoImport._, _root_.com.typesafe.sbt.packager.universal.UniversalPlugin.autoImport._, _root_.com.typesafe.sbt.packager.windows.WindowsPlugin.autoImport._, _root_.org.scalafmt.sbt.ScalafmtPlugin.autoImport._, _root_.scalafix.sbt.ScalafixPlugin.autoImport._, _root_.scalafix.sbt.ScalafixTestkitPlugin.autoImport._, _root_.sbtbuildinfo.BuildInfoPlugin.autoImport._, _root_.com.timushev.sbt.updates.UpdatesPlugin.autoImport._, _root_.net.vonbuchholtz.sbt.dependencycheck.DependencyCheckPlugin.autoImport._, _root_.laika.sbt.LaikaPlugin.autoImport._, _root_.wartremover.WartRemover.autoImport._, _root_.org.http4s.grpc.sbt.Http4sGrpcPlugin.autoImport._, _root_.scoverage.ScoverageSbtPlugin.autoImport._, _root_.sbt.plugins.DependencyTreePlugin.autoImport._, _root_.org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._",
+                "import _root_.sbt.plugins.IvyPlugin, _root_.sbt.plugins.JvmPlugin, _root_.sbt.plugins.CorePlugin, _root_.sbt.ScriptedPlugin, _root_.sbt.plugins.SbtPlugin, _root_.sbt.plugins.SemanticdbPlugin, _root_.sbt.plugins.JUnitXmlReportPlugin, _root_.sbt.plugins.Giter8TemplatePlugin, _root_.sbt.plugins.MiniDependencyTreePlugin, _root_.bloop.integrations.sbt.BloopPlugin, _root_.sbtprotoc.ProtocPlugin, _root_.sbtide.ConfigPlugin, _root_.org.typelevel.sbt.tpolecat.TpolecatPlugin, _root_.spray.revolver.RevolverPlugin, _root_.com.typesafe.sbt.SbtNativePackager, _root_.com.typesafe.sbt.packager.archetypes.JavaAppPackaging, _root_.com.typesafe.sbt.packager.archetypes.JavaServerAppPackaging, _root_.com.typesafe.sbt.packager.archetypes.jar.ClasspathJarPlugin, _root_.com.typesafe.sbt.packager.archetypes.jar.LauncherJarPlugin, _root_.com.typesafe.sbt.packager.archetypes.jlink.JlinkPlugin, _root_.com.typesafe.sbt.packager.archetypes.scripts.AshScriptPlugin, _root_.com.typesafe.sbt.packager.archetypes.scripts.BashStartScriptPlugin, _root_.com.typesafe.sbt.packager.archetypes.scripts.BatStartScriptPlugin, _root_.com.typesafe.sbt.packager.archetypes.systemloader.SystemVPlugin, _root_.com.typesafe.sbt.packager.archetypes.systemloader.SystemdPlugin, _root_.com.typesafe.sbt.packager.archetypes.systemloader.SystemloaderPlugin, _root_.com.typesafe.sbt.packager.archetypes.systemloader.UpstartPlugin, _root_.com.typesafe.sbt.packager.debian.DebianDeployPlugin, _root_.com.typesafe.sbt.packager.debian.DebianPlugin, _root_.com.typesafe.sbt.packager.debian.JDebPackaging, _root_.com.typesafe.sbt.packager.docker.DockerPlugin, _root_.com.typesafe.sbt.packager.docker.DockerSpotifyClientPlugin, _root_.com.typesafe.sbt.packager.graalvmnativeimage.GraalVMNativeImagePlugin, _root_.com.typesafe.sbt.packager.jdkpackager.JDKPackagerDeployPlugin, _root_.com.typesafe.sbt.packager.jdkpackager.JDKPackagerPlugin, _root_.com.typesafe.sbt.packager.linux.LinuxPlugin, _root_.com.typesafe.sbt.packager.rpm.RpmDeployPlugin, _root_.com.typesafe.sbt.packager.rpm.RpmPlugin, _root_.com.typesafe.sbt.packager.universal.UniversalDeployPlugin, _root_.com.typesafe.sbt.packager.universal.UniversalPlugin, _root_.com.typesafe.sbt.packager.windows.WindowsDeployPlugin, _root_.com.typesafe.sbt.packager.windows.WindowsPlugin, _root_.org.scalafmt.sbt.ScalafmtPlugin, _root_.scalafix.sbt.ScalafixPlugin, _root_.scalafix.sbt.ScalafixTestkitPlugin, _root_.sbtbuildinfo.BuildInfoPlugin, _root_.com.timushev.sbt.updates.UpdatesPlugin, _root_.net.vonbuchholtz.sbt.dependencycheck.DependencyCheckPlugin, _root_.laika.sbt.LaikaPlugin, _root_.wartremover.WartRemover, _root_.org.http4s.grpc.sbt.Http4sGrpcPlugin, _root_.scoverage.ScoverageSbtPlugin, _root_.sbt.plugins.DependencyTreePlugin, _root_.org.portablescala.sbtplatformdeps.PlatformDepsPlugin"
             ]
         },
         "test": {
@@ -399,9 +401,8 @@
                 "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/laika-sbt_2.12_1.0/1.3.2/laika-sbt_2.12_1.0-1.3.2.jar",
                 "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/wartremover/sbt-wartremover_2.12_1.0/3.4.2/sbt-wartremover_2.12_1.0-3.4.2.jar",
                 "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/io/chrisdavenport/sbt-http4s-grpc_2.12_1.0/0.0.4/sbt-http4s-grpc_2.12_1.0-0.0.4.jar",
+                "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scoverage/sbt-scoverage_2.12_1.0/2.2.2/sbt-scoverage_2.12_1.0-2.2.2.jar",
                 "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/sbt-dependency-tree_2.12_1.0/1.10.10/sbt-dependency-tree_2.12_1.0-1.10.10.jar",
-                "/Users/tomas/Library/Application Support/JetBrains/IntelliJIdea2025.3/plugins/Scala/repo/org/jetbrains/scala/sbt-structure-extractor_2.12_1.3/2025.3.5/sbt-structure-extractor_2.12_1.3-2025.3.5.jar",
-                "/Users/tomas/Library/Application Support/JetBrains/IntelliJIdea2025.3/plugins/Scala/repo/org/jetbrains/scala/sbt-idea-shell_2.12_1.0/2025.3.0/sbt-idea-shell_2.12_1.0-2025.3.0.jar",
                 "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/ch/epfl/scala/bloop-config_2.12/2.3.2/bloop-config_2.12-2.3.2.jar",
                 "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/scalac-options_2.12/0.1.7/scalac-options_2.12-0.1.7.jar",
                 "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/apache/commons/commons-compress/1.27.1/commons-compress-1.27.1.jar",
@@ -426,6 +427,7 @@
                 "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/thesamet/scalapb/compilerplugin_2.12/0.11.14/compilerplugin_2.12-0.11.14.jar",
                 "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/thesamet/sbt-protoc_2.12_1.0/1.0.6/sbt-protoc-1.0.6.jar",
                 "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/portable-scala/sbt-platform-deps_2.12_1.0/1.0.2/sbt-platform-deps_2.12_1.0-1.0.2.jar",
+                "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scoverage/scalac-scoverage-reporter_2.12/2.2.1/scalac-scoverage-reporter_2.12-2.2.1.jar",
                 "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/sbt/1.10.10/sbt-1.10.10.jar",
                 "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/github/plokhotnyuk/jsoniter-scala/jsoniter-scala-core_2.12/2.13.5.2/jsoniter-scala-core_2.12-2.13.5.2.jar",
                 "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/lihaoyi/unroll-annotation_2.12/0.1.12/unroll-annotation_2.12-0.1.12.jar",
@@ -478,6 +480,8 @@
                 "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/google/protobuf/protobuf-java/3.19.6/protobuf-java-3.19.6.jar",
                 "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/thesamet/scalapb/protoc-gen_2.12/0.9.6/protoc-gen_2.12-0.9.6.jar",
                 "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/thesamet/scalapb/protoc-bridge_2.12/0.9.6/protoc-bridge_2.12-0.9.6.jar",
+                "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scoverage/scalac-scoverage-domain_2.12/2.2.1/scalac-scoverage-domain_2.12-2.2.1.jar",
+                "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scoverage/scalac-scoverage-serializer_2.12/2.2.1/scalac-scoverage-serializer_2.12-2.2.1.jar",
                 "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/main_2.12/1.10.10/main_2.12-1.10.10.jar",
                 "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/commons-logging/commons-logging/1.3.0/commons-logging-1.3.0.jar",
                 "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/apache/commons/commons-pool2/2.10.0/commons-pool2-2.10.0.jar",
@@ -853,6 +857,23 @@
                     ]
                 },
                 {
+                    "organization": "org.scoverage",
+                    "name": "sbt-scoverage",
+                    "version": "2.2.2",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "sbt-scoverage",
+                            "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scoverage/sbt-scoverage_2.12_1.0/2.2.2/sbt-scoverage_2.12_1.0-2.2.2.jar"
+                        },
+                        {
+                            "name": "sbt-scoverage",
+                            "classifier": "sources",
+                            "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scoverage/sbt-scoverage_2.12_1.0/2.2.2/sbt-scoverage_2.12_1.0-2.2.2-sources.jar"
+                        }
+                    ]
+                },
+                {
                     "organization": "org.scala-sbt",
                     "name": "sbt-dependency-tree",
                     "version": "1.10.10",
@@ -866,30 +887,6 @@
                             "name": "sbt-dependency-tree",
                             "classifier": "sources",
                             "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/sbt-dependency-tree_2.12_1.0/1.10.10/sbt-dependency-tree_2.12_1.0-1.10.10-sources.jar"
-                        }
-                    ]
-                },
-                {
-                    "organization": "org.jetbrains.scala",
-                    "name": "sbt-structure-extractor",
-                    "version": "2025.3.5",
-                    "configurations": "default",
-                    "artifacts": [
-                        {
-                            "name": "sbt-structure-extractor",
-                            "path": "/Users/tomas/Library/Application Support/JetBrains/IntelliJIdea2025.3/plugins/Scala/repo/org/jetbrains/scala/sbt-structure-extractor_2.12_1.3/2025.3.5/sbt-structure-extractor_2.12_1.3-2025.3.5.jar"
-                        }
-                    ]
-                },
-                {
-                    "organization": "org.jetbrains.scala",
-                    "name": "sbt-idea-shell",
-                    "version": "2025.3.0",
-                    "configurations": "default",
-                    "artifacts": [
-                        {
-                            "name": "sbt-idea-shell",
-                            "path": "/Users/tomas/Library/Application Support/JetBrains/IntelliJIdea2025.3/plugins/Scala/repo/org/jetbrains/scala/sbt-idea-shell_2.12_1.0/2025.3.0/sbt-idea-shell_2.12_1.0-2025.3.0.jar"
                         }
                     ]
                 },
@@ -1298,6 +1295,23 @@
                             "name": "sbt-platform-deps",
                             "classifier": "sources",
                             "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/portable-scala/sbt-platform-deps_2.12_1.0/1.0.2/sbt-platform-deps_2.12_1.0-1.0.2-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.scoverage",
+                    "name": "scalac-scoverage-reporter_2.12",
+                    "version": "2.2.1",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "scalac-scoverage-reporter_2.12",
+                            "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scoverage/scalac-scoverage-reporter_2.12/2.2.1/scalac-scoverage-reporter_2.12-2.2.1.jar"
+                        },
+                        {
+                            "name": "scalac-scoverage-reporter_2.12",
+                            "classifier": "sources",
+                            "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scoverage/scalac-scoverage-reporter_2.12/2.2.1/scalac-scoverage-reporter_2.12-2.2.1-sources.jar"
                         }
                     ]
                 },
@@ -2177,6 +2191,40 @@
                             "name": "protoc-bridge_2.12",
                             "classifier": "sources",
                             "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/thesamet/scalapb/protoc-bridge_2.12/0.9.6/protoc-bridge_2.12-0.9.6-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.scoverage",
+                    "name": "scalac-scoverage-domain_2.12",
+                    "version": "2.2.1",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "scalac-scoverage-domain_2.12",
+                            "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scoverage/scalac-scoverage-domain_2.12/2.2.1/scalac-scoverage-domain_2.12-2.2.1.jar"
+                        },
+                        {
+                            "name": "scalac-scoverage-domain_2.12",
+                            "classifier": "sources",
+                            "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scoverage/scalac-scoverage-domain_2.12/2.2.1/scalac-scoverage-domain_2.12-2.2.1-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.scoverage",
+                    "name": "scalac-scoverage-serializer_2.12",
+                    "version": "2.2.1",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "scalac-scoverage-serializer_2.12",
+                            "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scoverage/scalac-scoverage-serializer_2.12/2.2.1/scalac-scoverage-serializer_2.12-2.2.1.jar"
+                        },
+                        {
+                            "name": "scalac-scoverage-serializer_2.12",
+                            "classifier": "sources",
+                            "path": "/Users/tomas/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scoverage/scalac-scoverage-serializer_2.12/2.2.1/scalac-scoverage-serializer_2.12-2.2.1-sources.jar"
                         }
                     ]
                 },

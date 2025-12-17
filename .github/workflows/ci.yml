@@ -249,12 +249,92 @@ jobs:
           echo "| Commit | ${{ needs.setup.outputs.sha_short }} |" >> $GITHUB_STEP_SUMMARY
 
   # ============================================
+  # Coverage report (matrix)
+  # ============================================
+  coverage:
+    name: Coverage ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    needs: [setup, compile]
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.setup.outputs.modules) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - name: Setup sbt
+        uses: sbt/setup-sbt@v1
+
+      - name: Cache sbt
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.sbt
+            ~/.ivy2/cache
+            ~/.cache/coursier
+          key: ${{ runner.os }}-sbt-${{ hashFiles('**/build.sbt', 'project/**') }}
+          restore-keys: |
+            ${{ runner.os }}-sbt-
+
+      - name: Run tests with coverage - ${{ matrix.name }}
+        run: |
+          echo "📊 Running coverage for: ${{ matrix.name }}"
+          echo "   Version: ${{ needs.setup.outputs.version }}"
+          echo "   Commit: ${{ needs.setup.outputs.sha_short }}"
+          sbt "coverage" "${{ matrix.name }}/test" "${{ matrix.name }}/coverageReport"
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-${{ matrix.name }}
+          path: |
+            modules/${{ matrix.path }}/target/scala-*/scoverage-report/
+            modules/${{ matrix.path }}/target/scala-*/coverage-report/
+          retention-days: 7
+          if-no-files-found: ignore
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          files: modules/${{ matrix.path }}/target/scala-*/scoverage-report/scoverage.xml
+          flags: ${{ matrix.name }}
+          name: ${{ matrix.name }}
+          fail_ci_if_error: false
+          verbose: true
+
+      - name: Generate coverage summary
+        run: |
+          echo "## 📊 Coverage - ${{ matrix.name }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Try to extract coverage percentage from the report
+          COVERAGE_FILE="modules/${{ matrix.path }}/target/scala-*/scoverage-report/scoverage.xml"
+          if ls $COVERAGE_FILE 1> /dev/null 2>&1; then
+            STMT_COVERAGE=$(grep -oP 'statement-rate="\K[^"]+' $COVERAGE_FILE 2>/dev/null | head -1 || echo "N/A")
+            BRANCH_COVERAGE=$(grep -oP 'branch-rate="\K[^"]+' $COVERAGE_FILE 2>/dev/null | head -1 || echo "N/A")
+
+            echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
+            echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+            echo "| Module | ${{ matrix.name }} |" >> $GITHUB_STEP_SUMMARY
+            echo "| Statement Coverage | ${STMT_COVERAGE}% |" >> $GITHUB_STEP_SUMMARY
+            echo "| Branch Coverage | ${BRANCH_COVERAGE}% |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "Coverage report not found for ${{ matrix.name }}" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  # ============================================
   # Final status check (for branch protection)
   # ============================================
   ci-success:
     name: CI Success
     runs-on: ubuntu-latest
-    needs: [setup, lint, compile, test]
+    needs: [setup, lint, compile, test, coverage]
     if: always()
     steps:
       - name: Check all jobs passed
@@ -264,6 +344,10 @@ jobs:
              [[ "${{ needs.test.result }}" != "success" ]]; then
             echo "❌ One or more jobs failed"
             exit 1
+          fi
+          # Coverage is informational, warn but don't fail
+          if [[ "${{ needs.coverage.result }}" != "success" ]]; then
+            echo "⚠️  Coverage job did not complete successfully (non-blocking)"
           fi
           echo "✅ All CI checks passed!"
 
@@ -277,6 +361,11 @@ jobs:
           echo "| Lint | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
           echo "| Compile | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
           echo "| Tests | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
+          if [[ "${{ needs.coverage.result }}" == "success" ]]; then
+            echo "| Coverage | ✅ Collected |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| Coverage | ⚠️ Incomplete |" >> $GITHUB_STEP_SUMMARY
+          fi
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Version:** ${{ needs.setup.outputs.version }}" >> $GITHUB_STEP_SUMMARY
           echo "**Commit:** ${{ needs.setup.outputs.sha_short }}" >> $GITHUB_STEP_SUMMARY

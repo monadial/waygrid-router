@@ -172,24 +172,10 @@
   <component name="ChangeListManager">
     <list default="true" id="7697e996-c24f-4ea1-a7ee-bf168edbe1e9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/algebra/SpecValidator.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/algebra/SpecValidator.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/model/traversal/spec/Spec.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/model/traversal/spec/Spec.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/origin/http/src/main/scala/com/monadial/waygrid/origin/http/Main.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/origin/http/src/main/scala/com/monadial/waygrid/origin/http/Main.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/origin/http/src/main/scala/com/monadial/waygrid/origin/http/http/resource/v1/IngestResource.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/origin/http/src/main/scala/com/monadial/waygrid/origin/http/http/resource/v1/IngestResource.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/system/iam/src/main/scala/com/monadial/waygrid/system/iam/Main.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/system/iam/src/main/scala/com/monadial/waygrid/system/iam/Main.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/system/iam/src/main/scala/com/monadial/waygrid/system/iam/domain/account/Account.scala" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/system/iam/src/main/scala/com/monadial/waygrid/system/iam/domain/account/AccountState.scala" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/system/iam/src/main/scala/com/monadial/waygrid/system/iam/domain/account/Accounts.scala" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/system/iam/src/main/scala/com/monadial/waygrid/system/iam/domain/account/Command.scala" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/system/iam/src/main/scala/com/monadial/waygrid/system/iam/domain/account/Error.scala" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/system/iam/src/main/scala/com/monadial/waygrid/system/iam/domain/account/Event.scala" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/system/iam/src/main/scala/com/monadial/waygrid/system/iam/domain/account/Value.scala" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/system/iam/src/main/scala/com/monadial/waygrid/system/iam/domain/channel/Channel.scala" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/system/iam/src/main/scala/com/monadial/waygrid/system/iam/domain/channel/Channels.scala" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/system/topology/src/main/scala/com/monadial/waygrid/system/topology/Main.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/system/topology/src/main/scala/com/monadial/waygrid/system/topology/Main.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/system/waystation/src/main/scala/com/monadial/waygrid/system/waystation/actor/TraversalExecutorActor.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/system/waystation/src/main/scala/com/monadial/waygrid/system/waystation/actor/TraversalExecutorActor.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CLAUDE.md" beforeDir="false" afterPath="$PROJECT_DIR$/CLAUDE.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.sbt" beforeDir="false" afterPath="$PROJECT_DIR$/build.sbt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/.bloop/waygrid-router-build.json" beforeDir="false" afterPath="$PROJECT_DIR$/project/.bloop/waygrid-router-build.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/project/.bloop/waygrid-router-build-build.json" beforeDir="false" afterPath="$PROJECT_DIR$/project/project/.bloop/waygrid-router-build-build.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/plugins.sbt" beforeDir="false" afterPath="$PROJECT_DIR$/project/plugins.sbt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -332,6 +318,7 @@
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",
+    "sbt Task.Unnamed (1).executor": "Run",
     "settings.editor.selected.configurable": "scala.compiler",
     "settings.editor.splitter.proportion": "0.3058104",
     "to.speed.mode.migration.done": "true",
@@ -344,7 +331,7 @@
       <recent name="$PROJECT_DIR$/modules/system/blob-store/src/main" />
     </key>
   </component>
-  <component name="RunManager" selected="Scala REPL.Scala REPL">
+  <component name="RunManager" selected="sbt Task.Unnamed (1)">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true">
       <envs>
         <env name="WAYGRID_REGION" value="lc-dev-01" />
@@ -433,6 +420,21 @@
       <option name="filePath" />
       <method v="2" />
     </configuration>
+    <configuration name="Unnamed (1)" type="SbtRunConfiguration" factoryName="sbt Task" nameIsGenerated="true" show_console_on_std_err="false" show_console_on_std_out="false">
+      <option name="allowRunningInParallel" value="false" />
+      <option name="projectPathOnTarget" />
+      <option name="selectedOptions">
+        <list />
+      </option>
+      <option name="tasks" value="" />
+      <option name="useSbtShell" value="false" />
+      <option name="vmparams" value="-Xms512M -Xmx1024M -Xss1M" />
+      <option name="workingDir" value="$PROJECT_DIR$" />
+      <option name="envFilePaths" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Unnamed" type="SbtRunConfiguration" factoryName="sbt Task" nameIsGenerated="true" show_console_on_std_err="false" show_console_on_std_out="false">
       <option name="allowRunningInParallel" value="false" />
       <option name="projectPathOnTarget" />
@@ -449,7 +451,6 @@
       </method>
     </configuration>
     <configuration name="Scala REPL" type="ScalaScriptConsoleRunConfiguration" factoryName="Scala Console" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
-      <module name="origin-kafka" />
       <option name="allowRunningInParallel" value="false" />
       <option name="envFilePaths">
         <list />
@@ -458,7 +459,7 @@
         <map />
       </option>
       <option name="javaOptions" value="" />
-      <option name="myConsoleArgs" value="" />
+      <option name="myConsoleArgs" value="-usejavacp" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -479,6 +480,7 @@
       <item itemvalue="JUnit.SpecJsonCodecSuite" />
       <item itemvalue="JUnit.SpecDslSuite$" />
       <item itemvalue="JUnit.TraversalFSMSuite$" />
+      <item itemvalue="sbt Task.Unnamed (1)" />
       <item itemvalue="sbt Task.Unnamed" />
       <item itemvalue="Scala REPL.Scala REPL" />
     </list>
@@ -517,7 +519,7 @@
       <workItem from="1765491390761" duration="38102000" />
       <workItem from="1765806194819" duration="5004000" />
       <workItem from="1765837790966" duration="43987000" />
-      <workItem from="1765981873712" duration="4566000" />
+      <workItem from="1765981873712" duration="5711000" />
     </task>
     <servers />
   </component>
@@ -561,7 +563,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="scala-line">
           <url>file://$PROJECT_DIR$/build.sbt</url>
-          <line>188</line>
+          <line>194</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="scala-line">
