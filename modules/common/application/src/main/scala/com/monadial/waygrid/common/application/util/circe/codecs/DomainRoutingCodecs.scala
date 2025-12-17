@@ -8,5 +8,5 @@ import io.circe.Codec
 
 object DomainRoutingCodecs:
   given Codec[DeliveryStrategy] = Codec.derived[DeliveryStrategy]
-  given Codec[RetryPolicy] = Codec.derived[RetryPolicy]
-  given Codec[RepeatPolicy] = Codec.derived[RepeatPolicy]
+  given Codec[RetryPolicy]      = Codec.derived[RetryPolicy]
+  given Codec[RepeatPolicy]     = Codec.derived[RepeatPolicy]

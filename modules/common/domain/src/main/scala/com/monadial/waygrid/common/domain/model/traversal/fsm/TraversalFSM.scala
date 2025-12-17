@@ -4,13 +4,13 @@ import cats.Monad
 import cats.implicits.*
 import com.monadial.waygrid.common.domain.model.fsm.FSM
 import com.monadial.waygrid.common.domain.model.fsm.Value.Result
-import com.monadial.waygrid.common.domain.model.resiliency.{Backoff, RetryPolicy}
-import com.monadial.waygrid.common.domain.model.routing.Value.{DeliveryStrategy, TraversalId}
-import com.monadial.waygrid.common.domain.model.traversal.dag.{Dag, JoinStrategy, Node as DagNode, NodeType}
-import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{BranchId, EdgeGuard, ForkId, NodeId}
+import com.monadial.waygrid.common.domain.model.resiliency.{ Backoff, RetryPolicy }
+import com.monadial.waygrid.common.domain.model.routing.Value.{ DeliveryStrategy, TraversalId }
+import com.monadial.waygrid.common.domain.model.traversal.dag.{ Dag, JoinStrategy, Node as DagNode, NodeType }
+import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ BranchId, EdgeGuard, ForkId, NodeId }
 import com.monadial.waygrid.common.domain.model.traversal.fsm.TraversalEffect.*
 import com.monadial.waygrid.common.domain.model.traversal.condition.Condition
-import com.monadial.waygrid.common.domain.model.traversal.state.{BranchResult, PendingJoin, TraversalState}
+import com.monadial.waygrid.common.domain.model.traversal.state.{ BranchResult, PendingJoin, TraversalState }
 import com.monadial.waygrid.common.domain.model.traversal.state.Value.RetryAttempt
 import com.monadial.waygrid.common.domain.value.Address.NodeAddress
 
@@ -202,7 +202,11 @@ object TraversalFSM:
    * @param now Current timestamp for scheduling decisions (passed explicitly for purity)
    * @return FSM instance that processes TraversalSignals and produces TraversalEffects
    */
-  def stateless[F[+_]: Monad](dag: Dag, nodeAddress: NodeAddress, now: Instant): FSM[F, TraversalState, TraversalSignal, TraversalError, TraversalEffect] =
+  def stateless[F[+_]: Monad](
+    dag: Dag,
+    nodeAddress: NodeAddress,
+    now: Instant
+  ): FSM[F, TraversalState, TraversalSignal, TraversalError, TraversalEffect] =
 
     // =========================================================================
     // Section 1: Result Constructors
@@ -277,7 +281,7 @@ object TraversalFSM:
     inline def buildTimeoutInfo(traversalId: TraversalId): Option[(String, Instant)] =
       dag.timeout.map { duration =>
         val timeoutId = s"traversal-timeout-${traversalId.unwrap}"
-        val deadline = now.plusMillis(duration.toMillis)
+        val deadline  = now.plusMillis(duration.toMillis)
         (timeoutId, deadline)
       }
 
@@ -352,7 +356,7 @@ object TraversalFSM:
         case Some(delay) =>
           // Retry available: schedule for future execution
           val scheduledAt = now.plusMillis(delay.toMillis)
-          val scheduled = state.schedule(node.id, nodeAddress, scheduledAt, None)
+          val scheduled   = state.schedule(node.id, nodeAddress, scheduledAt, None)
           ok(scheduled, ScheduleRetry(signal.traversalId, scheduledAt, RetryAttempt(nextAttempt), node.id))
 
         case None =>
@@ -364,7 +368,7 @@ object TraversalFSM:
             case None =>
               // No recovery path: fail the entire traversal
               val timeoutToCancel = state.traversalTimeoutId
-              val finalState = state.fail(node.id, nodeAddress, None, signal.reason).clearTraversalTimeout
+              val finalState      = state.fail(node.id, nodeAddress, None, signal.reason).clearTraversalTimeout
               ok(finalState, Fail(signal.traversalId, timeoutToCancel))
 
     // =========================================================================
@@ -414,7 +418,8 @@ object TraversalFSM:
      * @param forkNodeId The fork node to get edges from
      * @return List of outgoing edges representing fork branches
      */
-    inline def getForkOutgoingEdges(forkNodeId: NodeId): List[com.monadial.waygrid.common.domain.model.traversal.dag.Edge] =
+    inline def getForkOutgoingEdges(forkNodeId: NodeId)
+      : List[com.monadial.waygrid.common.domain.model.traversal.dag.Edge] =
       // Prefer explicit OnSuccess/Always edges for branch definition
       val preferredEdges = dag.outgoingEdges(forkNodeId, EdgeGuard.OnSuccess) ++
         dag.outgoingEdges(forkNodeId, EdgeGuard.Always)
@@ -445,8 +450,7 @@ object TraversalFSM:
         .flatMap(dag.nodeOf)
         .flatMap(_.nodeType match
           case NodeType.Join(_, _, t) => t.map(d => now.plusMillis(d.toMillis))
-          case _ => None
-        )
+          case _                      => None)
 
     /**
      * Initializes fork scope and starts all branches atomically.
@@ -497,21 +501,27 @@ object TraversalFSM:
     ): TraversalState =
       // Step 1: Capture parent branch context (critical for nested forks)
       val parentBranchState = state.branchForNode(forkNodeId)
-      val parentScope = parentBranchState.map(_.forkId)
-      val parentBranchId = parentBranchState.map(_.branchId)
+      val parentScope       = parentBranchState.map(_.forkId)
+      val parentBranchId    = parentBranchState.map(_.branchId)
 
       // Step 2: Create fork scope with all branch entries
       val forkedState = state.startFork(
-        forkNodeId, forkId, branchEntries,
-        parentScope, parentBranchId, timeout,
-        nodeAddress, None, now
+        forkNodeId,
+        forkId,
+        branchEntries,
+        parentScope,
+        parentBranchId,
+        timeout,
+        nodeAddress,
+        None,
+        now
       )
 
       // Step 3: Start all branches atomically
       // Each branch gets its entry node started and registered in branchStates
       branchEntries.foldLeft(forkedState) { case (s, (branchId, nodeId)) =>
         s.start(nodeId, nodeAddress, None)
-         .startBranch(nodeId, branchId, forkId, nodeAddress, None)
+          .startBranch(nodeId, branchId, forkId, nodeAddress, None)
       }
 
     // =========================================================================
@@ -691,9 +701,10 @@ object TraversalFSM:
           // First try conditional edges
           val matchedConditionals = dag.outgoingEdges(fromNodeId).collect {
             case e if e.guard match
-              case EdgeGuard.Conditional(cond) => Condition.eval(cond)
-              case _ => false
-            => dag.nodes.get(e.to)
+                  case EdgeGuard.Conditional(cond) => Condition.eval(cond)
+                  case _ =>
+                    false
+                => dag.nodes.get(e.to)
           }.flatten
 
           if matchedConditionals.nonEmpty then matchedConditionals
@@ -765,7 +776,8 @@ object TraversalFSM:
               ok(completed, Complete(state.traversalId, timeoutToCancel))
 
             case EdgeGuard.OnFailure | EdgeGuard.OnTimeout =>
-              val failed = state.fail(fromNodeId, nodeAddress, None, Some("No failure/timeout edge")).clearTraversalTimeout
+              val failed =
+                state.fail(fromNodeId, nodeAddress, None, Some("No failure/timeout edge")).clearTraversalTimeout
               ok(failed, Fail(state.traversalId, timeoutToCancel))
 
         // -----------------------------------------------------------------
@@ -793,7 +805,13 @@ object TraversalFSM:
 
             // Standard node: dispatch based on delivery strategy
             case NodeType.Standard =>
-              dispatchWithStrategy(state, head.id, head.deliveryStrategy, branchContextFor(state, fromNodeId), branchesToCancel)
+              dispatchWithStrategy(
+                state,
+                head.id,
+                head.deliveryStrategy,
+                branchContextFor(state, fromNodeId),
+                branchesToCancel
+              )
 
         // -----------------------------------------------------------------
         // Case 3: Multiple successors - only valid for Fork nodes
@@ -803,10 +821,15 @@ object TraversalFSM:
             case Some(node) if node.isFork && guard == EdgeGuard.OnSuccess =>
               handleForkReached(state, TraversalSignal.ForkReached(state.traversalId, fromNodeId))
             case _ =>
-              err(state, InvalidNodeState(
-                state.traversalId, fromNodeId,
-                "single successor or Fork", s"${many.size} successors"
-              ))
+              err(
+                state,
+                InvalidNodeState(
+                  state.traversalId,
+                  fromNodeId,
+                  "single successor or Fork",
+                  s"${many.size} successors"
+                )
+              )
 
     // =========================================================================
     // Section 4: Linear Traversal Handlers
@@ -949,8 +972,8 @@ object TraversalFSM:
      */
     def handleCancel(state: TraversalState, signal: TraversalSignal.Cancel): F[TraversalResult] =
       val timeoutToCancel = state.traversalTimeoutId
-      val nodeToCancel = state.current.getOrElse(dag.entry)
-      val canceled = state.cancel(nodeToCancel, nodeAddress, None).clearTraversalTimeout
+      val nodeToCancel    = state.current.getOrElse(dag.entry)
+      val canceled        = state.cancel(nodeToCancel, nodeAddress, None).clearTraversalTimeout
       ok(canceled, Cancel(signal.traversalId, timeoutToCancel))
 
     /**
@@ -1047,7 +1070,7 @@ object TraversalFSM:
             // Check if traversal is complete
             if succeeded.isTraversalComplete then
               val timeoutToCancel = succeeded.traversalTimeoutId
-              val completed = succeeded.complete(node.id, nodeAddress, None).clearTraversalTimeout
+              val completed       = succeeded.complete(node.id, nodeAddress, None).clearTraversalTimeout
               ok(completed, Complete(signal.traversalId, timeoutToCancel))
             else
               transitionToNext(succeeded, node.id, EdgeGuard.OnSuccess)
@@ -1107,18 +1130,25 @@ object TraversalFSM:
     def handleCompleted(state: TraversalState, signal: TraversalSignal.Completed): F[TraversalResult] =
       if state.isTraversalComplete then
         val timeoutToCancel = state.traversalTimeoutId
-        val nodeId = state.current.orElse(state.completed.lastOption)
+        val nodeId          = state.current.orElse(state.completed.lastOption)
         nodeId match
           case Some(id) =>
-            ok(state.complete(id, nodeAddress, None).clearTraversalTimeout, Complete(signal.traversalId, timeoutToCancel))
+            ok(
+              state.complete(id, nodeAddress, None).clearTraversalTimeout,
+              Complete(signal.traversalId, timeoutToCancel)
+            )
           case None =>
             ok(state.clearTraversalTimeout, Complete(signal.traversalId, timeoutToCancel))
       else
-        err(state, InvalidNodeState(
-          signal.traversalId,
-          state.current.getOrElse(dag.entry),
-          "traversal complete", "not complete"
-        ))
+        err(
+          state,
+          InvalidNodeState(
+            signal.traversalId,
+            state.current.getOrElse(dag.entry),
+            "traversal complete",
+            "not complete"
+          )
+        )
 
     /**
      * Handles external Failed signal.
@@ -1130,9 +1160,9 @@ object TraversalFSM:
      * @return Result with Fail effect
      */
     def handleFailed(state: TraversalState, signal: TraversalSignal.Failed): F[TraversalResult] =
-      val nodeId = state.current.getOrElse(dag.entry)
+      val nodeId          = state.current.getOrElse(dag.entry)
       val timeoutToCancel = state.traversalTimeoutId
-      val failed = state.fail(nodeId, nodeAddress, None, signal.reason).clearTraversalTimeout
+      val failed          = state.fail(nodeId, nodeAddress, None, signal.reason).clearTraversalTimeout
       ok(failed, Fail(signal.traversalId, timeoutToCancel))
 
     /**
@@ -1248,7 +1278,7 @@ object TraversalFSM:
               if outgoingEdges.isEmpty then
                 if state.isTraversalComplete then
                   val timeoutToCancel = state.traversalTimeoutId
-                  val completed = state.complete(signal.forkNodeId, nodeAddress, None).clearTraversalTimeout
+                  val completed       = state.complete(signal.forkNodeId, nodeAddress, None).clearTraversalTimeout
                   ok(completed, Complete(signal.traversalId, timeoutToCancel))
                 else
                   noop(state)
@@ -1261,7 +1291,7 @@ object TraversalFSM:
                   .flatMap { branchEntries =>
                     // Get join configuration using helpers
                     val joinNodeIdOpt = dag.joinNodeIdFor(forkId)
-                    val timeout = getJoinTimeoutForFork(forkId)
+                    val timeout       = getJoinTimeoutForFork(forkId)
 
                     // Initialize fork scope and start all branches using helper
                     val startedBranches = initializeForkScope(state, signal.forkNodeId, forkId, branchEntries, timeout)
@@ -1303,14 +1333,30 @@ object TraversalFSM:
           else
             val updatedState = signal.result match
               case BranchResult.Success(_) =>
-                state.completeBranch(branch.currentNode.getOrElse(branch.entryNode),
-                  signal.branchId, signal.forkId, nodeAddress, None)
+                state.completeBranch(
+                  branch.currentNode.getOrElse(branch.entryNode),
+                  signal.branchId,
+                  signal.forkId,
+                  nodeAddress,
+                  None
+                )
               case BranchResult.Failure(reason) =>
-                state.failBranch(branch.currentNode.getOrElse(branch.entryNode),
-                  signal.branchId, signal.forkId, reason, nodeAddress, None)
+                state.failBranch(
+                  branch.currentNode.getOrElse(branch.entryNode),
+                  signal.branchId,
+                  signal.forkId,
+                  reason,
+                  nodeAddress,
+                  None
+                )
               case BranchResult.Timeout =>
-                state.timeoutBranch(branch.currentNode.getOrElse(branch.entryNode),
-                  signal.branchId, signal.forkId, nodeAddress, None)
+                state.timeoutBranch(
+                  branch.currentNode.getOrElse(branch.entryNode),
+                  signal.branchId,
+                  signal.forkId,
+                  nodeAddress,
+                  None
+                )
 
             checkJoinsForFork(updatedState, signal.forkId)
 
@@ -1347,35 +1393,59 @@ object TraversalFSM:
                 case Some(forkScope) =>
                   // Validate branch belongs to this fork
                   if !forkScope.branches.contains(signal.branchId) then
-                    err(state, InvalidBranchState(
-                      signal.traversalId, signal.branchId,
-                      s"member of fork $forkId",
-                      s"not in fork branches"
-                    ))
+                    err(
+                      state,
+                      InvalidBranchState(
+                        signal.traversalId,
+                        signal.branchId,
+                        s"member of fork $forkId",
+                        s"not in fork branches"
+                      )
+                    )
                   // Validate this is the correct join for this fork
                   else if dag.joinNodeIdFor(forkId).exists(_ != signal.joinNodeId) then
-                    err(state, InvalidNodeState(
-                      signal.traversalId, signal.joinNodeId,
-                      s"join for fork $forkId",
-                      s"expected ${dag.joinNodeIdFor(forkId)}"
-                    ))
+                    err(
+                      state,
+                      InvalidNodeState(
+                        signal.traversalId,
+                        signal.joinNodeId,
+                        s"join for fork $forkId",
+                        s"expected ${dag.joinNodeIdFor(forkId)}"
+                      )
+                    )
                   else
                     // Mark branch complete (idempotent)
                     val stateAfterBranch = state.branchStates.get(signal.branchId) match
                       case Some(branch) if !branch.isTerminal =>
-                        state.completeBranch(branch.currentNode.getOrElse(branch.entryNode),
-                          signal.branchId, forkId, nodeAddress, None)
+                        state.completeBranch(
+                          branch.currentNode.getOrElse(branch.entryNode),
+                          signal.branchId,
+                          forkId,
+                          nodeAddress,
+                          None
+                        )
                       case _ => state
 
                     // Register or update pending join
                     val pendingJoin = stateAfterBranch.pendingJoins.getOrElse(
                       signal.joinNodeId,
-                      PendingJoin.create(signal.joinNodeId, forkId, strategy, forkScope.branches,
-                        timeout.map(d => now.plusMillis(d.toMillis)))
+                      PendingJoin.create(
+                        signal.joinNodeId,
+                        forkId,
+                        strategy,
+                        forkScope.branches,
+                        timeout.map(d => now.plusMillis(d.toMillis))
+                      )
                     ).branchCompleted(signal.branchId)
 
                     val stateWithJoin = stateAfterBranch.registerJoinArrival(
-                      signal.joinNodeId, signal.branchId, forkId, pendingJoin, nodeAddress, None)
+                      signal.joinNodeId,
+                      signal.branchId,
+                      forkId,
+                      pendingJoin,
+                      nodeAddress,
+                      None
+                    )
 
                     evaluateJoinCompletion(stateWithJoin, signal.joinNodeId, pendingJoin)
 
@@ -1412,8 +1482,10 @@ object TraversalFSM:
                 case Some(edge) =>
                   dag.nodeOf(edge.to) match
                     case Some(_) =>
-                      ok(timedOut.start(edge.to, nodeAddress, None),
-                        DispatchNode(signal.traversalId, edge.to))
+                      ok(
+                        timedOut.start(edge.to, nodeAddress, None),
+                        DispatchNode(signal.traversalId, edge.to)
+                      )
                     case None =>
                       err(timedOut, NodeNotFound(signal.traversalId, edge.to))
 
@@ -1436,12 +1508,18 @@ object TraversalFSM:
                     case Some(edge) =>
                       dag.nodeOf(edge.to) match
                         case Some(_) =>
-                          ok(timedOut.start(edge.to, nodeAddress, None),
-                            DispatchNode(signal.traversalId, edge.to))
+                          ok(
+                            timedOut.start(edge.to, nodeAddress, None),
+                            DispatchNode(signal.traversalId, edge.to)
+                          )
                         case None =>
                           val timeoutToCancel = timedOut.traversalTimeoutId
-                          val failed = timedOut.fail(signal.nodeId, nodeAddress, None,
-                            Some(s"OnTimeout target ${edge.to} not found")).clearTraversalTimeout
+                          val failed = timedOut.fail(
+                            signal.nodeId,
+                            nodeAddress,
+                            None,
+                            Some(s"OnTimeout target ${edge.to} not found")
+                          ).clearTraversalTimeout
                           ok(failed, Fail(signal.traversalId, timeoutToCancel))
 
                     case None =>
@@ -1469,8 +1547,14 @@ object TraversalFSM:
       val canceledState = signal.branchIds.foldLeft(state) { (s, branchId) =>
         s.branchStates.get(branchId) match
           case Some(branch) if branch.isActive =>
-            s.cancelBranch(branch.currentNode.getOrElse(branch.entryNode),
-              branchId, signal.forkId, signal.reason, nodeAddress, None)
+            s.cancelBranch(
+              branch.currentNode.getOrElse(branch.entryNode),
+              branchId,
+              signal.forkId,
+              signal.reason,
+              nodeAddress,
+              None
+            )
           case _ => s
       }
       noop(canceledState)
@@ -1559,7 +1643,11 @@ object TraversalFSM:
      * @param pendingJoin Current pending join state
      * @return Effectful result with next transition or NoOp
      */
-    def evaluateJoinCompletion(state: TraversalState, joinNodeId: NodeId, pendingJoin: PendingJoin): F[TraversalResult] =
+    def evaluateJoinCompletion(
+      state: TraversalState,
+      joinNodeId: NodeId,
+      pendingJoin: PendingJoin
+    ): F[TraversalResult] =
       // -----------------------------------------------------------------------
       // Case 1: Join is satisfied - complete and continue
       // -----------------------------------------------------------------------
@@ -1577,19 +1665,30 @@ object TraversalFSM:
             branchesToCancelIds.foldLeft(state) { (s, branchId) =>
               s.branchStates.get(branchId) match
                 case Some(branch) if branch.isActive =>
-                  s.cancelBranch(branch.currentNode.getOrElse(branch.entryNode),
-                    branchId, pendingJoin.forkId, "OR join completed", nodeAddress, None)
+                  s.cancelBranch(
+                    branch.currentNode.getOrElse(branch.entryNode),
+                    branchId,
+                    pendingJoin.forkId,
+                    "OR join completed",
+                    nodeAddress,
+                    None
+                  )
                 case _ => s
             }
           else state
 
         // Get parent branch context for nested forks
-        val forkScope = stateWithCancels.forkScopes.get(pendingJoin.forkId)
+        val forkScope      = stateWithCancels.forkScopes.get(pendingJoin.forkId)
         val parentBranchId = forkScope.flatMap(_.parentBranchId)
 
         // Complete the join
         val joinedState = stateWithCancels.completeJoin(
-          joinNodeId, pendingJoin.forkId, pendingJoin.completedBranches, nodeAddress, None)
+          joinNodeId,
+          pendingJoin.forkId,
+          pendingJoin.completedBranches,
+          nodeAddress,
+          None
+        )
 
         // Restore parent branch context for nested forks
         val stateForTransition = parentBranchId match
@@ -1598,8 +1697,12 @@ object TraversalFSM:
           case None =>
             joinedState
 
-        transitionToNext(stateForTransition, joinNodeId, EdgeGuard.OnSuccess,
-          branchesToCancel = branchesToCancelWithForkId)
+        transitionToNext(
+          stateForTransition,
+          joinNodeId,
+          EdgeGuard.OnSuccess,
+          branchesToCancel = branchesToCancelWithForkId
+        )
 
       // -----------------------------------------------------------------------
       // Case 2: Join has failed - cancel branches and handle failure
@@ -1611,22 +1714,32 @@ object TraversalFSM:
         val stateWithCancels = branchesToCancelIds.foldLeft(state) { (s, branchId) =>
           s.branchStates.get(branchId) match
             case Some(branch) if branch.isActive =>
-              s.cancelBranch(branch.currentNode.getOrElse(branch.entryNode),
-                branchId, pendingJoin.forkId, "Join failed", nodeAddress, None)
+              s.cancelBranch(
+                branch.currentNode.getOrElse(branch.entryNode),
+                branchId,
+                pendingJoin.forkId,
+                "Join failed",
+                nodeAddress,
+                None
+              )
             case _ => s
         }
 
         // Try OnFailure edge
         dag.outgoingEdges(joinNodeId, EdgeGuard.OnFailure).headOption match
           case Some(edge) =>
-            val started = stateWithCancels.start(edge.to, nodeAddress, None)
+            val started                    = stateWithCancels.start(edge.to, nodeAddress, None)
             val branchesToCancelWithForkId = branchesToCancelIds.map(bid => (bid, pendingJoin.forkId))
             ok(started, DispatchNode(stateWithCancels.traversalId, edge.to, branchesToCancelWithForkId))
 
           case None =>
             val timeoutToCancel = stateWithCancels.traversalTimeoutId
-            val failed = stateWithCancels.fail(joinNodeId, nodeAddress, None,
-              Some("Join failed: insufficient branch completions")).clearTraversalTimeout
+            val failed = stateWithCancels.fail(
+              joinNodeId,
+              nodeAddress,
+              None,
+              Some("Join failed: insufficient branch completions")
+            ).clearTraversalTimeout
             ok(failed, Fail(stateWithCancels.traversalId, timeoutToCancel))
 
       // -----------------------------------------------------------------------
@@ -1691,8 +1804,8 @@ object TraversalFSM:
         // These signals handle parallel branch execution and synchronization.
         // Flow: ForkReached → (parallel branches) → JoinReached → Continue
 
-        case s: TraversalSignal.ForkReached      => handleForkReached(state, s)
-        case s: TraversalSignal.BranchComplete   => handleBranchComplete(state, s)
-        case s: TraversalSignal.JoinReached      => handleJoinReached(state, s)
-        case s: TraversalSignal.Timeout          => handleTimeout(state, s)
-        case s: TraversalSignal.CancelBranches   => handleCancelBranches(state, s)
+        case s: TraversalSignal.ForkReached    => handleForkReached(state, s)
+        case s: TraversalSignal.BranchComplete => handleBranchComplete(state, s)
+        case s: TraversalSignal.JoinReached    => handleJoinReached(state, s)
+        case s: TraversalSignal.Timeout        => handleTimeout(state, s)
+        case s: TraversalSignal.CancelBranches => handleCancelBranches(state, s)

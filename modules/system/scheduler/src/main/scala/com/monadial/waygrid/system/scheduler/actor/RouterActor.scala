@@ -4,10 +4,10 @@ import cats.Parallel
 import cats.effect.*
 import cats.syntax.all.*
 import com.monadial.waygrid.common.application.algebra.*
-import com.monadial.waygrid.common.application.algebra.SupervisedRequest.{Restart, Start, Stop}
+import com.monadial.waygrid.common.application.algebra.SupervisedRequest.{ Restart, Start, Stop }
 import com.monadial.waygrid.common.application.syntax.EnvelopeSyntax.send
 import com.monadial.waygrid.common.application.syntax.EventRouterSyntax.event
-import com.monadial.waygrid.common.application.syntax.EventSourceSyntax.{EventSubscriber, subscribeTo}
+import com.monadial.waygrid.common.application.syntax.EventSourceSyntax.{ EventSubscriber, subscribeTo }
 import com.monadial.waygrid.common.application.syntax.EventSyntax.wrapIntoEnvelope
 import com.monadial.waygrid.common.application.util.cats.effect.FiberT
 import com.monadial.waygrid.common.domain.SystemWaygridApp
@@ -17,7 +17,6 @@ import com.monadial.waygrid.common.domain.model.traversal.Event.TraversalResumed
 import com.monadial.waygrid.common.domain.model.scheduling.Event.TaskSchedulingRequested
 import com.monadial.waygrid.common.domain.value.Address.EndpointDirection.Inbound
 import com.suprnation.actor.Actor.ReplyingReceive
-
 
 sealed trait RouterRequest
 
@@ -54,22 +53,22 @@ object RouterActor:
       def handleStart: F[Unit] =
         for
           fiber <- EventSource[F].subscribeTo(
-            SystemWaygridApp.Scheduler.toEndpoint(Inbound)
-          ):
-            event[F, TaskSchedulingRequested]: envelope =>
-              val traversalRef =
-                envelope.findStamp[TraversalRefStamp].getOrElse(
-                  throw new RuntimeException(s"[scheduler] No traversal ref stamp found in envelope: $envelope")
-                )
-              for
-                thisNode <- ThisNode[F].get
-                messageId <- MessageId.next[F]
-                _ <-
-                  TraversalResumed(messageId, envelope.message.traversalId, envelope.message.nodeId)
-                    .wrapIntoEnvelope[F](SystemWaygridApp.Waystation.toEndpoint(Inbound))
-                    .map(_.addStamp(traversalRef))
-                    .flatMap(_.send(None))
-              yield ()
+              SystemWaygridApp.Scheduler.toEndpoint(Inbound)
+            ):
+              event[F, TaskSchedulingRequested]: envelope =>
+                val traversalRef =
+                  envelope.findStamp[TraversalRefStamp].getOrElse(
+                    throw new RuntimeException(s"[scheduler] No traversal ref stamp found in envelope: $envelope")
+                  )
+                for
+                  thisNode  <- ThisNode[F].get
+                  messageId <- MessageId.next[F]
+                  _ <-
+                    TraversalResumed(messageId, envelope.message.traversalId, envelope.message.nodeId)
+                      .wrapIntoEnvelope[F](SystemWaygridApp.Waystation.toEndpoint(Inbound))
+                      .map(_.addStamp(traversalRef))
+                      .flatMap(_.send(None))
+                yield ()
           _ <- eventSourceFiber.set(Some(fiber))
         yield ()
 

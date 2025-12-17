@@ -1,16 +1,21 @@
 package com.monadial.waygrid.system.waystation.actor
 
 import cats.Parallel
-import cats.effect.{Async, Concurrent, Ref, Resource}
+import cats.effect.{ Async, Concurrent, Ref, Resource }
 import cats.implicits.*
 import com.monadial.waygrid.common.application.algebra.*
-import com.monadial.waygrid.common.domain.algebra.storage.{DagRepository, TraversalStateRepository}
+import com.monadial.waygrid.common.domain.algebra.storage.{ DagRepository, TraversalStateRepository }
 import com.monadial.waygrid.common.domain.model.routing.Value.TraversalId
 import com.monadial.waygrid.common.domain.model.traversal.Event.*
 import com.monadial.waygrid.common.domain.model.traversal.dag.Dag
 import com.monadial.waygrid.common.domain.model.traversal.dag.Value.DagHash
 import com.monadial.waygrid.common.domain.model.traversal.fsm.TraversalEffect
-import com.monadial.waygrid.common.domain.model.traversal.fsm.TraversalSignal.{Begin, NodeFailure, NodeSuccess, Resume}
+import com.monadial.waygrid.common.domain.model.traversal.fsm.TraversalSignal.{
+  Begin,
+  NodeFailure,
+  NodeSuccess,
+  Resume
+}
 import com.monadial.waygrid.common.domain.model.traversal.state.TraversalState
 import com.suprnation.actor.Actor.ReplyingReceive
 import org.typelevel.otel4s.trace.SpanContext

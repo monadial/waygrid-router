@@ -1,28 +1,30 @@
 package com.monadial.waygrid.common.application.util.doobie
 
-import cats.effect.{Async, Resource}
+import cats.effect.{ Async, Resource }
 import cats.syntax.all.*
 import com.monadial.waygrid.common.application.algebra.Logger
 import com.monadial.waygrid.common.application.domain.model.Platform
-import com.monadial.waygrid.common.application.domain.model.settings.{ClickHouseSettings, PostgresSettings}
+import com.monadial.waygrid.common.application.domain.model.settings.{ ClickHouseSettings, PostgresSettings }
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.util.Credentials
 import de.lhns.doobie.flyway.Flyway
 import doobie.hikari.HikariTransactor
 import doobie.util.log
-import doobie.util.log.{ExecFailure, LogHandler, ProcessingFailure, Success}
+import doobie.util.log.{ ExecFailure, LogHandler, ProcessingFailure, Success }
 
 import java.util.Properties
 
 object Doobie:
 
   private object DoobieLogHandler:
-    def default[F[+_] : Logger]: LogHandler[F] =
+    def default[F[+_]: Logger]: LogHandler[F] =
       case Success(sql, params, label, exec, processing) =>
         Logger[F].info(s"Success: $sql, params: $params, label: $label, exec: $exec, processing: $processing")
 
       case ProcessingFailure(sql, params, label, exec, processing, failure) =>
-        Logger[F].error(s"ProcessingFailure: $sql, params: $params, label: $label, exec: $exec, processing: $processing, failure: $failure")
+        Logger[F].error(
+          s"ProcessingFailure: $sql, params: $params, label: $label, exec: $exec, processing: $processing, failure: $failure"
+        )
 
       case ExecFailure(sql, params, label, exec, failure) =>
         Logger[F].error(s"ExecFailure: $sql, params: $params, label: $label, exec: $exec, failure: $failure")

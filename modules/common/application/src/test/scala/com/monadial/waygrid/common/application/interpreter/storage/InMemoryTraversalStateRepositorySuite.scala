@@ -33,47 +33,43 @@ object InMemoryTraversalStateRepositorySuite extends SimpleIOSuite:
     TraversalId.next[IO].map(id => TraversalState.initial(id, node, dag))
 
   test("save increments stateVersion and load returns saved state"):
-    InMemoryTraversalStateRepository.make[IO].flatMap { repo =>
-      for
-        state0 <- mkState
-        saved  <- repo.save(state0)
-        loaded <- repo.load(state0.traversalId)
-      yield
-        expect(saved.stateVersion == StateVersion(1L)) &&
+      InMemoryTraversalStateRepository.make[IO].flatMap { repo =>
+        for
+          state0 <- mkState
+          saved  <- repo.save(state0)
+          loaded <- repo.load(state0.traversalId)
+        yield expect(saved.stateVersion == StateVersion(1L)) &&
           expect(loaded.contains(saved))
-    }
+      }
 
   test("update enforces expected version and increments"):
-    InMemoryTraversalStateRepository.make[IO].flatMap { repo =>
-      for
-        state0 <- mkState
-        saved1 <- repo.save(state0)
-        saved2 <- repo.update(saved1.traversalId, saved1.stateVersion, s => s.copy(active = Set(nodeA)))
-      yield
-        expect(saved2.stateVersion == StateVersion(2L)) &&
+      InMemoryTraversalStateRepository.make[IO].flatMap { repo =>
+        for
+          state0 <- mkState
+          saved1 <- repo.save(state0)
+          saved2 <- repo.update(saved1.traversalId, saved1.stateVersion, s => s.copy(active = Set(nodeA)))
+        yield expect(saved2.stateVersion == StateVersion(2L)) &&
           expect(saved2.active.contains(nodeA))
-    }
+      }
 
   test("save detects concurrent modification"):
-    InMemoryTraversalStateRepository.make[IO].flatMap { repo =>
-      for
-        state0 <- mkState
-        _      <- repo.save(state0)
-        r <- repo.save(state0).attempt
-      yield
-        r match
+      InMemoryTraversalStateRepository.make[IO].flatMap { repo =>
+        for
+          state0 <- mkState
+          _      <- repo.save(state0)
+          r      <- repo.save(state0).attempt
+        yield r match
           case Left(_: ConcurrentModification) => success
           case other                           => failure(s"Expected ConcurrentModification, got: $other")
-    }
+      }
 
   test("acquireLock is exclusive until released"):
-    InMemoryTraversalStateRepository.make[IO].flatMap { repo =>
-      for
-        state0 <- mkState
-        ok1    <- repo.acquireLock(state0.traversalId, 10.seconds)
-        ok2    <- repo.acquireLock(state0.traversalId, 10.seconds)
-        _      <- repo.releaseLock(state0.traversalId)
-        ok3    <- repo.acquireLock(state0.traversalId, 10.seconds)
-      yield
-        expect(ok1) && expect(!ok2) && expect(ok3)
-    }
+      InMemoryTraversalStateRepository.make[IO].flatMap { repo =>
+        for
+          state0 <- mkState
+          ok1    <- repo.acquireLock(state0.traversalId, 10.seconds)
+          ok2    <- repo.acquireLock(state0.traversalId, 10.seconds)
+          _      <- repo.releaseLock(state0.traversalId)
+          ok3    <- repo.acquireLock(state0.traversalId, 10.seconds)
+        yield expect(ok1) && expect(!ok2) && expect(ok3)
+      }

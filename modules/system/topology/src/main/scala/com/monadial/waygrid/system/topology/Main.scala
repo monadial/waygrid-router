@@ -12,7 +12,7 @@ import com.monadial.waygrid.system.topology.actor.TopologyServerActor
 import com.monadial.waygrid.system.topology.settings.TopologySettings
 import com.suprnation.actor.ActorSystem
 import org.typelevel.otel4s.metrics.MeterProvider
-import org.typelevel.otel4s.trace.{Tracer, TracerProvider}
+import org.typelevel.otel4s.trace.{ Tracer, TracerProvider }
 
 import scala.annotation.nowarn
 
@@ -29,7 +29,7 @@ object Main extends WaygridApp[TopologySettings](SystemWaygridApp.Topology):
         .evalMap(actorSystem.actorOf(_, "topology-server-actor"))
       _ <- Resource.eval(topologyServerActor ! SupervisedRequest.Start)
       _ <- Resource.onFinalize:
-        Logger[F].info("Shutting down program...") *>
+          Logger[F].info("Shutting down program...") *>
             (topologyServerActor ! Stop) *>
             Concurrent[F].race(
               actorSystem.waitForTermination,

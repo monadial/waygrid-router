@@ -17,54 +17,54 @@ object SpecSuite extends SimpleIOSuite:
   private val svcD = ServiceAddress(Uri.unsafeFromString("waygrid://processor/d"))
 
   test("Spec.single creates a non-empty entryPoints list"):
-    val node = Node.Standard(
-      address = svcA,
-      retryPolicy = RetryPolicy.None,
-      deliveryStrategy = DeliveryStrategy.Immediate,
-      onSuccess = None,
-      onFailure = None
-    )
-    val spec = Spec.single(node, RepeatPolicy.NoRepeat)
-    IO.pure(expect(spec.entryPoints.toList == List(node)))
+      val node = Node.Standard(
+        address = svcA,
+        retryPolicy = RetryPolicy.None,
+        deliveryStrategy = DeliveryStrategy.Immediate,
+        onSuccess = None,
+        onFailure = None
+      )
+      val spec = Spec.single(node, RepeatPolicy.NoRepeat)
+      IO.pure(expect(spec.entryPoints.toList == List(node)))
 
   test("Spec.multiple preserves entry point order"):
-    val node1 = Node.standard(svcA)
-    val node2 = Node.standard(svcB)
-    val spec  = Spec.multiple(node1, node2)(RepeatPolicy.NoRepeat)
-    IO.pure(expect(spec.entryPoints.toList == List(node1, node2)))
+      val node1 = Node.standard(svcA)
+      val node2 = Node.standard(svcB)
+      val spec  = Spec.multiple(node1, node2)(RepeatPolicy.NoRepeat)
+      IO.pure(expect(spec.entryPoints.toList == List(node1, node2)))
 
   test("Spec supports fan-out (Fork) and fan-in (Join) wiring"):
-    val joinId = "join-1"
-    val after  = Node.standard(svcD)
-    val join   = Node.join(svcC, joinId, JoinStrategy.And, onSuccess = Some(after))
-    val b      = Node.standard(svcB, onSuccess = Some(join))
-    val a      = Node.fork(svcA, branches = Map("b" -> b), joinNodeId = joinId)
+      val joinId = "join-1"
+      val after  = Node.standard(svcD)
+      val join   = Node.join(svcC, joinId, JoinStrategy.And, onSuccess = Some(after))
+      val b      = Node.standard(svcB, onSuccess = Some(join))
+      val a      = Node.fork(svcA, branches = Map("b" -> b), joinNodeId = joinId)
 
-    val spec = Spec.single(a, RepeatPolicy.NoRepeat)
-    IO.pure(
-      expect(spec.entryPoints.head == a) &&
-        expect(a.branches("b") == b) &&
-        expect(b.onSuccess.contains(join)) &&
-        expect(join.onSuccess.contains(after))
-    )
+      val spec = Spec.single(a, RepeatPolicy.NoRepeat)
+      IO.pure(
+        expect(spec.entryPoints.head == a) &&
+          expect(a.branches("b") == b) &&
+          expect(b.onSuccess.contains(join)) &&
+          expect(join.onSuccess.contains(after))
+      )
 
   test("Spec supports conditional edges on Standard nodes"):
-    val yes = Node.standard(svcB)
-    val no  = Node.standard(svcC)
+      val yes = Node.standard(svcB)
+      val no  = Node.standard(svcC)
 
-    val router = Node.Standard(
-      address = svcA,
-      retryPolicy = RetryPolicy.None,
-      deliveryStrategy = DeliveryStrategy.Immediate,
-      onSuccess = Some(no),
-      onFailure = None,
-      onConditions = List(
-        Node.when(Condition.Always, yes),
-        Node.when(Condition.Not(Condition.Always), yes)
+      val router = Node.Standard(
+        address = svcA,
+        retryPolicy = RetryPolicy.None,
+        deliveryStrategy = DeliveryStrategy.Immediate,
+        onSuccess = Some(no),
+        onFailure = None,
+        onConditions = List(
+          Node.when(Condition.Always, yes),
+          Node.when(Condition.Not(Condition.Always), yes)
+        )
       )
-    )
 
-    IO.pure(
-      expect(router.onSuccess.contains(no)) &&
-        expect(router.onConditions.length == 2)
-    )
+      IO.pure(
+        expect(router.onSuccess.contains(no)) &&
+          expect(router.onConditions.length == 2)
+      )

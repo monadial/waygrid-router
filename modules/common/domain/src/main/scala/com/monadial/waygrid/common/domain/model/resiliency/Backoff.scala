@@ -1,6 +1,6 @@
 package com.monadial.waygrid.common.domain.model.resiliency
 
-import com.monadial.waygrid.common.domain.model.resiliency.Value.{DefaultJitter, HashKey, JitterConfig, JitterMode}
+import com.monadial.waygrid.common.domain.model.resiliency.Value.{ DefaultJitter, HashKey, JitterConfig, JitterMode }
 
 import scala.concurrent.duration.*
 import scala.util.Random

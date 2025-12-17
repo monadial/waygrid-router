@@ -37,4 +37,3 @@ object Value:
     case Immediate
     case ScheduleAfter(delay: FiniteDuration)
     case ScheduleAt(time: Instant)
-

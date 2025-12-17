@@ -2,15 +2,15 @@ package com.monadial.waygrid.origin.http.http.resource.v1
 
 import cats.effect.Async
 import cats.implicits.*
-import com.monadial.waygrid.common.application.algebra.{EventSink, Logger, ThisNode}
+import com.monadial.waygrid.common.application.algebra.{ EventSink, Logger, ThisNode }
 import com.monadial.waygrid.common.application.util.circe.codecs.DomainRoutingSpecCodecs.given
 import com.monadial.waygrid.common.domain.algebra.DagCompiler
 import com.monadial.waygrid.common.domain.algebra.messaging.message.Value.MessageId
 import com.monadial.waygrid.common.domain.algebra.storage.DagRepository
-import com.monadial.waygrid.common.domain.model.routing.Value.{RouteSalt, TraversalId}
+import com.monadial.waygrid.common.domain.model.routing.Value.{ RouteSalt, TraversalId }
 import com.monadial.waygrid.common.domain.model.traversal.dag.Value.DagHash
 import com.monadial.waygrid.common.domain.model.traversal.spec.Spec
-import io.circe.{Codec, Json}
+import io.circe.{ Codec, Json }
 import org.http4s.*
 import org.http4s.circe.*
 import org.http4s.dsl.Http4sDsl
@@ -30,7 +30,8 @@ object IngestResource:
   ) derives Codec.AsObject
 
   @nowarn("msg=unused implicit parameter")
-  def ingest[F[+_]: {Async, ThisNode, EventSink, Tracer, Logger, DagRepository}](compiler: DagCompiler[F]): HttpRoutes[F] =
+  def ingest[F[+_]: {Async, ThisNode, EventSink, Tracer, Logger,
+    DagRepository}](compiler: DagCompiler[F]): HttpRoutes[F] =
     object serverDsl extends Http4sDsl[F]
     import serverDsl.*
 

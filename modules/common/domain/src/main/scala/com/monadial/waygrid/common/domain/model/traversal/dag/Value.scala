@@ -1,6 +1,6 @@
 package com.monadial.waygrid.common.domain.model.traversal.dag
 
-import com.monadial.waygrid.common.domain.algebra.value.string.{StringValue, StringValueRefined}
+import com.monadial.waygrid.common.domain.algebra.value.string.{ StringValue, StringValueRefined }
 import com.monadial.waygrid.common.domain.algebra.value.ulid.ULIDValue
 import com.monadial.waygrid.common.domain.model.traversal.condition.Condition
 import eu.timepit.refined.collection.MaxSize
@@ -26,13 +26,18 @@ object Value:
   enum EdgeGuard:
     /** Execute when upstream node succeeds */
     case OnSuccess
+
     /** Execute when upstream node fails (after retries exhausted) */
     case OnFailure
+
     /** Execute regardless of success or failure */
     case Always
+
     /** Execute on first result (for OR join semantics) */
     case OnAny
+
     /** Execute when upstream node times out */
     case OnTimeout
+
     /** Execute when predicate evaluates to true */
     case Conditional(condition: Condition)

@@ -39,7 +39,7 @@ object TraversalEffect:
   final case class Schedule(
     traversalId: TraversalId,
     scheduledAt: Instant,
-    nodeId: NodeId,
+    nodeId: NodeId
   ) extends TraversalEffect
 
   /**
@@ -49,7 +49,7 @@ object TraversalEffect:
     traversalId: TraversalId,
     scheduledAt: Instant,
     retryAttempt: RetryAttempt,
-    nodeId: NodeId,
+    nodeId: NodeId
   ) extends TraversalEffect
 
   /**

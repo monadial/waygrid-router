@@ -3,7 +3,12 @@ package com.monadial.waygrid.common.domain.instances
 import cats.Show
 import cats.data.Validated
 import cats.kernel.Order
-import com.monadial.waygrid.common.domain.algebra.value.codec.{Base64Codec, Base64DecodingError, BytesCodec, BytesDecodingError}
+import com.monadial.waygrid.common.domain.algebra.value.codec.{
+  Base64Codec,
+  Base64DecodingError,
+  BytesCodec,
+  BytesDecodingError
+}
 import scodec.bits.ByteVector
 
 import java.util
@@ -24,9 +29,9 @@ object BytesInstances:
   given Base64Codec[Array[Byte]] with
     override def decode(value: String): Validated[Base64DecodingError, Array[Byte]] =
       Validated
-          .catchNonFatal(JavaBridge.base64Decoder(value))
-          .map(x => x.toArrayUnsafe)
-          .leftMap(x => Base64DecodingError(x.getMessage))
+        .catchNonFatal(JavaBridge.base64Decoder(value))
+        .map(x => x.toArrayUnsafe)
+        .leftMap(x => Base64DecodingError(x.getMessage))
 
     override def encode(value: Array[Byte]): String =
       JavaBridge

@@ -1,6 +1,6 @@
 package com.monadial.waygrid.system.scheduler.algebra
 
-import com.monadial.waygrid.system.scheduler.model.schedule.Value.{Schedule, ScheduleTime, ScheduleToken}
+import com.monadial.waygrid.system.scheduler.model.schedule.Value.{ Schedule, ScheduleTime, ScheduleToken }
 
 trait SchedulerStorage[F[+_]]:
   def put(schedule: Schedule): F[Unit]

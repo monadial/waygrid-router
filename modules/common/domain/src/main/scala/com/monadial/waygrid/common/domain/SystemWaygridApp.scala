@@ -1,6 +1,6 @@
 package com.monadial.waygrid.common.domain
 
-import com.monadial.waygrid.common.domain.model.node.Value.{NodeDescriptor, NodeService}
+import com.monadial.waygrid.common.domain.model.node.Value.{ NodeDescriptor, NodeService }
 
 /**
  * The `SystemWaygridApp` object defines the core system services required for the Waygrid application.

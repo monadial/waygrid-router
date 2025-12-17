@@ -2,8 +2,13 @@ package com.monadial.waygrid.common.domain.instances
 
 import cats.data.Validated
 import cats.syntax.all.*
-import com.monadial.waygrid.common.domain.algebra.value.codec.{Base64Codec, Base64DecodingError, BytesCodec, BytesDecodingError}
-import eu.timepit.refined.api.{RefType, Validate}
+import com.monadial.waygrid.common.domain.algebra.value.codec.{
+  Base64Codec,
+  Base64DecodingError,
+  BytesCodec,
+  BytesDecodingError
+}
+import eu.timepit.refined.api.{ RefType, Validate }
 import scodec.bits.ByteVector
 
 object RefinedInstances:

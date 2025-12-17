@@ -4,9 +4,9 @@ import cats.effect.Async
 import cats.implicits.*
 import com.monadial.waygrid.common.application.algebra.ThisNode
 import com.monadial.waygrid.common.domain.model.Waygrid
-import com.monadial.waygrid.common.domain.model.node.Value.{NodeComponent, NodeDescriptor, NodeId, NodeService}
+import com.monadial.waygrid.common.domain.model.node.Value.{ NodeComponent, NodeDescriptor, NodeId, NodeService }
 import com.monadial.waygrid.common.domain.value.Address
-import com.monadial.waygrid.common.domain.value.Address.{Endpoint, EndpointDirection}
+import com.monadial.waygrid.common.domain.value.Address.{ Endpoint, EndpointDirection }
 import org.apache.kafka.common.TopicPartition
 import wvlet.airframe.ulid.ULID
 
@@ -33,7 +33,7 @@ object KafkaUtils:
 
       for
         m <- pattern.findFirstMatchIn(tp.topic())
-            .liftTo[F](new IllegalArgumentException(s"Invalid topic format: ${tp.topic()}"))
+          .liftTo[F](new IllegalArgumentException(s"Invalid topic format: ${tp.topic()}"))
 
         component <- NodeComponent(m.group("component")).pure[F]
         service   <- NodeService(m.group("service")).pure[F]
@@ -43,7 +43,8 @@ object KafkaUtils:
         direction <- m.group("direction") match
           case "inbound"  => EndpointDirection.Inbound.pure[F]
           case "outbound" => EndpointDirection.Outbound.pure[F]
-          case other      => Async[F].raiseError(new IllegalArgumentException(s"Invalid direction '$other' in topic: ${tp.topic()}"))
+          case other =>
+            Async[F].raiseError(new IllegalArgumentException(s"Invalid direction '$other' in topic: ${tp.topic()}"))
 
         endpoint <- Option(m.group("nodeId")) match
           case Some(nodeId) =>

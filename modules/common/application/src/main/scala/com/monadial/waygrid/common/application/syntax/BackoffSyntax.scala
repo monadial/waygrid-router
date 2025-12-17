@@ -3,7 +3,7 @@ package com.monadial.waygrid.common.application.syntax
 import cats.effect.Temporal
 import cats.syntax.all.*
 import com.monadial.waygrid.common.domain.model.resiliency.Value.HashKey
-import com.monadial.waygrid.common.domain.model.resiliency.{RetryPolicy, Backoff}
+import com.monadial.waygrid.common.domain.model.resiliency.{ Backoff, RetryPolicy }
 import com.monadial.waygrid.common.domain.model.resiliency.Backoff.*
 
 object BackoffSyntax:

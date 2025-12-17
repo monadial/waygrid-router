@@ -40,9 +40,9 @@ object ParameterValue:
 
   /** Convenience constructors */
   def string(value: String): ParameterValue = StringVal(value)
-  def int(value: Int): ParameterValue = IntVal(value)
-  def float(value: Double): ParameterValue = FloatVal(value)
-  def bool(value: Boolean): ParameterValue = BoolVal(value)
-  def secret(path: String): ParameterValue = Secret(SecretReference(SecretPath(path)))
+  def int(value: Int): ParameterValue       = IntVal(value)
+  def float(value: Double): ParameterValue  = FloatVal(value)
+  def bool(value: Boolean): ParameterValue  = BoolVal(value)
+  def secret(path: String): ParameterValue  = Secret(SecretReference(SecretPath(path)))
   def secret(path: String, field: String): ParameterValue =
     Secret(SecretReference(SecretPath(path), field = Some(field)))

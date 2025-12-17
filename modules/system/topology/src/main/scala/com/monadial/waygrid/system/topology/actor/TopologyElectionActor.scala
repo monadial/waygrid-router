@@ -1,14 +1,14 @@
 package com.monadial.waygrid.system.topology.actor
 
 import cats.Parallel
-import cats.effect.{Async, Concurrent, Ref, Resource}
+import cats.effect.{ Async, Concurrent, Ref, Resource }
 import cats.syntax.all.*
 import com.monadial.waygrid.common.application.algebra.*
-import com.monadial.waygrid.common.application.util.cats.effect.{FiberT, FiberType}
+import com.monadial.waygrid.common.application.util.cats.effect.{ FiberT, FiberType }
 import com.monadial.waygrid.common.domain.algebra.value.long.LongValue
 import com.monadial.waygrid.common.domain.value.Address.NodeAddress
 import com.monadial.waygrid.system.topology.domain.model.election.Value.ElectionRole.Candidate
-import com.monadial.waygrid.system.topology.domain.model.election.Value.{ElectionRole, Leader}
+import com.monadial.waygrid.system.topology.domain.model.election.Value.{ ElectionRole, Leader }
 import com.monadial.waygrid.system.topology.interpreter.RedisTopologyLeaderElection
 import com.monadial.waygrid.system.topology.settings.TopologyServiceSettings
 import com.suprnation.actor.Actor.ReplyingReceive
@@ -43,7 +43,7 @@ final case class TopologyElectionState(
   epoch: ElectionEpoch,
   leader: Option[Leader],
   followers: Set[NodeAddress],
-  role: ElectionRole,
+  role: ElectionRole
 ):
   def isLeaderElected: Boolean = leader.isDefined
 

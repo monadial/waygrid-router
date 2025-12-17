@@ -8,11 +8,11 @@ import com.monadial.waygrid.common.domain.algebra.messaging.message.Value.Messag
 import io.circe.*
 
 import scala.collection.mutable
-import scala.quoted.{Expr, Quotes, Type}
+import scala.quoted.{ Expr, Quotes, Type }
 
 object CirceMessageCodecRegistryMacro:
-  type MessageCodec       = Codec[? <: Message]
-  type CodecMap = mutable.Map[MessageType, MessageCodec]
+  type MessageCodec = Codec[? <: Message]
+  type CodecMap     = mutable.Map[MessageType, MessageCodec]
 
   private val eventCodecRegistry: CodecMap =
     mutable.Map.empty[MessageType, MessageCodec]
@@ -24,7 +24,7 @@ object CirceMessageCodecRegistryMacro:
     import q.reflect.*
 
     val eventTrait = TypeRepr.of[E].typeSymbol
-    val children = eventTrait.children
+    val children   = eventTrait.children
 
     def canonicalName(sym: Symbol): String =
       val owner = sym.owner
@@ -38,10 +38,10 @@ object CirceMessageCodecRegistryMacro:
         full.stripPrefix("<root>.")
 
     val registrations = children.map { subtype =>
-      val fqcn = canonicalName(subtype)
-      val fqcnExpr = Expr(fqcn)
+      val fqcn       = canonicalName(subtype)
+      val fqcnExpr   = Expr(fqcn)
       val subtypeTpe = subtype.typeRef
-      val codecTpe = TypeRepr.of[Codec].appliedTo(subtypeTpe)
+      val codecTpe   = TypeRepr.of[Codec].appliedTo(subtypeTpe)
 
       if CirceMessageCodecRegistryMacro.isRegistered(MessageType(fqcn)) then
         report.errorAndAbort(s"Duplicate codec registration detected for: $fqcn")

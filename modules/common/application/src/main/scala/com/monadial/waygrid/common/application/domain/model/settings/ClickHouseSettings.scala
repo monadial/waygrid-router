@@ -34,7 +34,8 @@ object ClickHouseSettings:
     inline def url: String =
       settings.connectionType match
         case ConnectionType.HTTP => s"jdbc:clickhouse:http://${settings.host}:${settings.port}/${settings.database}"
-        case ConnectionType.HTTPS => s"jdbc:clickhouse:https://${settings.host}:${settings.port}/${settings.database}?ssl=true"
+        case ConnectionType.HTTPS =>
+          s"jdbc:clickhouse:https://${settings.host}:${settings.port}/${settings.database}?ssl=true"
 
     inline def getPoolSize: Int =
       settings.poolSize.getOrElse(Platform.numberOfAvailableCpuCores)

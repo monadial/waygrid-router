@@ -2,16 +2,21 @@ package com.monadial.waygrid.system.scheduler.actor
 
 import cats.Parallel
 import cats.effect.Resource
-import cats.effect.{Async, Ref}
+import cats.effect.{ Async, Ref }
 import cats.syntax.all.*
-import com.monadial.waygrid.common.application.algebra.SupervisedRequest.{Start, Stop}
-import com.monadial.waygrid.common.application.algebra.{Logger, SupervisedActor, SupervisedActorRef, SupervisedRequest}
+import com.monadial.waygrid.common.application.algebra.SupervisedRequest.{ Start, Stop }
+import com.monadial.waygrid.common.application.algebra.{
+  Logger,
+  SupervisedActor,
+  SupervisedActorRef,
+  SupervisedRequest
+}
 import com.monadial.waygrid.system.scheduler.model.schedule.Value.ScheduleShard
 import com.suprnation.actor.Actor.ReplyingReceive
 
 trait SchedulerSupervisorActorRequest
 
-type SchedulerSupervisorActor[F[+_]] = SupervisedActor[F, SchedulerSupervisorActorRequest]
+type SchedulerSupervisorActor[F[+_]]    = SupervisedActor[F, SchedulerSupervisorActorRequest]
 type SchedulerSupervisorActorRef[F[+_]] = SupervisedActorRef[F, SchedulerSupervisorActorRequest]
 
 object SchedulerSupervisorActor:

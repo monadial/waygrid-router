@@ -1,7 +1,7 @@
 package com.monadial.waygrid.common.application.util.cats.effect
 
-import cats.effect.kernel.{Fiber, Outcome}
-import cats.effect.{GenSpawn, MonadCancel}
+import cats.effect.kernel.{ Fiber, Outcome }
+import cats.effect.{ GenSpawn, MonadCancel }
 
 type FiberTUnit[F[+_], T <: FiberType] = FiberT[F, T, Unit]
 

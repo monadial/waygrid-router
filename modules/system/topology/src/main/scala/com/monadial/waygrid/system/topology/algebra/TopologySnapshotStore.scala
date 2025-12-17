@@ -7,6 +7,3 @@ trait TopologySnapshotStore[F[+_]]:
   def latest: F[TopologySnapshot]
 
   def upsert(snapshot: TopologySnapshot): F[Unit]
-
-
-

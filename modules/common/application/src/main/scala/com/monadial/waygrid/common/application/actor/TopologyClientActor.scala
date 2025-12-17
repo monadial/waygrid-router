@@ -1,7 +1,7 @@
 package com.monadial.waygrid.common.application.actor
 
 import cats.effect.Resource
-import com.monadial.waygrid.common.application.algebra.{SupervisedActor, SupervisedActorRef}
+import com.monadial.waygrid.common.application.algebra.{ SupervisedActor, SupervisedActorRef }
 
 sealed trait TopologyClientCommand
 
@@ -10,12 +10,6 @@ type TopologyClientActorRef[F[+_]] = SupervisedActorRef[F, TopologyClientCommand
 
 object TopologyClientActor:
   def behavior[F[+_]]: Resource[F, TopologyClientActor[F]] = ???
-
-
-
-
-
-
 
 //
 //import cats.Parallel

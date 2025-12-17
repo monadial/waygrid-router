@@ -14,10 +14,10 @@ object AggregateRootSuite extends SimpleIOSuite with Checkers:
   object DummyId extends ULIDValue
 
   // Commands require a MessageId from the Message trait
-  sealed trait DummyCommand                                         extends Command
-  case class DoSomething(aggregateId: DummyId, id: MessageId)       extends DummyCommand
-  case class DoNothing(aggregateId: DummyId, id: MessageId)         extends DummyCommand
-  case class Increment(aggregateId: DummyId, id: MessageId)         extends DummyCommand
+  sealed trait DummyCommand                                   extends Command
+  case class DoSomething(aggregateId: DummyId, id: MessageId) extends DummyCommand
+  case class DoNothing(aggregateId: DummyId, id: MessageId)   extends DummyCommand
+  case class Increment(aggregateId: DummyId, id: MessageId)   extends DummyCommand
 
   // Events require a MessageId from the Message trait
   sealed trait DummyEvent                     extends Event
@@ -157,8 +157,9 @@ object AggregateRootSuite extends SimpleIOSuite with Checkers:
         r3   <- r2.flatMap(r => DummyAggregate.handle(Increment(id, nextMessageId), Some(r.state))).pure
       yield expect(
         r3 match
-          case Right(r) => r.state.counter == 3 && r.state.version.unwrap == 3 && r.events.exists(_.isInstanceOf[Incremented])
-          case _        => false
+          case Right(r) =>
+            r.state.counter == 3 && r.state.version.unwrap == 3 && r.events.exists(_.isInstanceOf[Incremented])
+          case _ => false
       )
 
   test("DoNothing always returns HandlerNotFound"):
@@ -184,9 +185,9 @@ object AggregateRootSuite extends SimpleIOSuite with Checkers:
 
   test("Idempotency: same command on same state should not mutate again"):
       for
-        id     <- DummyId.next
-        init   <- DummyState.initial(id).some.pure
-        cmd     = Increment(id, nextMessageId)
+        id   <- DummyId.next
+        init <- DummyState.initial(id).some.pure
+        cmd = Increment(id, nextMessageId)
         first  <- DummyAggregate.handle(cmd, init).pure
         second <- DummyAggregate.handle(cmd, init).pure
       yield expect:
@@ -216,8 +217,9 @@ object AggregateRootSuite extends SimpleIOSuite with Checkers:
           yield AggregateHandlerResult.combine(c, i)
       yield expect(
         combined match
-          case Right(r) => r.events.exists(_.isInstanceOf[SomethingDone]) && r.events.exists(_.isInstanceOf[Incremented])
-          case _        => false
+          case Right(r) =>
+            r.events.exists(_.isInstanceOf[SomethingDone]) && r.events.exists(_.isInstanceOf[Incremented])
+          case _ => false
       )
 
   test("AlreadyExists does not mutate state"):

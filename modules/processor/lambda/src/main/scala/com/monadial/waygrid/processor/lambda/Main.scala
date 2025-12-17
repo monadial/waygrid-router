@@ -1,5 +1,3 @@
 package com.monadial.waygrid.processor.lambda
 
-class Main {
-
-}
+class Main {}

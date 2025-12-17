@@ -4,9 +4,15 @@ import cats.Show
 import cats.implicits.*
 import com.monadial.waygrid.common.domain.algebra.value.uri.URIValue
 import com.monadial.waygrid.common.domain.model.Waygrid
-import com.monadial.waygrid.common.domain.model.node.Value.{NodeComponent, NodeDescriptor, NodeId, NodeService}
-import com.monadial.waygrid.common.domain.value.Address.AddressError.{InvalidScheme, MissingAuthority, MissingNodeId, MissingScheme, MissingServiceSegment}
-import com.monadial.waygrid.common.domain.value.Address.EndpointDirection.{Inbound, Outbound}
+import com.monadial.waygrid.common.domain.model.node.Value.{ NodeComponent, NodeDescriptor, NodeId, NodeService }
+import com.monadial.waygrid.common.domain.value.Address.AddressError.{
+  InvalidScheme,
+  MissingAuthority,
+  MissingNodeId,
+  MissingScheme,
+  MissingServiceSegment
+}
+import com.monadial.waygrid.common.domain.value.Address.EndpointDirection.{ Inbound, Outbound }
 import org.http4s.Uri
 import org.http4s.Uri.Scheme
 import wvlet.airframe.ulid.ULID

@@ -1,14 +1,17 @@
 package com.monadial.waygrid.common.application.util.redis4cats
 
-import cats.effect.{Async, Resource, Sync}
+import cats.effect.{ Async, Resource, Sync }
 import cats.syntax.all.*
 import com.monadial.waygrid.common.application.algebra.Logger
 import com.monadial.waygrid.common.application.domain.model.settings.RedisSettings
 import dev.profunktor.redis4cats.algebra.Ping
-import dev.profunktor.redis4cats.connection.{RedisClient as Redis4CatsClient, RedisClusterClient as Redis4CatsClusterClient}
+import dev.profunktor.redis4cats.connection.{
+  RedisClient as Redis4CatsClient,
+  RedisClusterClient as Redis4CatsClusterClient
+}
 import dev.profunktor.redis4cats.data.RedisCodec
 import dev.profunktor.redis4cats.effect.Log as RedisLog
-import dev.profunktor.redis4cats.{RedisCommands, Redis as Redis4CatsRedis}
+import dev.profunktor.redis4cats.{ Redis as Redis4CatsRedis, RedisCommands }
 
 type Redis[F[+_], K, V]       = RedisCommands[F, K, V]
 type RedisClient[F[+_], K, V] = Resource[F, Redis[F, K, V]]
