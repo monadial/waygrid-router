@@ -43,11 +43,11 @@ object SpecValidator:
     def messages: List[String] = errors.map(_.message)
 
     override def toString: String =
-      s"ServiceValidationError(${address.uri}, errors=${errors.map(_.message).mkString(", ")})"
+      s"ServiceValidationError(${address.toDescriptor.show}, errors=${errors.map(_.message).mkString(", ")})"
 
   /** Error when a service's schema is missing in strict mode */
   final case class MissingSchemaError(address: ServiceAddress):
-    def message: String = s"No schema found for service: ${address.uri}"
+    def message: String = s"No schema found for service: ${address.toDescriptor.show}"
 
   /** Combined result of spec validation */
   enum SpecValidationError:
