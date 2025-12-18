@@ -8,23 +8,19 @@ import com.monadial.waygrid.common.domain.algebra.value.codec.{
   BytesDecodingError
 }
 import scodec.bits.ByteVector
-
-import java.nio.ByteBuffer
-import scodec.{ Attempt, Decoder as SDecoder, Encoder as SEncoder, codecs }
+import scodec.{ Decoder as SDecoder, Encoder as SEncoder, codecs }
 
 object IntegerInstances:
 
-  given SEncoder[Int] = codecs.int32.asEncoder.contramap(identity)
-
-  given SDecoder[Int] = codecs.int32.asDecoder.emap: value =>
-      Attempt.successful(value)
+  given SEncoder[Int] = codecs.int32.asEncoder
+  given SDecoder[Int] = codecs.int32.asDecoder
 
   given BytesCodec[Int] with
-    inline def encodeToScalar(value: Int): ByteVector = ByteVector(value)
+    inline def encodeToScalar(value: Int): ByteVector = ByteVector.fromInt(value)
 
     inline def decodeFromScalar(value: ByteVector): Validated[BytesDecodingError, Int] =
       Validated
-        .catchNonFatal(ByteBuffer.wrap(value.toArrayUnsafe).getInt)
+        .catchNonFatal(value.toInt())
         .leftMap(x => BytesDecodingError(x.getMessage))
 
   given Base64Codec[Int] with

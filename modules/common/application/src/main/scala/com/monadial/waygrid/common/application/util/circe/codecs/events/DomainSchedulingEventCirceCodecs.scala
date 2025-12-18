@@ -4,5 +4,5 @@ import com.monadial.waygrid.common.domain.model.scheduling.Event.TaskSchedulingR
 import io.circe.Codec
 import io.circe.generic.semiauto
 
-object DomainSchedulingEventCodecs:
+object DomainSchedulingEventCirceCodecs:
   given Codec[TaskSchedulingRequested] = semiauto.deriveCodec

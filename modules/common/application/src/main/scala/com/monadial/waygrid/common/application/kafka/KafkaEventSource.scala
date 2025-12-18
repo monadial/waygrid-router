@@ -8,23 +8,21 @@ import com.monadial.waygrid.common.application.algebra.EventSource.{ RebalanceEv
 import com.monadial.waygrid.common.application.algebra.{ EventSource, Logger, ThisNode, TransportEnvelopeCodec }
 import com.monadial.waygrid.common.application.domain.model.envelope.TransportEnvelope
 import com.monadial.waygrid.common.application.domain.model.settings.Kafka
-import com.monadial.waygrid.common.application.instances.CirceInstances.given
 import com.monadial.waygrid.common.application.interpreter.TransportEnvelopeCodecInterpreter
 import com.monadial.waygrid.common.application.kafka.KafkaUtils.{ toEndpoint, toTopic }
 import com.monadial.waygrid.common.application.kafka.Tags.{ Consumer, RebalanceListener }
 import com.monadial.waygrid.common.application.kafka.Value.Key
 import com.monadial.waygrid.common.application.util.cats.effect.{ FiberT, FiberType }
-import com.monadial.waygrid.common.application.util.circe.codecs.ApplicationTransportEnvelopeCodecs.given
+import com.monadial.waygrid.common.application.util.scodec.codecs.ApplicationTransportEnvelopeScodecCodecs.given
 import com.monadial.waygrid.common.domain.algebra.messaging.event.Event
-import com.monadial.waygrid.common.domain.algebra.value.codec.BytesCodec
 import com.monadial.waygrid.common.domain.model.envelope.DomainEnvelope
 import com.monadial.waygrid.common.domain.value.Address.Endpoint
 import fs2.kafka.*
-import io.circe.Json
 import org.typelevel.otel4s.context.propagation.TextMapGetter
 import org.typelevel.otel4s.metrics.{ Counter, Histogram, Meter, UpDownCounter }
 import org.typelevel.otel4s.trace.Tracer
-import scodec.bits.ByteVector
+import scodec.Codec
+import scodec.bits.BitVector
 
 import java.nio.charset.Charset
 
@@ -104,16 +102,15 @@ object KafkaEventSource:
       metrics <- KafkaEventSourceMetrics.create[F]
 
       given KeyDeserializer[F, Key] <- Resource.pure(
-        Deserializer.lift(x => Key(ByteVector(x)).pure[F])
+        Deserializer.lift(x => Key(scodec.bits.ByteVector(x)).pure[F])
       )
 
-      // Deserializer with error handling - returns Either instead of failing
-      given ValueDeserializer[F, TransportEnvelope] <- Resource.pure(Deserializer.lift(x =>
-        for
-          json <- BytesCodec[Json].decodeFromScalar(ByteVector(x)).liftTo[F]
-          raw  <- json.as[TransportEnvelope].liftTo[F]
-        yield raw
-      ))
+      // Deserializer using scodec binary format
+      given ValueDeserializer[F, TransportEnvelope] <- Resource.pure(Deserializer.lift { bytes =>
+        Codec[TransportEnvelope].decode(BitVector(bytes)) match
+          case scodec.Attempt.Successful(result) => result.value.pure[F]
+          case scodec.Attempt.Failure(err)       => Async[F].raiseError(new RuntimeException(s"Failed to decode TransportEnvelope: ${err.messageWithContext}"))
+      })
 
       consumerSettings <- Resource.pure(
         ConsumerSettings[F, Key, TransportEnvelope]

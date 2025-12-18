@@ -1,7 +1,7 @@
 package com.monadial.waygrid.common.application.util.circe.codecs
 
 import cats.effect.IO
-import com.monadial.waygrid.common.application.util.circe.codecs.DomainRoutingSpecCodecs.given
+import com.monadial.waygrid.common.application.util.circe.codecs.DomainRoutingSpecCirceCodecs.given
 import com.monadial.waygrid.common.domain.model.routing.Value.RepeatPolicy
 import com.monadial.waygrid.common.domain.model.traversal.condition.Condition
 import com.monadial.waygrid.common.domain.model.traversal.dag.JoinStrategy

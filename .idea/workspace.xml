@@ -172,7 +172,34 @@
   <component name="ChangeListManager">
     <list default="true" id="7697e996-c24f-4ea1-a7ee-bf168edbe1e9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.sbt" beforeDir="false" afterPath="$PROJECT_DIR$/build.sbt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/instances/DurationInstances.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/instances/DurationInstances.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/interpreter/storage/PostgresTraversalStateRepository.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/interpreter/storage/PostgresTraversalStateRepository.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/interpreter/storage/RedisTraversalStateRepository.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/interpreter/storage/RedisTraversalStateRepository.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/kafka/KafkaEventSink.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/kafka/KafkaEventSink.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/kafka/KafkaEventSource.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/kafka/KafkaEventSource.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/AllDomainEventCodecs.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/AllDomainEventCodecs.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/ApplicationTransportEnvelopeCodecs.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/ApplicationTransportEnvelopeCirceCodecs.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainAddressCodecs.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainAddressCirceCodecs.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainParameterCodecs.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainParameterCirceCodecs.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainRoutingCodecs.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainRoutingCirceCodecs.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainRoutingDagCodecs.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainRoutingDagCirceCodecs.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainRoutingSpecCodecs.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainRoutingSpecCirceCodecs.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainStampCodecs.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainStampCirceCodecs.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainTraversalStateCodecs.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainTraversalStateCirceCodecs.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainVectorClockCodecs.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainVectorClockCirceCodecs.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/events/DomainSchedulingEventCodecs.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/events/DomainSchedulingEventCirceCodecs.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/events/DomainTraversalEvents.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/events/DomainTraversalCirceEvents.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/application/src/test/scala/com/monadial/waygrid/common/application/util/circe/codecs/ParameterJsonCodecSuite.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/test/scala/com/monadial/waygrid/common/application/util/circe/codecs/ParameterJsonCodecSuite.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/application/src/test/scala/com/monadial/waygrid/common/application/util/circe/codecs/SpecJsonCodecSuite.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/test/scala/com/monadial/waygrid/common/application/util/circe/codecs/SpecJsonCodecSuite.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/algebra/value/ValueRefined.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/algebra/value/ValueRefined.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/instances/InstantInstances.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/instances/InstantInstances.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/instances/IntegerInstances.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/instances/IntegerInstances.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/instances/LongInstances.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/instances/LongInstances.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/instances/RefinedInstances.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/instances/RefinedInstances.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/instances/StringInstances.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/instances/StringInstances.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/instances/ULIDInstances.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/instances/ULIDInstances.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/instances/URIInstances.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/instances/URIInstances.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/origin/http/src/main/scala/com/monadial/waygrid/origin/http/http/resource/v1/IngestResource.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/origin/http/src/main/scala/com/monadial/waygrid/origin/http/http/resource/v1/IngestResource.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -180,7 +207,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="1273" />
+    <option name="cachedIndexableFilesCount" value="1367" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="ExternalProjectsData">
@@ -258,6 +285,9 @@
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scala-library/2.13.16/scala-library-2.13.16-sources.jar!/scala/Function1.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scala-library/2.13.16/scala-library-2.13.16-sources.jar!/scala/PartialFunction.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scala-library/2.13.16/scala-library-2.13.16-sources.jar!/scala/reflect/ClassTag.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scalacheck/scalacheck_3/1.18.1/scalacheck_3-1.18.1-sources.jar!/org/scalacheck/Gen.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scodec/scodec-bits_3/1.1.38/scodec-bits_3-1.1.38-sources.jar!/scodec/bits/BitVector.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scodec/scodec-core_3/2.3.2/scodec-core_3-2.3.2-sources.jar!/scodec/codecs/codecs.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/tpolecat/doobie-free_3/1.0.0-RC10/doobie-free_3-1.0.0-RC10-sources.jar!/doobie/util/log.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-core_3/2.13.0/cats-core_3-2.13.0-sources.jar!/cats/package.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-effect-kernel_3/3.6.3/cats-effect-kernel_3-3.6.3-sources.jar!/cats/effect/kernel/Resource.scala" root0="SKIP_INSPECTION" />
@@ -318,9 +348,14 @@
     "JUnit.All in common-application.executor": "Run",
     "JUnit.All in common-domain.executor": "Run",
     "JUnit.BackoffSuite$.executor": "Run",
+    "JUnit.BaseInstancesSuite$.executor": "Run",
+    "JUnit.BytesValueRefinedSuite$.executor": "Run",
     "JUnit.DagCompilerSuite$.executor": "Run",
+    "JUnit.DagPropertySuite$.executor": "Run",
     "JUnit.SpecDslSuite$.executor": "Debug",
     "JUnit.SpecJsonCodecSuite$.executor": "Run",
+    "JUnit.StringValueRefinedSuite$.executor": "Run",
+    "JUnit.TransportEnvelopeScodecSuite$.executor": "Run",
     "JUnit.TraversalFSMSuite$.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -355,78 +390,74 @@
       <recent name="$PROJECT_DIR$/modules/system/blob-store/src/main" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Main">
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true">
-      <envs>
-        <env name="WAYGRID_REGION" value="lc-dev-01" />
-        <env name="WAYGRID_CLUSTER_ID" value="local01" />
-      </envs>
-      <option name="MAIN_CLASS_NAME" value="com.monadial.waygrid.origin.http.Main" />
-      <module name="origin-http" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.monadial.waygrid.origin.http.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">
-        <option name="credential" />
-        <option name="region" />
-        <option name="useCurrentConnection" value="false" />
-      </extension>
+  <component name="RunManager" selected="JUnit.All in common-domain">
+    <configuration name="All in common-domain" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="common-domain" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
       <method v="2">
         <option name="Make" enabled="true" />
-        <option name="BSP.BeforeRunTask" enabled="true" />
+        <option name="BSP.BeforeRunTask" enabled="true" CHOSEN_TARGET="file:$PROJECT_DIR$/#common-domain/Test" />
       </method>
     </configuration>
-    <configuration name="SpecDslSuite$" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="BaseInstancesSuite$" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="common-domain" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.monadial.waygrid.common.domain.model.traversal.spec.dsl.*" />
+          <option name="PATTERN" value="com.monadial.waygrid.common.domain.instances.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="com.monadial.waygrid.common.domain.model.traversal.spec.dsl" />
-      <option name="MAIN_CLASS_NAME" value="com.monadial.waygrid.common.domain.model.traversal.spec.dsl.SpecDslSuite$" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-        <option name="BSP.BeforeRunTask" enabled="true" CHOSEN_TARGET="file:$PROJECT_DIR$/#common-domain/Compile" />
-      </method>
-    </configuration>
-    <configuration name="SpecJsonCodecSuite" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="common-application" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.monadial.waygrid.common.application.util.circe.codecs.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">
-        <option name="credential" />
-        <option name="region" />
-        <option name="useCurrentConnection" value="false" />
-      </extension>
-      <option name="PACKAGE_NAME" value="com.monadial.waygrid.common.application.util.circe.codecs" />
-      <option name="MAIN_CLASS_NAME" value="com.monadial.waygrid.common.application.util.circe.codecs.SpecJsonCodecSuite" />
-      <option name="METHOD_NAME" value="" />
+      <option name="PACKAGE_NAME" value="com.monadial.waygrid.common.domain.instances" />
+      <option name="MAIN_CLASS_NAME" value="com.monadial.waygrid.common.domain.instances.BaseInstancesSuite$" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
         <option name="BSP.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TraversalFSMSuite$" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="BytesValueRefinedSuite$" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="common-domain" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.monadial.waygrid.common.domain.model.traversal.fsm.*" />
+          <option name="PATTERN" value="com.monadial.waygrid.common.domain.value.valuerefined.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="com.monadial.waygrid.common.domain.model.traversal.fsm" />
-      <option name="MAIN_CLASS_NAME" value="com.monadial.waygrid.common.domain.model.traversal.fsm.TraversalFSMSuite$" />
+      <option name="PACKAGE_NAME" value="com.monadial.waygrid.common.domain.value.valuerefined" />
+      <option name="MAIN_CLASS_NAME" value="com.monadial.waygrid.common.domain.value.valuerefined.BytesValueRefinedSuite$" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+        <option name="BSP.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DagPropertySuite$" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="common-domain" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.monadial.waygrid.common.domain.model.traversal.dag.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.monadial.waygrid.common.domain.model.traversal.dag" />
+      <option name="MAIN_CLASS_NAME" value="com.monadial.waygrid.common.domain.model.traversal.dag.DagPropertySuite$" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+        <option name="BSP.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="StringValueRefinedSuite$" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="common-domain" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.monadial.waygrid.common.domain.value.string.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.monadial.waygrid.common.domain.value.string" />
+      <option name="MAIN_CLASS_NAME" value="com.monadial.waygrid.common.domain.value.string.StringValueRefinedSuite$" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -474,25 +505,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Scala REPL" type="ScalaScriptConsoleRunConfiguration" factoryName="Scala Console" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
-      <option name="allowRunningInParallel" value="false" />
-      <option name="envFilePaths">
-        <list />
-      </option>
-      <option name="environmentVariables">
-        <map />
-      </option>
-      <option name="javaOptions" value="" />
-      <option name="myConsoleArgs" value="-usejavacp" />
-      <option name="projectPathOnTarget" />
-      <option name="selectedOptions">
-        <list />
-      </option>
-      <option name="workingDirectory" value="$PROJECT_DIR$" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
       <deployment type="docker-compose.yml">
         <settings />
@@ -500,21 +512,21 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Application.Main" />
-      <item itemvalue="JUnit.SpecJsonCodecSuite" />
-      <item itemvalue="JUnit.SpecDslSuite$" />
-      <item itemvalue="JUnit.TraversalFSMSuite$" />
+      <item itemvalue="JUnit.All in common-domain" />
+      <item itemvalue="JUnit.BaseInstancesSuite$" />
+      <item itemvalue="JUnit.BytesValueRefinedSuite$" />
+      <item itemvalue="JUnit.DagPropertySuite$" />
+      <item itemvalue="JUnit.StringValueRefinedSuite$" />
       <item itemvalue="sbt Task.Unnamed (1)" />
       <item itemvalue="sbt Task.Unnamed" />
-      <item itemvalue="Scala REPL.Scala REPL" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Main" />
-        <item itemvalue="Scala REPL.Scala REPL" />
-        <item itemvalue="JUnit.SpecDslSuite$" />
-        <item itemvalue="JUnit.SpecJsonCodecSuite" />
-        <item itemvalue="JUnit.TraversalFSMSuite$" />
+        <item itemvalue="JUnit.All in common-domain" />
+        <item itemvalue="JUnit.DagPropertySuite$" />
+        <item itemvalue="JUnit.StringValueRefinedSuite$" />
+        <item itemvalue="JUnit.BytesValueRefinedSuite$" />
+        <item itemvalue="JUnit.BaseInstancesSuite$" />
       </list>
     </recent_temporary>
   </component>
@@ -543,7 +555,8 @@
       <workItem from="1765491390761" duration="38102000" />
       <workItem from="1765806194819" duration="5004000" />
       <workItem from="1765837790966" duration="43987000" />
-      <workItem from="1765981873712" duration="9148000" />
+      <workItem from="1765981873712" duration="9761000" />
+      <workItem from="1766004647650" duration="10200000" />
     </task>
     <servers />
   </component>
@@ -670,11 +683,6 @@
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
     <select />
-  </component>
-  <component name="com.github.lppedd.cc.CommitBuilderDialog">
-    <footers>
-      <entry type="" value="" />
-    </footers>
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>

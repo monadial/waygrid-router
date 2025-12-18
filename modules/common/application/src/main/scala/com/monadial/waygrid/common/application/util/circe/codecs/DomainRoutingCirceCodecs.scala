@@ -6,7 +6,7 @@ import com.monadial.waygrid.common.domain.model.resiliency.RetryPolicy
 import com.monadial.waygrid.common.domain.model.routing.Value.{ DeliveryStrategy, RepeatPolicy }
 import io.circe.Codec
 
-object DomainRoutingCodecs:
+object DomainRoutingCirceCodecs:
   given Codec[DeliveryStrategy] = Codec.derived[DeliveryStrategy]
   given Codec[RetryPolicy]      = Codec.derived[RetryPolicy]
   given Codec[RepeatPolicy]     = Codec.derived[RepeatPolicy]

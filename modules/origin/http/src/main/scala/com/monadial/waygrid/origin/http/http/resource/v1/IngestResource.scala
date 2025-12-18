@@ -3,7 +3,7 @@ package com.monadial.waygrid.origin.http.http.resource.v1
 import cats.effect.Async
 import cats.implicits.*
 import com.monadial.waygrid.common.application.algebra.{ EventSink, Logger, ThisNode }
-import com.monadial.waygrid.common.application.util.circe.codecs.DomainRoutingSpecCodecs.given
+import com.monadial.waygrid.common.application.util.circe.codecs.DomainRoutingSpecCirceCodecs.given
 import com.monadial.waygrid.common.domain.algebra.DagCompiler
 import com.monadial.waygrid.common.domain.algebra.messaging.message.Value.MessageId
 import com.monadial.waygrid.common.domain.algebra.storage.DagRepository

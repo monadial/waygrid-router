@@ -15,7 +15,7 @@ import io.circe.{ Codec, Decoder, Encoder }
  * - ParameterConstraint
  * - ServiceParameterSchema
  */
-object DomainParameterCodecs:
+object DomainParameterCirceCodecs:
 
   // ---------------------------------------------------------------------------
   // Secret Reference Codecs

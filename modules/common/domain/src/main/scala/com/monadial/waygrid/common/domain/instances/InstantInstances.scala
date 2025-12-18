@@ -9,8 +9,8 @@ import com.monadial.waygrid.common.domain.algebra.value.codec.{
   BytesDecodingError
 }
 import com.monadial.waygrid.common.domain.instances.LongInstances.given
-import scodec.bits.{ BitVector, ByteVector }
-import scodec.{ Attempt, Codec as SCodec, DecodeResult, SizeBound }
+import scodec.bits.ByteVector
+import scodec.{ Decoder as SDecoder, Encoder as SEncoder }
 
 import java.time.Instant
 
@@ -19,12 +19,8 @@ object InstantInstances:
   given Order[Instant] = Order.fromComparable
   given Show[Instant]  = Show.fromToString
 
-  given SCodec[Instant] = new SCodec[Instant]:
-    override def decode(bits: BitVector): Attempt[DecodeResult[Instant]] = ???
-
-    override def encode(value: Instant): Attempt[BitVector] = ???
-
-    override def sizeBound: SizeBound = ???
+  given SEncoder[Instant] = summon[SEncoder[Long]].contramap(_.toEpochMilli)
+  given SDecoder[Instant] = summon[SDecoder[Long]].map(Instant.ofEpochMilli)
 
   given BytesCodec[Instant] with
     inline def encodeToScalar(value: Instant): ByteVector =

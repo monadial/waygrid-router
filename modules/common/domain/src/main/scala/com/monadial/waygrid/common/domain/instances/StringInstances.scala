@@ -7,9 +7,8 @@ import com.monadial.waygrid.common.domain.algebra.value.codec.{
   BytesCodec,
   BytesDecodingError
 }
-import com.monadial.waygrid.common.domain.instances.ByteVectorInstances.given
 import scodec.bits.ByteVector
-import scodec.{ Attempt, Decoder as SDecoder, Encoder as SEncoder, codecs }
+import scodec.{ Decoder as SDecoder, Encoder as SEncoder, codecs }
 
 import java.nio.charset.Charset
 
@@ -24,9 +23,8 @@ object StringInstances:
     override def encodeToScalar(value: String): ByteVector =
       ByteVector(value.getBytes("UTF-8"))
 
-  given SEncoder[String] = codecs.utf8.asEncoder.contramap(identity)
-  given SDecoder[String] = codecs.utf8.asDecoder.emap: bytes =>
-      Attempt.successful(bytes)
+  given SEncoder[String] = codecs.utf8.asEncoder
+  given SDecoder[String] = codecs.utf8.asDecoder
 
   given Base64Codec[String] with
     inline def encode(value: String): String =
@@ -36,5 +34,5 @@ object StringInstances:
     inline def decode(value: String): Validated[Base64DecodingError, String] =
       Validated
         .catchNonFatal(JavaBridge.base64Decoder(value))
-        .map(Base64Codec[ByteVector].encode(_))
+        .andThen(BytesCodec[String].decodeFromScalar(_))
         .leftMap(x => Base64DecodingError(x.getMessage))

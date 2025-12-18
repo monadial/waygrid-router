@@ -8,7 +8,7 @@ import com.monadial.waygrid.common.domain.algebra.value.codec.{
   BytesDecodingError
 }
 import scodec.bits.ByteVector
-import scodec.{ Attempt, Decoder as SDecoder, Encoder as SEncoder, codecs }
+import scodec.{ Decoder as SDecoder, Encoder as SEncoder, codecs }
 
 object LongInstances:
 
@@ -22,9 +22,8 @@ object LongInstances:
         .catchNonFatal(value.toLong())
         .leftMap(x => BytesDecodingError(x.getMessage))
 
-  given SEncoder[Long] = codecs.int64.asEncoder.contramap(identity)
-  given SDecoder[Long] = codecs.int64.asDecoder.emap: value =>
-      Attempt.successful(value)
+  given SEncoder[Long] = codecs.int64.asEncoder
+  given SDecoder[Long] = codecs.int64.asDecoder
 
   given Base64Codec[Long] with
     inline override def decode(value: String): Validated[Base64DecodingError, Long] =
