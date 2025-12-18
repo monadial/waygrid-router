@@ -3,16 +3,18 @@ package com.monadial.waygrid.common.application.instances
 import io.circe.{ Decoder as JsonDecoder, Encoder as JsonEncoder }
 import scodec.*
 
+import java.util.concurrent.TimeUnit
 import scala.concurrent.duration.{ Duration, FiniteDuration }
 import scala.util.Try
 
 object DurationInstances:
 
-  given Codec[FiniteDuration] = (scodec.codecs.int64 :: scodec.codecs.utf8)
-    .xmap(
-      { case (length, unit) => FiniteDuration(length, unit) },
-      duration => (duration.length, duration.unit.toString)
-    )
+  given Codec[FiniteDuration] =
+    (scodec.codecs.int64 :: scodec.codecs.variableSizeBytes(scodec.codecs.int32, scodec.codecs.utf8))
+      .xmap(
+        { case (length, unit) => FiniteDuration(length, TimeUnit.valueOf(unit)) },
+        duration => (duration.length, duration.unit.name())
+      )
 
   given durationEncoder: JsonEncoder[Duration] = JsonEncoder
     .encodeString

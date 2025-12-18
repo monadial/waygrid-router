@@ -3,13 +3,13 @@ package com.monadial.waygrid.common.application.util.circe.codecs
 import cats.data.NonEmptyList
 import com.monadial.waygrid.common.application.instances.DurationInstances.given
 import com.monadial.waygrid.common.application.util.circe.DerivationConfiguration.given
-import com.monadial.waygrid.common.application.util.circe.codecs.DomainRoutingCodecs.given
+import com.monadial.waygrid.common.application.util.circe.codecs.DomainRoutingCirceCodecs.given
 import com.monadial.waygrid.common.domain.model.traversal.condition.Condition
 import com.monadial.waygrid.common.domain.model.traversal.dag.{ Dag, Edge, JoinStrategy, Node, NodeType }
 import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ BranchId, EdgeGuard, ForkId, NodeId }
 import io.circe.{ Codec, Decoder, Encoder }
 
-object DomainRoutingDagCodecs:
+object DomainRoutingDagCirceCodecs:
 
   // ---------------------------------------------------------------------------
   // ULID-based value codecs

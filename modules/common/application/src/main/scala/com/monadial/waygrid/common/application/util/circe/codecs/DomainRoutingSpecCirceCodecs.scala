@@ -3,8 +3,8 @@ package com.monadial.waygrid.common.application.util.circe.codecs
 import cats.data.NonEmptyList
 import com.monadial.waygrid.common.application.instances.DurationInstances.given
 import com.monadial.waygrid.common.application.util.circe.DerivationConfiguration.given
-import com.monadial.waygrid.common.application.util.circe.codecs.DomainParameterCodecs.given
-import com.monadial.waygrid.common.application.util.circe.codecs.DomainRoutingCodecs.given
+import com.monadial.waygrid.common.application.util.circe.codecs.DomainParameterCirceCodecs.given
+import com.monadial.waygrid.common.application.util.circe.codecs.DomainRoutingCirceCodecs.given
 import com.monadial.waygrid.common.domain.model.routing.Value.DeliveryStrategy
 import com.monadial.waygrid.common.domain.model.traversal.condition.Condition
 import com.monadial.waygrid.common.domain.model.traversal.dag.JoinStrategy
@@ -12,7 +12,7 @@ import com.monadial.waygrid.common.domain.model.traversal.spec.{ Node, Spec }
 import io.circe.{ Codec, Decoder, Encoder, Json }
 import io.circe.syntax.*
 
-object DomainRoutingSpecCodecs:
+object DomainRoutingSpecCirceCodecs:
 
   given Codec[DeliveryStrategy] = Codec.derived[DeliveryStrategy]
   given Codec[JoinStrategy]     = Codec.derived[JoinStrategy]

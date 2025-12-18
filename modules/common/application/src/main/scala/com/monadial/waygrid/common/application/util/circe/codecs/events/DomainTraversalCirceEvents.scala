@@ -13,7 +13,7 @@ import com.monadial.waygrid.common.domain.model.traversal.Event.{
 import io.circe.Codec
 import io.circe.generic.semiauto
 
-object DomainTraversalEvents:
+object DomainTraversalCirceEvents:
   given Codec[TraversalRequested]     = semiauto.deriveCodec
   given Codec[TraversalScheduled]     = semiauto.deriveCodec
   given Codec[TraversalResumed]       = semiauto.deriveCodec

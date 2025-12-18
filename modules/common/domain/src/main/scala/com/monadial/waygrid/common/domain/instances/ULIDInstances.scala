@@ -9,7 +9,6 @@ import com.monadial.waygrid.common.domain.algebra.value.codec.{
   BytesCodec,
   BytesDecodingError
 }
-import com.monadial.waygrid.common.domain.instances.StringInstances.given
 import io.circe.{ Decoder as JsonDecoder, Encoder as JsonEncoder }
 import scodec.bits.ByteVector
 import scodec.{ Attempt, Decoder as SDecoder, Encoder as SEncoder, Err }
@@ -21,13 +20,12 @@ object ULIDInstances:
   given Order[ULID] = (x: ULID, y: ULID) => x.compareTo(y)
   given Show[ULID]  = (t: ULID) => t.toString
 
-  given SEncoder[ULID] = scodec.codecs.bytes.asEncoder.contramap(x => ByteVector(x.toBytes))
-  given SDecoder[ULID] = scodec.codecs.bytes.asDecoder.emap: bytes =>
+  // ULID is 16 bytes fixed
+  given SEncoder[ULID] = scodec.codecs.bytes(16).asEncoder.contramap(x => ByteVector(x.toBytes))
+  given SDecoder[ULID] = scodec.codecs.bytes(16).asDecoder.emap: bytes =>
       Try(ULID.fromBytes(bytes.toArray)) match
-        case Success(ulid) =>
-          Attempt.successful(ulid)
-        case Failure(ex) =>
-          Attempt.failure(Err(ex.getMessage))
+        case Success(ulid) => Attempt.successful(ulid)
+        case Failure(ex)   => Attempt.failure(Err(ex.getMessage))
 
   given JsonEncoder[ULID] =
     JsonEncoder
@@ -39,15 +37,15 @@ object ULIDInstances:
       .decodeString
       .emapTry(str => Try(ULID.fromString(str)))
 
+  // ULID is 16 bytes fixed (128-bit)
   given BytesCodec[ULID] with
     inline def encodeToScalar(value: ULID): ByteVector =
-      BytesCodec[String]
-        .encodeToScalar(value.toString)
+      ByteVector(value.toBytes)
 
     inline def decodeFromScalar(value: ByteVector): Validated[BytesDecodingError, ULID] =
-      BytesCodec[String]
-        .decodeFromScalar(value)
-        .map(ULID.fromString)
+      Validated
+        .catchNonFatal(ULID.fromBytes(value.toArray))
+        .leftMap(ex => BytesDecodingError(ex.getMessage))
 
   given Base64Codec[ULID] with
     inline def encode(value: ULID): String =
@@ -57,5 +55,5 @@ object ULIDInstances:
     inline def decode(value: String): Validated[Base64DecodingError, ULID] =
       Validated
         .catchNonFatal(JavaBridge.base64Decoder(value))
-        .andThen(x => Validated.catchNonFatal(ULID.fromBytes(x.toArrayUnsafe)))
+        .andThen(BytesCodec[ULID].decodeFromScalar(_))
         .leftMap(x => Base64DecodingError(x.getMessage))

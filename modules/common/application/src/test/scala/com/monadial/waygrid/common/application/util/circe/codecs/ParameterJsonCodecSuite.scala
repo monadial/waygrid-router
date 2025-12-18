@@ -1,7 +1,7 @@
 package com.monadial.waygrid.common.application.util.circe.codecs
 
 import cats.data.NonEmptyList
-import com.monadial.waygrid.common.application.util.circe.codecs.DomainParameterCodecs.given
+import com.monadial.waygrid.common.application.util.circe.codecs.DomainParameterCirceCodecs.given
 import com.monadial.waygrid.common.domain.model.parameter.*
 import io.circe.*
 import io.circe.parser.*

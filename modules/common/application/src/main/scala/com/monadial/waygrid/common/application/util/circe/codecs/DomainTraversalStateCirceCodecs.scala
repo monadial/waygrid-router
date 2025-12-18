@@ -1,8 +1,8 @@
 package com.monadial.waygrid.common.application.util.circe.codecs
 
 import com.monadial.waygrid.common.application.util.circe.DerivationConfiguration.given
-import com.monadial.waygrid.common.application.util.circe.codecs.DomainRoutingDagCodecs.given
-import com.monadial.waygrid.common.application.util.circe.codecs.DomainVectorClockCodecs.given
+import com.monadial.waygrid.common.application.util.circe.codecs.DomainRoutingDagCirceCodecs.given
+import com.monadial.waygrid.common.application.util.circe.codecs.DomainVectorClockCirceCodecs.given
 import com.monadial.waygrid.common.domain.model.traversal.Event.TraversalEvent
 import com.monadial.waygrid.common.domain.model.traversal.dag.JoinStrategy
 import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ BranchId, ForkId, NodeId }
@@ -20,7 +20,7 @@ import io.circe.{ Codec, Decoder, Encoder, KeyDecoder, KeyEncoder }
 
 import java.time.Instant
 
-object DomainTraversalStateCodecs:
+object DomainTraversalStateCirceCodecs:
 
   // ---------------------------------------------------------------------------
   // Key Encoders/Decoders for Map types

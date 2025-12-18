@@ -29,8 +29,8 @@ object URIInstances:
           case Left(err)  => Left(err.message)
       )
 
-  given SEncoder[Uri] = scodec.codecs.utf8.asEncoder.contramap(_.renderString)
-  given SDecoder[Uri] = scodec.codecs.utf8.asDecoder.emap(raw =>
+  given SEncoder[Uri] = summon[SEncoder[String]].contramap(_.renderString)
+  given SDecoder[Uri] = summon[SDecoder[String]].emap(raw =>
     Uri.fromString(raw) match
       case Right(uri) => Attempt.successful(uri)
       case Left(err)  => Attempt.failure(Err(err.message))

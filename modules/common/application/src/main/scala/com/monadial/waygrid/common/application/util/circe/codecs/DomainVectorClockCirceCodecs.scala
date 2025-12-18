@@ -7,7 +7,7 @@ import org.http4s.Uri
 
 import scala.collection.immutable.SortedMap
 
-object DomainVectorClockCodecs:
+object DomainVectorClockCirceCodecs:
   given Codec[SortedMap[NodeAddress, Long]] = Codec.from(
     Decoder[SortedMap[String, Long]].map(_.map { case (k, v) => NodeAddress(Uri.unsafeFromString(k)) -> v }),
     Encoder[SortedMap[String, Long]].contramap(_.map { case (k, v) => k.unwrap.toString -> v })
