@@ -48,6 +48,7 @@ object Dependencies {
     val typesafeConfig               = "1.4.4"
     val weaver                       = "0.8.4"
     val zeroAllocationHashingVersion = "0.27ea1"
+    val vulcan                       = "1.11.0"
   }
 
   object Libraries {
@@ -63,6 +64,11 @@ object Dependencies {
     val fs2Core   = Def.setting("co.fs2" %% "fs2-core" % V.fs2core)
     val fs2Scodec = Def.setting("co.fs2" %% "fs2-scodec" % V.fs2core)
     val fs2Kafka  = Def.setting("com.github.fd4s" %% "fs2-kafka" % V.fs2Kafka)
+
+    // Vulcan - Avro codec derivation for Scala 3
+    val vulcanCore     = Def.setting("com.github.fd4s" %% "vulcan" % V.vulcan)
+    val vulcanGeneric  = Def.setting("com.github.fd4s" %% "vulcan-generic" % V.vulcan)
+    val fs2KafkaVulcan = Def.setting("com.github.fd4s" %% "fs2-kafka-vulcan" % V.fs2Kafka)
 
     // AWS fs2 integrations
     val fs2AwsCore      = Def.setting("io.laserdisc" %% "fs2-aws-core" % V.fs2Aws)

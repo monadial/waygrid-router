@@ -9,7 +9,7 @@ import com.monadial.waygrid.common.application.domain.model.settings.Kafka
 import com.monadial.waygrid.common.application.interpreter.TransportEnvelopeCodecInterpreter
 import com.monadial.waygrid.common.application.kafka.KafkaUtils.toTopic
 import com.monadial.waygrid.common.application.kafka.Value.Key
-import com.monadial.waygrid.common.application.util.scodec.codecs.ApplicationTransportEnvelopeScodecCodecs.given
+import com.monadial.waygrid.common.application.util.vulcan.codecs.ApplicationTransportEnvelopeVulcanCodecs.given
 import com.monadial.waygrid.common.domain.algebra.messaging.event.Event
 import com.monadial.waygrid.common.domain.algebra.messaging.message.Value.{ MessageGroupId, MessageId }
 import com.monadial.waygrid.common.domain.algebra.messaging.message.{ Groupable, Message }
@@ -18,7 +18,7 @@ import com.monadial.waygrid.common.domain.model.envelope.DomainEnvelope
 import com.monadial.waygrid.common.domain.value.Address.Endpoint
 import fs2.Stream
 import fs2.kafka.*
-import scodec.Codec
+import fs2.kafka.vulcan.{ avroSerializer, AvroSettings, SchemaRegistryClientSettings }
 import org.typelevel.otel4s.context.propagation.TextMapUpdater
 import org.typelevel.otel4s.experimental.metrics.InstrumentedQueue
 import org.typelevel.otel4s.metrics.{ Counter, Histogram, Meter, UpDownCounter }
@@ -81,11 +81,22 @@ object KafkaEventSink:
   ): Resource[F, KafkaProducer[F, Key, TransportEnvelope]] =
     for
       given KeySerializer[F, Key] <- Resource.pure(Serializer.lift[F, Key](_.unwrap.toArrayUnsafe.pure[F]))
-      given ValueSerializer[F, TransportEnvelope] <- Resource.pure(Serializer.lift[F, TransportEnvelope] { envelope =>
-        Codec[TransportEnvelope].encode(envelope) match
-          case scodec.Attempt.Successful(bits) => bits.toByteArray.pure[F]
-          case scodec.Attempt.Failure(err)     => Async[F].raiseError(new RuntimeException(s"Failed to encode TransportEnvelope: ${err.messageWithContext}"))
-      })
+
+      // Configure Avro serializer with Schema Registry
+      avroSettings <- settings.schemaRegistry match
+        case Some(sr) =>
+          Resource.pure(
+            AvroSettings(
+              SchemaRegistryClientSettings[F](sr.url)
+            ).withAutoRegisterSchemas(sr.autoRegisterSchemas)
+          )
+        case None =>
+          Resource.raiseError[F, AvroSettings[F], Throwable](
+            new IllegalStateException("Schema Registry configuration is required for Avro serialization")
+          )
+
+      given ValueSerializer[F, TransportEnvelope] <- avroSerializer[TransportEnvelope].forValue(avroSettings)
+
       producerSettings = ProducerSettings[F, Key, TransportEnvelope]
         .withBootstrapServers(settings.bootstrapServers.mkString(","))
         .withAcks(settings.sink.acks.getOrElse(Acks.All))
