@@ -171,17 +171,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7697e996-c24f-4ea1-a7ee-bf168edbe1e9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/ci.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/ci.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.sbt" beforeDir="false" afterPath="$PROJECT_DIR$/build.sbt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/compose.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/domain/model/settings/EventStreamSettings.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/domain/model/settings/EventStreamSettings.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/kafka/KafkaEventSink.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/kafka/KafkaEventSink.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/kafka/KafkaEventSource.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/kafka/KafkaEventSource.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/model/traversal/condition/Condition.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/model/traversal/condition/Condition.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/origin/http/src/main/resources/application.conf" beforeDir="false" afterPath="$PROJECT_DIR$/modules/origin/http/src/main/resources/application.conf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/origin/http/src/main/scala/com/monadial/waygrid/origin/http/http/resource/v1/IngestResource.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/origin/http/src/main/scala/com/monadial/waygrid/origin/http/http/resource/v1/IngestResource.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/Dependencies.scala" beforeDir="false" afterPath="$PROJECT_DIR$/project/Dependencies.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.scalafix.conf" beforeDir="false" afterPath="$PROJECT_DIR$/.scalafix.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/system/topology/src/main/scala/com/monadial/waygrid/system/topology/Main.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/system/topology/src/main/scala/com/monadial/waygrid/system/topology/Main.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/system/topology/src/main/scala/com/monadial/waygrid/system/topology/actor/TopologyElectionActor.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/system/topology/src/main/scala/com/monadial/waygrid/system/topology/actor/TopologyElectionActor.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/system/topology/src/main/scala/com/monadial/waygrid/system/topology/actor/TopologyServerActor.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/system/topology/src/main/scala/com/monadial/waygrid/system/topology/actor/TopologyServerActor.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/system/topology/src/main/scala/com/monadial/waygrid/system/topology/interpreter/DoobieTopologySnapshotStore.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/system/topology/src/main/scala/com/monadial/waygrid/system/topology/interpreter/DoobieTopologySnapshotStore.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/system/topology/src/main/scala/com/monadial/waygrid/system/topology/interpreter/RedisTopologyLeaderElection.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/system/topology/src/main/scala/com/monadial/waygrid/system/topology/interpreter/RedisTopologyLeaderElection.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/system/topology/src/main/scala/com/monadial/waygrid/system/topology/settings/TopologyServiceSettings.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/system/topology/src/main/scala/com/monadial/waygrid/system/topology/settings/TopologyServiceSettings.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/system/topology/src/main/scala/com/monadial/waygrid/system/topology/settings/TopologySettings.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/system/topology/src/main/scala/com/monadial/waygrid/system/topology/settings/TopologySettings.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -555,7 +554,7 @@
       <workItem from="1765806194819" duration="5004000" />
       <workItem from="1765837790966" duration="43987000" />
       <workItem from="1765981873712" duration="9761000" />
-      <workItem from="1766004647650" duration="33857000" />
+      <workItem from="1766004647650" duration="34536000" />
     </task>
     <servers />
   </component>

@@ -1,15 +1,16 @@
 package com.monadial.waygrid.system.topology.actor
 
-import cats.Parallel
-import cats.effect.{ Async, Concurrent, Ref, Resource }
-import cats.syntax.all.*
 import com.monadial.waygrid.common.application.algebra.SupervisedRequest.{ Restart, Start, Stop }
-import com.monadial.waygrid.common.application.algebra.*
+import com.monadial.waygrid.common.application.algebra._
 import com.monadial.waygrid.common.domain.model.node.Node
 import com.monadial.waygrid.common.domain.model.topology.state.TopologyState
 import com.monadial.waygrid.common.domain.value.Address.NodeAddress
 import com.monadial.waygrid.system.topology.domain.model.election.Value.FencingToken
 import com.monadial.waygrid.system.topology.settings.TopologyServiceSettings
+
+import cats.Parallel
+import cats.effect.{ Async, Concurrent, Ref, Resource }
+import cats.syntax.all._
 import com.suprnation.actor.Actor.ReplyingReceive
 import com.suprnation.actor.ActorSystem
 

@@ -1,6 +1,5 @@
 package com.monadial.waygrid.system.topology.interpreter
 
-import cats.effect.{ Async, Resource }
 import com.monadial.waygrid.common.application.algebra.Logger
 import com.monadial.waygrid.common.application.domain.model.settings.RedisSettings
 import com.monadial.waygrid.common.application.syntax.BackoffSyntax.retryOnFailure
@@ -9,9 +8,11 @@ import com.monadial.waygrid.common.domain.model.node.Value.NodeId
 import com.monadial.waygrid.common.domain.model.resiliency.RetryPolicy.Linear
 import com.monadial.waygrid.system.topology.algebra.{ LeadershipProvider, NodeLost, NodeWon }
 import com.monadial.waygrid.system.topology.domain.model.election.Value.FencingToken
-import dev.profunktor.redis4cats.data.RedisCodec
 
-import scala.concurrent.duration.*
+import scala.concurrent.duration._
+
+import cats.effect.{ Async, Resource }
+import dev.profunktor.redis4cats.data.RedisCodec
 
 object RedisTopologyLeaderElection:
 

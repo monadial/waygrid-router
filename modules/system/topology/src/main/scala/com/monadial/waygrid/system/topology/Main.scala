@@ -1,20 +1,21 @@
 package com.monadial.waygrid.system.topology
 
-import cats.implicits.*
-import cats.Parallel
-import cats.effect.*
-import cats.effect.std.Console
-import com.monadial.waygrid.common.application.algebra.*
+import com.monadial.waygrid.common.application.algebra._
 import com.monadial.waygrid.common.application.algebra.SupervisedRequest.Stop
 import com.monadial.waygrid.common.application.program.WaygridApp
 import com.monadial.waygrid.common.domain.SystemWaygridApp
 import com.monadial.waygrid.system.topology.actor.TopologyServerActor
 import com.monadial.waygrid.system.topology.settings.TopologySettings
+
+import scala.annotation.nowarn
+
+import cats.implicits._
+import cats.Parallel
+import cats.effect._
+import cats.effect.std.Console
 import com.suprnation.actor.ActorSystem
 import org.typelevel.otel4s.metrics.MeterProvider
 import org.typelevel.otel4s.trace.{ Tracer, TracerProvider }
-
-import scala.annotation.nowarn
 
 object Main extends WaygridApp[TopologySettings](SystemWaygridApp.Topology):
 
