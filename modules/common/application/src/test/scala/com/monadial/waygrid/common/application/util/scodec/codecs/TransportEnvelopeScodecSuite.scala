@@ -3,7 +3,11 @@ package com.monadial.waygrid.common.application.util.scodec.codecs
 import cats.Show
 import cats.data.NonEmptyList
 import com.monadial.waygrid.common.application.domain.model.envelope.TransportEnvelope
-import com.monadial.waygrid.common.application.domain.model.envelope.Value.{ MessageContent, MessageContentData, MessageContentType }
+import com.monadial.waygrid.common.application.domain.model.envelope.Value.{
+  MessageContent,
+  MessageContentData,
+  MessageContentType
+}
 import com.monadial.waygrid.common.domain.model.envelope.Value.EnvelopeId
 import com.monadial.waygrid.common.application.util.scodec.codecs.ApplicationTransportEnvelopeScodecCodecs.given
 import com.monadial.waygrid.common.application.util.scodec.codecs.DomainAddressScodecCodecs.given
@@ -13,7 +17,12 @@ import com.monadial.waygrid.common.application.util.scodec.codecs.DomainStampSco
 import com.monadial.waygrid.common.application.util.scodec.codecs.DomainVectorClockScodecCodecs.given
 import com.monadial.waygrid.common.domain.model.envelope.EnvelopeStamps
 import com.monadial.waygrid.common.domain.model.envelope.Value.{ Stamp, TraversalRefStamp, TraversalStamp }
-import com.monadial.waygrid.common.domain.model.node.Value.{ NodeComponent, NodeDescriptor, NodeId as ModelNodeId, NodeService }
+import com.monadial.waygrid.common.domain.model.node.Value.{
+  NodeComponent,
+  NodeDescriptor,
+  NodeId as ModelNodeId,
+  NodeService
+}
 import com.monadial.waygrid.common.domain.model.resiliency.RetryPolicy
 import com.monadial.waygrid.common.domain.model.routing.Value.{ DeliveryStrategy, RepeatPolicy, TraversalId }
 import com.monadial.waygrid.common.domain.model.traversal.condition.Condition
@@ -23,7 +32,14 @@ import com.monadial.waygrid.common.domain.model.traversal.state.{ BranchResult, 
 import com.monadial.waygrid.common.domain.model.traversal.state.Event.*
 import com.monadial.waygrid.common.domain.model.traversal.state.Value.RemainingNodes
 import com.monadial.waygrid.common.domain.model.vectorclock.VectorClock
-import com.monadial.waygrid.common.domain.value.Address.{ Endpoint, EndpointDirection, LogicalEndpoint, NodeAddress, PhysicalEndpoint, ServiceAddress }
+import com.monadial.waygrid.common.domain.value.Address.{
+  Endpoint,
+  EndpointDirection,
+  LogicalEndpoint,
+  NodeAddress,
+  PhysicalEndpoint,
+  ServiceAddress
+}
 import org.scalacheck.Gen
 import scodec.{ Attempt, Codec }
 import scodec.bits.ByteVector
@@ -45,29 +61,29 @@ object TransportEnvelopeScodecSuite extends SimpleIOSuite with Checkers:
   // Show instances for ScalaCheck
   // ---------------------------------------------------------------------------
 
-  given Show[Int]                = Show.fromToString
-  given Show[Long]               = Show.fromToString
-  given Show[String]             = Show.fromToString
-  given Show[RetryPolicy]        = Show.fromToString
-  given Show[RepeatPolicy]       = Show.fromToString
-  given Show[DeliveryStrategy]   = Show.fromToString
-  given Show[EdgeGuard]          = Show.fromToString
-  given Show[JoinStrategy]       = Show.fromToString
-  given Show[NodeType]           = Show.fromToString
-  given Show[Condition]          = Show.fromToString
-  given Show[Node]               = Show.fromToString
-  given Show[Edge]               = Show.fromToString
-  given Show[Dag]                = Show.fromToString
-  given Show[VectorClock]        = Show.fromToString
-  given Show[Endpoint]           = Show.fromToString
-  given Show[Stamp]              = Show.fromToString
-  given Show[MessageContent]     = Show.fromToString
-  given Show[TransportEnvelope]  = Show.fromToString
-  given Show[TraversalState]     = Show.fromToString
-  given Show[StateEvent]         = Show.fromToString
-  given Show[BranchStatus]       = Show.fromToString
-  given Show[BranchResult]       = Show.fromToString
-  given Show[EnvelopeStamps]     = Show.fromToString
+  given Show[Int]               = Show.fromToString
+  given Show[Long]              = Show.fromToString
+  given Show[String]            = Show.fromToString
+  given Show[RetryPolicy]       = Show.fromToString
+  given Show[RepeatPolicy]      = Show.fromToString
+  given Show[DeliveryStrategy]  = Show.fromToString
+  given Show[EdgeGuard]         = Show.fromToString
+  given Show[JoinStrategy]      = Show.fromToString
+  given Show[NodeType]          = Show.fromToString
+  given Show[Condition]         = Show.fromToString
+  given Show[Node]              = Show.fromToString
+  given Show[Edge]              = Show.fromToString
+  given Show[Dag]               = Show.fromToString
+  given Show[VectorClock]       = Show.fromToString
+  given Show[Endpoint]          = Show.fromToString
+  given Show[Stamp]             = Show.fromToString
+  given Show[MessageContent]    = Show.fromToString
+  given Show[TransportEnvelope] = Show.fromToString
+  given Show[TraversalState]    = Show.fromToString
+  given Show[StateEvent]        = Show.fromToString
+  given Show[BranchStatus]      = Show.fromToString
+  given Show[BranchResult]      = Show.fromToString
+  given Show[EnvelopeStamps]    = Show.fromToString
 
   // ---------------------------------------------------------------------------
   // Generators
@@ -103,7 +119,11 @@ object TransportEnvelopeScodecSuite extends SimpleIOSuite with Checkers:
     Gen.oneOf(NodeComponent.Origin, NodeComponent.Processor, NodeComponent.Destination, NodeComponent.System)
 
   private val genNodeService: Gen[NodeService] =
-    Gen.alphaLowerStr.map(s => NodeService(s.take(10).nonEmpty match { case true => s.take(10); case false => "svc" }))
+    Gen.alphaLowerStr.map(s =>
+      NodeService(s.take(10).nonEmpty match
+        case true  => s.take(10);
+        case false => "svc")
+    )
 
   private val genNodeDescriptor: Gen[NodeDescriptor] =
     for
@@ -252,7 +272,8 @@ object TransportEnvelopeScodecSuite extends SimpleIOSuite with Checkers:
   private val genMessageContent: Gen[MessageContent] =
     for
       contentType <- Gen.alphaNumStr.map(s => MessageContentType(s"type-${s.take(10)}"))
-      contentData <- Gen.listOf(Gen.choose(0, 255).map(_.toByte)).map(bytes => MessageContentData(ByteVector(bytes.toArray)))
+      contentData <-
+        Gen.listOf(Gen.choose(0, 255).map(_.toByte)).map(bytes => MessageContentData(ByteVector(bytes.toArray)))
     yield MessageContent(contentType, contentData)
 
   private val genTraversalStamp: Gen[TraversalStamp] =
@@ -311,108 +332,112 @@ object TransportEnvelopeScodecSuite extends SimpleIOSuite with Checkers:
   // ---------------------------------------------------------------------------
 
   test("RetryPolicy roundtrip"):
-    forall(genRetryPolicy)(policy => expect(roundtrip(policy)))
+      forall(genRetryPolicy)(policy => expect(roundtrip(policy)))
 
   test("RepeatPolicy roundtrip"):
-    forall(genRepeatPolicy)(policy => expect(roundtrip(policy)))
+      forall(genRepeatPolicy)(policy => expect(roundtrip(policy)))
 
   test("DeliveryStrategy roundtrip"):
-    forall(genDeliveryStrategy)(strategy => expect(roundtrip(strategy)))
+      forall(genDeliveryStrategy)(strategy => expect(roundtrip(strategy)))
 
   test("EdgeGuard roundtrip"):
-    forall(genEdgeGuard)(guard => expect(roundtrip(guard)))
+      forall(genEdgeGuard)(guard => expect(roundtrip(guard)))
 
   pureTest("EdgeGuard debug OnFailure"):
-    val guard: EdgeGuard = EdgeGuard.OnFailure
-    val codec            = summon[Codec[EdgeGuard]]
-    codec.encode(guard) match
-      case Attempt.Failure(err) =>
-        failure(s"Encode failed: $err")
-      case Attempt.Successful(bits) =>
-        codec.decode(bits) match
-          case Attempt.Failure(err) =>
-            failure(s"Decode failed: $err")
-          case Attempt.Successful(result) =>
-            if result.value == guard && result.remainder.isEmpty then success
-            else
-              failure(
-                s"bits=${bits.toHex}, decoded=${result.value} (expected $guard), remainder=${result.remainder.size}"
-              )
+      val guard: EdgeGuard = EdgeGuard.OnFailure
+      val codec            = summon[Codec[EdgeGuard]]
+      codec.encode(guard) match
+        case Attempt.Failure(err) =>
+          failure(s"Encode failed: $err")
+        case Attempt.Successful(bits) =>
+          codec.decode(bits) match
+            case Attempt.Failure(err) =>
+              failure(s"Decode failed: $err")
+            case Attempt.Successful(result) =>
+              if result.value == guard && result.remainder.isEmpty then success
+              else
+                failure(
+                  s"bits=${bits.toHex}, decoded=${result.value} (expected $guard), remainder=${result.remainder.size}"
+                )
 
   test("JoinStrategy roundtrip"):
-    forall(genJoinStrategy)(strategy => expect(roundtrip(strategy)))
+      forall(genJoinStrategy)(strategy => expect(roundtrip(strategy)))
 
   test("NodeType roundtrip"):
-    forall(genNodeType)(nodeType => expect(roundtrip(nodeType)))
+      forall(genNodeType)(nodeType => expect(roundtrip(nodeType)))
 
   test("Node roundtrip"):
-    forall(genNode)(node => expect(roundtrip(node)))
+      forall(genNode)(node => expect(roundtrip(node)))
 
   test("Edge roundtrip"):
-    forall(genEdge)(edge => expect(roundtrip(edge)))
+      forall(genEdge)(edge => expect(roundtrip(edge)))
 
   test("VectorClock roundtrip"):
-    forall(genVectorClock)(vc => expect(roundtrip(vc)))
+      forall(genVectorClock)(vc => expect(roundtrip(vc)))
 
   test("Dag roundtrip"):
-    forall(genSimpleDag)(dag => expect(roundtrip(dag)))
+      forall(genSimpleDag)(dag => expect(roundtrip(dag)))
 
   test("Endpoint roundtrip"):
-    forall(genEndpoint)(endpoint => expect(roundtrip(endpoint)))
+      forall(genEndpoint)(endpoint => expect(roundtrip(endpoint)))
 
   test("Stamp roundtrip"):
-    forall(genStamp)(stamp => expect(roundtrip(stamp)))
+      forall(genStamp)(stamp => expect(roundtrip(stamp)))
 
   test("MessageContent roundtrip"):
-    forall(genMessageContent)(mc => expect(roundtrip(mc)))
+      forall(genMessageContent)(mc => expect(roundtrip(mc)))
 
   pureTest("EnvelopeStamps roundtrip (empty)"):
-    val emptyStamps: EnvelopeStamps = Map.empty
-    expect(roundtrip[EnvelopeStamps](emptyStamps))
+      val emptyStamps: EnvelopeStamps = Map.empty
+      expect(roundtrip[EnvelopeStamps](emptyStamps))
 
   test("EnvelopeStamps roundtrip"):
-    forall(genEnvelopeStamps)(stamps => expect(roundtrip(stamps)))
+      forall(genEnvelopeStamps)(stamps => expect(roundtrip(stamps)))
 
   test("TransportEnvelope roundtrip"):
-    forall(genTransportEnvelope)(envelope => expect(roundtrip(envelope)))
+      forall(genTransportEnvelope)(envelope => expect(roundtrip(envelope)))
 
   // ---------------------------------------------------------------------------
   // Edge case tests
   // ---------------------------------------------------------------------------
 
   pureTest("TransportEnvelope with empty stamps roundtrips"):
-    val envelope = TransportEnvelope(
-      id = EnvelopeId(ULID.newULID),
-      sender = NodeAddress(NodeDescriptor.Origin(NodeService("http")), ModelNodeId(ULID.newULID)),
-      endpoint = LogicalEndpoint(NodeDescriptor.Destination(NodeService("webhook")), EndpointDirection.Outbound),
-      message = MessageContent(MessageContentType("test"), MessageContentData(ByteVector.empty)),
-      stamps = Map.empty
-    )
-    expect(roundtrip[TransportEnvelope](envelope))
+      val envelope = TransportEnvelope(
+        id = EnvelopeId(ULID.newULID),
+        sender = NodeAddress(NodeDescriptor.Origin(NodeService("http")), ModelNodeId(ULID.newULID)),
+        endpoint = LogicalEndpoint(NodeDescriptor.Destination(NodeService("webhook")), EndpointDirection.Outbound),
+        message = MessageContent(MessageContentType("test"), MessageContentData(ByteVector.empty)),
+        stamps = Map.empty
+      )
+      expect(roundtrip[TransportEnvelope](envelope))
 
   pureTest("TransportEnvelope with TraversalRefStamp roundtrips"):
-    val stamp    = TraversalRefStamp(DagHash("test-hash"))
-    val stamps   = Map(classOf[TraversalRefStamp] -> List(stamp)).asInstanceOf[EnvelopeStamps]
-    val envelope = TransportEnvelope(
-      id = EnvelopeId(ULID.newULID),
-      sender = NodeAddress(NodeDescriptor.Origin(NodeService("http")), ModelNodeId(ULID.newULID)),
-      endpoint = PhysicalEndpoint(NodeDescriptor.System(NodeService("topology")), ModelNodeId(ULID.newULID), EndpointDirection.Inbound),
-      message = MessageContent(MessageContentType("event"), MessageContentData(ByteVector(1, 2, 3))),
-      stamps = stamps
-    )
-    expect(roundtrip[TransportEnvelope](envelope))
+      val stamp  = TraversalRefStamp(DagHash("test-hash"))
+      val stamps = Map(classOf[TraversalRefStamp] -> List(stamp)).asInstanceOf[EnvelopeStamps]
+      val envelope = TransportEnvelope(
+        id = EnvelopeId(ULID.newULID),
+        sender = NodeAddress(NodeDescriptor.Origin(NodeService("http")), ModelNodeId(ULID.newULID)),
+        endpoint = PhysicalEndpoint(
+          NodeDescriptor.System(NodeService("topology")),
+          ModelNodeId(ULID.newULID),
+          EndpointDirection.Inbound
+        ),
+        message = MessageContent(MessageContentType("event"), MessageContentData(ByteVector(1, 2, 3))),
+        stamps = stamps
+      )
+      expect(roundtrip[TransportEnvelope](envelope))
 
   pureTest("Condition.Not roundtrips"):
-    val condition = Condition.Not(Condition.Always)
-    expect(roundtrip(condition))
+      val condition = Condition.Not(Condition.Always)
+      expect(roundtrip(condition))
 
   pureTest("Condition.And with multiple conditions roundtrips"):
-    val condition = Condition.And(List(Condition.Always, Condition.Not(Condition.Always)))
-    expect(roundtrip(condition))
+      val condition = Condition.And(List(Condition.Always, Condition.Not(Condition.Always)))
+      expect(roundtrip(condition))
 
   pureTest("Nested Condition roundtrips"):
-    val condition = Condition.Or(List(
-      Condition.And(List(Condition.Always)),
-      Condition.Not(Condition.Or(List(Condition.Always)))
-    ))
-    expect(roundtrip(condition))
+      val condition = Condition.Or(List(
+        Condition.And(List(Condition.Always)),
+        Condition.Not(Condition.Or(List(Condition.Always)))
+      ))
+      expect(roundtrip(condition))

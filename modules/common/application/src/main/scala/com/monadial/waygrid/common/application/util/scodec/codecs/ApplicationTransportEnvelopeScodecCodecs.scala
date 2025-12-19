@@ -1,7 +1,11 @@
 package com.monadial.waygrid.common.application.util.scodec.codecs
 
 import com.monadial.waygrid.common.application.domain.model.envelope.TransportEnvelope
-import com.monadial.waygrid.common.application.domain.model.envelope.Value.{ MessageContent, MessageContentData, MessageContentType }
+import com.monadial.waygrid.common.application.domain.model.envelope.Value.{
+  MessageContent,
+  MessageContentData,
+  MessageContentType
+}
 import com.monadial.waygrid.common.application.util.scodec.codecs.DomainAddressScodecCodecs.given
 import com.monadial.waygrid.common.application.util.scodec.codecs.DomainStampScodecCodecs.given
 import com.monadial.waygrid.common.domain.model.envelope.EnvelopeStamps
@@ -86,18 +90,18 @@ object ApplicationTransportEnvelopeScodecCodecs:
       // Flatten all stamps into a single list
       val allStamps = value.values.flatten.toList
       for
-        countBits  <- int32.encode(allStamps.size)
+        countBits <- int32.encode(allStamps.size)
         stampsBits <- allStamps.foldLeft(Attempt.successful(BitVector.empty)) { (acc, stamp) =>
-                        acc.flatMap(bits => stampCodec.encode(stamp).map(bits ++ _))
-                      }
+          acc.flatMap(bits => stampCodec.encode(stamp).map(bits ++ _))
+        }
       yield countBits ++ stampsBits
 
     override def decode(bits: BitVector): Attempt[DecodeResult[EnvelopeStamps]] =
       for
         countResult <- int32.decode(bits)
-        count        = countResult.value
-        remaining    = countResult.remainder
-        result      <- decodeStamps(remaining, count, List.empty)
+        count     = countResult.value
+        remaining = countResult.remainder
+        result <- decodeStamps(remaining, count, List.empty)
       yield result.map(stamps => groupStampsByClass(stamps))
 
     private def decodeStamps(

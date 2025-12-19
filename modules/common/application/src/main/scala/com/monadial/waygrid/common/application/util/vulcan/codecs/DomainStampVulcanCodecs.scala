@@ -77,8 +77,4 @@ object DomainStampVulcanCodecs:
    * so we convert to/from EnvelopeStampsV2 for wire format.
    */
   given Codec[EnvelopeStamps] =
-    summon[Codec[EnvelopeStampsV2]].imap(
-      v2 => v2.toLegacy
-    )(
-      legacy => EnvelopeStampsV2.fromLegacy(legacy)
-    )
+    summon[Codec[EnvelopeStampsV2]].imap(v2 => v2.toLegacy)(legacy => EnvelopeStampsV2.fromLegacy(legacy))

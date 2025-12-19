@@ -2,7 +2,12 @@ package com.monadial.waygrid.common.application.util.scodec.codecs
 
 import com.monadial.waygrid.common.application.instances.DurationInstances.given
 import com.monadial.waygrid.common.domain.model.resiliency.RetryPolicy
-import com.monadial.waygrid.common.domain.model.routing.Value.{ DeliveryStrategy, RepeatPolicy, RepeatTimes, RepeatUntilDate }
+import com.monadial.waygrid.common.domain.model.routing.Value.{
+  DeliveryStrategy,
+  RepeatPolicy,
+  RepeatTimes,
+  RepeatUntilDate
+}
 import scodec.*
 import scodec.bits.*
 import scodec.codecs.*
@@ -59,7 +64,9 @@ object DomainRoutingScodecCodecs:
         case RetryPolicy.Exponential(base, maxRetries) =>
           uint8.encode(2).flatMap(b => retryPolicyLinearDataCodec.encode((base, maxRetries)).map(b ++ _))
         case RetryPolicy.BoundedExponential(base, cap, maxRetries) =>
-          uint8.encode(3).flatMap(b => retryPolicyBoundedExponentialDataCodec.encode((base, cap, maxRetries)).map(b ++ _))
+          uint8.encode(3).flatMap(b =>
+            retryPolicyBoundedExponentialDataCodec.encode((base, cap, maxRetries)).map(b ++ _)
+          )
         case RetryPolicy.Fibonacci(base, maxRetries) =>
           uint8.encode(4).flatMap(b => retryPolicyLinearDataCodec.encode((base, maxRetries)).map(b ++ _))
         case RetryPolicy.Polynomial(base, maxRetries, power) =>
@@ -74,26 +81,28 @@ object DomainRoutingScodecCodecs:
         result.value match
           case 0 => Attempt.successful(DecodeResult(RetryPolicy.None, result.remainder))
           case 1 => retryPolicyLinearDataCodec.decode(result.remainder).map(_.map { case (base, maxRetries) =>
-            RetryPolicy.Linear(base, maxRetries)
-          })
+              RetryPolicy.Linear(base, maxRetries)
+            })
           case 2 => retryPolicyLinearDataCodec.decode(result.remainder).map(_.map { case (base, maxRetries) =>
-            RetryPolicy.Exponential(base, maxRetries)
-          })
-          case 3 => retryPolicyBoundedExponentialDataCodec.decode(result.remainder).map(_.map { case (base, cap, maxRetries) =>
-            RetryPolicy.BoundedExponential(base, cap, maxRetries)
-          })
+              RetryPolicy.Exponential(base, maxRetries)
+            })
+          case 3 => retryPolicyBoundedExponentialDataCodec.decode(result.remainder).map(_.map {
+              case (base, cap, maxRetries) =>
+                RetryPolicy.BoundedExponential(base, cap, maxRetries)
+            })
           case 4 => retryPolicyLinearDataCodec.decode(result.remainder).map(_.map { case (base, maxRetries) =>
-            RetryPolicy.Fibonacci(base, maxRetries)
-          })
-          case 5 => retryPolicyPolynomialDataCodec.decode(result.remainder).map(_.map { case (base, maxRetries, power) =>
-            RetryPolicy.Polynomial(base, maxRetries, power)
-          })
+              RetryPolicy.Fibonacci(base, maxRetries)
+            })
+          case 5 => retryPolicyPolynomialDataCodec.decode(result.remainder).map(_.map {
+              case (base, maxRetries, power) =>
+                RetryPolicy.Polynomial(base, maxRetries, power)
+            })
           case 6 => retryPolicyLinearDataCodec.decode(result.remainder).map(_.map { case (base, maxRetries) =>
-            RetryPolicy.DecorrelatedJitter(base, maxRetries)
-          })
+              RetryPolicy.DecorrelatedJitter(base, maxRetries)
+            })
           case 7 => retryPolicyLinearDataCodec.decode(result.remainder).map(_.map { case (base, maxRetries) =>
-            RetryPolicy.FullJitter(base, maxRetries)
-          })
+              RetryPolicy.FullJitter(base, maxRetries)
+            })
           case n => Attempt.failure(Err(s"Unknown RetryPolicy discriminator: $n"))
       }
   )
@@ -156,7 +165,8 @@ object DomainRoutingScodecCodecs:
         result.value match
           case 0 => Attempt.successful(DecodeResult(DeliveryStrategy.Immediate, result.remainder))
           case 1 => durationCodec.decode(result.remainder).map(_.map(DeliveryStrategy.ScheduleAfter(_)))
-          case 2 => int64.decode(result.remainder).map(_.map(ms => DeliveryStrategy.ScheduleAt(Instant.ofEpochMilli(ms))))
+          case 2 =>
+            int64.decode(result.remainder).map(_.map(ms => DeliveryStrategy.ScheduleAt(Instant.ofEpochMilli(ms))))
           case n => Attempt.failure(Err(s"Unknown DeliveryStrategy discriminator: $n"))
       }
   )

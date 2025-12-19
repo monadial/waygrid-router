@@ -81,20 +81,12 @@ object DomainAddressVulcanCodecs:
   /**
    * ServiceAddress encoded as string (URI format).
    */
-  given Codec[ServiceAddress] = summon[Codec[Uri]].imap(
-    uri => ServiceAddress(uri)
-  )(
-    addr => addr.unwrap
-  )
+  given Codec[ServiceAddress] = summon[Codec[Uri]].imap(uri => ServiceAddress(uri))(addr => addr.unwrap)
 
   /**
    * NodeAddress encoded as string (URI format).
    */
-  given Codec[NodeAddress] = summon[Codec[Uri]].imap(
-    uri => NodeAddress(uri)
-  )(
-    addr => addr.unwrap
-  )
+  given Codec[NodeAddress] = summon[Codec[Uri]].imap(uri => NodeAddress(uri))(addr => addr.unwrap)
 
   // ---------------------------------------------------------------------------
   // Endpoint (sealed trait union)

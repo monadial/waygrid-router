@@ -1,6 +1,9 @@
 package com.monadial.waygrid.system.topology.actor
 
-import com.monadial.waygrid.common.application.algebra._
+import cats.Parallel
+import cats.effect.{ Async, Concurrent, Ref, Resource }
+import cats.syntax.all.*
+import com.monadial.waygrid.common.application.algebra.*
 import com.monadial.waygrid.common.application.util.cats.effect.{ FiberT, FiberType }
 import com.monadial.waygrid.common.domain.algebra.value.long.LongValue
 import com.monadial.waygrid.common.domain.value.Address.NodeAddress
@@ -8,10 +11,6 @@ import com.monadial.waygrid.system.topology.domain.model.election.Value.Election
 import com.monadial.waygrid.system.topology.domain.model.election.Value.{ ElectionRole, Leader }
 import com.monadial.waygrid.system.topology.interpreter.RedisTopologyLeaderElection
 import com.monadial.waygrid.system.topology.settings.TopologyServiceSettings
-
-import cats.Parallel
-import cats.effect.{ Async, Concurrent, Ref, Resource }
-import cats.syntax.all._
 import com.suprnation.actor.Actor.ReplyingReceive
 
 type TopologyServerLeaderActor[F[+_]]    = SupervisedActor[F, TopologyServerLeaderMessage]

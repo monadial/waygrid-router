@@ -2,7 +2,11 @@ package com.monadial.waygrid.common.application.util.vulcan.codecs
 
 import cats.syntax.all.*
 import com.monadial.waygrid.common.application.domain.model.envelope.TransportEnvelope
-import com.monadial.waygrid.common.application.domain.model.envelope.Value.{ MessageContent, MessageContentData, MessageContentType }
+import com.monadial.waygrid.common.application.domain.model.envelope.Value.{
+  MessageContent,
+  MessageContentData,
+  MessageContentType
+}
 import com.monadial.waygrid.common.application.util.vulcan.VulcanUtils.given
 import com.monadial.waygrid.common.application.util.vulcan.codecs.DomainAddressVulcanCodecs.given
 import com.monadial.waygrid.common.application.util.vulcan.codecs.DomainPrimitivesVulcanCodecs.given
@@ -34,20 +38,12 @@ object ApplicationTransportEnvelopeVulcanCodecs:
   /**
    * MessageContentType (MIME type string).
    */
-  given Codec[MessageContentType] = Codec.string.imap(
-    str => MessageContentType(str)
-  )(
-    ct => ct.unwrap
-  )
+  given Codec[MessageContentType] = Codec.string.imap(str => MessageContentType(str))(ct => ct.unwrap)
 
   /**
    * MessageContentData (binary content as ByteVector).
    */
-  given Codec[MessageContentData] = summon[Codec[ByteVector]].imap(
-    bv => MessageContentData(bv)
-  )(
-    mcd => mcd.unwrap
-  )
+  given Codec[MessageContentData] = summon[Codec[ByteVector]].imap(bv => MessageContentData(bv))(mcd => mcd.unwrap)
 
   /**
    * MessageContent encoded as Avro record.

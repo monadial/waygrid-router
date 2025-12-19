@@ -40,9 +40,9 @@ object DomainTraversalStateVulcanCodecs:
   }
 
   given Codec[Map[NodeId, RetryAttempt]] =
-    Codec.list[RetryEntry].imap(
-      entries => entries.map(e => e.nodeId -> e.attempt).toMap
-    )(_.toList.map { case (k, v) => RetryEntry(k, v) })
+    Codec.list[RetryEntry].imap(entries => entries.map(e => e.nodeId -> e.attempt).toMap)(_.toList.map { case (k, v) =>
+      RetryEntry(k, v)
+    })
 
   /**
    * Vector[StateEvent] codec as list.

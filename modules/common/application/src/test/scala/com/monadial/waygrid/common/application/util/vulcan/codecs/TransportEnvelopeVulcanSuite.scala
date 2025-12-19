@@ -2,21 +2,36 @@ package com.monadial.waygrid.common.application.util.vulcan.codecs
 
 import cats.Show
 import com.monadial.waygrid.common.application.domain.model.envelope.TransportEnvelope
-import com.monadial.waygrid.common.application.domain.model.envelope.Value.{ MessageContent, MessageContentData, MessageContentType }
+import com.monadial.waygrid.common.application.domain.model.envelope.Value.{
+  MessageContent,
+  MessageContentData,
+  MessageContentType
+}
 import com.monadial.waygrid.common.application.util.vulcan.codecs.ApplicationTransportEnvelopeVulcanCodecs.given
 import com.monadial.waygrid.common.application.util.vulcan.codecs.DomainAddressVulcanCodecs.given
 import com.monadial.waygrid.common.application.util.vulcan.codecs.DomainForkJoinVulcanCodecs.given
 import com.monadial.waygrid.common.application.util.vulcan.codecs.DomainRoutingDagVulcanCodecs.given
 import com.monadial.waygrid.common.application.util.vulcan.codecs.DomainRoutingVulcanCodecs.given
 import com.monadial.waygrid.common.application.util.vulcan.codecs.DomainVectorClockVulcanCodecs.given
-import com.monadial.waygrid.common.domain.model.node.Value.{ NodeComponent, NodeDescriptor, NodeId as ModelNodeId, NodeService }
+import com.monadial.waygrid.common.domain.model.node.Value.{
+  NodeComponent,
+  NodeDescriptor,
+  NodeId as ModelNodeId,
+  NodeService
+}
 import com.monadial.waygrid.common.domain.model.resiliency.RetryPolicy
 import com.monadial.waygrid.common.domain.model.routing.Value.{ DeliveryStrategy, RepeatPolicy }
 import com.monadial.waygrid.common.domain.model.traversal.dag.{ Dag, Edge, JoinStrategy, Node, NodeType }
 import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ EdgeGuard, ForkId }
 import com.monadial.waygrid.common.domain.model.traversal.state.{ BranchResult, BranchStatus }
 import com.monadial.waygrid.common.domain.model.vectorclock.VectorClock
-import com.monadial.waygrid.common.domain.value.Address.{ Endpoint, EndpointDirection, LogicalEndpoint, NodeAddress, PhysicalEndpoint }
+import com.monadial.waygrid.common.domain.value.Address.{
+  Endpoint,
+  EndpointDirection,
+  LogicalEndpoint,
+  NodeAddress,
+  PhysicalEndpoint
+}
 import org.apache.avro.generic.{ GenericDatumReader, GenericDatumWriter }
 import org.apache.avro.io.{ DecoderFactory, EncoderFactory }
 import org.scalacheck.Gen
@@ -181,7 +196,8 @@ object TransportEnvelopeVulcanSuite extends SimpleIOSuite with Checkers:
   private val genMessageContent: Gen[MessageContent] =
     for
       contentType <- Gen.alphaNumStr.map(s => MessageContentType(s"type-${s.take(10)}"))
-      contentData <- Gen.listOf(Gen.choose(0, 255).map(_.toByte)).map(bytes => MessageContentData(ByteVector(bytes.toArray)))
+      contentData <-
+        Gen.listOf(Gen.choose(0, 255).map(_.toByte)).map(bytes => MessageContentData(ByteVector(bytes.toArray)))
     yield MessageContent(contentType, contentData)
 
   private val genBranchStatus: Gen[BranchStatus] =
@@ -266,65 +282,65 @@ object TransportEnvelopeVulcanSuite extends SimpleIOSuite with Checkers:
   // ---------------------------------------------------------------------------
 
   pureTest("RetryPolicy schema can be generated"):
-    val codec = summon[Codec[RetryPolicy]]
-    codec.schema match
-      case Left(err) => failure(s"Failed to generate schema: $err")
-      case Right(_)  => success
+      val codec = summon[Codec[RetryPolicy]]
+      codec.schema match
+        case Left(err) => failure(s"Failed to generate schema: $err")
+        case Right(_)  => success
 
   pureTest("RepeatPolicy schema can be generated"):
-    val codec = summon[Codec[RepeatPolicy]]
-    codec.schema match
-      case Left(err) => failure(s"Failed to generate schema: $err")
-      case Right(_)  => success
+      val codec = summon[Codec[RepeatPolicy]]
+      codec.schema match
+        case Left(err) => failure(s"Failed to generate schema: $err")
+        case Right(_)  => success
 
   pureTest("DeliveryStrategy schema can be generated"):
-    val codec = summon[Codec[DeliveryStrategy]]
-    codec.schema match
-      case Left(err) => failure(s"Failed to generate schema: $err")
-      case Right(_)  => success
+      val codec = summon[Codec[DeliveryStrategy]]
+      codec.schema match
+        case Left(err) => failure(s"Failed to generate schema: $err")
+        case Right(_)  => success
 
   pureTest("JoinStrategy schema can be generated"):
-    val codec = summon[Codec[JoinStrategy]]
-    codec.schema match
-      case Left(err) => failure(s"Failed to generate schema: $err")
-      case Right(_)  => success
+      val codec = summon[Codec[JoinStrategy]]
+      codec.schema match
+        case Left(err) => failure(s"Failed to generate schema: $err")
+        case Right(_)  => success
 
   // Note: EdgeGuard schema test excluded - contains Condition (recursive type)
   // that causes infinite recursion in Vulcan schema generation
 
   pureTest("NodeType schema can be generated"):
-    val codec = summon[Codec[NodeType]]
-    codec.schema match
-      case Left(err) => failure(s"Failed to generate schema: $err")
-      case Right(_)  => success
+      val codec = summon[Codec[NodeType]]
+      codec.schema match
+        case Left(err) => failure(s"Failed to generate schema: $err")
+        case Right(_)  => success
 
   pureTest("VectorClock schema can be generated"):
-    val codec = summon[Codec[VectorClock]]
-    codec.schema match
-      case Left(err) => failure(s"Failed to generate schema: $err")
-      case Right(_)  => success
+      val codec = summon[Codec[VectorClock]]
+      codec.schema match
+        case Left(err) => failure(s"Failed to generate schema: $err")
+        case Right(_)  => success
 
   pureTest("Endpoint schema can be generated"):
-    val codec = summon[Codec[Endpoint]]
-    codec.schema match
-      case Left(err) => failure(s"Failed to generate schema: $err")
-      case Right(_)  => success
+      val codec = summon[Codec[Endpoint]]
+      codec.schema match
+        case Left(err) => failure(s"Failed to generate schema: $err")
+        case Right(_)  => success
 
   // Note: Node, Edge, Dag schema tests excluded - they contain EdgeGuard
   // which contains Condition (recursive type) causing infinite recursion
   // Roundtrip tests use simple EdgeGuard variants that don't trigger recursion
 
   pureTest("BranchStatus schema can be generated"):
-    val codec = summon[Codec[BranchStatus]]
-    codec.schema match
-      case Left(err) => failure(s"Failed to generate schema: $err")
-      case Right(_)  => success
+      val codec = summon[Codec[BranchStatus]]
+      codec.schema match
+        case Left(err) => failure(s"Failed to generate schema: $err")
+        case Right(_)  => success
 
   pureTest("BranchResult schema can be generated"):
-    val codec = summon[Codec[BranchResult]]
-    codec.schema match
-      case Left(err) => failure(s"Failed to generate schema: $err")
-      case Right(_)  => success
+      val codec = summon[Codec[BranchResult]]
+      codec.schema match
+        case Left(err) => failure(s"Failed to generate schema: $err")
+        case Right(_)  => success
 
   // Note: TransportEnvelope schema test excluded - contains stamps which may
   // reference complex recursive types. Roundtrip tests use empty stamps.
@@ -334,83 +350,83 @@ object TransportEnvelopeVulcanSuite extends SimpleIOSuite with Checkers:
   // ---------------------------------------------------------------------------
 
   test("RetryPolicy Avro roundtrip"):
-    forall(genRetryPolicy)(policy => expect(avroRoundtrip(policy)))
+      forall(genRetryPolicy)(policy => expect(avroRoundtrip(policy)))
 
   test("RepeatPolicy Avro roundtrip"):
-    forall(genRepeatPolicy)(policy => expect(avroRoundtrip(policy)))
+      forall(genRepeatPolicy)(policy => expect(avroRoundtrip(policy)))
 
   test("DeliveryStrategy Avro roundtrip"):
-    forall(genDeliveryStrategy)(strategy => expect(avroRoundtrip(strategy)))
+      forall(genDeliveryStrategy)(strategy => expect(avroRoundtrip(strategy)))
 
   test("JoinStrategy Avro roundtrip"):
-    forall(genJoinStrategy)(strategy => expect(avroRoundtrip(strategy)))
+      forall(genJoinStrategy)(strategy => expect(avroRoundtrip(strategy)))
 
   // EdgeGuard roundtrip test excluded - EdgeGuard.Conditional contains Condition (recursive)
   // which causes infinite recursion in Vulcan schema generation
 
   test("NodeType Avro roundtrip"):
-    forall(genNodeType)(nodeType => expect(avroRoundtrip(nodeType)))
+      forall(genNodeType)(nodeType => expect(avroRoundtrip(nodeType)))
 
   // Node and Edge roundtrip tests excluded - contain EdgeGuard which includes
   // Condition (recursive type) causing infinite recursion in schema generation
 
   test("VectorClock Avro roundtrip"):
-    forall(genVectorClock)(vc => expect(avroRoundtrip(vc)))
+      forall(genVectorClock)(vc => expect(avroRoundtrip(vc)))
 
   // Dag roundtrip test excluded - contains Edge which has EdgeGuard
   // which includes Condition (recursive type)
 
   test("Endpoint Avro roundtrip"):
-    forall(genEndpoint)(endpoint => expect(avroRoundtrip(endpoint)))
+      forall(genEndpoint)(endpoint => expect(avroRoundtrip(endpoint)))
 
   test("MessageContent Avro roundtrip"):
-    forall(genMessageContent)(mc => expect(avroRoundtrip(mc)))
+      forall(genMessageContent)(mc => expect(avroRoundtrip(mc)))
 
   test("BranchStatus Avro roundtrip"):
-    forall(genBranchStatus)(status => expect(avroRoundtrip(status)))
+      forall(genBranchStatus)(status => expect(avroRoundtrip(status)))
 
   test("BranchResult Avro roundtrip"):
-    forall(genBranchResult)(result => expect(avroRoundtrip(result)))
+      forall(genBranchResult)(result => expect(avroRoundtrip(result)))
 
   // ---------------------------------------------------------------------------
   // Edge case tests
   // ---------------------------------------------------------------------------
 
   pureTest("NodeType.Standard roundtrips"):
-    expect(avroRoundtrip(NodeType.Standard))
+      expect(avroRoundtrip(NodeType.Standard))
 
   pureTest("NodeType.Fork roundtrips"):
-    expect(avroRoundtrip(NodeType.Fork(ForkId.unsafeFrom("test-fork"))))
+      expect(avroRoundtrip(NodeType.Fork(ForkId.unsafeFrom("test-fork"))))
 
   pureTest("NodeType.Join roundtrips"):
-    val nodeType = NodeType.Join(
-      ForkId.unsafeFrom("test-fork"),
-      JoinStrategy.Quorum(2),
-      Some(5.seconds)
-    )
-    expect(avroRoundtrip(nodeType))
+      val nodeType = NodeType.Join(
+        ForkId.unsafeFrom("test-fork"),
+        JoinStrategy.Quorum(2),
+        Some(5.seconds)
+      )
+      expect(avroRoundtrip(nodeType))
 
   pureTest("BranchResult.Timeout roundtrips"):
-    expect(avroRoundtrip(BranchResult.Timeout))
+      expect(avroRoundtrip(BranchResult.Timeout))
 
   pureTest("BranchResult.Failure roundtrips"):
-    expect(avroRoundtrip(BranchResult.Failure("test error")))
+      expect(avroRoundtrip(BranchResult.Failure("test error")))
 
   pureTest("BranchResult.Success roundtrips"):
-    expect(avroRoundtrip(BranchResult.Success(Some(io.circe.Json.obj("key" -> io.circe.Json.fromString("value"))))))
+      expect(avroRoundtrip(BranchResult.Success(Some(io.circe.Json.obj("key" -> io.circe.Json.fromString("value"))))))
 
   pureTest("Empty VectorClock roundtrips"):
-    val vc = VectorClock(SortedMap.empty)
-    expect(avroRoundtrip(vc))
+      val vc = VectorClock(SortedMap.empty)
+      expect(avroRoundtrip(vc))
 
   pureTest("Empty MessageContent roundtrips"):
-    val mc = MessageContent(MessageContentType("empty"), MessageContentData(ByteVector.empty))
-    expect(avroRoundtrip(mc))
+      val mc = MessageContent(MessageContentType("empty"), MessageContentData(ByteVector.empty))
+      expect(avroRoundtrip(mc))
 
   pureTest("EdgeGuard.OnSuccess roundtrips"):
-    expect(avroRoundtrip(EdgeGuard.OnSuccess))
+      expect(avroRoundtrip(EdgeGuard.OnSuccess))
 
   pureTest("EdgeGuard.Conditional roundtrips"):
-    import com.monadial.waygrid.common.domain.model.traversal.condition.Condition
-    val guard = EdgeGuard.Conditional(Condition.And(List(Condition.Always, Condition.Not(Condition.Always))))
-    expect(avroRoundtrip(guard))
+      import com.monadial.waygrid.common.domain.model.traversal.condition.Condition
+      val guard = EdgeGuard.Conditional(Condition.And(List(Condition.Always, Condition.Not(Condition.Always))))
+      expect(avroRoundtrip(guard))

@@ -1,8 +1,7 @@
 package com.monadial.waygrid.system.topology.interpreter
 
-import com.monadial.waygrid.system.topology.algebra.TopologySnapshotStore
-
 import cats.effect.Resource
+import com.monadial.waygrid.system.topology.algebra.TopologySnapshotStore
 import doobie.hikari.HikariTransactor
 
 object DoobieTopologySnapshotStore:
