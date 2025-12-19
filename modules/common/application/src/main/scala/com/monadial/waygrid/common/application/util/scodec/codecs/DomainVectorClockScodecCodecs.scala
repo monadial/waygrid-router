@@ -33,18 +33,18 @@ object DomainVectorClockScodecCodecs:
 
     override def encode(value: SortedMap[NodeAddress, Long]): Attempt[BitVector] =
       for
-        countBits   <- int32.encode(value.size)
+        countBits <- int32.encode(value.size)
         entriesBits <- value.toList.foldLeft(Attempt.successful(BitVector.empty)) { (acc, entry) =>
-                         acc.flatMap(bits => entryCodec.encode(entry).map(bits ++ _))
-                       }
+          acc.flatMap(bits => entryCodec.encode(entry).map(bits ++ _))
+        }
       yield countBits ++ entriesBits
 
     override def decode(bits: BitVector): Attempt[DecodeResult[SortedMap[NodeAddress, Long]]] =
       for
         countResult <- int32.decode(bits)
-        count        = countResult.value
-        remaining    = countResult.remainder
-        result      <- decodeEntries(remaining, count, List.empty)
+        count     = countResult.value
+        remaining = countResult.remainder
+        result <- decodeEntries(remaining, count, List.empty)
       yield result.map(entries => SortedMap.from(entries))
 
     private def decodeEntries(

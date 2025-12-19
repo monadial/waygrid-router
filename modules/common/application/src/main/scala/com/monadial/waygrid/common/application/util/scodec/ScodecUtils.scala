@@ -31,9 +31,9 @@ object ScodecUtils:
    * }}}
    */
   def enumCodec[A](mappings: (A, Int)*): Codec[A] =
-    val toDiscriminator = mappings.toMap
+    val toDiscriminator   = mappings.toMap
     val fromDiscriminator = mappings.map(_.swap).toMap
-    val typeName = mappings.headOption.map(_._1.getClass.getSimpleName.stripSuffix("$")).getOrElse("Unknown")
+    val typeName          = mappings.headOption.map(_._1.getClass.getSimpleName.stripSuffix("$")).getOrElse("Unknown")
 
     Codec[A](
       (a: A) =>
@@ -73,16 +73,24 @@ object ScodecUtils:
       )
       new DiscriminatedCodecBuilder(variants :+ variant)
 
-    def variant[B](discriminator: Int, construct: B => A, extract: A => B)(using codec: Codec[B]): DiscriminatedCodecBuilder[A] =
+    def variant[B](discriminator: Int, construct: B => A, extract: A => B)(using
+      codec: Codec[B]
+    ): DiscriminatedCodecBuilder[A] =
       val variant = VariantCodec[A](
         discriminator,
-        a => scala.util.Try(extract(a)).isSuccess && a.getClass.getSimpleName.contains(construct.getClass.getSimpleName.takeWhile(_ != '$')),
+        a =>
+          scala.util.Try(
+            extract(a)
+          ).isSuccess && a.getClass.getSimpleName.contains(construct.getClass.getSimpleName.takeWhile(_ != '$')),
         a => uint8.encode(discriminator).flatMap(d => codec.encode(extract(a)).map(d ++ _)),
         bits => codec.decode(bits).map(_.map(construct))
       )
       new DiscriminatedCodecBuilder(variants :+ variant)
 
-    def variantBy[B <: A](discriminator: Int)(using codec: Codec[B], ct: reflect.ClassTag[B]): DiscriminatedCodecBuilder[A] =
+    def variantBy[B <: A](discriminator: Int)(using
+      codec: Codec[B],
+      ct: reflect.ClassTag[B]
+    ): DiscriminatedCodecBuilder[A] =
       val variant = VariantCodec[A](
         discriminator,
         a => ct.runtimeClass.isInstance(a),

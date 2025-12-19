@@ -18,7 +18,7 @@ import com.monadial.waygrid.common.domain.model.envelope.DomainEnvelope
 import com.monadial.waygrid.common.domain.value.Address.Endpoint
 import fs2.Stream
 import fs2.kafka.*
-import fs2.kafka.vulcan.{ avroSerializer, AvroSettings, SchemaRegistryClientSettings }
+import fs2.kafka.vulcan.{ AvroSettings, SchemaRegistryClientSettings, avroSerializer }
 import org.typelevel.otel4s.context.propagation.TextMapUpdater
 import org.typelevel.otel4s.experimental.metrics.InstrumentedQueue
 import org.typelevel.otel4s.metrics.{ Counter, Histogram, Meter, UpDownCounter }

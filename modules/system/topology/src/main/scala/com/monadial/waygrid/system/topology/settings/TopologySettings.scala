@@ -1,5 +1,7 @@
 package com.monadial.waygrid.system.topology.settings
 
+import scala.concurrent.duration.Duration
+
 import com.monadial.waygrid.common.application.domain.model.settings.{
   EventStreamSettings,
   HttpServerSettings,
@@ -8,9 +10,6 @@ import com.monadial.waygrid.common.application.domain.model.settings.{
 }
 import com.monadial.waygrid.common.application.instances.DurationInstances.given
 import com.monadial.waygrid.common.application.instances.OdinLoggerInstances.given
-
-import scala.concurrent.duration.Duration
-
 import io.circe.Codec
 import io.odin.Level
 

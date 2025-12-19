@@ -38,9 +38,11 @@ object DomainTraversalStateScodecCodecs:
   given Codec[RemainingNodes] = int32.xmap(RemainingNodes(_), _.unwrap)
   given Codec[RetryAttempt]   = int32.xmap(RetryAttempt(_), _.unwrap)
   given Codec[StateVersion]   = int64.xmap(StateVersion(_), _.unwrap)
-  given Codec[NodeAddress]    = variableSizeBytes(int32, utf8).xmap(s => NodeAddress(Uri.unsafeFromString(s)), _.unwrap.renderString)
+  given Codec[NodeAddress] =
+    variableSizeBytes(int32, utf8).xmap(s => NodeAddress(Uri.unsafeFromString(s)), _.unwrap.renderString)
 
-  private given jsonCodec: Codec[Json]       = variableSizeBytes(int32, utf8).xmap(s => parse(s).getOrElse(Json.Null), _.noSpaces)
+  private given jsonCodec: Codec[Json] =
+    variableSizeBytes(int32, utf8).xmap(s => parse(s).getOrElse(Json.Null), _.noSpaces)
   private given instantCodec: Codec[Instant] = int64.xmap(Instant.ofEpochMilli, _.toEpochMilli)
   private given stringCodec: Codec[String]   = variableSizeBytes(int32, utf8)
 
@@ -63,7 +65,8 @@ object DomainTraversalStateScodecCodecs:
 
   given Codec[BranchResult] = Codec[BranchResult](
     {
-      case BranchResult.Success(output) => uint8.encode(0).flatMap(d => optional(bool, jsonCodec).encode(output).map(d ++ _))
+      case BranchResult.Success(output) =>
+        uint8.encode(0).flatMap(d => optional(bool, jsonCodec).encode(output).map(d ++ _))
       case BranchResult.Failure(reason) => uint8.encode(1).flatMap(d => stringCodec.encode(reason).map(d ++ _))
       case BranchResult.Timeout         => uint8.encode(2)
     },
@@ -125,7 +128,17 @@ object DomainTraversalStateScodecCodecs:
       { case (joinNodeId, forkId, strategy, required, completed, failed, canceled, timeout) =>
         PendingJoin(joinNodeId, forkId, strategy, required, completed, failed, canceled, timeout)
       },
-      pj => (pj.joinNodeId, pj.forkId, pj.strategy, pj.requiredBranches, pj.completedBranches, pj.failedBranches, pj.canceledBranches, pj.timeout)
+      pj =>
+        (
+          pj.joinNodeId,
+          pj.forkId,
+          pj.strategy,
+          pj.requiredBranches,
+          pj.completedBranches,
+          pj.failedBranches,
+          pj.canceledBranches,
+          pj.timeout
+        )
     )
 
   given mapNodeIdPendingJoinCodec: Codec[Map[NodeId, PendingJoin]] = mapCodec[NodeId, PendingJoin]
@@ -159,7 +172,10 @@ object DomainTraversalStateScodecCodecs:
     )
 
   private val traversalFailedCodec: Codec[TraversalFailed] =
-    (summon[Codec[NodeId]] :: summon[Codec[NodeAddress]] :: summon[Codec[VectorClock]] :: optional(bool, stringCodec)).xmap(
+    (summon[Codec[NodeId]] :: summon[Codec[NodeAddress]] :: summon[Codec[VectorClock]] :: optional(
+      bool,
+      stringCodec
+    )).xmap(
       { case (node, actor, vc, reason) => TraversalFailed(node, actor, vc, reason) },
       e => (e.node, e.actor, e.vectorClock, e.reason)
     )
@@ -171,7 +187,9 @@ object DomainTraversalStateScodecCodecs:
     )
 
   private val nodeTraversalRetriedCodec: Codec[NodeTraversalRetried] =
-    (summon[Codec[NodeId]] :: summon[Codec[NodeAddress]] :: summon[Codec[RetryAttempt]] :: summon[Codec[VectorClock]]).xmap(
+    (summon[
+      Codec[NodeId]
+    ] :: summon[Codec[NodeAddress]] :: summon[Codec[RetryAttempt]] :: summon[Codec[VectorClock]]).xmap(
       { case (node, actor, attempt, vc) => NodeTraversalRetried(node, actor, attempt, vc) },
       e => (e.node, e.actor, e.attempt, e.vectorClock)
     )
@@ -183,74 +201,105 @@ object DomainTraversalStateScodecCodecs:
     )
 
   private val nodeTraversalFailedCodec: Codec[NodeTraversalFailed] =
-    (summon[Codec[NodeId]] :: summon[Codec[NodeAddress]] :: summon[Codec[VectorClock]] :: optional(bool, stringCodec)).xmap(
+    (summon[Codec[NodeId]] :: summon[Codec[NodeAddress]] :: summon[Codec[VectorClock]] :: optional(
+      bool,
+      stringCodec
+    )).xmap(
       { case (node, actor, vc, reason) => NodeTraversalFailed(node, actor, vc, reason) },
       e => (e.node, e.actor, e.vectorClock, e.reason)
     )
 
   private val forkStartedCodec: Codec[ForkStarted] =
-    (summon[Codec[NodeId]] :: summon[Codec[ForkId]] :: setBranchIdCodec :: summon[Codec[NodeAddress]] :: summon[Codec[VectorClock]]).xmap(
+    (summon[
+      Codec[NodeId]
+    ] :: summon[Codec[ForkId]] :: setBranchIdCodec :: summon[Codec[NodeAddress]] :: summon[Codec[VectorClock]]).xmap(
       { case (node, forkId, branches, actor, vc) => ForkStarted(node, forkId, branches, actor, vc) },
       e => (e.node, e.forkId, e.branches, e.actor, e.vectorClock)
     )
 
   private val branchStartedCodec: Codec[BranchStarted] =
-    (summon[Codec[NodeId]] :: summon[Codec[BranchId]] :: summon[Codec[ForkId]] :: summon[Codec[NodeAddress]] :: summon[Codec[VectorClock]]).xmap(
+    (summon[Codec[NodeId]] :: summon[
+      Codec[BranchId]
+    ] :: summon[Codec[ForkId]] :: summon[Codec[NodeAddress]] :: summon[Codec[VectorClock]]).xmap(
       { case (node, branchId, forkId, actor, vc) => BranchStarted(node, branchId, forkId, actor, vc) },
       e => (e.node, e.branchId, e.forkId, e.actor, e.vectorClock)
     )
 
   private val branchAdvancedCodec: Codec[BranchAdvanced] =
-    (summon[Codec[NodeId]] :: summon[Codec[BranchId]] :: summon[Codec[ForkId]] :: summon[Codec[NodeAddress]] :: summon[Codec[VectorClock]]).xmap(
+    (summon[Codec[NodeId]] :: summon[
+      Codec[BranchId]
+    ] :: summon[Codec[ForkId]] :: summon[Codec[NodeAddress]] :: summon[Codec[VectorClock]]).xmap(
       { case (node, branchId, forkId, actor, vc) => BranchAdvanced(node, branchId, forkId, actor, vc) },
       e => (e.node, e.branchId, e.forkId, e.actor, e.vectorClock)
     )
 
   private val branchCompletedCodec: Codec[BranchCompleted] =
-    (summon[Codec[NodeId]] :: summon[Codec[BranchId]] :: summon[Codec[ForkId]] :: summon[Codec[BranchResult]] :: summon[Codec[NodeAddress]] :: summon[Codec[VectorClock]]).xmap(
-      { case (node, branchId, forkId, result, actor, vc) => BranchCompleted(node, branchId, forkId, result, actor, vc) },
+    (summon[Codec[NodeId]] :: summon[Codec[BranchId]] :: summon[
+      Codec[ForkId]
+    ] :: summon[Codec[BranchResult]] :: summon[Codec[NodeAddress]] :: summon[Codec[VectorClock]]).xmap(
+      { case (node, branchId, forkId, result, actor, vc) =>
+        BranchCompleted(node, branchId, forkId, result, actor, vc)
+      },
       e => (e.node, e.branchId, e.forkId, e.result, e.actor, e.vectorClock)
     )
 
   private val branchCanceledCodec: Codec[BranchCanceled] =
-    (summon[Codec[NodeId]] :: summon[Codec[BranchId]] :: summon[Codec[ForkId]] :: stringCodec :: summon[Codec[NodeAddress]] :: summon[Codec[VectorClock]]).xmap(
+    (summon[Codec[NodeId]] :: summon[
+      Codec[BranchId]
+    ] :: summon[Codec[ForkId]] :: stringCodec :: summon[Codec[NodeAddress]] :: summon[Codec[VectorClock]]).xmap(
       { case (node, branchId, forkId, reason, actor, vc) => BranchCanceled(node, branchId, forkId, reason, actor, vc) },
       e => (e.node, e.branchId, e.forkId, e.reason, e.actor, e.vectorClock)
     )
 
   private val branchTimedOutCodec: Codec[BranchTimedOut] =
-    (summon[Codec[NodeId]] :: summon[Codec[BranchId]] :: summon[Codec[ForkId]] :: summon[Codec[NodeAddress]] :: summon[Codec[VectorClock]]).xmap(
+    (summon[Codec[NodeId]] :: summon[
+      Codec[BranchId]
+    ] :: summon[Codec[ForkId]] :: summon[Codec[NodeAddress]] :: summon[Codec[VectorClock]]).xmap(
       { case (node, branchId, forkId, actor, vc) => BranchTimedOut(node, branchId, forkId, actor, vc) },
       e => (e.node, e.branchId, e.forkId, e.actor, e.vectorClock)
     )
 
   private val joinReachedCodec: Codec[JoinReached] =
-    (summon[Codec[NodeId]] :: summon[Codec[BranchId]] :: summon[Codec[ForkId]] :: summon[Codec[NodeAddress]] :: summon[Codec[VectorClock]]).xmap(
+    (summon[Codec[NodeId]] :: summon[
+      Codec[BranchId]
+    ] :: summon[Codec[ForkId]] :: summon[Codec[NodeAddress]] :: summon[Codec[VectorClock]]).xmap(
       { case (node, branchId, forkId, actor, vc) => JoinReached(node, branchId, forkId, actor, vc) },
       e => (e.node, e.branchId, e.forkId, e.actor, e.vectorClock)
     )
 
   private val joinCompletedCodec: Codec[JoinCompleted] =
-    (summon[Codec[NodeId]] :: summon[Codec[ForkId]] :: setBranchIdCodec :: summon[Codec[NodeAddress]] :: summon[Codec[VectorClock]]).xmap(
+    (summon[
+      Codec[NodeId]
+    ] :: summon[Codec[ForkId]] :: setBranchIdCodec :: summon[Codec[NodeAddress]] :: summon[Codec[VectorClock]]).xmap(
       { case (node, forkId, completed, actor, vc) => JoinCompleted(node, forkId, completed, actor, vc) },
       e => (e.node, e.forkId, e.completedBranches, e.actor, e.vectorClock)
     )
 
   private val joinTimedOutCodec: Codec[JoinTimedOut] =
-    (summon[Codec[NodeId]] :: summon[Codec[ForkId]] :: setBranchIdCodec :: summon[Codec[NodeAddress]] :: summon[Codec[VectorClock]]).xmap(
+    (summon[
+      Codec[NodeId]
+    ] :: summon[Codec[ForkId]] :: setBranchIdCodec :: summon[Codec[NodeAddress]] :: summon[Codec[VectorClock]]).xmap(
       { case (node, forkId, pending, actor, vc) => JoinTimedOut(node, forkId, pending, actor, vc) },
       e => (e.node, e.forkId, e.pendingBranches, e.actor, e.vectorClock)
     )
 
   private val traversalTimeoutScheduledCodec: Codec[TraversalTimeoutScheduled] =
-    (summon[Codec[NodeId]] :: stringCodec :: instantCodec :: summon[Codec[NodeAddress]] :: summon[Codec[VectorClock]]).xmap(
-      { case (node, timeoutId, deadline, actor, vc) => TraversalTimeoutScheduled(node, timeoutId, deadline, actor, vc) },
+    (summon[
+      Codec[NodeId]
+    ] :: stringCodec :: instantCodec :: summon[Codec[NodeAddress]] :: summon[Codec[VectorClock]]).xmap(
+      { case (node, timeoutId, deadline, actor, vc) =>
+        TraversalTimeoutScheduled(node, timeoutId, deadline, actor, vc)
+      },
       e => (e.node, e.timeoutId, e.deadline, e.actor, e.vectorClock)
     )
 
   private val traversalTimedOutCodec: Codec[TraversalTimedOut] =
-    (summon[Codec[NodeId]] :: setNodeIdCodec :: setBranchIdCodec :: summon[Codec[NodeAddress]] :: summon[Codec[VectorClock]]).xmap(
-      { case (node, activeNodes, activeBranches, actor, vc) => TraversalTimedOut(node, activeNodes, activeBranches, actor, vc) },
+    (summon[
+      Codec[NodeId]
+    ] :: setNodeIdCodec :: setBranchIdCodec :: summon[Codec[NodeAddress]] :: summon[Codec[VectorClock]]).xmap(
+      { case (node, activeNodes, activeBranches, actor, vc) =>
+        TraversalTimedOut(node, activeNodes, activeBranches, actor, vc)
+      },
       e => (e.node, e.activeNodes, e.activeBranches, e.actor, e.vectorClock)
     )
 
@@ -297,8 +346,55 @@ object DomainTraversalStateScodecCodecs:
       mapNodeIdBranchIdCodec ::
       optional(bool, stringCodec) ::
       summon[Codec[StateVersion]]).xmap(
-      { case (traversalId, active, completed, failed, retries, vectorClock, history, remainingNodes, forkScopes, branchStates, pendingJoins, nodeToBranch, traversalTimeoutId, stateVersion) =>
-        TraversalState(traversalId, active, completed, failed, retries, vectorClock, history, remainingNodes, forkScopes, branchStates, pendingJoins, nodeToBranch, traversalTimeoutId, stateVersion)
+      {
+        case (
+              traversalId,
+              active,
+              completed,
+              failed,
+              retries,
+              vectorClock,
+              history,
+              remainingNodes,
+              forkScopes,
+              branchStates,
+              pendingJoins,
+              nodeToBranch,
+              traversalTimeoutId,
+              stateVersion
+            ) =>
+          TraversalState(
+            traversalId,
+            active,
+            completed,
+            failed,
+            retries,
+            vectorClock,
+            history,
+            remainingNodes,
+            forkScopes,
+            branchStates,
+            pendingJoins,
+            nodeToBranch,
+            traversalTimeoutId,
+            stateVersion
+          )
       },
-      ts => (ts.traversalId, ts.active, ts.completed, ts.failed, ts.retries, ts.vectorClock, ts.history, ts.remainingNodes, ts.forkScopes, ts.branchStates, ts.pendingJoins, ts.nodeToBranch, ts.traversalTimeoutId, ts.stateVersion)
+      ts =>
+        (
+          ts.traversalId,
+          ts.active,
+          ts.completed,
+          ts.failed,
+          ts.retries,
+          ts.vectorClock,
+          ts.history,
+          ts.remainingNodes,
+          ts.forkScopes,
+          ts.branchStates,
+          ts.pendingJoins,
+          ts.nodeToBranch,
+          ts.traversalTimeoutId,
+          ts.stateVersion
+        )
     )

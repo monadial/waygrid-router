@@ -28,11 +28,7 @@ object VulcanUtils:
    * ULIDs are 128-bit identifiers that encode timestamp + randomness.
    * We use the raw binary format for compactness and consistent ordering.
    */
-  given Codec[ULID] = Codec.bytes.imap(
-    bytes => ULID.fromBytes(bytes)
-  )(
-    ulid => ulid.toBytes
-  )
+  given Codec[ULID] = Codec.bytes.imap(bytes => ULID.fromBytes(bytes))(ulid => ulid.toBytes)
 
   /**
    * http4s URI codec using string representation.
@@ -40,11 +36,7 @@ object VulcanUtils:
    * URIs are stored as their string form for readability and
    * compatibility with other systems consuming the Avro data.
    */
-  given Codec[Uri] = Codec.string.imap(
-    str => Uri.unsafeFromString(str)
-  )(
-    uri => uri.renderString
-  )
+  given Codec[Uri] = Codec.string.imap(str => Uri.unsafeFromString(str))(uri => uri.renderString)
 
   /**
    * Instant codec using epoch milliseconds.
@@ -52,22 +44,14 @@ object VulcanUtils:
    * Avro has native timestamp-millis logical type, but we use long directly
    * for simplicity and cross-language compatibility.
    */
-  given Codec[Instant] = Codec.long.imap(
-    millis => Instant.ofEpochMilli(millis)
-  )(
-    instant => instant.toEpochMilli
-  )
+  given Codec[Instant] = Codec.long.imap(millis => Instant.ofEpochMilli(millis))(instant => instant.toEpochMilli)
 
   /**
    * ByteVector codec using Avro bytes.
    *
    * scodec ByteVector maps directly to Avro's bytes type.
    */
-  given Codec[ByteVector] = Codec.bytes.imap(
-    bytes => ByteVector(bytes)
-  )(
-    bv => bv.toArray
-  )
+  given Codec[ByteVector] = Codec.bytes.imap(bytes => ByteVector(bytes))(bv => bv.toArray)
 
   /**
    * FiniteDuration codec using nanoseconds as long.
@@ -75,8 +59,5 @@ object VulcanUtils:
    * We store as nanoseconds to preserve full precision.
    * On decode, we construct a Duration from nanos.
    */
-  given Codec[scala.concurrent.duration.FiniteDuration] = Codec.long.imap(
-    nanos => scala.concurrent.duration.Duration.fromNanos(nanos)
-  )(
-    duration => duration.toNanos
-  )
+  given Codec[scala.concurrent.duration.FiniteDuration] =
+    Codec.long.imap(nanos => scala.concurrent.duration.Duration.fromNanos(nanos))(duration => duration.toNanos)

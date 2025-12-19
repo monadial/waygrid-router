@@ -290,9 +290,9 @@ object DomainRoutingVulcanCodecs:
       unionCodec.schema,
       (ds: DeliveryStrategy) =>
         ds match
-          case DeliveryStrategy.Immediate      => immediateCodec.encode(DeliveryStrategy.Immediate)
+          case DeliveryStrategy.Immediate        => immediateCodec.encode(DeliveryStrategy.Immediate)
           case v: DeliveryStrategy.ScheduleAfter => scheduleAfterCodec.encode(v)
-          case v: DeliveryStrategy.ScheduleAt  => scheduleAtCodec.encode(v),
+          case v: DeliveryStrategy.ScheduleAt    => scheduleAtCodec.encode(v),
       unionCodec.decode
     )
     result

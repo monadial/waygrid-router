@@ -6,7 +6,13 @@ import com.monadial.waygrid.common.application.util.vulcan.codecs.DomainPrimitiv
 import com.monadial.waygrid.common.application.util.vulcan.codecs.DomainRoutingDagVulcanCodecs.given
 import com.monadial.waygrid.common.domain.model.traversal.dag.JoinStrategy
 import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ BranchId, ForkId, NodeId }
-import com.monadial.waygrid.common.domain.model.traversal.state.{ BranchResult, BranchState, BranchStatus, ForkScope, PendingJoin }
+import com.monadial.waygrid.common.domain.model.traversal.state.{
+  BranchResult,
+  BranchState,
+  BranchStatus,
+  ForkScope,
+  PendingJoin
+}
 import io.circe.Json
 import vulcan.Codec
 
@@ -58,12 +64,11 @@ object DomainForkJoinVulcanCodecs:
    * Json codec using string representation.
    * Circe Json is serialized as its string form.
    */
-  private given Codec[Json] = Codec.string.imapError(
-    str =>
-      io.circe.parser
-        .parse(str)
-        .left
-        .map(e => vulcan.AvroError(s"Invalid JSON: ${e.getMessage}"))
+  private given Codec[Json] = Codec.string.imapError(str =>
+    io.circe.parser
+      .parse(str)
+      .left
+      .map(e => vulcan.AvroError(s"Invalid JSON: ${e.getMessage}"))
   )(_.noSpaces)
 
   /**
@@ -219,25 +224,19 @@ object DomainForkJoinVulcanCodecs:
    * Map[ForkId, ForkScope] codec as list.
    */
   given forkScopeMapCodec: Codec[Map[ForkId, ForkScope]] =
-    Codec.list[ForkScope].imap(
-      scopes => scopes.map(s => s.forkId -> s).toMap
-    )(_.values.toList)
+    Codec.list[ForkScope].imap(scopes => scopes.map(s => s.forkId -> s).toMap)(_.values.toList)
 
   /**
    * Map[BranchId, BranchState] codec as list.
    */
   given branchStateMapCodec: Codec[Map[BranchId, BranchState]] =
-    Codec.list[BranchState].imap(
-      states => states.map(s => s.branchId -> s).toMap
-    )(_.values.toList)
+    Codec.list[BranchState].imap(states => states.map(s => s.branchId -> s).toMap)(_.values.toList)
 
   /**
    * Map[NodeId, PendingJoin] codec as list.
    */
   given pendingJoinMapCodec: Codec[Map[NodeId, PendingJoin]] =
-    Codec.list[PendingJoin].imap(
-      joins => joins.map(j => j.joinNodeId -> j).toMap
-    )(_.values.toList)
+    Codec.list[PendingJoin].imap(joins => joins.map(j => j.joinNodeId -> j).toMap)(_.values.toList)
 
   /**
    * Map[NodeId, BranchId] codec as list of entries.
@@ -254,6 +253,6 @@ object DomainForkJoinVulcanCodecs:
   }
 
   given nodeToBranchMapCodec: Codec[Map[NodeId, BranchId]] =
-    Codec.list[NodeToBranchEntry].imap(
-      entries => entries.map(e => e.nodeId -> e.branchId).toMap
-    )(_.toList.map { case (k, v) => NodeToBranchEntry(k, v) })
+    Codec.list[NodeToBranchEntry].imap(entries => entries.map(e => e.nodeId -> e.branchId).toMap)(_.toList.map {
+      case (k, v) => NodeToBranchEntry(k, v)
+    })

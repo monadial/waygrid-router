@@ -97,12 +97,12 @@ object DomainRoutingDagScodecCodecs:
   given Codec[EdgeGuard] = Codec[EdgeGuard](
     (guard: EdgeGuard) =>
       guard match
-        case EdgeGuard.OnSuccess       => uint8.encode(0)
-        case EdgeGuard.OnFailure       => uint8.encode(1)
-        case EdgeGuard.Always          => uint8.encode(2)
-        case EdgeGuard.OnAny           => uint8.encode(3)
-        case EdgeGuard.OnTimeout       => uint8.encode(4)
-        case c: EdgeGuard.Conditional  => uint8.encode(5).flatMap(b => conditionCodec.encode(c.condition).map(b ++ _))
+        case EdgeGuard.OnSuccess      => uint8.encode(0)
+        case EdgeGuard.OnFailure      => uint8.encode(1)
+        case EdgeGuard.Always         => uint8.encode(2)
+        case EdgeGuard.OnAny          => uint8.encode(3)
+        case EdgeGuard.OnTimeout      => uint8.encode(4)
+        case c: EdgeGuard.Conditional => uint8.encode(5).flatMap(b => conditionCodec.encode(c.condition).map(b ++ _))
     ,
     (bits: BitVector) =>
       uint8.decode(bits).flatMap { result =>
@@ -124,8 +124,8 @@ object DomainRoutingDagScodecCodecs:
   given Codec[JoinStrategy] = Codec[JoinStrategy](
     (strategy: JoinStrategy) =>
       strategy match
-        case JoinStrategy.And      => uint8.encode(0)
-        case JoinStrategy.Or       => uint8.encode(1)
+        case JoinStrategy.And       => uint8.encode(0)
+        case JoinStrategy.Or        => uint8.encode(1)
         case JoinStrategy.Quorum(n) => uint8.encode(2).flatMap(b => int32.encode(n).map(b ++ _))
     ,
     (bits: BitVector) =>
@@ -210,18 +210,18 @@ object DomainRoutingDagScodecCodecs:
 
     override def encode(value: Map[NodeId, Node]): Attempt[BitVector] =
       for
-        countBits   <- int32.encode(value.size)
+        countBits <- int32.encode(value.size)
         entriesBits <- value.toList.foldLeft(Attempt.successful(BitVector.empty)) { (acc, entry) =>
-                         acc.flatMap(bits => entryCodec.encode(entry).map(bits ++ _))
-                       }
+          acc.flatMap(bits => entryCodec.encode(entry).map(bits ++ _))
+        }
       yield countBits ++ entriesBits
 
     override def decode(bits: BitVector): Attempt[DecodeResult[Map[NodeId, Node]]] =
       for
         countResult <- int32.decode(bits)
-        count        = countResult.value
-        remaining    = countResult.remainder
-        result      <- decodeEntries(remaining, count, List.empty)
+        count     = countResult.value
+        remaining = countResult.remainder
+        result <- decodeEntries(remaining, count, List.empty)
       yield result.map(_.toMap)
 
     private def decodeEntries(
@@ -247,19 +247,19 @@ object DomainRoutingDagScodecCodecs:
       for
         countBits <- int32.encode(list.size)
         itemsBits <- list.foldLeft(Attempt.successful(BitVector.empty)) { (acc, nodeId) =>
-                       acc.flatMap(bits => nodeIdCodec.encode(nodeId).map(bits ++ _))
-                     }
+          acc.flatMap(bits => nodeIdCodec.encode(nodeId).map(bits ++ _))
+        }
       yield countBits ++ itemsBits
 
     override def decode(bits: BitVector): Attempt[DecodeResult[NonEmptyList[NodeId]]] =
       for
         countResult <- int32.decode(bits)
-        count        = countResult.value
-        remaining    = countResult.remainder
-        result      <- decodeItems(remaining, count, List.empty)
+        count     = countResult.value
+        remaining = countResult.remainder
+        result <- decodeItems(remaining, count, List.empty)
         nel <- result.value match
-                 case h :: t => Attempt.successful(DecodeResult(NonEmptyList(h, t), result.remainder))
-                 case Nil    => Attempt.failure(Err("NonEmptyList cannot be empty"))
+          case h :: t => Attempt.successful(DecodeResult(NonEmptyList(h, t), result.remainder))
+          case Nil    => Attempt.failure(Err("NonEmptyList cannot be empty"))
       yield nel
 
     private def decodeItems(

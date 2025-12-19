@@ -1,7 +1,12 @@
 package com.monadial.waygrid.common.application.util.scodec.codecs
 
 import com.monadial.waygrid.common.domain.model.node.Value.{ NodeComponent, NodeDescriptor, NodeId, NodeService }
-import com.monadial.waygrid.common.domain.value.Address.{ Endpoint, EndpointDirection, LogicalEndpoint, PhysicalEndpoint }
+import com.monadial.waygrid.common.domain.value.Address.{
+  Endpoint,
+  EndpointDirection,
+  LogicalEndpoint,
+  PhysicalEndpoint
+}
 import scodec.*
 import scodec.bits.*
 import scodec.codecs.*

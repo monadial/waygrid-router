@@ -45,9 +45,8 @@ object DomainRoutingDagVulcanCodecs:
     import io.circe.parser.decode
     import com.monadial.waygrid.common.domain.model.traversal.condition.Condition.given
 
-    Codec.string.imapError(
-      jsonStr =>
-        decode[Condition](jsonStr).left.map(e => vulcan.AvroError(s"Invalid Condition JSON: ${e.getMessage}"))
+    Codec.string.imapError(jsonStr =>
+      decode[Condition](jsonStr).left.map(e => vulcan.AvroError(s"Invalid Condition JSON: ${e.getMessage}"))
     )(_.asJson.noSpaces)
 
   // ---------------------------------------------------------------------------
@@ -275,9 +274,9 @@ object DomainRoutingDagVulcanCodecs:
       unionCodec.schema,
       (nt: NodeType) =>
         nt match
-          case NodeType.Standard   => standardCodec.encode(NodeType.Standard)
-          case v: NodeType.Fork    => forkCodec.encode(v)
-          case v: NodeType.Join    => joinCodec.encode(v),
+          case NodeType.Standard => standardCodec.encode(NodeType.Standard)
+          case v: NodeType.Fork  => forkCodec.encode(v)
+          case v: NodeType.Join  => joinCodec.encode(v),
       unionCodec.decode
     )
     result
@@ -329,11 +328,10 @@ object DomainRoutingDagVulcanCodecs:
    * NonEmptyList codec as Avro array (encoded as List, validated on decode).
    */
   given [A](using Codec[A]): Codec[NonEmptyList[A]] =
-    Codec.list[A].imapError(
-      list =>
-        NonEmptyList
-          .fromList(list)
-          .toRight(vulcan.AvroError("Expected non-empty list"))
+    Codec.list[A].imapError(list =>
+      NonEmptyList
+        .fromList(list)
+        .toRight(vulcan.AvroError("Expected non-empty list"))
     )(_.toList)
 
   // ---------------------------------------------------------------------------
@@ -345,11 +343,7 @@ object DomainRoutingDagVulcanCodecs:
    * We encode as List[Node] and reconstruct the Map on decode.
    */
   given Codec[Map[NodeId, Node]] =
-    Codec.list[Node].imap(
-      nodes => nodes.map(n => n.id -> n).toMap
-    )(
-      nodeMap => nodeMap.values.toList
-    )
+    Codec.list[Node].imap(nodes => nodes.map(n => n.id -> n).toMap)(nodeMap => nodeMap.values.toList)
 
   // ---------------------------------------------------------------------------
   // Dag

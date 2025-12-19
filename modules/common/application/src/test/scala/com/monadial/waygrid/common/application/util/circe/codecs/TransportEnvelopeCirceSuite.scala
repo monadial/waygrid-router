@@ -3,7 +3,11 @@ package com.monadial.waygrid.common.application.util.circe.codecs
 import cats.Show
 import cats.data.NonEmptyList
 import com.monadial.waygrid.common.application.domain.model.envelope.TransportEnvelope
-import com.monadial.waygrid.common.application.domain.model.envelope.Value.{ MessageContent, MessageContentData, MessageContentType }
+import com.monadial.waygrid.common.application.domain.model.envelope.Value.{
+  MessageContent,
+  MessageContentData,
+  MessageContentType
+}
 import com.monadial.waygrid.common.application.util.circe.codecs.ApplicationTransportEnvelopeCirceCodecs.given
 import com.monadial.waygrid.common.application.util.circe.codecs.DomainRoutingCirceCodecs.given
 import com.monadial.waygrid.common.application.util.circe.codecs.DomainRoutingDagCirceCodecs.given
@@ -12,7 +16,12 @@ import com.monadial.waygrid.common.application.util.circe.codecs.DomainTraversal
 import com.monadial.waygrid.common.application.util.circe.codecs.DomainVectorClockCirceCodecs.given
 import com.monadial.waygrid.common.domain.model.envelope.EnvelopeStamps
 import com.monadial.waygrid.common.domain.model.envelope.Value.{ EnvelopeId, Stamp, TraversalRefStamp, TraversalStamp }
-import com.monadial.waygrid.common.domain.model.node.Value.{ NodeComponent, NodeDescriptor, NodeId as ModelNodeId, NodeService }
+import com.monadial.waygrid.common.domain.model.node.Value.{
+  NodeComponent,
+  NodeDescriptor,
+  NodeId as ModelNodeId,
+  NodeService
+}
 import com.monadial.waygrid.common.domain.model.resiliency.RetryPolicy
 import com.monadial.waygrid.common.domain.model.routing.Value.{ DeliveryStrategy, RepeatPolicy, TraversalId }
 import com.monadial.waygrid.common.domain.model.traversal.condition.Condition
@@ -21,7 +30,14 @@ import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ DagHash, E
 import com.monadial.waygrid.common.domain.model.traversal.state.TraversalState
 import com.monadial.waygrid.common.domain.model.traversal.state.Value.RemainingNodes
 import com.monadial.waygrid.common.domain.model.vectorclock.VectorClock
-import com.monadial.waygrid.common.domain.value.Address.{ Endpoint, EndpointDirection, LogicalEndpoint, NodeAddress, PhysicalEndpoint, ServiceAddress }
+import com.monadial.waygrid.common.domain.value.Address.{
+  Endpoint,
+  EndpointDirection,
+  LogicalEndpoint,
+  NodeAddress,
+  PhysicalEndpoint,
+  ServiceAddress
+}
 import io.circe.{ Decoder, Encoder }
 import io.circe.syntax.*
 import org.scalacheck.Gen
@@ -99,7 +115,11 @@ object TransportEnvelopeCirceSuite extends SimpleIOSuite with Checkers:
     Gen.oneOf(NodeComponent.Origin, NodeComponent.Processor, NodeComponent.Destination, NodeComponent.System)
 
   private val genNodeService: Gen[NodeService] =
-    Gen.alphaLowerStr.map(s => NodeService(s.take(10).nonEmpty match { case true => s.take(10); case false => "svc" }))
+    Gen.alphaLowerStr.map(s =>
+      NodeService(s.take(10).nonEmpty match
+        case true  => s.take(10);
+        case false => "svc")
+    )
 
   private val genNodeDescriptor: Gen[NodeDescriptor] =
     for
@@ -248,7 +268,8 @@ object TransportEnvelopeCirceSuite extends SimpleIOSuite with Checkers:
   private val genMessageContent: Gen[MessageContent] =
     for
       contentType <- Gen.alphaNumStr.map(s => MessageContentType(s"type-${s.take(10)}"))
-      contentData <- Gen.listOf(Gen.choose(0, 255).map(_.toByte)).map(bytes => MessageContentData(ByteVector(bytes.toArray)))
+      contentData <-
+        Gen.listOf(Gen.choose(0, 255).map(_.toByte)).map(bytes => MessageContentData(ByteVector(bytes.toArray)))
     yield MessageContent(contentType, contentData)
 
   private val genTraversalStamp: Gen[TraversalStamp] =
@@ -313,189 +334,197 @@ object TransportEnvelopeCirceSuite extends SimpleIOSuite with Checkers:
   // ---------------------------------------------------------------------------
 
   test("RetryPolicy roundtrip"):
-    forall(genRetryPolicy)(policy => expect(roundtrip(policy)))
+      forall(genRetryPolicy)(policy => expect(roundtrip(policy)))
 
   test("RepeatPolicy roundtrip"):
-    forall(genRepeatPolicy)(policy => expect(roundtrip(policy)))
+      forall(genRepeatPolicy)(policy => expect(roundtrip(policy)))
 
   test("DeliveryStrategy roundtrip"):
-    forall(genDeliveryStrategy)(strategy => expect(roundtrip(strategy)))
+      forall(genDeliveryStrategy)(strategy => expect(roundtrip(strategy)))
 
   test("EdgeGuard roundtrip"):
-    forall(genEdgeGuard)(guard => expect(roundtrip(guard)))
+      forall(genEdgeGuard)(guard => expect(roundtrip(guard)))
 
   pureTest("EdgeGuard debug OnFailure"):
-    val guard: EdgeGuard = EdgeGuard.OnFailure
-    roundtripDebug(guard) match
-      case Left(err) => failure(err)
-      case Right(decoded) =>
-        if decoded == guard then success
-        else failure(s"Expected $guard but got $decoded")
+      val guard: EdgeGuard = EdgeGuard.OnFailure
+      roundtripDebug(guard) match
+        case Left(err) => failure(err)
+        case Right(decoded) =>
+          if decoded == guard then success
+          else failure(s"Expected $guard but got $decoded")
 
   test("JoinStrategy roundtrip"):
-    forall(genJoinStrategy)(strategy => expect(roundtrip(strategy)))
+      forall(genJoinStrategy)(strategy => expect(roundtrip(strategy)))
 
   test("NodeType roundtrip"):
-    forall(genNodeType)(nodeType => expect(roundtrip(nodeType)))
+      forall(genNodeType)(nodeType => expect(roundtrip(nodeType)))
 
   test("Node roundtrip"):
-    forall(genNode)(node => expect(roundtrip(node)))
+      forall(genNode)(node => expect(roundtrip(node)))
 
   test("Edge roundtrip"):
-    forall(genEdge)(edge => expect(roundtrip(edge)))
+      forall(genEdge)(edge => expect(roundtrip(edge)))
 
   test("VectorClock roundtrip"):
-    forall(genVectorClock)(vc => expect(roundtrip(vc)))
+      forall(genVectorClock)(vc => expect(roundtrip(vc)))
 
   test("Dag roundtrip"):
-    forall(genSimpleDag)(dag => expect(roundtrip(dag)))
+      forall(genSimpleDag)(dag => expect(roundtrip(dag)))
 
   test("Endpoint roundtrip"):
-    forall(genEndpoint)(endpoint => expect(roundtrip(endpoint)))
+      forall(genEndpoint)(endpoint => expect(roundtrip(endpoint)))
 
   test("Stamp roundtrip"):
-    forall(genStamp)(stamp => expect(roundtrip(stamp)))
+      forall(genStamp)(stamp => expect(roundtrip(stamp)))
 
   test("MessageContent roundtrip"):
-    forall(genMessageContent)(mc => expect(roundtrip(mc)))
+      forall(genMessageContent)(mc => expect(roundtrip(mc)))
 
   pureTest("EnvelopeStamps roundtrip (empty)"):
-    val emptyStamps: EnvelopeStamps = Map.empty
-    expect(roundtrip[EnvelopeStamps](emptyStamps))
+      val emptyStamps: EnvelopeStamps = Map.empty
+      expect(roundtrip[EnvelopeStamps](emptyStamps))
 
   test("EnvelopeStamps roundtrip"):
-    forall(genEnvelopeStamps)(stamps => expect(roundtrip(stamps)))
+      forall(genEnvelopeStamps)(stamps => expect(roundtrip(stamps)))
 
   test("TransportEnvelope roundtrip"):
-    forall(genTransportEnvelope)(envelope => expect(roundtrip(envelope)))
+      forall(genTransportEnvelope)(envelope => expect(roundtrip(envelope)))
 
   // ---------------------------------------------------------------------------
   // Edge case tests
   // ---------------------------------------------------------------------------
 
   pureTest("TransportEnvelope with empty stamps roundtrips"):
-    val envelope = TransportEnvelope(
-      id = EnvelopeId(ULID.newULID),
-      sender = NodeAddress(NodeDescriptor.Origin(NodeService("http")), ModelNodeId(ULID.newULID)),
-      endpoint = LogicalEndpoint(NodeDescriptor.Destination(NodeService("webhook")), EndpointDirection.Outbound),
-      message = MessageContent(MessageContentType("test"), MessageContentData(ByteVector.empty)),
-      stamps = Map.empty
-    )
-    expect(roundtrip[TransportEnvelope](envelope))
+      val envelope = TransportEnvelope(
+        id = EnvelopeId(ULID.newULID),
+        sender = NodeAddress(NodeDescriptor.Origin(NodeService("http")), ModelNodeId(ULID.newULID)),
+        endpoint = LogicalEndpoint(NodeDescriptor.Destination(NodeService("webhook")), EndpointDirection.Outbound),
+        message = MessageContent(MessageContentType("test"), MessageContentData(ByteVector.empty)),
+        stamps = Map.empty
+      )
+      expect(roundtrip[TransportEnvelope](envelope))
 
   pureTest("TransportEnvelope with TraversalRefStamp roundtrips"):
-    val stamp    = TraversalRefStamp(DagHash("test-hash"))
-    val stamps   = Map(classOf[TraversalRefStamp] -> List(stamp)).asInstanceOf[EnvelopeStamps]
-    val envelope = TransportEnvelope(
-      id = EnvelopeId(ULID.newULID),
-      sender = NodeAddress(NodeDescriptor.Origin(NodeService("http")), ModelNodeId(ULID.newULID)),
-      endpoint = PhysicalEndpoint(NodeDescriptor.System(NodeService("topology")), ModelNodeId(ULID.newULID), EndpointDirection.Inbound),
-      message = MessageContent(MessageContentType("event"), MessageContentData(ByteVector(1, 2, 3))),
-      stamps = stamps
-    )
-    expect(roundtrip[TransportEnvelope](envelope))
+      val stamp  = TraversalRefStamp(DagHash("test-hash"))
+      val stamps = Map(classOf[TraversalRefStamp] -> List(stamp)).asInstanceOf[EnvelopeStamps]
+      val envelope = TransportEnvelope(
+        id = EnvelopeId(ULID.newULID),
+        sender = NodeAddress(NodeDescriptor.Origin(NodeService("http")), ModelNodeId(ULID.newULID)),
+        endpoint = PhysicalEndpoint(
+          NodeDescriptor.System(NodeService("topology")),
+          ModelNodeId(ULID.newULID),
+          EndpointDirection.Inbound
+        ),
+        message = MessageContent(MessageContentType("event"), MessageContentData(ByteVector(1, 2, 3))),
+        stamps = stamps
+      )
+      expect(roundtrip[TransportEnvelope](envelope))
 
   pureTest("Condition.Not roundtrips"):
-    val condition = Condition.Not(Condition.Always)
-    expect(roundtrip(condition))
+      val condition = Condition.Not(Condition.Always)
+      expect(roundtrip(condition))
 
   pureTest("Condition.And with multiple conditions roundtrips"):
-    val condition = Condition.And(List(Condition.Always, Condition.Not(Condition.Always)))
-    expect(roundtrip(condition))
+      val condition = Condition.And(List(Condition.Always, Condition.Not(Condition.Always)))
+      expect(roundtrip(condition))
 
   pureTest("Nested Condition roundtrips"):
-    val condition = Condition.Or(List(
-      Condition.And(List(Condition.Always)),
-      Condition.Not(Condition.Or(List(Condition.Always)))
-    ))
-    expect(roundtrip(condition))
+      val condition = Condition.Or(List(
+        Condition.And(List(Condition.Always)),
+        Condition.Not(Condition.Or(List(Condition.Always)))
+      ))
+      expect(roundtrip(condition))
 
   // ---------------------------------------------------------------------------
   // JSON structure tests
   // ---------------------------------------------------------------------------
 
   pureTest("RetryPolicy.None produces correct JSON structure"):
-    val policy: RetryPolicy = RetryPolicy.None
-    val json                = policy.asJson
-    val hasType             = json.hcursor.downField("type").as[String] == Right("None")
-    expect(hasType)
+      val policy: RetryPolicy = RetryPolicy.None
+      val json                = policy.asJson
+      val hasType             = json.hcursor.downField("type").as[String] == Right("None")
+      expect(hasType)
 
   pureTest("RetryPolicy.Linear produces correct JSON structure"):
-    val policy: RetryPolicy = RetryPolicy.Linear(1.second, 3)
-    val json                = policy.asJson
-    val hasType             = json.hcursor.downField("type").as[String] == Right("Linear")
-    val hasBase             = json.hcursor.downField("base").succeeded
-    val hasMaxRetries       = json.hcursor.downField("maxRetries").as[Int] == Right(3)
-    expect(hasType && hasBase && hasMaxRetries)
+      val policy: RetryPolicy = RetryPolicy.Linear(1.second, 3)
+      val json                = policy.asJson
+      val hasType             = json.hcursor.downField("type").as[String] == Right("Linear")
+      val hasBase             = json.hcursor.downField("base").succeeded
+      val hasMaxRetries       = json.hcursor.downField("maxRetries").as[Int] == Right(3)
+      expect(hasType && hasBase && hasMaxRetries)
 
   pureTest("DeliveryStrategy.Immediate produces correct JSON structure"):
-    val strategy: DeliveryStrategy = DeliveryStrategy.Immediate
-    val json                       = strategy.asJson
-    val hasType                    = json.hcursor.downField("type").as[String] == Right("Immediate")
-    expect(hasType)
+      val strategy: DeliveryStrategy = DeliveryStrategy.Immediate
+      val json                       = strategy.asJson
+      val hasType                    = json.hcursor.downField("type").as[String] == Right("Immediate")
+      expect(hasType)
 
   pureTest("EdgeGuard variants produce correct JSON discriminators"):
-    val guards = List(
-      EdgeGuard.OnSuccess  -> "OnSuccess",
-      EdgeGuard.OnFailure  -> "OnFailure",
-      EdgeGuard.Always     -> "Always",
-      EdgeGuard.OnAny      -> "OnAny",
-      EdgeGuard.OnTimeout  -> "OnTimeout"
-    )
-    val results = guards.map { case (guard, expectedType) =>
-      val json      = guard.asJson
-      val actualType = json.hcursor.downField("type").as[String]
-      actualType == Right(expectedType)
-    }
-    expect(results.forall(identity))
+      val guards = List(
+        EdgeGuard.OnSuccess -> "OnSuccess",
+        EdgeGuard.OnFailure -> "OnFailure",
+        EdgeGuard.Always    -> "Always",
+        EdgeGuard.OnAny     -> "OnAny",
+        EdgeGuard.OnTimeout -> "OnTimeout"
+      )
+      val results = guards.map { case (guard, expectedType) =>
+        val json       = guard.asJson
+        val actualType = json.hcursor.downField("type").as[String]
+        actualType == Right(expectedType)
+      }
+      expect(results.forall(identity))
 
   pureTest("JoinStrategy variants produce correct JSON discriminators"):
-    val strategies = List(
-      JoinStrategy.And       -> "And",
-      JoinStrategy.Or        -> "Or",
-      JoinStrategy.Quorum(2) -> "Quorum"
-    )
-    val results = strategies.map { case (strategy, expectedType) =>
-      val json       = strategy.asJson
-      val actualType = json.hcursor.downField("type").as[String]
-      actualType == Right(expectedType)
-    }
-    expect(results.forall(identity))
+      val strategies = List(
+        JoinStrategy.And       -> "And",
+        JoinStrategy.Or        -> "Or",
+        JoinStrategy.Quorum(2) -> "Quorum"
+      )
+      val results = strategies.map { case (strategy, expectedType) =>
+        val json       = strategy.asJson
+        val actualType = json.hcursor.downField("type").as[String]
+        actualType == Right(expectedType)
+      }
+      expect(results.forall(identity))
 
   pureTest("Stamp discriminators - TraversalStamp"):
-    val dag = Dag(
-      hash = DagHash("test"),
-      entryPoints = NonEmptyList.one(NodeId("entry")),
-      repeatPolicy = RepeatPolicy.NoRepeat,
-      nodes = Map(NodeId("entry") -> Node(
-        NodeId("entry"), None, RetryPolicy.None, DeliveryStrategy.Immediate,
-        ServiceAddress(NodeDescriptor.Origin(NodeService("http"))), NodeType.Standard
-      )),
-      edges = List.empty,
-      timeout = None
-    )
-    val state = TraversalState(
-      traversalId = TraversalId(ULID.newULID),
-      active = Set.empty,
-      completed = Set.empty,
-      failed = Set.empty,
-      retries = Map.empty,
-      vectorClock = VectorClock.empty,
-      history = Vector.empty,
-      remainingNodes = RemainingNodes(1)
-    )
-    val stamp: Stamp = TraversalStamp(state, dag)
-    val json         = stamp.asJson
-    // Circe derived codecs use the case class name as discriminator
-    // Check that it contains "TraversalStamp" in the structure (could be a wrapper object)
-    val jsonStr = json.noSpaces
-    val hasStampData = jsonStr.contains("state") && jsonStr.contains("dag")
-    expect(hasStampData)
+      val dag = Dag(
+        hash = DagHash("test"),
+        entryPoints = NonEmptyList.one(NodeId("entry")),
+        repeatPolicy = RepeatPolicy.NoRepeat,
+        nodes = Map(NodeId("entry") -> Node(
+          NodeId("entry"),
+          None,
+          RetryPolicy.None,
+          DeliveryStrategy.Immediate,
+          ServiceAddress(NodeDescriptor.Origin(NodeService("http"))),
+          NodeType.Standard
+        )),
+        edges = List.empty,
+        timeout = None
+      )
+      val state = TraversalState(
+        traversalId = TraversalId(ULID.newULID),
+        active = Set.empty,
+        completed = Set.empty,
+        failed = Set.empty,
+        retries = Map.empty,
+        vectorClock = VectorClock.empty,
+        history = Vector.empty,
+        remainingNodes = RemainingNodes(1)
+      )
+      val stamp: Stamp = TraversalStamp(state, dag)
+      val json         = stamp.asJson
+      // Circe derived codecs use the case class name as discriminator
+      // Check that it contains "TraversalStamp" in the structure (could be a wrapper object)
+      val jsonStr      = json.noSpaces
+      val hasStampData = jsonStr.contains("state") && jsonStr.contains("dag")
+      expect(hasStampData)
 
   pureTest("Stamp discriminators - TraversalRefStamp"):
-    val stamp: Stamp = TraversalRefStamp(DagHash("ref-hash"))
-    val json         = stamp.asJson
-    // Check that the JSON contains the dagHash field
-    val jsonStr = json.noSpaces
-    val hasDagHash = jsonStr.contains("dagHash") || jsonStr.contains("ref-hash")
-    expect(hasDagHash)
+      val stamp: Stamp = TraversalRefStamp(DagHash("ref-hash"))
+      val json         = stamp.asJson
+      // Check that the JSON contains the dagHash field
+      val jsonStr    = json.noSpaces
+      val hasDagHash = jsonStr.contains("dagHash") || jsonStr.contains("ref-hash")
+      expect(hasDagHash)

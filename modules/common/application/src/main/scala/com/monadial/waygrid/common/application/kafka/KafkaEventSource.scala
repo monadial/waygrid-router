@@ -18,7 +18,7 @@ import com.monadial.waygrid.common.domain.algebra.messaging.event.Event
 import com.monadial.waygrid.common.domain.model.envelope.DomainEnvelope
 import com.monadial.waygrid.common.domain.value.Address.Endpoint
 import fs2.kafka.*
-import fs2.kafka.vulcan.{ avroDeserializer, AvroSettings, SchemaRegistryClientSettings }
+import fs2.kafka.vulcan.{ AvroSettings, SchemaRegistryClientSettings, avroDeserializer }
 import org.typelevel.otel4s.context.propagation.TextMapGetter
 import org.typelevel.otel4s.metrics.{ Counter, Histogram, Meter, UpDownCounter }
 import org.typelevel.otel4s.trace.Tracer
@@ -111,7 +111,7 @@ object KafkaEventSource:
             AvroSettings(
               SchemaRegistryClientSettings[F](sr.url)
             )
-                .withAutoRegisterSchemas(sr.autoRegisterSchemas)
+              .withAutoRegisterSchemas(sr.autoRegisterSchemas)
           )
         case None =>
           Resource.raiseError[F, AvroSettings[F], Throwable](
