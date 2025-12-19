@@ -1,10 +1,10 @@
 package com.monadial.waygrid.common.domain.algebra.storage
 
+import scala.concurrent.duration.FiniteDuration
+
 import com.monadial.waygrid.common.domain.model.routing.Value.TraversalId
 import com.monadial.waygrid.common.domain.model.traversal.state.TraversalState
 import com.monadial.waygrid.common.domain.model.traversal.state.Value.StateVersion
-
-import scala.concurrent.duration.FiniteDuration
 
 /**
  * Repository algebra for persistent storage of traversal state.

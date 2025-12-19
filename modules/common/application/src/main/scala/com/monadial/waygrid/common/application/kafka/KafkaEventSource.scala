@@ -1,5 +1,7 @@
 package com.monadial.waygrid.common.application.kafka
 
+import java.nio.charset.Charset
+
 import cats.effect.kernel.Ref
 import cats.effect.syntax.all.*
 import cats.effect.{ Async, Clock, Concurrent, Resource }
@@ -22,8 +24,6 @@ import fs2.kafka.vulcan.{ AvroSettings, SchemaRegistryClientSettings, avroDeseri
 import org.typelevel.otel4s.context.propagation.TextMapGetter
 import org.typelevel.otel4s.metrics.{ Counter, Histogram, Meter, UpDownCounter }
 import org.typelevel.otel4s.trace.Tracer
-
-import java.nio.charset.Charset
 
 object Tags:
   trait Consumer          extends FiberType

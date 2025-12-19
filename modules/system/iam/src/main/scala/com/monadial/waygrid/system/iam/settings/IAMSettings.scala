@@ -1,17 +1,17 @@
 package com.monadial.waygrid.system.iam.settings
 
+import scala.concurrent.duration.Duration
+
 import com.monadial.waygrid.common.application.domain.model.settings.{
   EventStreamSettings,
   HttpServerSettings,
   NodeSettings,
   WithServiceSettings
 }
-import com.monadial.waygrid.common.application.instances.OdinLoggerInstances.given
 import com.monadial.waygrid.common.application.instances.DurationInstances.given
+import com.monadial.waygrid.common.application.instances.OdinLoggerInstances.given
 import io.circe.Codec
 import io.odin.Level
-
-import scala.concurrent.duration.Duration
 
 final case class IAMSettings(
   override val debug: Boolean,

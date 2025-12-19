@@ -1,15 +1,6 @@
 package com.monadial.waygrid.common.application.util.circe.codecs.events
 
-import com.monadial.waygrid.common.domain.model.traversal.Event.{
-  NodeTraversalFailed,
-  NodeTraversalRequested,
-  NodeTraversalSucceeded,
-  TraversalCancelled,
-  TraversalFailed,
-  TraversalRequested,
-  TraversalResumed,
-  TraversalScheduled
-}
+import com.monadial.waygrid.common.domain.model.traversal.Event.*
 import io.circe.Codec
 import io.circe.generic.semiauto
 

@@ -1,5 +1,7 @@
 package com.monadial.waygrid.common.domain.instances
 
+import java.time.Instant
+
 import cats.Show
 import com.monadial.waygrid.common.domain.algebra.value.codec.{ Base64Codec, BytesCodec }
 import com.monadial.waygrid.common.domain.instances.ByteVectorInstances.given
@@ -9,8 +11,8 @@ import com.monadial.waygrid.common.domain.instances.LongInstances.given
 import com.monadial.waygrid.common.domain.instances.StringInstances.given
 import com.monadial.waygrid.common.domain.instances.ULIDInstances.given
 import com.monadial.waygrid.common.domain.instances.URIInstances.given
-import io.circe.{ Decoder as JsonDecoder, Encoder as JsonEncoder }
 import io.circe.syntax.*
+import io.circe.{ Decoder as JsonDecoder, Encoder as JsonEncoder }
 import org.http4s.Uri
 import org.scalacheck.Gen
 import scodec.bits.ByteVector
@@ -18,8 +20,6 @@ import scodec.{ Codec as SCodec, Decoder as SDecoder, Encoder as SEncoder }
 import weaver.SimpleIOSuite
 import weaver.scalacheck.Checkers
 import wvlet.airframe.ulid.ULID
-
-import java.time.Instant
 
 /**
  * Comprehensive tests for base value type instances.
@@ -83,10 +83,11 @@ object BaseInstancesSuite extends SimpleIOSuite with Checkers:
 
   private def testScodecRoundtrip[A: {SEncoder, SDecoder}](value: A): Boolean =
     val codec = SCodec(summon[SEncoder[A]], summon[SDecoder[A]])
-    val result = for
-      bits    <- codec.encode(value)
-      decoded <- codec.decode(bits)
-    yield decoded.value == value && decoded.remainder.isEmpty
+    val result =
+      for
+        bits    <- codec.encode(value)
+        decoded <- codec.decode(bits)
+      yield decoded.value == value && decoded.remainder.isEmpty
     result.toOption.getOrElse(false)
 
   private def testCirceRoundtrip[A: {JsonEncoder, JsonDecoder}](value: A): Boolean =
@@ -109,170 +110,170 @@ object BaseInstancesSuite extends SimpleIOSuite with Checkers:
   // ===========================================================================
 
   test("String scodec roundtrip"):
-    forall(genString) { s =>
-      expect(testScodecRoundtrip(s))
-    }
+      forall(genString) { s =>
+        expect(testScodecRoundtrip(s))
+      }
 
   test("String scodec roundtrip with special characters"):
-    forall(genStringWithSpecialChars) { s =>
-      expect(testScodecRoundtrip(s))
-    }
+      forall(genStringWithSpecialChars) { s =>
+        expect(testScodecRoundtrip(s))
+      }
 
   test("String circe roundtrip"):
-    forall(genString) { s =>
-      expect(testCirceRoundtrip(s))
-    }
+      forall(genString) { s =>
+        expect(testCirceRoundtrip(s))
+      }
 
   test("String BytesCodec roundtrip"):
-    forall(genString) { s =>
-      expect(testBytesCodecRoundtrip(s))
-    }
+      forall(genString) { s =>
+        expect(testBytesCodecRoundtrip(s))
+      }
 
   test("String Base64Codec roundtrip"):
-    forall(genString) { s =>
-      expect(testBase64CodecRoundtrip(s))
-    }
+      forall(genString) { s =>
+        expect(testBase64CodecRoundtrip(s))
+      }
 
   // ===========================================================================
   // Int tests
   // ===========================================================================
 
   test("Int scodec roundtrip"):
-    forall(genInt) { i =>
-      expect(testScodecRoundtrip(i))
-    }
+      forall(genInt) { i =>
+        expect(testScodecRoundtrip(i))
+      }
 
   test("Int circe roundtrip"):
-    forall(genInt) { i =>
-      expect(testCirceRoundtrip(i))
-    }
+      forall(genInt) { i =>
+        expect(testCirceRoundtrip(i))
+      }
 
   test("Int BytesCodec roundtrip"):
-    forall(genInt) { i =>
-      expect(testBytesCodecRoundtrip(i))
-    }
+      forall(genInt) { i =>
+        expect(testBytesCodecRoundtrip(i))
+      }
 
   test("Int Base64Codec roundtrip"):
-    forall(genInt) { i =>
-      expect(testBase64CodecRoundtrip(i))
-    }
+      forall(genInt) { i =>
+        expect(testBase64CodecRoundtrip(i))
+      }
 
   // ===========================================================================
   // Long tests
   // ===========================================================================
 
   test("Long scodec roundtrip"):
-    forall(genLong) { l =>
-      expect(testScodecRoundtrip(l))
-    }
+      forall(genLong) { l =>
+        expect(testScodecRoundtrip(l))
+      }
 
   test("Long circe roundtrip"):
-    forall(genLong) { l =>
-      expect(testCirceRoundtrip(l))
-    }
+      forall(genLong) { l =>
+        expect(testCirceRoundtrip(l))
+      }
 
   test("Long BytesCodec roundtrip"):
-    forall(genLong) { l =>
-      expect(testBytesCodecRoundtrip(l))
-    }
+      forall(genLong) { l =>
+        expect(testBytesCodecRoundtrip(l))
+      }
 
   test("Long Base64Codec roundtrip"):
-    forall(genLong) { l =>
-      expect(testBase64CodecRoundtrip(l))
-    }
+      forall(genLong) { l =>
+        expect(testBase64CodecRoundtrip(l))
+      }
 
   // ===========================================================================
   // ULID tests
   // ===========================================================================
 
   test("ULID scodec roundtrip"):
-    forall(genULID) { ulid =>
-      expect(testScodecRoundtrip(ulid))
-    }
+      forall(genULID) { ulid =>
+        expect(testScodecRoundtrip(ulid))
+      }
 
   test("ULID circe roundtrip"):
-    forall(genULID) { ulid =>
-      expect(testCirceRoundtrip(ulid))
-    }
+      forall(genULID) { ulid =>
+        expect(testCirceRoundtrip(ulid))
+      }
 
   test("ULID BytesCodec roundtrip"):
-    forall(genULID) { ulid =>
-      expect(testBytesCodecRoundtrip(ulid))
-    }
+      forall(genULID) { ulid =>
+        expect(testBytesCodecRoundtrip(ulid))
+      }
 
   test("ULID Base64Codec roundtrip"):
-    forall(genULID) { ulid =>
-      expect(testBase64CodecRoundtrip(ulid))
-    }
+      forall(genULID) { ulid =>
+        expect(testBase64CodecRoundtrip(ulid))
+      }
 
   // ===========================================================================
   // Uri tests
   // ===========================================================================
 
   test("Uri scodec roundtrip"):
-    forall(genUri) { uri =>
-      expect(testScodecRoundtrip(uri))
-    }
+      forall(genUri) { uri =>
+        expect(testScodecRoundtrip(uri))
+      }
 
   test("Uri circe roundtrip"):
-    forall(genUri) { uri =>
-      expect(testCirceRoundtrip(uri))
-    }
+      forall(genUri) { uri =>
+        expect(testCirceRoundtrip(uri))
+      }
 
   test("Uri BytesCodec roundtrip"):
-    forall(genUri) { uri =>
-      expect(testBytesCodecRoundtrip(uri))
-    }
+      forall(genUri) { uri =>
+        expect(testBytesCodecRoundtrip(uri))
+      }
 
   test("Uri Base64Codec roundtrip"):
-    forall(genUri) { uri =>
-      expect(testBase64CodecRoundtrip(uri))
-    }
+      forall(genUri) { uri =>
+        expect(testBase64CodecRoundtrip(uri))
+      }
 
   // ===========================================================================
   // Instant tests
   // ===========================================================================
 
   test("Instant scodec roundtrip"):
-    forall(genInstant) { instant =>
-      expect(testScodecRoundtrip(instant))
-    }
+      forall(genInstant) { instant =>
+        expect(testScodecRoundtrip(instant))
+      }
 
   test("Instant circe roundtrip"):
-    forall(genInstant) { instant =>
-      expect(testCirceRoundtrip(instant))
-    }
+      forall(genInstant) { instant =>
+        expect(testCirceRoundtrip(instant))
+      }
 
   test("Instant BytesCodec roundtrip"):
-    forall(genInstant) { instant =>
-      expect(testBytesCodecRoundtrip(instant))
-    }
+      forall(genInstant) { instant =>
+        expect(testBytesCodecRoundtrip(instant))
+      }
 
   test("Instant Base64Codec roundtrip"):
-    forall(genInstant) { instant =>
-      expect(testBase64CodecRoundtrip(instant))
-    }
+      forall(genInstant) { instant =>
+        expect(testBase64CodecRoundtrip(instant))
+      }
 
   // ===========================================================================
   // ByteVector tests
   // ===========================================================================
 
   test("ByteVector scodec roundtrip"):
-    forall(genByteVector) { bv =>
-      expect(testScodecRoundtrip(bv))
-    }
+      forall(genByteVector) { bv =>
+        expect(testScodecRoundtrip(bv))
+      }
 
   test("ByteVector circe roundtrip"):
-    forall(genByteVector) { bv =>
-      expect(testCirceRoundtrip(bv))
-    }
+      forall(genByteVector) { bv =>
+        expect(testCirceRoundtrip(bv))
+      }
 
   test("ByteVector BytesCodec roundtrip"):
-    forall(genByteVector) { bv =>
-      expect(testBytesCodecRoundtrip(bv))
-    }
+      forall(genByteVector) { bv =>
+        expect(testBytesCodecRoundtrip(bv))
+      }
 
   test("ByteVector Base64Codec roundtrip"):
-    forall(genByteVector) { bv =>
-      expect(testBase64CodecRoundtrip(bv))
-    }
+      forall(genByteVector) { bv =>
+        expect(testBase64CodecRoundtrip(bv))
+      }

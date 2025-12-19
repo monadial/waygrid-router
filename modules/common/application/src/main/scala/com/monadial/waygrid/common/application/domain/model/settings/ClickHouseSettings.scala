@@ -1,12 +1,12 @@
 package com.monadial.waygrid.common.application.domain.model.settings
 
+import scala.concurrent.duration.{ DurationInt, FiniteDuration }
+
 import com.comcast.ip4s.{ Host, Port }
 import com.monadial.waygrid.common.application.domain.model.Platform
-import com.monadial.waygrid.common.application.instances.Ip4sInstances.given
 import com.monadial.waygrid.common.application.instances.DurationInstances.given
+import com.monadial.waygrid.common.application.instances.Ip4sInstances.given
 import io.circe.Codec
-
-import scala.concurrent.duration.{ DurationInt, FiniteDuration }
 
 enum ConnectionType derives Codec.AsObject:
   case HTTP

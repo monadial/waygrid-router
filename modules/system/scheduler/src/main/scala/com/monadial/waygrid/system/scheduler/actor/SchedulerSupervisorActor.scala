@@ -1,8 +1,7 @@
 package com.monadial.waygrid.system.scheduler.actor
 
 import cats.Parallel
-import cats.effect.Resource
-import cats.effect.{ Async, Ref }
+import cats.effect.{Async, Ref, Resource}
 import cats.syntax.all.*
 import com.monadial.waygrid.common.application.algebra.SupervisedRequest.{ Start, Stop }
 import com.monadial.waygrid.common.application.algebra.{

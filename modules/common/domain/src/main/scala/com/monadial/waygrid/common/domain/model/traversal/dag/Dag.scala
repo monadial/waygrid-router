@@ -1,10 +1,10 @@
 package com.monadial.waygrid.common.domain.model.traversal.dag
 
+import scala.concurrent.duration.FiniteDuration
+
 import cats.data.NonEmptyList
 import com.monadial.waygrid.common.domain.model.routing.Value.RepeatPolicy
 import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ DagHash, EdgeGuard, ForkId, NodeId }
-
-import scala.concurrent.duration.FiniteDuration
 
 /**
  * A Directed Acyclic Graph representing a workflow/traversal definition.

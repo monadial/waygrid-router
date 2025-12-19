@@ -1,10 +1,10 @@
 package com.monadial.waygrid.common.domain.algebra.value.instant
 
+import java.time.Instant
+
 import cats.Applicative
 import com.monadial.waygrid.common.domain.algebra.value.Value
 import com.monadial.waygrid.common.domain.instances.InstantInstances.given
-
-import java.time.Instant
 
 abstract class InstantValue extends Value[Instant]:
   given IsInstant[Type] = derive[IsInstant]

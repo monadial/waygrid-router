@@ -1,29 +1,23 @@
 package com.monadial.waygrid.common.domain.model.traversal.fsm
 
-import cats.effect.IO
+import java.nio.charset.StandardCharsets
+import java.security.MessageDigest
+import java.time.temporal.ChronoUnit
+
+import scala.concurrent.duration.*
+
 import cats.data.NonEmptyList
+import cats.effect.IO
 import com.monadial.waygrid.common.domain.model.resiliency.RetryPolicy
 import com.monadial.waygrid.common.domain.model.routing.Value.{ DeliveryStrategy, RepeatPolicy, TraversalId }
 import com.monadial.waygrid.common.domain.model.traversal.condition.Condition
-import com.monadial.waygrid.common.domain.model.traversal.dag.{
-  Dag,
-  DagValidationError,
-  Edge,
-  JoinStrategy,
-  Node,
-  NodeType
-}
+import com.monadial.waygrid.common.domain.model.traversal.dag.*
 import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ DagHash, EdgeGuard, ForkId, NodeId }
 import com.monadial.waygrid.common.domain.model.traversal.state.{ BranchStatus, Event, TraversalState }
 import com.monadial.waygrid.common.domain.value.Address.{ NodeAddress, ServiceAddress }
 import io.circe.Json
 import org.http4s.Uri
 import weaver.SimpleIOSuite
-
-import scala.concurrent.duration.*
-import java.time.temporal.ChronoUnit
-import java.nio.charset.StandardCharsets
-import java.security.MessageDigest
 
 /**
  * Test ID generators for creating ForkId and BranchId values from readable names.
@@ -2158,7 +2152,7 @@ object TraversalFSMSuite extends SimpleIOSuite:
             // Also acceptable: idempotent handling
             success
           case Right(TraversalEffect.DispatchNode(_, nid, _, _)) if nid == nodeAfter =>
-            failure(s"CRITICAL: Late branch arrival dispatched nodeAfter AGAIN! This would cause duplicate processing.")
+            failure("CRITICAL: Late branch arrival dispatched nodeAfter AGAIN! This would cause duplicate processing.")
           case other =>
             // Any other result that's not dispatching nodeAfter again is acceptable
             success

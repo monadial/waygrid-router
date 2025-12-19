@@ -40,74 +40,74 @@ object IntegerValueRefinedSuite extends SimpleIOSuite with Checkers:
   // ---------------------------------------------------------------------------
 
   test("IntegerValueRefined scodec roundtrip"):
-    forall(genDummyPositiveInt) { v =>
-      val codec  = summon[SCodec[DummyPositiveInt]]
-      val result = codec.encode(v).flatMap(codec.decode)
-      expect(result.toOption.exists(r => r.value == v && r.remainder.isEmpty))
-    }
+      forall(genDummyPositiveInt) { v =>
+        val codec  = summon[SCodec[DummyPositiveInt]]
+        val result = codec.encode(v).flatMap(codec.decode)
+        expect(result.toOption.exists(r => r.value == v && r.remainder.isEmpty))
+      }
 
   test("IntegerValueRefined circe roundtrip"):
-    forall(genDummyPositiveInt) { v =>
-      val json    = v.asJson
-      val decoded = json.as[DummyPositiveInt]
-      expect(decoded.toOption.contains(v))
-    }
+      forall(genDummyPositiveInt) { v =>
+        val json    = v.asJson
+        val decoded = json.as[DummyPositiveInt]
+        expect(decoded.toOption.contains(v))
+      }
 
   test("IntegerValueRefined BytesCodec roundtrip"):
-    forall(genDummyPositiveInt) { v =>
-      val encoded = BytesCodec[DummyPositiveInt].encodeToScalar(v)
-      val decoded = BytesCodec[DummyPositiveInt].decodeFromScalar(encoded)
-      expect(decoded.toOption.contains(v))
-    }
+      forall(genDummyPositiveInt) { v =>
+        val encoded = BytesCodec[DummyPositiveInt].encodeToScalar(v)
+        val decoded = BytesCodec[DummyPositiveInt].decodeFromScalar(encoded)
+        expect(decoded.toOption.contains(v))
+      }
 
   test("IntegerValueRefined Base64Codec roundtrip"):
-    forall(genDummyPositiveInt) { v =>
-      val encoded = Base64Codec[DummyPositiveInt].encode(v)
-      val decoded = Base64Codec[DummyPositiveInt].decode(encoded)
-      expect(decoded.toOption.contains(v))
-    }
+      forall(genDummyPositiveInt) { v =>
+        val encoded = Base64Codec[DummyPositiveInt].encode(v)
+        val decoded = Base64Codec[DummyPositiveInt].decode(encoded)
+        expect(decoded.toOption.contains(v))
+      }
 
   // ---------------------------------------------------------------------------
   // Type class instance tests
   // ---------------------------------------------------------------------------
 
   test("IntegerValueRefined Eq instance"):
-    forall(genDummyPositiveIntPair) { case (a, b) =>
-      val eqInstance = summon[Eq[DummyPositiveInt]]
-      expect(eqInstance.eqv(a, a)) and
-        expect(eqInstance.eqv(b, b)) and
-        expect(eqInstance.eqv(a, b) == (a.unwrap == b.unwrap))
-    }
+      forall(genDummyPositiveIntPair) { case (a, b) =>
+        val eqInstance = summon[Eq[DummyPositiveInt]]
+        expect(eqInstance.eqv(a, a)) and
+          expect(eqInstance.eqv(b, b)) and
+          expect(eqInstance.eqv(a, b) == (a.unwrap == b.unwrap))
+      }
 
   test("IntegerValueRefined Order instance"):
-    forall(genDummyPositiveIntPair) { case (a, b) =>
-      val orderInstance = summon[Order[DummyPositiveInt]]
-      val cmp           = orderInstance.compare(a, b)
-      expect(orderInstance.compare(a, a) == 0) and
-        expect(cmp == Integer.compare(a.unwrap, b.unwrap))
-    }
+      forall(genDummyPositiveIntPair) { case (a, b) =>
+        val orderInstance = summon[Order[DummyPositiveInt]]
+        val cmp           = orderInstance.compare(a, b)
+        expect(orderInstance.compare(a, a) == 0) and
+          expect(cmp == Integer.compare(a.unwrap, b.unwrap))
+      }
 
   test("IntegerValueRefined Show instance"):
-    forall(genDummyPositiveInt) { v =>
-      val showInstance = summon[Show[DummyPositiveInt]]
-      expect(showInstance.show(v) == v.unwrap.toString)
-    }
+      forall(genDummyPositiveInt) { v =>
+        val showInstance = summon[Show[DummyPositiveInt]]
+        expect(showInstance.show(v) == v.unwrap.toString)
+      }
 
   test("IntegerValueRefined Ordering instance"):
-    forall(genDummyPositiveIntPair) { case (a, b) =>
-      val orderingInstance = summon[Ordering[DummyPositiveInt]]
-      expect(orderingInstance.compare(a, b) == Integer.compare(a.unwrap, b.unwrap))
-    }
+      forall(genDummyPositiveIntPair) { case (a, b) =>
+        val orderingInstance = summon[Ordering[DummyPositiveInt]]
+        expect(orderingInstance.compare(a, b) == Integer.compare(a.unwrap, b.unwrap))
+      }
 
   // ---------------------------------------------------------------------------
   // Unwrap test
   // ---------------------------------------------------------------------------
 
   test("IntegerValueRefined unwrap returns underlying value"):
-    forall(genDummyPositiveInt) { v =>
-      expect(v.unwrap.isInstanceOf[Int]) and
-        expect(v.unwrap > 0)
-    }
+      forall(genDummyPositiveInt) { v =>
+        expect(v.unwrap.isInstanceOf[Int]) and
+          expect(v.unwrap > 0)
+      }
 
   // ---------------------------------------------------------------------------
   // Refinement validation tests
@@ -151,7 +151,7 @@ object IntegerValueRefinedSuite extends SimpleIOSuite with Checkers:
   }
 
   pureTest("IntegerValueRefined scodec decode fails for zero (refinement)") {
-    val codec   = summon[SCodec[DummyPositiveInt]]
+    val codec = summon[SCodec[DummyPositiveInt]]
     // Encode zero as raw int32
     val encoded = scodec.codecs.int32.encode(0)
     val decoded = encoded.flatMap(codec.decode)

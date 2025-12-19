@@ -1,9 +1,9 @@
 package com.monadial.waygrid.common.domain.algebra.value.instant
 
+import java.time.Instant
+
 import cats.Applicative
 import cats.implicits.*
-
-import java.time.Instant
 
 trait GenInstant[F[+_]]:
   def fromDouble[A: IsInstant](value: Double): F[A]

@@ -1,5 +1,9 @@
 package com.monadial.waygrid.common.application.interpreter.storage
 
+import java.time.Instant
+
+import scala.concurrent.duration.FiniteDuration
+
 import cats.effect.{ Async, Ref, Resource, Sync }
 import cats.implicits.*
 import com.monadial.waygrid.common.domain.algebra.storage.TraversalStateRepository
@@ -7,9 +11,6 @@ import com.monadial.waygrid.common.domain.model.routing.Value.TraversalId
 import com.monadial.waygrid.common.domain.model.traversal.fsm.ConcurrentModification
 import com.monadial.waygrid.common.domain.model.traversal.state.TraversalState
 import com.monadial.waygrid.common.domain.model.traversal.state.Value.StateVersion
-
-import java.time.Instant
-import scala.concurrent.duration.FiniteDuration
 
 /**
  * In-memory implementation of TraversalStateRepository.

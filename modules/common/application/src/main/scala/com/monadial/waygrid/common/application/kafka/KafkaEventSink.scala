@@ -1,5 +1,7 @@
 package com.monadial.waygrid.common.application.kafka
 
+import scala.concurrent.duration.*
+
 import cats.effect.implicits.*
 import cats.effect.{ Async, Clock, Resource }
 import cats.implicits.*
@@ -23,8 +25,6 @@ import org.typelevel.otel4s.context.propagation.TextMapUpdater
 import org.typelevel.otel4s.experimental.metrics.InstrumentedQueue
 import org.typelevel.otel4s.metrics.{ Counter, Histogram, Meter, UpDownCounter }
 import org.typelevel.otel4s.trace.{ SpanContext, Tracer }
-
-import scala.concurrent.duration.*
 
 // -----------------------------------------------------------------------------
 // Metrics Definition

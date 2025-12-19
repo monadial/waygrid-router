@@ -1,13 +1,13 @@
 package com.monadial.waygrid.common.domain.model.node
 
+import java.time.Instant
+
 import cats.syntax.all.*
 import com.monadial.waygrid.common.domain.model.Waygrid
 import com.monadial.waygrid.common.domain.model.node.Value.*
 import com.monadial.waygrid.common.domain.syntax.StringSyntax.toDomain
 import com.monadial.waygrid.common.domain.value.Address.NodeAddress
 import io.circe.Codec
-
-import java.time.Instant
 
 final case class Node(
   id: NodeId,

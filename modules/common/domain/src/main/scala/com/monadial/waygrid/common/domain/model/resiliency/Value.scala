@@ -1,8 +1,8 @@
 package com.monadial.waygrid.common.domain.model.resiliency
 
-import com.monadial.waygrid.common.domain.instances.StringInstances.given
 import com.monadial.waygrid.common.domain.algebra.value.bytes.BytesValue
 import com.monadial.waygrid.common.domain.algebra.value.codec.BytesCodec
+import com.monadial.waygrid.common.domain.instances.StringInstances.given
 
 object Value:
 

@@ -40,72 +40,72 @@ object ULIDValueSuite extends SimpleIOSuite with Checkers:
   // ---------------------------------------------------------------------------
 
   test("ULIDValue scodec roundtrip"):
-    forall(genDummyUlidId) { v =>
-      val codec  = summon[SCodec[DummyUlidId]]
-      val result = codec.encode(v).flatMap(codec.decode)
-      expect(result.toOption.exists(r => r.value == v && r.remainder.isEmpty))
-    }
+      forall(genDummyUlidId) { v =>
+        val codec  = summon[SCodec[DummyUlidId]]
+        val result = codec.encode(v).flatMap(codec.decode)
+        expect(result.toOption.exists(r => r.value == v && r.remainder.isEmpty))
+      }
 
   test("ULIDValue circe roundtrip"):
-    forall(genDummyUlidId) { v =>
-      val json    = v.asJson
-      val decoded = json.as[DummyUlidId]
-      expect(decoded.toOption.contains(v))
-    }
+      forall(genDummyUlidId) { v =>
+        val json    = v.asJson
+        val decoded = json.as[DummyUlidId]
+        expect(decoded.toOption.contains(v))
+      }
 
   test("ULIDValue BytesCodec roundtrip"):
-    forall(genDummyUlidId) { v =>
-      val encoded = BytesCodec[DummyUlidId].encodeToScalar(v)
-      val decoded = BytesCodec[DummyUlidId].decodeFromScalar(encoded)
-      expect(decoded.toOption.contains(v))
-    }
+      forall(genDummyUlidId) { v =>
+        val encoded = BytesCodec[DummyUlidId].encodeToScalar(v)
+        val decoded = BytesCodec[DummyUlidId].decodeFromScalar(encoded)
+        expect(decoded.toOption.contains(v))
+      }
 
   test("ULIDValue Base64Codec roundtrip"):
-    forall(genDummyUlidId) { v =>
-      val encoded = Base64Codec[DummyUlidId].encode(v)
-      val decoded = Base64Codec[DummyUlidId].decode(encoded)
-      expect(decoded.toOption.contains(v))
-    }
+      forall(genDummyUlidId) { v =>
+        val encoded = Base64Codec[DummyUlidId].encode(v)
+        val decoded = Base64Codec[DummyUlidId].decode(encoded)
+        expect(decoded.toOption.contains(v))
+      }
 
   // ---------------------------------------------------------------------------
   // Type class instance tests
   // ---------------------------------------------------------------------------
 
   test("ULIDValue Eq instance"):
-    forall(genDummyUlidIdPair) { case (a, b) =>
-      val eqInstance = summon[Eq[DummyUlidId]]
-      expect(eqInstance.eqv(a, a)) and
-        expect(eqInstance.eqv(b, b)) and
-        expect(eqInstance.eqv(a, b) == (a.unwrap == b.unwrap))
-    }
+      forall(genDummyUlidIdPair) { case (a, b) =>
+        val eqInstance = summon[Eq[DummyUlidId]]
+        expect(eqInstance.eqv(a, a)) and
+          expect(eqInstance.eqv(b, b)) and
+          expect(eqInstance.eqv(a, b) == (a.unwrap == b.unwrap))
+      }
 
   test("ULIDValue Order instance"):
-    forall(genDummyUlidIdPair) { case (a, b) =>
-      val orderInstance = summon[Order[DummyUlidId]]
-      expect(orderInstance.compare(a, a) == 0) and
-        expect(orderInstance.compare(a, b) == a.unwrap.compareTo(b.unwrap))
-    }
+      forall(genDummyUlidIdPair) { case (a, b) =>
+        val orderInstance = summon[Order[DummyUlidId]]
+        expect(orderInstance.compare(a, a) == 0) and
+          expect(orderInstance.compare(a, b) == a.unwrap.compareTo(b.unwrap))
+      }
 
   test("ULIDValue Show instance"):
-    forall(genDummyUlidId) { v =>
-      val showInstance = summon[Show[DummyUlidId]]
-      expect(showInstance.show(v) == v.unwrap.toString)
-    }
+      forall(genDummyUlidId) { v =>
+        val showInstance = summon[Show[DummyUlidId]]
+        expect(showInstance.show(v) == v.unwrap.toString)
+      }
 
   test("ULIDValue Ordering instance"):
-    forall(genDummyUlidIdPair) { case (a, b) =>
-      val orderingInstance = summon[Ordering[DummyUlidId]]
-      expect(orderingInstance.compare(a, b) == a.unwrap.compareTo(b.unwrap))
-    }
+      forall(genDummyUlidIdPair) { case (a, b) =>
+        val orderingInstance = summon[Ordering[DummyUlidId]]
+        expect(orderingInstance.compare(a, b) == a.unwrap.compareTo(b.unwrap))
+      }
 
   // ---------------------------------------------------------------------------
   // Unwrap test
   // ---------------------------------------------------------------------------
 
   test("ULIDValue unwrap returns underlying value"):
-    forall(genDummyUlidId) { v =>
-      expect(v.unwrap.isInstanceOf[ULID])
-    }
+      forall(genDummyUlidId) { v =>
+        expect(v.unwrap.isInstanceOf[ULID])
+      }
 
   // ---------------------------------------------------------------------------
   // Edge case tests - ULID specific
@@ -151,7 +151,7 @@ object ULIDValueSuite extends SimpleIOSuite with Checkers:
   pureTest("ULIDValue Order respects ULID ordering (later ULIDs are greater)") {
     val earlier = DummyUlidId(ULID.newULID)
     Thread.sleep(2) // ensure different timestamp component
-    val later   = DummyUlidId(ULID.newULID)
+    val later = DummyUlidId(ULID.newULID)
     expect(summon[Order[DummyUlidId]].compare(earlier, later) < 0)
   }
 
@@ -163,7 +163,7 @@ object ULIDValueSuite extends SimpleIOSuite with Checkers:
   }
 
   pureTest("ULIDValue Base64Codec roundtrip preserves ordering") {
-    val earlier    = DummyUlidId(ULID.newULID)
+    val earlier = DummyUlidId(ULID.newULID)
     Thread.sleep(2)
     val later      = DummyUlidId(ULID.newULID)
     val encEarlier = Base64Codec[DummyUlidId].encode(earlier)

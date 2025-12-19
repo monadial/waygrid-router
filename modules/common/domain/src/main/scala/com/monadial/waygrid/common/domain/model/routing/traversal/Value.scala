@@ -1,10 +1,10 @@
 package com.monadial.waygrid.common.domain.model.routing.traversal
 
+import scala.concurrent.duration.FiniteDuration
+
 import com.monadial.waygrid.common.domain.model.routing.Value.TraversalId
 import com.monadial.waygrid.common.domain.model.traversal.dag.{ Dag, Node }
 import com.monadial.waygrid.common.domain.value.Address.NodeAddress
-
-import scala.concurrent.duration.FiniteDuration
 
 object Value:
 

@@ -1,5 +1,7 @@
 package com.monadial.waygrid.system.blob.store
 
+import scala.annotation.nowarn
+
 import cats.Parallel
 import cats.effect.*
 import cats.effect.std.Console
@@ -13,8 +15,6 @@ import com.monadial.waygrid.system.blob.store.settings.BlobStoreSettings
 import com.suprnation.actor.ActorSystem
 import org.typelevel.otel4s.metrics.MeterProvider
 import org.typelevel.otel4s.trace.{ Tracer, TracerProvider }
-
-import scala.annotation.nowarn
 
 object Main extends WaygridApp[BlobStoreSettings](SystemWaygridApp.BlobStore):
 
@@ -33,7 +33,7 @@ object Main extends WaygridApp[BlobStoreSettings](SystemWaygridApp.BlobStore):
     settings: BlobStoreSettings
   ): Resource[F, Unit] =
     for
-      _ <- Resource.eval(Logger[F].info(s"Starting Blob Store Service."))
+      _ <- Resource.eval(Logger[F].info("Starting Blob Store Service."))
       programActor <- ProgramActor
         .behavior[F](settings, actorSystem)
         .evalMap(actorSystem.actorOf(_, "program-actor"))

@@ -4,8 +4,8 @@ import cats.syntax.all.*
 import com.monadial.waygrid.common.application.util.vulcan.codecs.DomainPrimitivesVulcanCodecs.given
 import com.monadial.waygrid.common.application.util.vulcan.codecs.DomainRoutingDagVulcanCodecs.given
 import com.monadial.waygrid.common.application.util.vulcan.codecs.DomainTraversalStateVulcanCodecs.given
-import com.monadial.waygrid.common.domain.model.envelope.{ EnvelopeStamps, EnvelopeStampsV2 }
 import com.monadial.waygrid.common.domain.model.envelope.Value.{ Stamp, TraversalRefStamp, TraversalStamp }
+import com.monadial.waygrid.common.domain.model.envelope.{ EnvelopeStamps, EnvelopeStampsV2 }
 import vulcan.Codec
 
 /**

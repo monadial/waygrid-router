@@ -1,5 +1,7 @@
 package com.monadial.waygrid.common.application.util.scodec.codecs
 
+import java.time.Instant
+
 import com.monadial.waygrid.common.application.util.scodec.ScodecUtils.*
 import com.monadial.waygrid.common.application.util.scodec.codecs.DomainRoutingDagScodecCodecs.given
 import com.monadial.waygrid.common.application.util.scodec.codecs.DomainVectorClockScodecCodecs.given
@@ -18,8 +20,6 @@ import scodec.*
 import scodec.bits.*
 import scodec.codecs.*
 import wvlet.airframe.ulid.ULID
-
-import java.time.Instant
 
 /**
  * Scodec binary codecs for TraversalState and related types.

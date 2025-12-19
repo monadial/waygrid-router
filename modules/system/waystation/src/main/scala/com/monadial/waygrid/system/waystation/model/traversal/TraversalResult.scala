@@ -1,12 +1,13 @@
 package com.monadial.waygrid.system.waystation.model.traversal
 
+import java.time.Instant
+
+import scala.concurrent.duration.FiniteDuration
+
 import com.monadial.waygrid.common.domain.model.routing.Value.{ DeliveryStrategy, TraversalId }
-import com.monadial.waygrid.common.domain.model.traversal.dag.Value.NodeId
 import com.monadial.waygrid.common.domain.model.routing.traversal.TraversalState
 import com.monadial.waygrid.common.domain.model.traversal.dag.Node
-
-import java.time.Instant
-import scala.concurrent.duration.FiniteDuration
+import com.monadial.waygrid.common.domain.model.traversal.dag.Value.NodeId
 
 sealed trait TraversalResult
 

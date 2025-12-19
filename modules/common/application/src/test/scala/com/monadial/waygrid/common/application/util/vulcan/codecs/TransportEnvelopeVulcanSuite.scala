@@ -1,5 +1,11 @@
 package com.monadial.waygrid.common.application.util.vulcan.codecs
 
+import java.io.{ ByteArrayInputStream, ByteArrayOutputStream }
+import java.time.Instant
+
+import scala.collection.immutable.SortedMap
+import scala.concurrent.duration.*
+
 import cats.Show
 import com.monadial.waygrid.common.application.domain.model.envelope.TransportEnvelope
 import com.monadial.waygrid.common.application.domain.model.envelope.Value.{
@@ -21,8 +27,8 @@ import com.monadial.waygrid.common.domain.model.node.Value.{
 }
 import com.monadial.waygrid.common.domain.model.resiliency.RetryPolicy
 import com.monadial.waygrid.common.domain.model.routing.Value.{ DeliveryStrategy, RepeatPolicy }
-import com.monadial.waygrid.common.domain.model.traversal.dag.{ Dag, Edge, JoinStrategy, Node, NodeType }
 import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ EdgeGuard, ForkId }
+import com.monadial.waygrid.common.domain.model.traversal.dag.{ Dag, Edge, JoinStrategy, Node, NodeType }
 import com.monadial.waygrid.common.domain.model.traversal.state.{ BranchResult, BranchStatus }
 import com.monadial.waygrid.common.domain.model.vectorclock.VectorClock
 import com.monadial.waygrid.common.domain.value.Address.{
@@ -40,11 +46,6 @@ import vulcan.Codec
 import weaver.SimpleIOSuite
 import weaver.scalacheck.Checkers
 import wvlet.airframe.ulid.ULID
-
-import java.io.{ ByteArrayInputStream, ByteArrayOutputStream }
-import java.time.Instant
-import scala.collection.immutable.SortedMap
-import scala.concurrent.duration.*
 
 /**
  * Property-based tests for Vulcan TransportEnvelope and related Avro codecs.
@@ -267,7 +268,7 @@ object TransportEnvelopeVulcanSuite extends SimpleIOSuite with Checkers:
                 case Right(decoded) =>
                   val result = decoded == value
                   if !result then
-                    System.err.println(s"Mismatch!")
+                    System.err.println("Mismatch!")
                     System.err.println(s"  Original: $value (class: ${value.getClass.getName})")
                     System.err.println(s"  Decoded:  $decoded (class: ${decoded.getClass.getName})")
                   result

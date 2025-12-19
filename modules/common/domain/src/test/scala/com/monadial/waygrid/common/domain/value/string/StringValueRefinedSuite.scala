@@ -43,74 +43,74 @@ object StringValueRefinedSuite extends SimpleIOSuite with Checkers:
   // ---------------------------------------------------------------------------
 
   test("StringValueRefined scodec roundtrip"):
-    forall(genDummyNonEmptyString) { v =>
-      val codec  = summon[SCodec[DummyNonEmptyString]]
-      val result = codec.encode(v).flatMap(codec.decode)
-      expect(result.toOption.exists(r => r.value == v && r.remainder.isEmpty))
-    }
+      forall(genDummyNonEmptyString) { v =>
+        val codec  = summon[SCodec[DummyNonEmptyString]]
+        val result = codec.encode(v).flatMap(codec.decode)
+        expect(result.toOption.exists(r => r.value == v && r.remainder.isEmpty))
+      }
 
   test("StringValueRefined circe roundtrip"):
-    forall(genDummyNonEmptyString) { v =>
-      val json    = v.asJson
-      val decoded = json.as[DummyNonEmptyString]
-      expect(decoded.toOption.contains(v))
-    }
+      forall(genDummyNonEmptyString) { v =>
+        val json    = v.asJson
+        val decoded = json.as[DummyNonEmptyString]
+        expect(decoded.toOption.contains(v))
+      }
 
   test("StringValueRefined BytesCodec roundtrip"):
-    forall(genDummyNonEmptyString) { v =>
-      val encoded = BytesCodec[DummyNonEmptyString].encodeToScalar(v)
-      val decoded = BytesCodec[DummyNonEmptyString].decodeFromScalar(encoded)
-      expect(decoded.toOption.contains(v))
-    }
+      forall(genDummyNonEmptyString) { v =>
+        val encoded = BytesCodec[DummyNonEmptyString].encodeToScalar(v)
+        val decoded = BytesCodec[DummyNonEmptyString].decodeFromScalar(encoded)
+        expect(decoded.toOption.contains(v))
+      }
 
   test("StringValueRefined Base64Codec roundtrip"):
-    forall(genDummyNonEmptyString) { v =>
-      val encoded = Base64Codec[DummyNonEmptyString].encode(v)
-      val decoded = Base64Codec[DummyNonEmptyString].decode(encoded)
-      expect(decoded.toOption.contains(v))
-    }
+      forall(genDummyNonEmptyString) { v =>
+        val encoded = Base64Codec[DummyNonEmptyString].encode(v)
+        val decoded = Base64Codec[DummyNonEmptyString].decode(encoded)
+        expect(decoded.toOption.contains(v))
+      }
 
   // ---------------------------------------------------------------------------
   // Type class instance tests
   // ---------------------------------------------------------------------------
 
   test("StringValueRefined Eq instance"):
-    forall(genDummyNonEmptyStringPair) { case (a, b) =>
-      val eqInstance = summon[Eq[DummyNonEmptyString]]
-      expect(eqInstance.eqv(a, a)) and
-        expect(eqInstance.eqv(b, b)) and
-        expect(eqInstance.eqv(a, b) == (a.unwrap == b.unwrap))
-    }
+      forall(genDummyNonEmptyStringPair) { case (a, b) =>
+        val eqInstance = summon[Eq[DummyNonEmptyString]]
+        expect(eqInstance.eqv(a, a)) and
+          expect(eqInstance.eqv(b, b)) and
+          expect(eqInstance.eqv(a, b) == (a.unwrap == b.unwrap))
+      }
 
   test("StringValueRefined Order instance"):
-    forall(genDummyNonEmptyStringPair) { case (a, b) =>
-      val orderInstance = summon[Order[DummyNonEmptyString]]
-      val cmp           = orderInstance.compare(a, b)
-      expect(orderInstance.compare(a, a) == 0) and
-        expect(cmp == a.unwrap.compare(b.unwrap))
-    }
+      forall(genDummyNonEmptyStringPair) { case (a, b) =>
+        val orderInstance = summon[Order[DummyNonEmptyString]]
+        val cmp           = orderInstance.compare(a, b)
+        expect(orderInstance.compare(a, a) == 0) and
+          expect(cmp == a.unwrap.compare(b.unwrap))
+      }
 
   test("StringValueRefined Show instance"):
-    forall(genDummyNonEmptyString) { v =>
-      val showInstance = summon[Show[DummyNonEmptyString]]
-      expect(showInstance.show(v) == v.unwrap)
-    }
+      forall(genDummyNonEmptyString) { v =>
+        val showInstance = summon[Show[DummyNonEmptyString]]
+        expect(showInstance.show(v) == v.unwrap)
+      }
 
   test("StringValueRefined Ordering instance"):
-    forall(genDummyNonEmptyStringPair) { case (a, b) =>
-      val orderingInstance = summon[Ordering[DummyNonEmptyString]]
-      expect(orderingInstance.compare(a, b) == a.unwrap.compare(b.unwrap))
-    }
+      forall(genDummyNonEmptyStringPair) { case (a, b) =>
+        val orderingInstance = summon[Ordering[DummyNonEmptyString]]
+        expect(orderingInstance.compare(a, b) == a.unwrap.compare(b.unwrap))
+      }
 
   // ---------------------------------------------------------------------------
   // Unwrap test
   // ---------------------------------------------------------------------------
 
   test("StringValueRefined unwrap returns underlying value"):
-    forall(genDummyNonEmptyString) { v =>
-      expect(v.unwrap.isInstanceOf[String]) and
-        expect(v.unwrap.nonEmpty)
-    }
+      forall(genDummyNonEmptyString) { v =>
+        expect(v.unwrap.isInstanceOf[String]) and
+          expect(v.unwrap.nonEmpty)
+      }
 
   // ---------------------------------------------------------------------------
   // Refinement validation tests
@@ -133,50 +133,50 @@ object StringValueRefinedSuite extends SimpleIOSuite with Checkers:
 
   private val genSpecialCharsNonEmpty: Gen[DummyNonEmptyString] =
     Gen.oneOf(
-      "hello\nworld",           // newline
-      "tab\there",              // tab
-      "quote\"inside",          // double quote
-      "back\\slash",            // backslash
-      "emoji🎉test",            // emoji
-      "unicode™®©",             // special unicode
-      "中文字符",                // Chinese characters
+      "hello\nworld",          // newline
+      "tab\there",             // tab
+      "quote\"inside",         // double quote
+      "back\\slash",           // backslash
+      "emoji🎉test",           // emoji
+      "unicode™®©",            // special unicode
+      "中文字符",                  // Chinese characters
       "Ελληνικά",              // Greek
-      "العربية",                // Arabic
-      " ",                      // single space (non-empty!)
-      " leading",               // leading space
-      "trailing ",              // trailing space
-      "  multiple   spaces  ",  // multiple spaces
-      "a",                      // single char
-      "🔥💧🌍🌬️"                 // multiple emojis
+      "العربية",               // Arabic
+      " ",                     // single space (non-empty!)
+      " leading",              // leading space
+      "trailing ",             // trailing space
+      "  multiple   spaces  ", // multiple spaces
+      "a",                     // single char
+      "🔥💧🌍🌬️"              // multiple emojis
     ).map(DummyNonEmptyString.unsafeFrom)
 
   test("StringValueRefined scodec roundtrip with special characters"):
-    forall(genSpecialCharsNonEmpty) { v =>
-      val codec  = summon[SCodec[DummyNonEmptyString]]
-      val result = codec.encode(v).flatMap(codec.decode)
-      expect(result.toOption.exists(r => r.value == v && r.remainder.isEmpty))
-    }
+      forall(genSpecialCharsNonEmpty) { v =>
+        val codec  = summon[SCodec[DummyNonEmptyString]]
+        val result = codec.encode(v).flatMap(codec.decode)
+        expect(result.toOption.exists(r => r.value == v && r.remainder.isEmpty))
+      }
 
   test("StringValueRefined circe roundtrip with special characters"):
-    forall(genSpecialCharsNonEmpty) { v =>
-      val json    = v.asJson
-      val decoded = json.as[DummyNonEmptyString]
-      expect(decoded.toOption.contains(v))
-    }
+      forall(genSpecialCharsNonEmpty) { v =>
+        val json    = v.asJson
+        val decoded = json.as[DummyNonEmptyString]
+        expect(decoded.toOption.contains(v))
+      }
 
   test("StringValueRefined BytesCodec roundtrip with special characters"):
-    forall(genSpecialCharsNonEmpty) { v =>
-      val encoded = BytesCodec[DummyNonEmptyString].encodeToScalar(v)
-      val decoded = BytesCodec[DummyNonEmptyString].decodeFromScalar(encoded)
-      expect(decoded.toOption.contains(v))
-    }
+      forall(genSpecialCharsNonEmpty) { v =>
+        val encoded = BytesCodec[DummyNonEmptyString].encodeToScalar(v)
+        val decoded = BytesCodec[DummyNonEmptyString].decodeFromScalar(encoded)
+        expect(decoded.toOption.contains(v))
+      }
 
   test("StringValueRefined Base64Codec roundtrip with special characters"):
-    forall(genSpecialCharsNonEmpty) { v =>
-      val encoded = Base64Codec[DummyNonEmptyString].encode(v)
-      val decoded = Base64Codec[DummyNonEmptyString].decode(encoded)
-      expect(decoded.toOption.contains(v))
-    }
+      forall(genSpecialCharsNonEmpty) { v =>
+        val encoded = Base64Codec[DummyNonEmptyString].encode(v)
+        val decoded = Base64Codec[DummyNonEmptyString].decode(encoded)
+        expect(decoded.toOption.contains(v))
+      }
 
   // ---------------------------------------------------------------------------
   // Edge case tests - boundary values
@@ -201,7 +201,7 @@ object StringValueRefinedSuite extends SimpleIOSuite with Checkers:
   }
 
   pureTest("StringValueRefined scodec decode fails for empty string (refinement)") {
-    val codec   = summon[SCodec[DummyNonEmptyString]]
+    val codec = summon[SCodec[DummyNonEmptyString]]
     // Encode an empty string as raw UTF-8 bytes
     val encoded = scodec.codecs.utf8.encode("")
     val decoded = encoded.flatMap(codec.decode)
@@ -222,8 +222,8 @@ object StringValueRefinedSuite extends SimpleIOSuite with Checkers:
   }
 
   pureTest("StringValueRefined handles whitespace-only string") {
-    val v      = DummyNonEmptyString.unsafeFrom("   ")
-    val json   = v.asJson
+    val v       = DummyNonEmptyString.unsafeFrom("   ")
+    val json    = v.asJson
     val decoded = json.as[DummyNonEmptyString]
     expect(decoded.toOption.contains(v)) and
       expect(v.unwrap == "   ")

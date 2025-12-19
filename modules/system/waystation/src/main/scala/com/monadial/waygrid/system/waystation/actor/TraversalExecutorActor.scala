@@ -1,5 +1,7 @@
 package com.monadial.waygrid.system.waystation.actor
 
+import scala.annotation.nowarn
+
 import cats.Parallel
 import cats.effect.{ Async, Concurrent, Ref, Resource }
 import cats.implicits.*
@@ -19,8 +21,6 @@ import com.monadial.waygrid.common.domain.model.traversal.fsm.TraversalSignal.{
 import com.monadial.waygrid.common.domain.model.traversal.state.TraversalState
 import com.suprnation.actor.Actor.ReplyingReceive
 import org.typelevel.otel4s.trace.SpanContext
-
-import scala.annotation.nowarn
 
 sealed trait TraversalExecutorRequest:
   val traversalId: TraversalId

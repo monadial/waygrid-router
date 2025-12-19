@@ -1,5 +1,10 @@
 package com.monadial.waygrid.common.application.util.scodec.codecs
 
+import java.time.Instant
+
+import scala.collection.immutable.SortedMap
+import scala.concurrent.duration.*
+
 import cats.Show
 import cats.data.NonEmptyList
 import com.monadial.waygrid.common.application.domain.model.envelope.TransportEnvelope
@@ -8,7 +13,6 @@ import com.monadial.waygrid.common.application.domain.model.envelope.Value.{
   MessageContentData,
   MessageContentType
 }
-import com.monadial.waygrid.common.domain.model.envelope.Value.EnvelopeId
 import com.monadial.waygrid.common.application.util.scodec.codecs.ApplicationTransportEnvelopeScodecCodecs.given
 import com.monadial.waygrid.common.application.util.scodec.codecs.DomainAddressScodecCodecs.given
 import com.monadial.waygrid.common.application.util.scodec.codecs.DomainRoutingDagScodecCodecs.given
@@ -16,7 +20,7 @@ import com.monadial.waygrid.common.application.util.scodec.codecs.DomainRoutingS
 import com.monadial.waygrid.common.application.util.scodec.codecs.DomainStampScodecCodecs.given
 import com.monadial.waygrid.common.application.util.scodec.codecs.DomainVectorClockScodecCodecs.given
 import com.monadial.waygrid.common.domain.model.envelope.EnvelopeStamps
-import com.monadial.waygrid.common.domain.model.envelope.Value.{ Stamp, TraversalRefStamp, TraversalStamp }
+import com.monadial.waygrid.common.domain.model.envelope.Value.{ EnvelopeId, Stamp, TraversalRefStamp, TraversalStamp }
 import com.monadial.waygrid.common.domain.model.node.Value.{
   NodeComponent,
   NodeDescriptor,
@@ -26,30 +30,19 @@ import com.monadial.waygrid.common.domain.model.node.Value.{
 import com.monadial.waygrid.common.domain.model.resiliency.RetryPolicy
 import com.monadial.waygrid.common.domain.model.routing.Value.{ DeliveryStrategy, RepeatPolicy, TraversalId }
 import com.monadial.waygrid.common.domain.model.traversal.condition.Condition
-import com.monadial.waygrid.common.domain.model.traversal.dag.{ Dag, Edge, JoinStrategy, Node, NodeType }
 import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ DagHash, EdgeGuard, ForkId, NodeId }
-import com.monadial.waygrid.common.domain.model.traversal.state.{ BranchResult, BranchStatus, TraversalState }
+import com.monadial.waygrid.common.domain.model.traversal.dag.{ Dag, Edge, JoinStrategy, Node, NodeType }
 import com.monadial.waygrid.common.domain.model.traversal.state.Event.*
 import com.monadial.waygrid.common.domain.model.traversal.state.Value.RemainingNodes
+import com.monadial.waygrid.common.domain.model.traversal.state.{ BranchResult, BranchStatus, TraversalState }
 import com.monadial.waygrid.common.domain.model.vectorclock.VectorClock
-import com.monadial.waygrid.common.domain.value.Address.{
-  Endpoint,
-  EndpointDirection,
-  LogicalEndpoint,
-  NodeAddress,
-  PhysicalEndpoint,
-  ServiceAddress
-}
+import com.monadial.waygrid.common.domain.value.Address.*
 import org.scalacheck.Gen
-import scodec.{ Attempt, Codec }
 import scodec.bits.ByteVector
+import scodec.{ Attempt, Codec }
 import weaver.SimpleIOSuite
 import weaver.scalacheck.Checkers
 import wvlet.airframe.ulid.ULID
-
-import java.time.Instant
-import scala.collection.immutable.SortedMap
-import scala.concurrent.duration.*
 
 /**
  * Property-based tests for scodec TransportEnvelope and related codecs.

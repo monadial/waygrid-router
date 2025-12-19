@@ -1,11 +1,11 @@
 package com.monadial.waygrid.common.domain.model.traversal.fsm
 
+import java.time.Instant
+
 import com.monadial.waygrid.common.domain.model.routing.Value.TraversalId
 import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ BranchId, ForkId, NodeId }
 import com.monadial.waygrid.common.domain.model.traversal.state.TraversalState
 import com.monadial.waygrid.common.domain.model.traversal.state.Value.RetryAttempt
-
-import java.time.Instant
 
 sealed trait TraversalEffect:
   val traversalId: TraversalId

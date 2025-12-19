@@ -1,20 +1,20 @@
 package com.monadial.waygrid.common.domain.model.traversal.fsm
 
+import java.time.Instant
+
 import cats.Monad
 import cats.implicits.*
 import com.monadial.waygrid.common.domain.model.fsm.FSM
 import com.monadial.waygrid.common.domain.model.fsm.Value.Result
 import com.monadial.waygrid.common.domain.model.resiliency.{ Backoff, RetryPolicy }
 import com.monadial.waygrid.common.domain.model.routing.Value.{ DeliveryStrategy, TraversalId }
-import com.monadial.waygrid.common.domain.model.traversal.dag.{ Dag, JoinStrategy, Node as DagNode, NodeType }
-import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ BranchId, EdgeGuard, ForkId, NodeId }
-import com.monadial.waygrid.common.domain.model.traversal.fsm.TraversalEffect.*
 import com.monadial.waygrid.common.domain.model.traversal.condition.Condition
-import com.monadial.waygrid.common.domain.model.traversal.state.{ BranchResult, PendingJoin, TraversalState }
+import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ BranchId, EdgeGuard, ForkId, NodeId }
+import com.monadial.waygrid.common.domain.model.traversal.dag.{ Dag, JoinStrategy, Node as DagNode, NodeType }
+import com.monadial.waygrid.common.domain.model.traversal.fsm.TraversalEffect.*
 import com.monadial.waygrid.common.domain.model.traversal.state.Value.RetryAttempt
+import com.monadial.waygrid.common.domain.model.traversal.state.{ BranchResult, PendingJoin, TraversalState }
 import com.monadial.waygrid.common.domain.value.Address.NodeAddress
-
-import java.time.Instant
 
 /**
  * ==TraversalFSM - Pure Deterministic DAG Traversal State Machine==
@@ -1399,7 +1399,7 @@ object TraversalFSM:
                         signal.traversalId,
                         signal.branchId,
                         s"member of fork $forkId",
-                        s"not in fork branches"
+                        "not in fork branches"
                       )
                     )
                   // Validate this is the correct join for this fork

@@ -1,14 +1,14 @@
 package com.monadial.waygrid.common.application.domain.model.event
 
-import com.monadial.waygrid.common.domain.syntax.StringSyntax.toDomain
+import scala.reflect.ClassTag
+
 import cats.implicits.*
 import com.monadial.waygrid.common.domain.algebra.messaging.event.Event as DomainEvent
 import com.monadial.waygrid.common.domain.algebra.value.string.StringValue
 import com.monadial.waygrid.common.domain.algebra.value.ulid.ULIDValue
 import com.monadial.waygrid.common.domain.model.Waygrid
+import com.monadial.waygrid.common.domain.syntax.StringSyntax.toDomain
 import io.circe.Codec
-
-import scala.reflect.ClassTag
 
 type EventId = EventId.Type
 object EventId extends ULIDValue

@@ -1,14 +1,14 @@
 package com.monadial.waygrid.common.application.interpreter
 
-import com.monadial.waygrid.common.application.algebra.ThisNode
-import com.monadial.waygrid.common.domain.model.node.Value.*
-import com.monadial.waygrid.common.domain.syntax.StringSyntax.toDomain
 import cats.*
 import cats.data.*
 import cats.effect.*
 import cats.effect.std.Env
 import cats.syntax.all.*
+import com.monadial.waygrid.common.application.algebra.ThisNode
 import com.monadial.waygrid.common.domain.model.node.Node
+import com.monadial.waygrid.common.domain.model.node.Value.*
+import com.monadial.waygrid.common.domain.syntax.StringSyntax.toDomain
 
 object EnvHasNodeInterpreter:
   def resource[F[+_]: {Async, Env}](descriptor: NodeDescriptor): Resource[F, ThisNode[F]] =

@@ -1,5 +1,7 @@
 package com.monadial.waygrid.common.domain.model.traversal.dag
 
+import scala.concurrent.duration.*
+
 import cats.Show
 import cats.data.NonEmptyList
 import com.monadial.waygrid.common.domain.model.resiliency.RetryPolicy
@@ -10,8 +12,6 @@ import org.http4s.Uri
 import org.scalacheck.Gen
 import weaver.SimpleIOSuite
 import weaver.scalacheck.Checkers
-
-import scala.concurrent.duration.*
 
 /**
  * Property-based tests for DAG structures and related value types.

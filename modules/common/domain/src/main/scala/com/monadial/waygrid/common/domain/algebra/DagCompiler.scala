@@ -1,24 +1,17 @@
 package com.monadial.waygrid.common.domain.algebra
 
+import scala.collection.mutable
+
+import cats.data.NonEmptyList
 import cats.effect.{ Resource, Sync }
 import cats.implicits.*
 import com.monadial.waygrid.common.domain.interpreter.cryptography.HasherInterpreter
 import com.monadial.waygrid.common.domain.model.cryptography.hashing.Value.LongHash
 import com.monadial.waygrid.common.domain.model.routing.Value.RouteSalt
 import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ DagHash, EdgeGuard, ForkId, NodeId }
-import com.monadial.waygrid.common.domain.model.traversal.dag.{
-  CompiledDag,
-  Dag,
-  DagValidationError,
-  Edge as DagEdge,
-  Node as DagNode,
-  NodeType
-}
-import com.monadial.waygrid.common.domain.model.traversal.spec.{ Node as SpecNode, Spec }
+import com.monadial.waygrid.common.domain.model.traversal.dag.{Edge as DagEdge, Node as DagNode, *}
 import com.monadial.waygrid.common.domain.model.traversal.spec.Node.NodeParameters
-import cats.data.NonEmptyList
-
-import scala.collection.mutable
+import com.monadial.waygrid.common.domain.model.traversal.spec.{ Node as SpecNode, Spec }
 
 final case class RouteCompilerError(msg: String) extends RuntimeException(msg)
 

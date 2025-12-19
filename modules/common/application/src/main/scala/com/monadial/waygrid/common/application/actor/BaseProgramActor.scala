@@ -1,9 +1,9 @@
 package com.monadial.waygrid.common.application.actor
 
-import com.monadial.waygrid.common.application.algebra.SupervisedRequest.{ Restart, Start, Stop }
 import cats.Parallel
 import cats.effect.Async
 import cats.syntax.all.*
+import com.monadial.waygrid.common.application.algebra.SupervisedRequest.{ Restart, Start, Stop }
 import com.monadial.waygrid.common.application.algebra.{
   Logger,
   SupervisedActor,

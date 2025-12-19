@@ -1,9 +1,9 @@
 package com.monadial.waygrid.common.domain.algebra.value.instant
 
+import java.time.Instant
+
 import com.monadial.waygrid.common.domain.algebra.TypeEvidence
 import monocle.Iso
-
-import java.time.Instant
 
 trait IsInstant[A] extends TypeEvidence[Instant, A]
 

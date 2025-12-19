@@ -1,11 +1,11 @@
 package com.monadial.waygrid.common.domain.model.traversal.state
 
+import java.time.Instant
+
 import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ BranchId, ForkId, NodeId }
 import com.monadial.waygrid.common.domain.model.traversal.state.Value.RetryAttempt
 import com.monadial.waygrid.common.domain.model.vectorclock.VectorClock
 import com.monadial.waygrid.common.domain.value.Address.NodeAddress
-
-import java.time.Instant
 
 object Event:
 

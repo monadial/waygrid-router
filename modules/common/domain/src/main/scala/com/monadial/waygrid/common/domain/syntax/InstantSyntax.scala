@@ -1,10 +1,10 @@
 package com.monadial.waygrid.common.domain.syntax
 
+import java.time.Instant
+
 import cats.Applicative
 import cats.implicits.*
 import com.monadial.waygrid.common.domain.algebra.value.instant.IsInstant
-
-import java.time.Instant
 
 object InstantSyntax:
   extension (instant: Instant)

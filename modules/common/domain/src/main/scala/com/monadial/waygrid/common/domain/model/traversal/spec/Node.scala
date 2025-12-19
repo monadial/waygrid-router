@@ -1,13 +1,13 @@
 package com.monadial.waygrid.common.domain.model.traversal.spec
 
+import scala.concurrent.duration.FiniteDuration
+
 import com.monadial.waygrid.common.domain.model.parameter.ParameterValue
 import com.monadial.waygrid.common.domain.model.resiliency.RetryPolicy
 import com.monadial.waygrid.common.domain.model.routing.Value.DeliveryStrategy
 import com.monadial.waygrid.common.domain.model.traversal.condition.Condition
 import com.monadial.waygrid.common.domain.model.traversal.dag.JoinStrategy
 import com.monadial.waygrid.common.domain.value.Address.ServiceAddress
-
-import scala.concurrent.duration.FiniteDuration
 
 /**
  * Specification node for DAG definition.

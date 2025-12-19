@@ -23,8 +23,8 @@ import org.http4s.ember.server.EmberServerBuilder
 import org.http4s.implicits.given
 import org.http4s.otel4s.middleware.metrics.OtelMetrics
 import org.http4s.otel4s.middleware.trace.client.UriRedactor
-import org.http4s.otel4s.middleware.trace.{ PerRequestFilter, redact }
 import org.http4s.otel4s.middleware.trace.server.{ ServerMiddleware, ServerSpanDataProvider }
+import org.http4s.otel4s.middleware.trace.{ PerRequestFilter, redact }
 import org.http4s.server.Server
 import org.http4s.server.middleware.Metrics
 import org.http4s.server.websocket.WebSocketBuilder2

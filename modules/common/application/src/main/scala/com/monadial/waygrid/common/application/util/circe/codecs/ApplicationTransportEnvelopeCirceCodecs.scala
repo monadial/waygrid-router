@@ -3,10 +3,10 @@ package com.monadial.waygrid.common.application.util.circe.codecs
 import cats.syntax.all.*
 import com.monadial.waygrid.common.application.domain.model.envelope.TransportEnvelope
 import com.monadial.waygrid.common.application.domain.model.envelope.Value.MessageContent
+import com.monadial.waygrid.common.application.util.circe.codecs.DomainStampCirceCodecs.given
 import com.monadial.waygrid.common.domain.model.envelope.EnvelopeStamps
 import com.monadial.waygrid.common.domain.model.envelope.Value.Stamp
 import com.monadial.waygrid.common.domain.value.Address.{ Endpoint, EndpointDirection }
-import com.monadial.waygrid.common.application.util.circe.codecs.DomainStampCirceCodecs.given
 import io.circe.*
 import io.circe.generic.semiauto
 import io.circe.syntax.*

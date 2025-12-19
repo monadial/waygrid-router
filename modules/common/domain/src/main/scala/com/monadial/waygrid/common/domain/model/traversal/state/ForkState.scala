@@ -1,10 +1,10 @@
 package com.monadial.waygrid.common.domain.model.traversal.state
 
+import java.time.Instant
+
 import com.monadial.waygrid.common.domain.model.traversal.dag.JoinStrategy
 import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ BranchId, ForkId, NodeId }
 import io.circe.Json
-
-import java.time.Instant
 
 /**
  * Tracks an active fork scope during DAG traversal.

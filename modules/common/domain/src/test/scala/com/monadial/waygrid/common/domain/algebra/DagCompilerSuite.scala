@@ -482,7 +482,7 @@ object DagCompilerSuite extends SimpleIOSuite:
           case Left(other) =>
             failure(s"Expected RouteCompilerError, got: ${other.getClass.getSimpleName}: ${other.getMessage}")
           case Right(dag) =>
-            failure(s"Expected compilation to fail for single-branch fork, but got valid DAG")
+            failure("Expected compilation to fail for single-branch fork, but got valid DAG")
         }
       }
 

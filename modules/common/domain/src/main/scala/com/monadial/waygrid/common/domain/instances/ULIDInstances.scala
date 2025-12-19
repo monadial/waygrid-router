@@ -1,5 +1,7 @@
 package com.monadial.waygrid.common.domain.instances
 
+import scala.util.{ Failure, Success, Try }
+
 import cats.Show
 import cats.data.Validated
 import cats.kernel.Order
@@ -13,8 +15,6 @@ import io.circe.{ Decoder as JsonDecoder, Encoder as JsonEncoder }
 import scodec.bits.ByteVector
 import scodec.{ Attempt, Decoder as SDecoder, Encoder as SEncoder, Err }
 import wvlet.airframe.ulid.ULID
-
-import scala.util.{ Failure, Success, Try }
 
 object ULIDInstances:
   given Order[ULID] = (x: ULID, y: ULID) => x.compareTo(y)

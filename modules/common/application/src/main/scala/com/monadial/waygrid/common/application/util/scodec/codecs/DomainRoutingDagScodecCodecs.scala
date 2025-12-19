@@ -1,21 +1,21 @@
 package com.monadial.waygrid.common.application.util.scodec.codecs
 
+import scala.concurrent.duration.FiniteDuration
+
 import cats.data.NonEmptyList
 import com.monadial.waygrid.common.application.instances.DurationInstances.given
 import com.monadial.waygrid.common.application.util.scodec.codecs.DomainRoutingScodecCodecs.given
 import com.monadial.waygrid.common.domain.model.resiliency.RetryPolicy
 import com.monadial.waygrid.common.domain.model.routing.Value.{ DeliveryStrategy, RepeatPolicy }
 import com.monadial.waygrid.common.domain.model.traversal.condition.Condition
-import com.monadial.waygrid.common.domain.model.traversal.dag.{ Dag, Edge, JoinStrategy, Node, NodeType }
 import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ BranchId, DagHash, EdgeGuard, ForkId, NodeId }
+import com.monadial.waygrid.common.domain.model.traversal.dag.{ Dag, Edge, JoinStrategy, Node, NodeType }
 import com.monadial.waygrid.common.domain.value.Address.ServiceAddress
 import org.http4s.Uri
 import scodec.*
 import scodec.bits.*
 import scodec.codecs.*
 import wvlet.airframe.ulid.ULID
-
-import scala.concurrent.duration.FiniteDuration
 
 /**
  * Scodec binary codecs for DAG-related domain types.

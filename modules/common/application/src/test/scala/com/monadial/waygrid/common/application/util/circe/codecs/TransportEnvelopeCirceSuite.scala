@@ -1,5 +1,10 @@
 package com.monadial.waygrid.common.application.util.circe.codecs
 
+import java.time.Instant
+
+import scala.collection.immutable.SortedMap
+import scala.concurrent.duration.*
+
 import cats.Show
 import cats.data.NonEmptyList
 import com.monadial.waygrid.common.application.domain.model.envelope.TransportEnvelope
@@ -25,30 +30,19 @@ import com.monadial.waygrid.common.domain.model.node.Value.{
 import com.monadial.waygrid.common.domain.model.resiliency.RetryPolicy
 import com.monadial.waygrid.common.domain.model.routing.Value.{ DeliveryStrategy, RepeatPolicy, TraversalId }
 import com.monadial.waygrid.common.domain.model.traversal.condition.Condition
-import com.monadial.waygrid.common.domain.model.traversal.dag.{ Dag, Edge, JoinStrategy, Node, NodeType }
 import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ DagHash, EdgeGuard, ForkId, NodeId }
+import com.monadial.waygrid.common.domain.model.traversal.dag.{ Dag, Edge, JoinStrategy, Node, NodeType }
 import com.monadial.waygrid.common.domain.model.traversal.state.TraversalState
 import com.monadial.waygrid.common.domain.model.traversal.state.Value.RemainingNodes
 import com.monadial.waygrid.common.domain.model.vectorclock.VectorClock
-import com.monadial.waygrid.common.domain.value.Address.{
-  Endpoint,
-  EndpointDirection,
-  LogicalEndpoint,
-  NodeAddress,
-  PhysicalEndpoint,
-  ServiceAddress
-}
-import io.circe.{ Decoder, Encoder }
+import com.monadial.waygrid.common.domain.value.Address.*
 import io.circe.syntax.*
+import io.circe.{ Decoder, Encoder }
 import org.scalacheck.Gen
 import scodec.bits.ByteVector
 import weaver.SimpleIOSuite
 import weaver.scalacheck.Checkers
 import wvlet.airframe.ulid.ULID
-
-import java.time.Instant
-import scala.collection.immutable.SortedMap
-import scala.concurrent.duration.*
 
 /**
  * Property-based tests for Circe JSON TransportEnvelope and related codecs.

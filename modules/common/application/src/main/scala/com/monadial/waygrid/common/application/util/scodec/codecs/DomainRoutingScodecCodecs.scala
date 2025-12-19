@@ -1,5 +1,9 @@
 package com.monadial.waygrid.common.application.util.scodec.codecs
 
+import java.time.Instant
+
+import scala.concurrent.duration.FiniteDuration
+
 import com.monadial.waygrid.common.application.instances.DurationInstances.given
 import com.monadial.waygrid.common.domain.model.resiliency.RetryPolicy
 import com.monadial.waygrid.common.domain.model.routing.Value.{
@@ -11,9 +15,6 @@ import com.monadial.waygrid.common.domain.model.routing.Value.{
 import scodec.*
 import scodec.bits.*
 import scodec.codecs.*
-
-import java.time.Instant
-import scala.concurrent.duration.FiniteDuration
 
 /**
  * Scodec binary codecs for routing-related domain types.

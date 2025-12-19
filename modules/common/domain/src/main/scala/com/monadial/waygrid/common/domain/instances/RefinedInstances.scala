@@ -9,8 +9,8 @@ import com.monadial.waygrid.common.domain.algebra.value.codec.{
   BytesDecodingError
 }
 import eu.timepit.refined.api.{ RefType, Validate }
-import scodec.{ Attempt, Decoder as SDecoder, Encoder as SEncoder, Err }
 import scodec.bits.ByteVector
+import scodec.{ Attempt, Decoder as SDecoder, Encoder as SEncoder, Err }
 
 object RefinedInstances:
 
@@ -30,9 +30,9 @@ object RefinedInstances:
     refType: RefType[F]
   ): SDecoder[F[T, P]] =
     underlying.emap: value =>
-      refType.refine[P](value) match
-        case Right(refined) => Attempt.successful(refined)
-        case Left(err)      => Attempt.failure(Err(err))
+        refType.refine[P](value) match
+          case Right(refined) => Attempt.successful(refined)
+          case Left(err)      => Attempt.failure(Err(err))
 
   // ---------------------------------------------------------------------------
   // BytesCodec instances for Refined types

@@ -5,8 +5,8 @@ import com.monadial.waygrid.common.application.instances.DurationInstances.given
 import com.monadial.waygrid.common.application.util.circe.DerivationConfiguration.given
 import com.monadial.waygrid.common.application.util.circe.codecs.DomainRoutingCirceCodecs.given
 import com.monadial.waygrid.common.domain.model.traversal.condition.Condition
-import com.monadial.waygrid.common.domain.model.traversal.dag.{ Dag, Edge, JoinStrategy, Node, NodeType }
 import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ BranchId, EdgeGuard, ForkId, NodeId }
+import com.monadial.waygrid.common.domain.model.traversal.dag.{ Dag, Edge, JoinStrategy, Node, NodeType }
 import io.circe.{ Codec, Decoder, Encoder }
 
 object DomainRoutingDagCirceCodecs:

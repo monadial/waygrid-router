@@ -1,12 +1,12 @@
 package com.monadial.waygrid.common.domain.model.vectorclock
 
-import weaver.SimpleIOSuite
+import scala.collection.immutable.SortedMap
+
 import cats.syntax.all.*
 import com.monadial.waygrid.common.domain.model.vectorclock.VectorClock.Comparison.*
 import com.monadial.waygrid.common.domain.value.Address.NodeAddress
 import org.http4s.Uri
-
-import scala.collection.immutable.SortedMap
+import weaver.SimpleIOSuite
 
 object VectorClockSuite extends SimpleIOSuite:
 

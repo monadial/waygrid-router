@@ -1,11 +1,11 @@
 package com.monadial.waygrid.common.application.util.vulcan
 
+import java.time.Instant
+
 import org.http4s.Uri
 import scodec.bits.ByteVector
 import vulcan.Codec
 import wvlet.airframe.ulid.ULID
-
-import java.time.Instant
 
 /**
  * Base Vulcan Avro codecs for common JDK and library types.

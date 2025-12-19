@@ -1,5 +1,7 @@
 package com.monadial.waygrid.common.domain.model.traversal.dag
 
+import scala.concurrent.duration.*
+
 import cats.data.NonEmptyList
 import cats.effect.IO
 import com.monadial.waygrid.common.domain.model.resiliency.RetryPolicy
@@ -8,8 +10,6 @@ import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ DagHash, E
 import com.monadial.waygrid.common.domain.value.Address.ServiceAddress
 import org.http4s.Uri
 import weaver.SimpleIOSuite
-
-import scala.concurrent.duration.*
 
 object DagValidationSuite extends SimpleIOSuite:
 

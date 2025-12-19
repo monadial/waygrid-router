@@ -1,5 +1,7 @@
 package com.monadial.waygrid.common.domain.instances
 
+import java.nio.charset.Charset
+
 import cats.data.Validated
 import com.monadial.waygrid.common.domain.algebra.value.codec.{
   Base64Codec,
@@ -9,8 +11,6 @@ import com.monadial.waygrid.common.domain.algebra.value.codec.{
 }
 import scodec.bits.ByteVector
 import scodec.{ Decoder as SDecoder, Encoder as SEncoder, codecs }
-
-import java.nio.charset.Charset
 
 object StringInstances:
 

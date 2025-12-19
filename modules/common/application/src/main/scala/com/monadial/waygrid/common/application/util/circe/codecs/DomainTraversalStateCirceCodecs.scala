@@ -1,24 +1,17 @@
 package com.monadial.waygrid.common.application.util.circe.codecs
 
+import java.time.Instant
+
 import com.monadial.waygrid.common.application.util.circe.DerivationConfiguration.given
 import com.monadial.waygrid.common.application.util.circe.codecs.DomainRoutingDagCirceCodecs.given
 import com.monadial.waygrid.common.application.util.circe.codecs.DomainVectorClockCirceCodecs.given
 import com.monadial.waygrid.common.domain.model.traversal.Event.TraversalEvent
 import com.monadial.waygrid.common.domain.model.traversal.dag.JoinStrategy
 import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ BranchId, ForkId, NodeId }
+import com.monadial.waygrid.common.domain.model.traversal.state.*
 import com.monadial.waygrid.common.domain.model.traversal.state.Event.StateEvent
-import com.monadial.waygrid.common.domain.model.traversal.state.{
-  BranchResult,
-  BranchState,
-  BranchStatus,
-  ForkScope,
-  PendingJoin,
-  TraversalState
-}
 import com.monadial.waygrid.common.domain.model.traversal.state.Value.{ RemainingNodes, RetryAttempt, StateVersion }
 import io.circe.{ Codec, Decoder, Encoder, KeyDecoder, KeyEncoder }
-
-import java.time.Instant
 
 object DomainTraversalStateCirceCodecs:
 

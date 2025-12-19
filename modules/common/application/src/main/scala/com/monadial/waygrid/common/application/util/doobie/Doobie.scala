@@ -1,5 +1,7 @@
 package com.monadial.waygrid.common.application.util.doobie
 
+import java.util.Properties
+
 import cats.effect.{ Async, Resource }
 import cats.syntax.all.*
 import com.monadial.waygrid.common.application.algebra.Logger
@@ -11,8 +13,6 @@ import de.lhns.doobie.flyway.Flyway
 import doobie.hikari.HikariTransactor
 import doobie.util.log
 import doobie.util.log.{ ExecFailure, LogHandler, ProcessingFailure, Success }
-
-import java.util.Properties
 
 object Doobie:
 

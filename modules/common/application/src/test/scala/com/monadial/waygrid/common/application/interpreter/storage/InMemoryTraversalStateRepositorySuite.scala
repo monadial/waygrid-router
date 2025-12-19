@@ -1,7 +1,9 @@
 package com.monadial.waygrid.common.application.interpreter.storage
 
-import cats.effect.IO
+import scala.concurrent.duration.*
+
 import cats.data.NonEmptyList
+import cats.effect.IO
 import com.monadial.waygrid.common.domain.model.resiliency.RetryPolicy
 import com.monadial.waygrid.common.domain.model.routing.Value.{ DeliveryStrategy, RepeatPolicy, TraversalId }
 import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ DagHash, NodeId }
@@ -12,8 +14,6 @@ import com.monadial.waygrid.common.domain.model.traversal.state.Value.StateVersi
 import com.monadial.waygrid.common.domain.value.Address.{ NodeAddress, ServiceAddress }
 import org.http4s.Uri
 import weaver.SimpleIOSuite
-
-import scala.concurrent.duration.*
 
 object InMemoryTraversalStateRepositorySuite extends SimpleIOSuite:
 

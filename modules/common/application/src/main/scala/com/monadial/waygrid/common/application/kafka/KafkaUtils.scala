@@ -29,7 +29,7 @@ object KafkaUtils:
   extension (tp: TopicPartition)
     def toEndpoint[F[_]: Async]: F[Endpoint] =
       val pattern =
-        raw"""^(?<app>[^-]+)-(?<cluster>[^-]+)-(?<region>[a-z]{2}(?:-[a-z]{1,16})*-[0-9]{1,2})-(?<component>[^-]+)-(?<service>[^-]+)(?:-(?<nodeId>[^-]+))?-(?<direction>[^-]+)$$""".r
+        """^(?<app>[^-]+)-(?<cluster>[^-]+)-(?<region>[a-z]{2}(?:-[a-z]{1,16})*-[0-9]{1,2})-(?<component>[^-]+)-(?<service>[^-]+)(?:-(?<nodeId>[^-]+))?-(?<direction>[^-]+)$$""".r
 
       for
         m <- pattern.findFirstMatchIn(tp.topic())
