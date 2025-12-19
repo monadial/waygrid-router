@@ -1,5 +1,7 @@
 package com.monadial.waygrid.destination.webhook.settings
 
+import scala.concurrent.duration.Duration
+
 import com.monadial.waygrid.common.application.domain.model.settings.{
   EventStreamSettings,
   HttpServerSettings,
@@ -9,8 +11,6 @@ import com.monadial.waygrid.common.application.instances.DurationInstances.given
 import com.monadial.waygrid.common.application.instances.OdinLoggerInstances.given
 import io.circe.Codec
 import io.odin.Level
-
-import scala.concurrent.duration.Duration
 
 final case class WebhookSettings(
   override val debug: Boolean,
