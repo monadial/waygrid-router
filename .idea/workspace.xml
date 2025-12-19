@@ -170,7 +170,13 @@
     </option>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7697e996-c24f-4ea1-a7ee-bf168edbe1e9" name="Changes" comment="" />
+    <list default="true" id="7697e996-c24f-4ea1-a7ee-bf168edbe1e9" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/algebra/DagCompiler.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/algebra/DagCompiler.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/algebra/ParameterValidator.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/algebra/ParameterValidator.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/system/scheduler/src/main/scala/com/monadial/waygrid/system/scheduler/actor/SchedulerSupervisorActor.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/system/scheduler/src/main/scala/com/monadial/waygrid/system/scheduler/actor/SchedulerSupervisorActor.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/system/waystation/src/main/scala/com/monadial/waygrid/system/waystation/Main.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/system/waystation/src/main/scala/com/monadial/waygrid/system/waystation/Main.scala" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -543,7 +549,7 @@
       <workItem from="1765806194819" duration="5004000" />
       <workItem from="1765837790966" duration="43987000" />
       <workItem from="1765981873712" duration="9761000" />
-      <workItem from="1766004647650" duration="35613000" />
+      <workItem from="1766004647650" duration="36430000" />
     </task>
     <servers />
   </component>
@@ -569,7 +575,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="scala-line">
           <url>file://$PROJECT_DIR$/modules/system/waystation/src/main/scala/com/monadial/waygrid/system/waystation/Main.scala</url>
-          <line>20</line>
+          <line>23</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="scala-line">
@@ -587,7 +593,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="scala-line">
           <url>file://$PROJECT_DIR$/modules/common/domain/src/test/scala/com/monadial/waygrid/common/domain/model/traversal/fsm/TraversalFSMSuite.scala</url>
-          <line>584</line>
+          <line>578</line>
           <properties>
             <option name="lambda-ordinal" value="-1" />
           </properties>
@@ -595,7 +601,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="scala-line">
           <url>file://$PROJECT_DIR$/modules/common/domain/src/test/scala/com/monadial/waygrid/common/domain/model/traversal/fsm/TraversalFSMSuite.scala</url>
-          <line>623</line>
+          <line>617</line>
           <properties>
             <option name="lambda-ordinal" value="-1" />
           </properties>
@@ -603,22 +609,22 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="scala-line">
           <url>file://$PROJECT_DIR$/modules/common/domain/src/test/scala/com/monadial/waygrid/common/domain/model/traversal/fsm/TraversalFSMSuite.scala</url>
-          <line>625</line>
+          <line>619</line>
           <option name="timeStamp" value="10" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="scala-line">
           <url>file://$PROJECT_DIR$/modules/common/domain/src/test/scala/com/monadial/waygrid/common/domain/model/traversal/fsm/TraversalFSMSuite.scala</url>
-          <line>755</line>
+          <line>749</line>
           <option name="timeStamp" value="28" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="scala-line">
           <url>file://$PROJECT_DIR$/modules/common/domain/src/test/scala/com/monadial/waygrid/common/domain/model/traversal/fsm/TraversalFSMSuite.scala</url>
-          <line>1164</line>
+          <line>1158</line>
           <option name="timeStamp" value="29" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="scala-line">
           <url>file://$PROJECT_DIR$/modules/common/domain/src/test/scala/com/monadial/waygrid/common/domain/model/traversal/fsm/TraversalFSMSuite.scala</url>
-          <line>1161</line>
+          <line>1155</line>
           <properties>
             <option name="lambda-ordinal" value="-1" />
           </properties>
@@ -626,7 +632,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="scala-line">
           <url>file://$PROJECT_DIR$/modules/common/domain/src/test/scala/com/monadial/waygrid/common/domain/model/traversal/fsm/TraversalFSMSuite.scala</url>
-          <line>1183</line>
+          <line>1177</line>
           <option name="timeStamp" value="31" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="scala-line">
@@ -646,7 +652,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="scala-line">
           <url>file://$PROJECT_DIR$/modules/common/domain/src/test/scala/com/monadial/waygrid/common/domain/model/traversal/fsm/TraversalFSMSuite.scala</url>
-          <line>2659</line>
+          <line>2653</line>
           <option name="timeStamp" value="40" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="scala-line">

@@ -8,10 +8,13 @@ import cats.effect.std.Console
 import cats.implicits.*
 import com.monadial.waygrid.common.application.algebra.SupervisedRequest.{ Start, Stop }
 import com.monadial.waygrid.common.application.algebra.{ EventSink, EventSource, Logger, ThisNode }
-import com.monadial.waygrid.common.application.interpreter.storage.{InMemoryDagRepository, InMemoryTraversalStateRepository}
+import com.monadial.waygrid.common.application.interpreter.storage.{
+  InMemoryDagRepository,
+  InMemoryTraversalStateRepository
+}
 import com.monadial.waygrid.common.application.program.WaygridApp
 import com.monadial.waygrid.common.domain.SystemWaygridApp
-import com.monadial.waygrid.common.domain.algebra.storage.{DagRepository, TraversalStateRepository}
+import com.monadial.waygrid.common.domain.algebra.storage.{ DagRepository, TraversalStateRepository }
 import com.monadial.waygrid.system.waystation.actor.TraversalListenerActor
 import com.monadial.waygrid.system.waystation.settings.WaystationSettings
 import com.suprnation.actor.ActorSystem

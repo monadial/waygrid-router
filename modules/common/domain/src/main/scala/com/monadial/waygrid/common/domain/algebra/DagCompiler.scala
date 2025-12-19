@@ -9,7 +9,7 @@ import com.monadial.waygrid.common.domain.interpreter.cryptography.HasherInterpr
 import com.monadial.waygrid.common.domain.model.cryptography.hashing.Value.LongHash
 import com.monadial.waygrid.common.domain.model.routing.Value.RouteSalt
 import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ DagHash, EdgeGuard, ForkId, NodeId }
-import com.monadial.waygrid.common.domain.model.traversal.dag.{Edge as DagEdge, Node as DagNode, *}
+import com.monadial.waygrid.common.domain.model.traversal.dag.{ Edge as DagEdge, Node as DagNode, * }
 import com.monadial.waygrid.common.domain.model.traversal.spec.Node.NodeParameters
 import com.monadial.waygrid.common.domain.model.traversal.spec.{ Node as SpecNode, Spec }
 
