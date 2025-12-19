@@ -1,11 +1,12 @@
 package com.monadial.waygrid.common.application.instances
 
-import io.circe.{ Decoder as JsonDecoder, Encoder as JsonEncoder }
-import scodec.*
-
 import java.util.concurrent.TimeUnit
+
 import scala.concurrent.duration.{ Duration, FiniteDuration }
 import scala.util.Try
+
+import io.circe.{ Decoder as JsonDecoder, Encoder as JsonEncoder }
+import scodec.*
 
 object DurationInstances:
 

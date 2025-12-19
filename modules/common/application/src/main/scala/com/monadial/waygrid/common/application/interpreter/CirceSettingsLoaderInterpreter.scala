@@ -1,5 +1,7 @@
 package com.monadial.waygrid.common.application.interpreter
 
+import java.io.File
+
 import cats.*
 import cats.data.OptionT
 import cats.effect.Resource
@@ -9,8 +11,6 @@ import com.monadial.waygrid.common.application.algebra.{ SettingsLoader, ThisNod
 import com.typesafe.config.ConfigFactory
 import io.circe.Decoder
 import io.circe.config.syntax.CirceConfigOps
-
-import java.io.File
 
 object CirceSettingsLoaderInterpreter:
   def resource[F[+_]: {MonadThrow, Env}, A: Decoder]: Resource[F, SettingsLoader[F, A]] =

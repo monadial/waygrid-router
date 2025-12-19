@@ -1,9 +1,9 @@
 package com.monadial.waygrid.common.application.domain.model.settings
 
+import scala.concurrent.duration.Duration
+
 import com.monadial.waygrid.common.domain.model.settings.{ ServiceSettings, Settings }
 import io.odin.Level
-
-import scala.concurrent.duration.Duration
 
 trait WithServiceSettings[SVC <: ServiceSettings] extends NodeSettings:
   val service: SVC

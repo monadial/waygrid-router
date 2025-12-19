@@ -1,5 +1,7 @@
 package com.monadial.waygrid.system.scheduler.interpreter
 
+import java.time.Instant
+
 import cats.effect.{ Async, Resource }
 import cats.syntax.all.*
 import com.monadial.waygrid.common.application.algebra.Logger
@@ -7,13 +9,11 @@ import com.monadial.waygrid.system.scheduler.algebra.ScheduledTaskDataStorage
 import com.monadial.waygrid.system.scheduler.model.eventdata.ScheduledTaskData
 import com.monadial.waygrid.system.scheduler.model.schedule.Value.{ ScheduleTime, ScheduleToken }
 import doobie.*
-import doobie.postgres.implicits.*
 import doobie.implicits.*
+import doobie.postgres.implicits.*
 import doobie.util.meta.Meta
 import doobie.util.transactor.Transactor
 import wvlet.airframe.ulid.ULID
-
-import java.time.Instant
 
 final case class DoobieScheduledTaskDataStorage[F[+_]: {Async, Logger}](xa: Transactor[F])
     extends ScheduledTaskDataStorage[F]:

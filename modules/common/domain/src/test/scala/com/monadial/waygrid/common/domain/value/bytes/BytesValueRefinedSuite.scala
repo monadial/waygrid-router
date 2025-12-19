@@ -59,74 +59,74 @@ object BytesValueRefinedSuite extends SimpleIOSuite with Checkers:
   // ---------------------------------------------------------------------------
 
   test("BytesValueRefined scodec roundtrip"):
-    forall(genDummyNonEmptyBytes) { v =>
-      val codec  = summon[SCodec[DummyNonEmptyBytes]]
-      val result = codec.encode(v).flatMap(codec.decode)
-      expect(result.toOption.exists(r => r.value == v && r.remainder.isEmpty))
-    }
+      forall(genDummyNonEmptyBytes) { v =>
+        val codec  = summon[SCodec[DummyNonEmptyBytes]]
+        val result = codec.encode(v).flatMap(codec.decode)
+        expect(result.toOption.exists(r => r.value == v && r.remainder.isEmpty))
+      }
 
   test("BytesValueRefined circe roundtrip"):
-    forall(genDummyNonEmptyBytes) { v =>
-      val json    = v.asJson
-      val decoded = json.as[DummyNonEmptyBytes]
-      expect(decoded.toOption.contains(v))
-    }
+      forall(genDummyNonEmptyBytes) { v =>
+        val json    = v.asJson
+        val decoded = json.as[DummyNonEmptyBytes]
+        expect(decoded.toOption.contains(v))
+      }
 
   test("BytesValueRefined BytesCodec roundtrip"):
-    forall(genDummyNonEmptyBytes) { v =>
-      val encoded = BytesCodec[DummyNonEmptyBytes].encodeToScalar(v)
-      val decoded = BytesCodec[DummyNonEmptyBytes].decodeFromScalar(encoded)
-      expect(decoded.toOption.contains(v))
-    }
+      forall(genDummyNonEmptyBytes) { v =>
+        val encoded = BytesCodec[DummyNonEmptyBytes].encodeToScalar(v)
+        val decoded = BytesCodec[DummyNonEmptyBytes].decodeFromScalar(encoded)
+        expect(decoded.toOption.contains(v))
+      }
 
   test("BytesValueRefined Base64Codec roundtrip"):
-    forall(genDummyNonEmptyBytes) { v =>
-      val encoded = Base64Codec[DummyNonEmptyBytes].encode(v)
-      val decoded = Base64Codec[DummyNonEmptyBytes].decode(encoded)
-      expect(decoded.toOption.contains(v))
-    }
+      forall(genDummyNonEmptyBytes) { v =>
+        val encoded = Base64Codec[DummyNonEmptyBytes].encode(v)
+        val decoded = Base64Codec[DummyNonEmptyBytes].decode(encoded)
+        expect(decoded.toOption.contains(v))
+      }
 
   // ---------------------------------------------------------------------------
   // Type class instance tests
   // ---------------------------------------------------------------------------
 
   test("BytesValueRefined Eq instance"):
-    forall(genDummyNonEmptyBytesPair) { case (a, b) =>
-      val eqInstance = summon[Eq[DummyNonEmptyBytes]]
-      expect(eqInstance.eqv(a, a)) and
-        expect(eqInstance.eqv(b, b)) and
-        expect(eqInstance.eqv(a, b) == (a.unwrap == b.unwrap))
-    }
+      forall(genDummyNonEmptyBytesPair) { case (a, b) =>
+        val eqInstance = summon[Eq[DummyNonEmptyBytes]]
+        expect(eqInstance.eqv(a, a)) and
+          expect(eqInstance.eqv(b, b)) and
+          expect(eqInstance.eqv(a, b) == (a.unwrap == b.unwrap))
+      }
 
   test("BytesValueRefined Order instance"):
-    forall(genDummyNonEmptyBytesPair) { case (a, b) =>
-      val orderInstance = summon[Order[DummyNonEmptyBytes]]
-      val cmp           = orderInstance.compare(a, b)
-      expect(orderInstance.compare(a, a) == 0) and
-        expect(cmp == a.unwrap.compareTo(b.unwrap))
-    }
+      forall(genDummyNonEmptyBytesPair) { case (a, b) =>
+        val orderInstance = summon[Order[DummyNonEmptyBytes]]
+        val cmp           = orderInstance.compare(a, b)
+        expect(orderInstance.compare(a, a) == 0) and
+          expect(cmp == a.unwrap.compareTo(b.unwrap))
+      }
 
   test("BytesValueRefined Show instance"):
-    forall(genDummyNonEmptyBytes) { v =>
-      val showInstance = summon[Show[DummyNonEmptyBytes]]
-      expect(showInstance.show(v).nonEmpty)
-    }
+      forall(genDummyNonEmptyBytes) { v =>
+        val showInstance = summon[Show[DummyNonEmptyBytes]]
+        expect(showInstance.show(v).nonEmpty)
+      }
 
   test("BytesValueRefined Ordering instance"):
-    forall(genDummyNonEmptyBytesPair) { case (a, b) =>
-      val orderingInstance = summon[Ordering[DummyNonEmptyBytes]]
-      expect(orderingInstance.compare(a, b) == a.unwrap.compareTo(b.unwrap))
-    }
+      forall(genDummyNonEmptyBytesPair) { case (a, b) =>
+        val orderingInstance = summon[Ordering[DummyNonEmptyBytes]]
+        expect(orderingInstance.compare(a, b) == a.unwrap.compareTo(b.unwrap))
+      }
 
   // ---------------------------------------------------------------------------
   // Unwrap test
   // ---------------------------------------------------------------------------
 
   test("BytesValueRefined unwrap returns underlying value"):
-    forall(genDummyNonEmptyBytes) { v =>
-      expect(v.unwrap.isInstanceOf[ByteVector]) and
-        expect(v.unwrap.nonEmpty)
-    }
+      forall(genDummyNonEmptyBytes) { v =>
+        expect(v.unwrap.isInstanceOf[ByteVector]) and
+          expect(v.unwrap.nonEmpty)
+      }
 
   // ---------------------------------------------------------------------------
   // Refinement validation tests
@@ -167,12 +167,12 @@ object BytesValueRefinedSuite extends SimpleIOSuite with Checkers:
   }
 
   pureTest("BytesValueRefined handles all 0xFF bytes") {
-    val bytes   = ByteVector.fill(16)(0xFF.toByte)
+    val bytes   = ByteVector.fill(16)(0xff.toByte)
     val v       = DummyNonEmptyBytes.unsafeFrom(bytes)
     val json    = v.asJson
     val decoded = json.as[DummyNonEmptyBytes]
     expect(decoded.toOption.contains(v)) and
-      expect(v.unwrap.toArray.forall(_ == 0xFF.toByte))
+      expect(v.unwrap.toArray.forall(_ == 0xff.toByte))
   }
 
   pureTest("BytesValueRefined handles large ByteVector") {
@@ -227,7 +227,7 @@ object BytesValueRefinedSuite extends SimpleIOSuite with Checkers:
   }
 
   pureTest("BytesValueRefined circe encodes to base64 string") {
-    val v    = DummyNonEmptyBytes.unsafeFrom(ByteVector(0xDE, 0xAD, 0xBE, 0xEF))
+    val v    = DummyNonEmptyBytes.unsafeFrom(ByteVector(0xde, 0xad, 0xbe, 0xef))
     val json = v.asJson
     expect(json.isString) and
       expect(json.asString.exists(_.nonEmpty))
@@ -248,4 +248,3 @@ object BytesValueRefinedSuite extends SimpleIOSuite with Checkers:
     val encoded = BytesCodec[DummyNonEmptyBytes].encodeToScalar(v)
     expect(encoded == bytes)
   }
-

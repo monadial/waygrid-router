@@ -42,73 +42,73 @@ object StringValueSuite extends SimpleIOSuite with Checkers:
   // ---------------------------------------------------------------------------
 
   test("StringValue scodec roundtrip"):
-    forall(genDummyStringId) { v =>
-      val codec  = summon[SCodec[DummyStringId]]
-      val result = codec.encode(v).flatMap(codec.decode)
-      expect(result.toOption.exists(r => r.value == v && r.remainder.isEmpty))
-    }
+      forall(genDummyStringId) { v =>
+        val codec  = summon[SCodec[DummyStringId]]
+        val result = codec.encode(v).flatMap(codec.decode)
+        expect(result.toOption.exists(r => r.value == v && r.remainder.isEmpty))
+      }
 
   test("StringValue circe roundtrip"):
-    forall(genDummyStringId) { v =>
-      val json    = v.asJson
-      val decoded = json.as[DummyStringId]
-      expect(decoded.toOption.contains(v))
-    }
+      forall(genDummyStringId) { v =>
+        val json    = v.asJson
+        val decoded = json.as[DummyStringId]
+        expect(decoded.toOption.contains(v))
+      }
 
   test("StringValue BytesCodec roundtrip"):
-    forall(genDummyStringId) { v =>
-      val encoded = BytesCodec[DummyStringId].encodeToScalar(v)
-      val decoded = BytesCodec[DummyStringId].decodeFromScalar(encoded)
-      expect(decoded.toOption.contains(v))
-    }
+      forall(genDummyStringId) { v =>
+        val encoded = BytesCodec[DummyStringId].encodeToScalar(v)
+        val decoded = BytesCodec[DummyStringId].decodeFromScalar(encoded)
+        expect(decoded.toOption.contains(v))
+      }
 
   test("StringValue Base64Codec roundtrip"):
-    forall(genDummyStringId) { v =>
-      val encoded = Base64Codec[DummyStringId].encode(v)
-      val decoded = Base64Codec[DummyStringId].decode(encoded)
-      expect(decoded.toOption.contains(v))
-    }
+      forall(genDummyStringId) { v =>
+        val encoded = Base64Codec[DummyStringId].encode(v)
+        val decoded = Base64Codec[DummyStringId].decode(encoded)
+        expect(decoded.toOption.contains(v))
+      }
 
   // ---------------------------------------------------------------------------
   // Type class instance tests
   // ---------------------------------------------------------------------------
 
   test("StringValue Eq instance"):
-    forall(genDummyStringIdPair) { case (a, b) =>
-      val eqInstance = summon[Eq[DummyStringId]]
-      expect(eqInstance.eqv(a, a)) and
-        expect(eqInstance.eqv(b, b)) and
-        expect(eqInstance.eqv(a, b) == (a.unwrap == b.unwrap))
-    }
+      forall(genDummyStringIdPair) { case (a, b) =>
+        val eqInstance = summon[Eq[DummyStringId]]
+        expect(eqInstance.eqv(a, a)) and
+          expect(eqInstance.eqv(b, b)) and
+          expect(eqInstance.eqv(a, b) == (a.unwrap == b.unwrap))
+      }
 
   test("StringValue Order instance"):
-    forall(genDummyStringIdPair) { case (a, b) =>
-      val orderInstance = summon[Order[DummyStringId]]
-      val cmp           = orderInstance.compare(a, b)
-      expect(orderInstance.compare(a, a) == 0) and
-        expect(cmp == a.unwrap.compare(b.unwrap))
-    }
+      forall(genDummyStringIdPair) { case (a, b) =>
+        val orderInstance = summon[Order[DummyStringId]]
+        val cmp           = orderInstance.compare(a, b)
+        expect(orderInstance.compare(a, a) == 0) and
+          expect(cmp == a.unwrap.compare(b.unwrap))
+      }
 
   test("StringValue Show instance"):
-    forall(genDummyStringId) { v =>
-      val showInstance = summon[Show[DummyStringId]]
-      expect(showInstance.show(v) == v.unwrap)
-    }
+      forall(genDummyStringId) { v =>
+        val showInstance = summon[Show[DummyStringId]]
+        expect(showInstance.show(v) == v.unwrap)
+      }
 
   test("StringValue Ordering instance"):
-    forall(genDummyStringIdPair) { case (a, b) =>
-      val orderingInstance = summon[Ordering[DummyStringId]]
-      expect(orderingInstance.compare(a, b) == a.unwrap.compare(b.unwrap))
-    }
+      forall(genDummyStringIdPair) { case (a, b) =>
+        val orderingInstance = summon[Ordering[DummyStringId]]
+        expect(orderingInstance.compare(a, b) == a.unwrap.compare(b.unwrap))
+      }
 
   // ---------------------------------------------------------------------------
   // Unwrap test
   // ---------------------------------------------------------------------------
 
   test("StringValue unwrap returns underlying value"):
-    forall(genDummyStringId) { v =>
-      expect(v.unwrap.isInstanceOf[String])
-    }
+      forall(genDummyStringId) { v =>
+        expect(v.unwrap.isInstanceOf[String])
+      }
 
   // ---------------------------------------------------------------------------
   // Edge case tests - special characters
@@ -116,50 +116,50 @@ object StringValueSuite extends SimpleIOSuite with Checkers:
 
   private val genSpecialChars: Gen[DummyStringId] =
     Gen.oneOf(
-      "hello\nworld",           // newline
-      "tab\there",              // tab
-      "quote\"inside",          // double quote
-      "back\\slash",            // backslash
-      "emoji🎉test",            // emoji
-      "unicode™®©",             // special unicode
-      "中文字符",                // Chinese characters
+      "hello\nworld",          // newline
+      "tab\there",             // tab
+      "quote\"inside",         // double quote
+      "back\\slash",           // backslash
+      "emoji🎉test",           // emoji
+      "unicode™®©",            // special unicode
+      "中文字符",                  // Chinese characters
       "Ελληνικά",              // Greek
-      "العربية",                // Arabic
-      "null\u0000byte",         // null byte
-      " leading",               // leading space
-      "trailing ",              // trailing space
-      "  multiple   spaces  ",  // multiple spaces
-      "a",                      // single char
-      "🔥💧🌍🌬️"                 // multiple emojis
+      "العربية",               // Arabic
+      "null\u0000byte",        // null byte
+      " leading",              // leading space
+      "trailing ",             // trailing space
+      "  multiple   spaces  ", // multiple spaces
+      "a",                     // single char
+      "🔥💧🌍🌬️"              // multiple emojis
     ).map(DummyStringId(_))
 
   test("StringValue scodec roundtrip with special characters"):
-    forall(genSpecialChars) { v =>
-      val codec  = summon[SCodec[DummyStringId]]
-      val result = codec.encode(v).flatMap(codec.decode)
-      expect(result.toOption.exists(r => r.value == v && r.remainder.isEmpty))
-    }
+      forall(genSpecialChars) { v =>
+        val codec  = summon[SCodec[DummyStringId]]
+        val result = codec.encode(v).flatMap(codec.decode)
+        expect(result.toOption.exists(r => r.value == v && r.remainder.isEmpty))
+      }
 
   test("StringValue circe roundtrip with special characters"):
-    forall(genSpecialChars) { v =>
-      val json    = v.asJson
-      val decoded = json.as[DummyStringId]
-      expect(decoded.toOption.contains(v))
-    }
+      forall(genSpecialChars) { v =>
+        val json    = v.asJson
+        val decoded = json.as[DummyStringId]
+        expect(decoded.toOption.contains(v))
+      }
 
   test("StringValue BytesCodec roundtrip with special characters"):
-    forall(genSpecialChars) { v =>
-      val encoded = BytesCodec[DummyStringId].encodeToScalar(v)
-      val decoded = BytesCodec[DummyStringId].decodeFromScalar(encoded)
-      expect(decoded.toOption.contains(v))
-    }
+      forall(genSpecialChars) { v =>
+        val encoded = BytesCodec[DummyStringId].encodeToScalar(v)
+        val decoded = BytesCodec[DummyStringId].decodeFromScalar(encoded)
+        expect(decoded.toOption.contains(v))
+      }
 
   test("StringValue Base64Codec roundtrip with special characters"):
-    forall(genSpecialChars) { v =>
-      val encoded = Base64Codec[DummyStringId].encode(v)
-      val decoded = Base64Codec[DummyStringId].decode(encoded)
-      expect(decoded.toOption.contains(v))
-    }
+      forall(genSpecialChars) { v =>
+        val encoded = Base64Codec[DummyStringId].encode(v)
+        val decoded = Base64Codec[DummyStringId].decode(encoded)
+        expect(decoded.toOption.contains(v))
+      }
 
   // ---------------------------------------------------------------------------
   // Edge case tests - boundary values

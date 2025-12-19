@@ -4,14 +4,7 @@ import cats.syntax.all.*
 import com.monadial.waygrid.common.application.util.vulcan.VulcanUtils.given
 import com.monadial.waygrid.common.application.util.vulcan.codecs.DomainPrimitivesVulcanCodecs.given
 import com.monadial.waygrid.common.domain.model.node.Value.NodeDescriptor
-import com.monadial.waygrid.common.domain.value.Address.{
-  Endpoint,
-  EndpointDirection,
-  LogicalEndpoint,
-  NodeAddress,
-  PhysicalEndpoint,
-  ServiceAddress
-}
+import com.monadial.waygrid.common.domain.value.Address.*
 import org.http4s.Uri
 import vulcan.Codec
 

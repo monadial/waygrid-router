@@ -1,7 +1,6 @@
 package com.monadial.waygrid.common.domain.algebra
 
-import cats.data.Validated
-import cats.data.ValidatedNel
+import cats.data.{Validated, ValidatedNel}
 import cats.syntax.all.*
 import com.monadial.waygrid.common.domain.model.parameter.*
 

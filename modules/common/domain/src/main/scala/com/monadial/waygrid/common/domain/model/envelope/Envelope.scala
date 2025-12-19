@@ -1,10 +1,10 @@
 package com.monadial.waygrid.common.domain.model.envelope
 
+import scala.reflect.ClassTag
+
 import com.monadial.waygrid.common.domain.algebra.messaging.message.Message
 import com.monadial.waygrid.common.domain.model.envelope.Value.{ EnvelopeId, Stamp }
 import com.monadial.waygrid.common.domain.value.Address.{ Endpoint, NodeAddress }
-
-import scala.reflect.ClassTag
 
 type EnvelopeStamps = Map[Class[? <: Stamp], List[Stamp]]
 

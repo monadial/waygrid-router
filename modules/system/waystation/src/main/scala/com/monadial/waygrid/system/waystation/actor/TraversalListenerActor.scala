@@ -80,7 +80,7 @@ object TraversalListenerActor:
 
       private def onActorStart: F[Unit] =
         for
-          _ <- Logger[F].debug(s"[TraversalListenerActor] Starting...")
+          _ <- Logger[F].debug("[TraversalListenerActor] Starting...")
           esf <- EventSource[F]
             .subscribeToWaystationInboundEvents:
               event[F, TraversalRequested](dispatch[TraversalRequested])
@@ -113,7 +113,7 @@ object TraversalListenerActor:
 
       private def onActorStop: F[Unit] =
         for
-          _   <- Logger[F].debug(s"[TraversalListenerActor] Stopping...")
+          _   <- Logger[F].debug("[TraversalListenerActor] Stopping...")
           esf <- eventSubscriberFiber.get
           _ <- esf match
             case Some(es) => es.cancel

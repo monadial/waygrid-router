@@ -39,73 +39,73 @@ object LongValueSuite extends SimpleIOSuite with Checkers:
   // ---------------------------------------------------------------------------
 
   test("LongValue scodec roundtrip"):
-    forall(genDummyLongId) { v =>
-      val codec  = summon[SCodec[DummyLongId]]
-      val result = codec.encode(v).flatMap(codec.decode)
-      expect(result.toOption.exists(r => r.value == v && r.remainder.isEmpty))
-    }
+      forall(genDummyLongId) { v =>
+        val codec  = summon[SCodec[DummyLongId]]
+        val result = codec.encode(v).flatMap(codec.decode)
+        expect(result.toOption.exists(r => r.value == v && r.remainder.isEmpty))
+      }
 
   test("LongValue circe roundtrip"):
-    forall(genDummyLongId) { v =>
-      val json    = v.asJson
-      val decoded = json.as[DummyLongId]
-      expect(decoded.toOption.contains(v))
-    }
+      forall(genDummyLongId) { v =>
+        val json    = v.asJson
+        val decoded = json.as[DummyLongId]
+        expect(decoded.toOption.contains(v))
+      }
 
   test("LongValue BytesCodec roundtrip"):
-    forall(genDummyLongId) { v =>
-      val encoded = BytesCodec[DummyLongId].encodeToScalar(v)
-      val decoded = BytesCodec[DummyLongId].decodeFromScalar(encoded)
-      expect(decoded.toOption.contains(v))
-    }
+      forall(genDummyLongId) { v =>
+        val encoded = BytesCodec[DummyLongId].encodeToScalar(v)
+        val decoded = BytesCodec[DummyLongId].decodeFromScalar(encoded)
+        expect(decoded.toOption.contains(v))
+      }
 
   test("LongValue Base64Codec roundtrip"):
-    forall(genDummyLongId) { v =>
-      val encoded = Base64Codec[DummyLongId].encode(v)
-      val decoded = Base64Codec[DummyLongId].decode(encoded)
-      expect(decoded.toOption.contains(v))
-    }
+      forall(genDummyLongId) { v =>
+        val encoded = Base64Codec[DummyLongId].encode(v)
+        val decoded = Base64Codec[DummyLongId].decode(encoded)
+        expect(decoded.toOption.contains(v))
+      }
 
   // ---------------------------------------------------------------------------
   // Type class instance tests
   // ---------------------------------------------------------------------------
 
   test("LongValue Eq instance"):
-    forall(genDummyLongIdPair) { case (a, b) =>
-      val eqInstance = summon[Eq[DummyLongId]]
-      expect(eqInstance.eqv(a, a)) and
-        expect(eqInstance.eqv(b, b)) and
-        expect(eqInstance.eqv(a, b) == (a.unwrap == b.unwrap))
-    }
+      forall(genDummyLongIdPair) { case (a, b) =>
+        val eqInstance = summon[Eq[DummyLongId]]
+        expect(eqInstance.eqv(a, a)) and
+          expect(eqInstance.eqv(b, b)) and
+          expect(eqInstance.eqv(a, b) == (a.unwrap == b.unwrap))
+      }
 
   test("LongValue Order instance"):
-    forall(genDummyLongIdPair) { case (a, b) =>
-      val orderInstance = summon[Order[DummyLongId]]
-      val cmp           = orderInstance.compare(a, b)
-      expect(orderInstance.compare(a, a) == 0) and
-        expect(cmp == java.lang.Long.compare(a.unwrap, b.unwrap))
-    }
+      forall(genDummyLongIdPair) { case (a, b) =>
+        val orderInstance = summon[Order[DummyLongId]]
+        val cmp           = orderInstance.compare(a, b)
+        expect(orderInstance.compare(a, a) == 0) and
+          expect(cmp == java.lang.Long.compare(a.unwrap, b.unwrap))
+      }
 
   test("LongValue Show instance"):
-    forall(genDummyLongId) { v =>
-      val showInstance = summon[Show[DummyLongId]]
-      expect(showInstance.show(v) == v.unwrap.toString)
-    }
+      forall(genDummyLongId) { v =>
+        val showInstance = summon[Show[DummyLongId]]
+        expect(showInstance.show(v) == v.unwrap.toString)
+      }
 
   test("LongValue Ordering instance"):
-    forall(genDummyLongIdPair) { case (a, b) =>
-      val orderingInstance = summon[Ordering[DummyLongId]]
-      expect(orderingInstance.compare(a, b) == java.lang.Long.compare(a.unwrap, b.unwrap))
-    }
+      forall(genDummyLongIdPair) { case (a, b) =>
+        val orderingInstance = summon[Ordering[DummyLongId]]
+        expect(orderingInstance.compare(a, b) == java.lang.Long.compare(a.unwrap, b.unwrap))
+      }
 
   // ---------------------------------------------------------------------------
   // Unwrap test
   // ---------------------------------------------------------------------------
 
   test("LongValue unwrap returns underlying value"):
-    forall(genDummyLongId) { v =>
-      expect(v.unwrap.isInstanceOf[Long])
-    }
+      forall(genDummyLongId) { v =>
+        expect(v.unwrap.isInstanceOf[Long])
+      }
 
   // ---------------------------------------------------------------------------
   // Edge case tests - boundary values
@@ -180,12 +180,12 @@ object LongValueSuite extends SimpleIOSuite with Checkers:
   }
 
   pureTest("LongValue Base64Codec roundtrip for boundary values") {
-    val minVal  = DummyLongId(Long.MinValue)
-    val maxVal  = DummyLongId(Long.MaxValue)
-    val minEnc  = Base64Codec[DummyLongId].encode(minVal)
-    val maxEnc  = Base64Codec[DummyLongId].encode(maxVal)
-    val minDec  = Base64Codec[DummyLongId].decode(minEnc)
-    val maxDec  = Base64Codec[DummyLongId].decode(maxEnc)
+    val minVal = DummyLongId(Long.MinValue)
+    val maxVal = DummyLongId(Long.MaxValue)
+    val minEnc = Base64Codec[DummyLongId].encode(minVal)
+    val maxEnc = Base64Codec[DummyLongId].encode(maxVal)
+    val minDec = Base64Codec[DummyLongId].decode(minEnc)
+    val maxDec = Base64Codec[DummyLongId].decode(maxEnc)
     expect(minDec.toOption.contains(minVal)) and
       expect(maxDec.toOption.contains(maxVal))
   }

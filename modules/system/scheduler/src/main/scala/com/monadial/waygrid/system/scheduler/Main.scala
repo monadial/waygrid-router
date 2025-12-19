@@ -1,8 +1,10 @@
 package com.monadial.waygrid.system.scheduler
 
+import scala.annotation.nowarn
+
 import cats.Parallel
-import cats.effect.std.Console
 import cats.effect.*
+import cats.effect.std.Console
 import cats.implicits.*
 import com.monadial.waygrid.common.application.algebra.SupervisedRequest.{ Start, Stop }
 import com.monadial.waygrid.common.application.algebra.{ EventSink, EventSource, Logger, ThisNode }
@@ -14,8 +16,6 @@ import com.suprnation.actor.ActorSystem
 import org.typelevel.otel4s.metrics.MeterProvider
 import org.typelevel.otel4s.trace.{ Tracer, TracerProvider }
 
-import scala.annotation.nowarn
-
 object Main extends WaygridApp[SchedulerSettings](SystemWaygridApp.Scheduler):
 
   @nowarn("msg=unused implicit parameter")
@@ -26,7 +26,7 @@ object Main extends WaygridApp[SchedulerSettings](SystemWaygridApp.Scheduler):
     settings: SchedulerSettings
   ): Resource[F, Unit] =
     for
-      _           <- Resource.eval(Logger[F].info(s"Starting Scheduler Service."))
+      _           <- Resource.eval(Logger[F].info("Starting Scheduler Service."))
       routerActor <- RouterActor.behavior[F].evalMap(actorSystem.actorOf(_, "router-actor"))
       _           <- Resource.eval(routerActor ! Start)
       _ <- Resource

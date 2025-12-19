@@ -1,5 +1,7 @@
 package com.monadial.waygrid.common.domain.instances
 
+import java.util
+
 import cats.Show
 import cats.data.Validated
 import cats.kernel.Order
@@ -10,8 +12,6 @@ import com.monadial.waygrid.common.domain.algebra.value.codec.{
   BytesDecodingError
 }
 import scodec.bits.ByteVector
-
-import java.util
 
 object BytesInstances:
   given Order[Array[Byte]] = Order.from((x, y) => util.Arrays.compareUnsigned(x, y))

@@ -1,5 +1,7 @@
 package com.monadial.waygrid.common.application.util.vulcan.codecs
 
+import java.time.Instant
+
 import cats.syntax.all.*
 import com.monadial.waygrid.common.application.util.vulcan.VulcanUtils.given
 import com.monadial.waygrid.common.application.util.vulcan.codecs.DomainPrimitivesVulcanCodecs.given
@@ -15,8 +17,6 @@ import com.monadial.waygrid.common.domain.model.traversal.state.{
 }
 import io.circe.Json
 import vulcan.Codec
-
-import java.time.Instant
 
 /**
  * Vulcan Avro codecs for fork/join state types.

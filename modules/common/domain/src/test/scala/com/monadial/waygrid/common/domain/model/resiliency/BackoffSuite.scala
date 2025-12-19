@@ -1,10 +1,10 @@
 package com.monadial.waygrid.common.domain.model.resiliency
 
-import weaver.SimpleIOSuite
-
 import scala.concurrent.duration.*
+
 import cats.implicits.*
 import com.monadial.waygrid.common.domain.model.resiliency.Value.HashKey
+import weaver.SimpleIOSuite
 
 object BackoffSuite extends SimpleIOSuite:
 

@@ -8,8 +8,7 @@ import com.monadial.waygrid.common.application.`macro`.CirceMessageCodecRegistry
 import com.monadial.waygrid.common.application.algebra.{ EventSink, EventSource, Logger, ThisNode }
 import com.monadial.waygrid.common.application.domain.model.settings.NodeSettings
 import com.monadial.waygrid.common.application.interpreter.*
-import com.monadial.waygrid.common.application.kafka.KafkaEventSink
-import com.monadial.waygrid.common.application.kafka.KafkaEventSource
+import com.monadial.waygrid.common.application.kafka.{ KafkaEventSink, KafkaEventSource }
 import com.monadial.waygrid.common.domain.model.node.Node
 import com.monadial.waygrid.common.domain.model.node.Value.NodeDescriptor
 import com.suprnation.actor.ActorSystem

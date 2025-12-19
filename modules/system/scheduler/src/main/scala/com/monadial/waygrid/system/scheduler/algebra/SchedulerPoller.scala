@@ -1,9 +1,9 @@
 package com.monadial.waygrid.system.scheduler.algebra
 
+import scala.concurrent.duration.FiniteDuration
+
 import cats.effect.{ Fiber, Resource }
 import com.monadial.waygrid.system.scheduler.model.schedule.Value.ScheduleToken
-
-import scala.concurrent.duration.FiniteDuration
 
 trait SchedulerPoller[F[+_]]:
   def acquire(

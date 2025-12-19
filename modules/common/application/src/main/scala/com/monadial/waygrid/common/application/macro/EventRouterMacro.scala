@@ -1,13 +1,13 @@
 package com.monadial.waygrid.common.application.`macro`
 
+import scala.quoted.*
+
 import cats.effect.Concurrent
 import cats.implicits.*
 import com.monadial.waygrid.common.application.algebra.EventRouter
 import com.monadial.waygrid.common.domain.algebra.messaging.event.Event
 import com.monadial.waygrid.common.domain.model.envelope.DomainEnvelope
 import shapeless3.typeable.Typeable
-
-import scala.quoted.*
 
 object EventRouterMacro:
 

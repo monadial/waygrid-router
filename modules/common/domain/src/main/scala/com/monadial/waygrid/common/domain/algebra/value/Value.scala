@@ -3,10 +3,9 @@ package com.monadial.waygrid.common.domain.algebra.value
 import cats.{ Eq, Order, Show }
 import com.monadial.waygrid.common.domain.algebra.TypeEvidence
 import com.monadial.waygrid.common.domain.algebra.value.codec.{ Base64Codec, BytesCodec }
-
 import io.circe.{ Decoder as JsonDecoder, Encoder as JsonEncoder }
-import scodec.{ Codec as SCodec, Decoder as SDecoder, Encoder as SEncoder }
 import monocle.Iso
+import scodec.{ Codec as SCodec, Decoder as SDecoder, Encoder as SEncoder }
 
 abstract class Value[V](using
   eqv: Eq[V],

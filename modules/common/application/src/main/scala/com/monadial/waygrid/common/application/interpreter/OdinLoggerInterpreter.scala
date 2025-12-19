@@ -5,8 +5,8 @@ import cats.syntax.all.*
 import com.monadial.waygrid.common.application.algebra.{ Logger, LoggerContext, ThisNode }
 import io.odin.formatter.Formatter
 import io.odin.meta.Position
-import io.odin.{ Level, consoleLogger }
 import io.odin.syntax.*
+import io.odin.{ Level, consoleLogger }
 
 object OdinLoggerInterpreter: // todo refactor
 

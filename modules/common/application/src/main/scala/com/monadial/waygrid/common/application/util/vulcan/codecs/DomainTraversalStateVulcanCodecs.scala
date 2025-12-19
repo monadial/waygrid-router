@@ -7,8 +7,8 @@ import com.monadial.waygrid.common.application.util.vulcan.codecs.DomainStateEve
 import com.monadial.waygrid.common.application.util.vulcan.codecs.DomainVectorClockVulcanCodecs.given
 import com.monadial.waygrid.common.domain.model.traversal.dag.Value.NodeId
 import com.monadial.waygrid.common.domain.model.traversal.state.Event.StateEvent
-import com.monadial.waygrid.common.domain.model.traversal.state.Value.RetryAttempt
 import com.monadial.waygrid.common.domain.model.traversal.state.TraversalState
+import com.monadial.waygrid.common.domain.model.traversal.state.Value.RetryAttempt
 import vulcan.Codec
 
 /**

@@ -1,7 +1,6 @@
 package com.monadial.waygrid.common.domain.algebra.value.uri
 
 import com.monadial.waygrid.common.domain.algebra.TypeEvidence
-
 import org.http4s.Uri
 
 trait IsURI[A] extends TypeEvidence[Uri, A]

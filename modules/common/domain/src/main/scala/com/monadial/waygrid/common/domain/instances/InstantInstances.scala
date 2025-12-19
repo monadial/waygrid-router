@@ -1,5 +1,7 @@
 package com.monadial.waygrid.common.domain.instances
 
+import java.time.Instant
+
 import cats.data.Validated
 import cats.{ Eq, Order, Show }
 import com.monadial.waygrid.common.domain.algebra.value.codec.{
@@ -11,8 +13,6 @@ import com.monadial.waygrid.common.domain.algebra.value.codec.{
 import com.monadial.waygrid.common.domain.instances.LongInstances.given
 import scodec.bits.ByteVector
 import scodec.{ Decoder as SDecoder, Encoder as SEncoder }
-
-import java.time.Instant
 
 object InstantInstances:
   given Eq[Instant]    = Eq.fromUniversalEquals

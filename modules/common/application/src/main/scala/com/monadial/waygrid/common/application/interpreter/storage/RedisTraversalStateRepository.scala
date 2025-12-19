@@ -1,5 +1,7 @@
 package com.monadial.waygrid.common.application.interpreter.storage
 
+import scala.concurrent.duration.FiniteDuration
+
 import cats.effect.{ Async, Resource }
 import cats.implicits.*
 import com.monadial.waygrid.common.application.util.circe.codecs.DomainTraversalStateCirceCodecs.given
@@ -10,8 +12,6 @@ import com.monadial.waygrid.common.domain.model.traversal.state.Value.StateVersi
 import dev.profunktor.redis4cats.RedisCommands
 import io.circe.parser.*
 import io.circe.syntax.*
-
-import scala.concurrent.duration.FiniteDuration
 
 /**
  * Redis implementation of TraversalStateRepository.

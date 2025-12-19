@@ -1,10 +1,10 @@
 package com.monadial.waygrid.common.domain.model.vectorclock
 
+import scala.collection.immutable.SortedMap
+
 import com.monadial.waygrid.common.domain.model.vectorclock.VectorClock.Comparison
 import com.monadial.waygrid.common.domain.model.vectorclock.VectorClock.Comparison.{ After, Before, Concurrent, Equal }
 import com.monadial.waygrid.common.domain.value.Address.NodeAddress
-
-import scala.collection.immutable.SortedMap
 
 /**
  * A VectorClock is a distributed logical clock for tracking causality across nodes.

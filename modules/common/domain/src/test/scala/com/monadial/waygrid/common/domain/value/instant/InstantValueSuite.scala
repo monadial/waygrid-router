@@ -1,5 +1,7 @@
 package com.monadial.waygrid.common.domain.value.instant
 
+import java.time.Instant
+
 import cats.{ Eq, Order, Show }
 import com.monadial.waygrid.common.domain.algebra.value.codec.{ Base64Codec, BytesCodec }
 import com.monadial.waygrid.common.domain.algebra.value.instant.InstantValue
@@ -8,8 +10,6 @@ import org.scalacheck.Gen
 import scodec.Codec as SCodec
 import weaver.SimpleIOSuite
 import weaver.scalacheck.Checkers
-
-import java.time.Instant
 
 /**
  * Tests for InstantValue abstraction using a dummy value object.
@@ -41,72 +41,72 @@ object InstantValueSuite extends SimpleIOSuite with Checkers:
   // ---------------------------------------------------------------------------
 
   test("InstantValue scodec roundtrip"):
-    forall(genDummyTimestamp) { v =>
-      val codec  = summon[SCodec[DummyTimestamp]]
-      val result = codec.encode(v).flatMap(codec.decode)
-      expect(result.toOption.exists(r => r.value == v && r.remainder.isEmpty))
-    }
+      forall(genDummyTimestamp) { v =>
+        val codec  = summon[SCodec[DummyTimestamp]]
+        val result = codec.encode(v).flatMap(codec.decode)
+        expect(result.toOption.exists(r => r.value == v && r.remainder.isEmpty))
+      }
 
   test("InstantValue circe roundtrip"):
-    forall(genDummyTimestamp) { v =>
-      val json    = v.asJson
-      val decoded = json.as[DummyTimestamp]
-      expect(decoded.toOption.contains(v))
-    }
+      forall(genDummyTimestamp) { v =>
+        val json    = v.asJson
+        val decoded = json.as[DummyTimestamp]
+        expect(decoded.toOption.contains(v))
+      }
 
   test("InstantValue BytesCodec roundtrip"):
-    forall(genDummyTimestamp) { v =>
-      val encoded = BytesCodec[DummyTimestamp].encodeToScalar(v)
-      val decoded = BytesCodec[DummyTimestamp].decodeFromScalar(encoded)
-      expect(decoded.toOption.contains(v))
-    }
+      forall(genDummyTimestamp) { v =>
+        val encoded = BytesCodec[DummyTimestamp].encodeToScalar(v)
+        val decoded = BytesCodec[DummyTimestamp].decodeFromScalar(encoded)
+        expect(decoded.toOption.contains(v))
+      }
 
   test("InstantValue Base64Codec roundtrip"):
-    forall(genDummyTimestamp) { v =>
-      val encoded = Base64Codec[DummyTimestamp].encode(v)
-      val decoded = Base64Codec[DummyTimestamp].decode(encoded)
-      expect(decoded.toOption.contains(v))
-    }
+      forall(genDummyTimestamp) { v =>
+        val encoded = Base64Codec[DummyTimestamp].encode(v)
+        val decoded = Base64Codec[DummyTimestamp].decode(encoded)
+        expect(decoded.toOption.contains(v))
+      }
 
   // ---------------------------------------------------------------------------
   // Type class instance tests
   // ---------------------------------------------------------------------------
 
   test("InstantValue Eq instance"):
-    forall(genDummyTimestampPair) { case (a, b) =>
-      val eqInstance = summon[Eq[DummyTimestamp]]
-      expect(eqInstance.eqv(a, a)) and
-        expect(eqInstance.eqv(b, b)) and
-        expect(eqInstance.eqv(a, b) == (a.unwrap == b.unwrap))
-    }
+      forall(genDummyTimestampPair) { case (a, b) =>
+        val eqInstance = summon[Eq[DummyTimestamp]]
+        expect(eqInstance.eqv(a, a)) and
+          expect(eqInstance.eqv(b, b)) and
+          expect(eqInstance.eqv(a, b) == (a.unwrap == b.unwrap))
+      }
 
   test("InstantValue Order instance"):
-    forall(genDummyTimestampPair) { case (a, b) =>
-      val orderInstance = summon[Order[DummyTimestamp]]
-      expect(orderInstance.compare(a, a) == 0) and
-        expect(orderInstance.compare(a, b) == a.unwrap.compareTo(b.unwrap))
-    }
+      forall(genDummyTimestampPair) { case (a, b) =>
+        val orderInstance = summon[Order[DummyTimestamp]]
+        expect(orderInstance.compare(a, a) == 0) and
+          expect(orderInstance.compare(a, b) == a.unwrap.compareTo(b.unwrap))
+      }
 
   test("InstantValue Show instance"):
-    forall(genDummyTimestamp) { v =>
-      val showInstance = summon[Show[DummyTimestamp]]
-      expect(showInstance.show(v) == v.unwrap.toString)
-    }
+      forall(genDummyTimestamp) { v =>
+        val showInstance = summon[Show[DummyTimestamp]]
+        expect(showInstance.show(v) == v.unwrap.toString)
+      }
 
   test("InstantValue Ordering instance"):
-    forall(genDummyTimestampPair) { case (a, b) =>
-      val orderingInstance = summon[Ordering[DummyTimestamp]]
-      expect(orderingInstance.compare(a, b) == a.unwrap.compareTo(b.unwrap))
-    }
+      forall(genDummyTimestampPair) { case (a, b) =>
+        val orderingInstance = summon[Ordering[DummyTimestamp]]
+        expect(orderingInstance.compare(a, b) == a.unwrap.compareTo(b.unwrap))
+      }
 
   // ---------------------------------------------------------------------------
   // Unwrap test
   // ---------------------------------------------------------------------------
 
   test("InstantValue unwrap returns underlying value"):
-    forall(genDummyTimestamp) { v =>
-      expect(v.unwrap.isInstanceOf[Instant])
-    }
+      forall(genDummyTimestamp) { v =>
+        expect(v.unwrap.isInstanceOf[Instant])
+      }
 
   // ---------------------------------------------------------------------------
   // Edge case tests - Instant specific
@@ -163,7 +163,7 @@ object InstantValueSuite extends SimpleIOSuite with Checkers:
   pureTest("InstantValue Order respects chronological ordering") {
     val earlier = DummyTimestamp(Instant.now())
     Thread.sleep(2)
-    val later   = DummyTimestamp(Instant.now())
+    val later = DummyTimestamp(Instant.now())
     expect(summon[Order[DummyTimestamp]].compare(earlier, later) < 0) and
       expect(summon[Order[DummyTimestamp]].compare(later, earlier) > 0)
   }
@@ -191,8 +191,8 @@ object InstantValueSuite extends SimpleIOSuite with Checkers:
   }
 
   pureTest("InstantValue Base64Codec roundtrip for boundary values") {
-    val epoch  = DummyTimestamp(Instant.EPOCH)
-    val future = DummyTimestamp(Instant.ofEpochMilli(Long.MaxValue / 1000)) // Reasonable far future
+    val epoch     = DummyTimestamp(Instant.EPOCH)
+    val future    = DummyTimestamp(Instant.ofEpochMilli(Long.MaxValue / 1000)) // Reasonable far future
     val encEpoch  = Base64Codec[DummyTimestamp].encode(epoch)
     val encFuture = Base64Codec[DummyTimestamp].encode(future)
     val decEpoch  = Base64Codec[DummyTimestamp].decode(encEpoch)

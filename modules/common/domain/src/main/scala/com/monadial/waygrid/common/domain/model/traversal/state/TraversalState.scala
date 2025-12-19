@@ -1,5 +1,7 @@
 package com.monadial.waygrid.common.domain.model.traversal.state
 
+import java.time.Instant
+
 import com.monadial.waygrid.common.domain.model.routing.Value.TraversalId
 import com.monadial.waygrid.common.domain.model.traversal.dag.Dag
 import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ BranchId, EdgeGuard, ForkId, NodeId }
@@ -7,8 +9,6 @@ import com.monadial.waygrid.common.domain.model.traversal.state.Event.*
 import com.monadial.waygrid.common.domain.model.traversal.state.Value.{ RemainingNodes, RetryAttempt, StateVersion }
 import com.monadial.waygrid.common.domain.model.vectorclock.VectorClock
 import com.monadial.waygrid.common.domain.value.Address.NodeAddress
-
-import java.time.Instant
 
 /**
  * TraversalState tracks the causal and topological execution of a DAG routing traversal.

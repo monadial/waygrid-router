@@ -1,12 +1,13 @@
 package com.monadial.waygrid.common.domain.model.routing
 
+import java.time.Instant
+
+import scala.concurrent.duration.FiniteDuration
+
 import com.monadial.waygrid.common.domain.algebra.value.instant.InstantValue
 import com.monadial.waygrid.common.domain.algebra.value.long.LongValue
 import com.monadial.waygrid.common.domain.algebra.value.string.StringValue
 import com.monadial.waygrid.common.domain.algebra.value.ulid.ULIDValue
-
-import java.time.Instant
-import scala.concurrent.duration.FiniteDuration
 
 object Value:
   type RouteId = RouteId.Type

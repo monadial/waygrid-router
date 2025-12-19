@@ -1,8 +1,8 @@
 package com.monadial.waygrid.system.blob.store.actor
 
-import cats.implicits.given
 import cats.Parallel
 import cats.effect.{ Async, Resource }
+import cats.implicits.given
 import com.monadial.waygrid.common.application.actor.{ BaseProgramActor, HttpServerActor }
 import com.monadial.waygrid.common.application.algebra.SupervisedRequest.{ Restart, Start, Stop }
 import com.monadial.waygrid.common.application.algebra.{ Logger, ThisNode }

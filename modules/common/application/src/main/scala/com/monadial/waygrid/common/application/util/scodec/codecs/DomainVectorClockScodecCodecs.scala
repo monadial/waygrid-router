@@ -1,13 +1,13 @@
 package com.monadial.waygrid.common.application.util.scodec.codecs
 
+import scala.collection.immutable.SortedMap
+
 import com.monadial.waygrid.common.domain.model.vectorclock.VectorClock
 import com.monadial.waygrid.common.domain.value.Address.NodeAddress
 import org.http4s.Uri
 import scodec.*
 import scodec.bits.*
 import scodec.codecs.*
-
-import scala.collection.immutable.SortedMap
 
 /**
  * Scodec binary codecs for VectorClock and related types.

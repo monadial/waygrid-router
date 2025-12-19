@@ -1,12 +1,12 @@
 package com.monadial.waygrid.common.application.util.vulcan.codecs
 
+import scala.collection.immutable.SortedMap
+
 import cats.syntax.all.*
 import com.monadial.waygrid.common.application.util.vulcan.codecs.DomainAddressVulcanCodecs.given
 import com.monadial.waygrid.common.domain.model.vectorclock.VectorClock
 import com.monadial.waygrid.common.domain.value.Address.NodeAddress
 import vulcan.Codec
-
-import scala.collection.immutable.SortedMap
 
 /**
  * Vulcan Avro codec for VectorClock.

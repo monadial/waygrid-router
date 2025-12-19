@@ -1,8 +1,8 @@
 package com.monadial.waygrid.common.domain.model.traversal.dag
 
-import com.monadial.waygrid.common.domain.model.traversal.dag.Value.ForkId
-
 import scala.concurrent.duration.FiniteDuration
+
+import com.monadial.waygrid.common.domain.model.traversal.dag.Value.ForkId
 
 /**
  * Defines the type of a node in a DAG, determining its behavior during traversal.

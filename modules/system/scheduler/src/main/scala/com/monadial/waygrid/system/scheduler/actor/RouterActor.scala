@@ -13,8 +13,8 @@ import com.monadial.waygrid.common.application.util.cats.effect.FiberT
 import com.monadial.waygrid.common.domain.SystemWaygridApp
 import com.monadial.waygrid.common.domain.algebra.messaging.message.Value.MessageId
 import com.monadial.waygrid.common.domain.model.envelope.Value.TraversalRefStamp
-import com.monadial.waygrid.common.domain.model.traversal.Event.TraversalResumed
 import com.monadial.waygrid.common.domain.model.scheduling.Event.TaskSchedulingRequested
+import com.monadial.waygrid.common.domain.model.traversal.Event.TraversalResumed
 import com.monadial.waygrid.common.domain.value.Address.EndpointDirection.Inbound
 import com.suprnation.actor.Actor.ReplyingReceive
 

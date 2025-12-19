@@ -1,9 +1,9 @@
 package com.monadial.waygrid.common.application.instances
 
+import scala.util.{ Failure, Success }
+
 import com.comcast.ip4s.{ Host, Port }
 import io.circe.{ Decoder, Encoder }
-
-import scala.util.{ Failure, Success }
 
 object Ip4sInstances:
 

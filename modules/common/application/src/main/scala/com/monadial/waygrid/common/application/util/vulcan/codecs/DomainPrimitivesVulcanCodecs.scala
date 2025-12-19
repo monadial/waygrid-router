@@ -1,5 +1,7 @@
 package com.monadial.waygrid.common.application.util.vulcan.codecs
 
+import java.time.Instant
+
 import com.monadial.waygrid.common.application.util.vulcan.VulcanUtils.given
 import com.monadial.waygrid.common.domain.model.envelope.Value.{ EnvelopeId, GroupId }
 import com.monadial.waygrid.common.domain.model.node.Value.{
@@ -14,8 +16,6 @@ import com.monadial.waygrid.common.domain.model.traversal.dag.Value.{ BranchId, 
 import com.monadial.waygrid.common.domain.model.traversal.state.Value.{ RemainingNodes, RetryAttempt, StateVersion }
 import vulcan.Codec
 import wvlet.airframe.ulid.ULID
-
-import java.time.Instant
 
 /**
  * Vulcan Avro codecs for primitive domain value types.

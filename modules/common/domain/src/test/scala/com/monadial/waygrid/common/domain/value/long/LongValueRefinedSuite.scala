@@ -40,74 +40,74 @@ object LongValueRefinedSuite extends SimpleIOSuite with Checkers:
   // ---------------------------------------------------------------------------
 
   test("LongValueRefined scodec roundtrip"):
-    forall(genDummyPositiveLong) { v =>
-      val codec  = summon[SCodec[DummyPositiveLong]]
-      val result = codec.encode(v).flatMap(codec.decode)
-      expect(result.toOption.exists(r => r.value == v && r.remainder.isEmpty))
-    }
+      forall(genDummyPositiveLong) { v =>
+        val codec  = summon[SCodec[DummyPositiveLong]]
+        val result = codec.encode(v).flatMap(codec.decode)
+        expect(result.toOption.exists(r => r.value == v && r.remainder.isEmpty))
+      }
 
   test("LongValueRefined circe roundtrip"):
-    forall(genDummyPositiveLong) { v =>
-      val json    = v.asJson
-      val decoded = json.as[DummyPositiveLong]
-      expect(decoded.toOption.contains(v))
-    }
+      forall(genDummyPositiveLong) { v =>
+        val json    = v.asJson
+        val decoded = json.as[DummyPositiveLong]
+        expect(decoded.toOption.contains(v))
+      }
 
   test("LongValueRefined BytesCodec roundtrip"):
-    forall(genDummyPositiveLong) { v =>
-      val encoded = BytesCodec[DummyPositiveLong].encodeToScalar(v)
-      val decoded = BytesCodec[DummyPositiveLong].decodeFromScalar(encoded)
-      expect(decoded.toOption.contains(v))
-    }
+      forall(genDummyPositiveLong) { v =>
+        val encoded = BytesCodec[DummyPositiveLong].encodeToScalar(v)
+        val decoded = BytesCodec[DummyPositiveLong].decodeFromScalar(encoded)
+        expect(decoded.toOption.contains(v))
+      }
 
   test("LongValueRefined Base64Codec roundtrip"):
-    forall(genDummyPositiveLong) { v =>
-      val encoded = Base64Codec[DummyPositiveLong].encode(v)
-      val decoded = Base64Codec[DummyPositiveLong].decode(encoded)
-      expect(decoded.toOption.contains(v))
-    }
+      forall(genDummyPositiveLong) { v =>
+        val encoded = Base64Codec[DummyPositiveLong].encode(v)
+        val decoded = Base64Codec[DummyPositiveLong].decode(encoded)
+        expect(decoded.toOption.contains(v))
+      }
 
   // ---------------------------------------------------------------------------
   // Type class instance tests
   // ---------------------------------------------------------------------------
 
   test("LongValueRefined Eq instance"):
-    forall(genDummyPositiveLongPair) { case (a, b) =>
-      val eqInstance = summon[Eq[DummyPositiveLong]]
-      expect(eqInstance.eqv(a, a)) and
-        expect(eqInstance.eqv(b, b)) and
-        expect(eqInstance.eqv(a, b) == (a.unwrap == b.unwrap))
-    }
+      forall(genDummyPositiveLongPair) { case (a, b) =>
+        val eqInstance = summon[Eq[DummyPositiveLong]]
+        expect(eqInstance.eqv(a, a)) and
+          expect(eqInstance.eqv(b, b)) and
+          expect(eqInstance.eqv(a, b) == (a.unwrap == b.unwrap))
+      }
 
   test("LongValueRefined Order instance"):
-    forall(genDummyPositiveLongPair) { case (a, b) =>
-      val orderInstance = summon[Order[DummyPositiveLong]]
-      val cmp           = orderInstance.compare(a, b)
-      expect(orderInstance.compare(a, a) == 0) and
-        expect(cmp == java.lang.Long.compare(a.unwrap, b.unwrap))
-    }
+      forall(genDummyPositiveLongPair) { case (a, b) =>
+        val orderInstance = summon[Order[DummyPositiveLong]]
+        val cmp           = orderInstance.compare(a, b)
+        expect(orderInstance.compare(a, a) == 0) and
+          expect(cmp == java.lang.Long.compare(a.unwrap, b.unwrap))
+      }
 
   test("LongValueRefined Show instance"):
-    forall(genDummyPositiveLong) { v =>
-      val showInstance = summon[Show[DummyPositiveLong]]
-      expect(showInstance.show(v) == v.unwrap.toString)
-    }
+      forall(genDummyPositiveLong) { v =>
+        val showInstance = summon[Show[DummyPositiveLong]]
+        expect(showInstance.show(v) == v.unwrap.toString)
+      }
 
   test("LongValueRefined Ordering instance"):
-    forall(genDummyPositiveLongPair) { case (a, b) =>
-      val orderingInstance = summon[Ordering[DummyPositiveLong]]
-      expect(orderingInstance.compare(a, b) == java.lang.Long.compare(a.unwrap, b.unwrap))
-    }
+      forall(genDummyPositiveLongPair) { case (a, b) =>
+        val orderingInstance = summon[Ordering[DummyPositiveLong]]
+        expect(orderingInstance.compare(a, b) == java.lang.Long.compare(a.unwrap, b.unwrap))
+      }
 
   // ---------------------------------------------------------------------------
   // Unwrap test
   // ---------------------------------------------------------------------------
 
   test("LongValueRefined unwrap returns underlying value"):
-    forall(genDummyPositiveLong) { v =>
-      expect(v.unwrap.isInstanceOf[Long]) and
-        expect(v.unwrap > 0L)
-    }
+      forall(genDummyPositiveLong) { v =>
+        expect(v.unwrap.isInstanceOf[Long]) and
+          expect(v.unwrap > 0L)
+      }
 
   // ---------------------------------------------------------------------------
   // Refinement validation tests

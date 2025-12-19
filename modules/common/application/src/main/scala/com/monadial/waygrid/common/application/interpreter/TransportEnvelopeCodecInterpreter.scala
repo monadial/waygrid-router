@@ -15,9 +15,9 @@ import com.monadial.waygrid.common.application.domain.model.envelope.Value.{
 }
 import com.monadial.waygrid.common.application.instances.CirceInstances.given
 import com.monadial.waygrid.common.domain.algebra.messaging.message.Message
-import com.monadial.waygrid.common.domain.model.envelope.DomainEnvelope
 import com.monadial.waygrid.common.domain.algebra.messaging.message.Value.MessageType
 import com.monadial.waygrid.common.domain.algebra.value.codec.BytesCodec
+import com.monadial.waygrid.common.domain.model.envelope.DomainEnvelope
 import io.circe.{ Decoder, Encoder, Json }
 
 object TransportEnvelopeCodecInterpreter:

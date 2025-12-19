@@ -1,10 +1,10 @@
 package com.monadial.waygrid.common.application.domain.model.settings
 
+import scala.concurrent.duration.FiniteDuration
+
 import com.monadial.waygrid.common.application.instances.DurationInstances.given
 import fs2.kafka.Acks
 import io.circe.{ Codec, Decoder, Encoder }
-
-import scala.concurrent.duration.FiniteDuration
 
 trait SinkSettings
 trait SourceSettings

@@ -2,11 +2,11 @@ package com.monadial.waygrid.common.application.util.circe.codecs
 
 import cats.effect.IO
 import com.monadial.waygrid.common.application.util.circe.codecs.DomainRoutingSpecCirceCodecs.given
+import com.monadial.waygrid.common.domain.model.parameter.ParameterValue
 import com.monadial.waygrid.common.domain.model.routing.Value.RepeatPolicy
 import com.monadial.waygrid.common.domain.model.traversal.condition.Condition
 import com.monadial.waygrid.common.domain.model.traversal.dag.JoinStrategy
 import com.monadial.waygrid.common.domain.model.traversal.spec.{ Node, Spec }
-import com.monadial.waygrid.common.domain.model.parameter.ParameterValue
 import com.monadial.waygrid.common.domain.value.Address.ServiceAddress
 import io.circe.parser.decode
 import io.circe.syntax.*

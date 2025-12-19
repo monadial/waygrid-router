@@ -1,5 +1,7 @@
 package com.monadial.waygrid.common.application.interpreter.storage
 
+import scala.concurrent.duration.FiniteDuration
+
 import cats.effect.{ Async, Resource }
 import cats.implicits.*
 import com.monadial.waygrid.common.application.util.circe.codecs.DomainTraversalStateCirceCodecs.given
@@ -11,8 +13,6 @@ import doobie.*
 import doobie.implicits.*
 import io.circe.parser.*
 import io.circe.syntax.*
-
-import scala.concurrent.duration.FiniteDuration
 
 /**
  * PostgreSQL implementation of TraversalStateRepository.

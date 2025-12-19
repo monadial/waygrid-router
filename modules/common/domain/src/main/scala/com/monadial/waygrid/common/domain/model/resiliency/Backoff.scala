@@ -1,10 +1,10 @@
 package com.monadial.waygrid.common.domain.model.resiliency
 
-import com.monadial.waygrid.common.domain.model.resiliency.Value.{ DefaultJitter, HashKey, JitterConfig, JitterMode }
-
 import scala.concurrent.duration.*
 import scala.util.Random
 import scala.util.hashing.MurmurHash3
+
+import com.monadial.waygrid.common.domain.model.resiliency.Value.{ DefaultJitter, HashKey, JitterConfig, JitterMode }
 
 /**
  * Typeclass for computing the next retry delay given a [[RetryPolicy]].

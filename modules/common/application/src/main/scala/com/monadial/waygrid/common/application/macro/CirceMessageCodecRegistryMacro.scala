@@ -1,14 +1,14 @@
 package com.monadial.waygrid.common.application.`macro`
 
-import com.monadial.waygrid.common.application.algebra.Logger
+import scala.collection.mutable
+import scala.quoted.{ Expr, Quotes, Type }
+
 import cats.effect.Async
 import cats.syntax.all.*
+import com.monadial.waygrid.common.application.algebra.Logger
 import com.monadial.waygrid.common.domain.algebra.messaging.message.Message
 import com.monadial.waygrid.common.domain.algebra.messaging.message.Value.MessageType
 import io.circe.*
-
-import scala.collection.mutable
-import scala.quoted.{ Expr, Quotes, Type }
 
 object CirceMessageCodecRegistryMacro:
   type MessageCodec = Codec[? <: Message]

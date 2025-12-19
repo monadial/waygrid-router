@@ -1,5 +1,7 @@
 package com.monadial.waygrid.common.application.http.resource
 
+import java.time.Instant
+
 import cats.effect.Async
 import cats.syntax.all.*
 import com.monadial.waygrid.common.application.algebra.ThisNode
@@ -9,8 +11,6 @@ import io.circe.Codec
 import org.http4s.circe.*
 import org.http4s.dsl.Http4sDsl
 import org.http4s.{ EntityEncoder, HttpRoutes }
-
-import java.time.Instant
 
 object HomeResource:
 

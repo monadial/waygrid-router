@@ -1,10 +1,10 @@
 package com.monadial.waygrid.common.application.util.logging
 
-import com.monadial.waygrid.common.application.algebra.LoggerContext
-
 import scala.annotation.*
 import scala.compiletime.summonInline
 import scala.quoted.*
+
+import com.monadial.waygrid.common.application.algebra.LoggerContext
 
 /**
  * Marks a class or object with a log category that will be
