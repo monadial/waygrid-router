@@ -85,7 +85,7 @@ jobs:
       sha_short: ${{ steps.version.outputs.sha_short }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Generate version
         id: version
@@ -149,7 +149,7 @@ jobs:
       matrix: ${{ fromJson(needs.setup.outputs.modules) }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Java
         uses: actions/setup-java@v5
@@ -188,7 +188,7 @@ jobs:
       matrix: ${{ fromJson(needs.setup.outputs.modules) }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Java
         uses: actions/setup-java@v5
@@ -244,7 +244,7 @@ jobs:
       matrix: ${{ fromJson(needs.setup.outputs.docker_modules) }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Java
         uses: actions/setup-java@v5
