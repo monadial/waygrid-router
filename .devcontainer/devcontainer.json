@@ -1,12 +1,37 @@
 {
-  "name": "Waygrid Development Container",
-  "build": {
-    "dockerfile": "Dockerfile",
-    "context": "."
-  },
-  "postCreateCommand": "sbt update",
+  "name": "Waygrid Router Dev",
+  "dockerComposeFile": ["../compose.yaml", "compose.yml"],
+  "service": "devcontainer",
   "workspaceFolder": "/workspace",
+  "shutdownAction": "stopCompose",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "dockerDashComposeVersion": "v2"
+    },
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
   "customizations": {
+    "vscode": {
+      "extensions": [
+        "scalameta.metals",
+        "scala-lang.scala",
+        "redhat.vscode-yaml",
+        "ms-azuretools.vscode-docker",
+        "eamodio.gitlens",
+        "streetsidesoftware.code-spell-checker"
+      ],
+      "settings": {
+        "metals.serverVersion": "latest.release",
+        "metals.javaHome": "/opt/java/openjdk",
+        "editor.formatOnSave": true,
+        "files.watcherExclude": {
+          "**/target/**": true,
+          "**/.bloop/**": true,
+          "**/.metals/**": true
+        }
+      }
+    },
     "jetbrains": {
       "plugins": [
         "org.intellij.scala",
@@ -14,13 +39,46 @@
         "izhangzhihao.rainbow.brackets",
         "com.github.catppuccin.jetbrains",
         "com.github.catppuccin.jetbrains_icons",
-        "com.intellij.bigdatatools.spark",
-        "com.intellij.bigdatatools.metastore.core",
-        "com.intellij.bigdatatools.rfs",
-        "com.intellij.bigdatatools.binary.files",
-        "com.intellij.bigdatatools.core",
-        "com.intellij.bigdatatools",
-      ],
-    },
+      ]
+    }
+  },
+  "forwardPorts": [
+    1337,
+    29092,
+    29094,
+    29096,
+    6379,
+    6380,
+    6381,
+    8081,
+    4317,
+    4318,
+    3000,
+    5540,
+    8080
+  ],
+  "portsAttributes": {
+    "1337": { "label": "Waygrid App" },
+    "29092": { "label": "Kafka Node 1" },
+    "29094": { "label": "Kafka Node 2" },
+    "29096": { "label": "Kafka Node 3" },
+    "6379": { "label": "Redis Node 1" },
+    "6380": { "label": "Redis Node 2" },
+    "6381": { "label": "Redis Node 3" },
+    "8081": { "label": "Schema Registry" },
+    "4317": { "label": "OTLP gRPC" },
+    "4318": { "label": "OTLP HTTP" },
+    "3000": { "label": "Grafana" },
+    "5540": { "label": "RedisInsight" },
+    "8080": { "label": "Redpanda Console" }
+  },
+  "postCreateCommand": "sbt update",
+  "postStartCommand": "echo '=== Waygrid devcontainer ready! ===' && echo 'Kafka: kafka-node-1:9092, kafka-node-2:9094, kafka-node-3:9096' && echo 'Redis: redis-node-1:6379, redis-node-2:6379, redis-node-3:6379' && echo 'Grafana: http://localhost:3000' && echo 'Redpanda Console: http://localhost:8080' && echo 'Run: sbt compile'",
+  "remoteUser": "vscode",
+  "containerEnv": {
+    "OTEL_EXPORTER_OTLP_ENDPOINT": "http://otel-lgtm:4317",
+    "OTEL_JAVA_GLOBAL_AUTOCONFIGURE_ENABLED": "true",
+    "KAFKA_BOOTSTRAP_SERVERS": "kafka-node-1:9092,kafka-node-2:9094,kafka-node-3:9096",
+    "REDIS_NODES": "redis-node-1:6379,redis-node-2:6379,redis-node-3:6379"
   }
 }
