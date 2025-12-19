@@ -68,7 +68,7 @@ jobs:
       sha_short: ${{ steps.version.outputs.sha_short }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           # For workflow_run, checkout the commit that triggered CI
           ref: ${{ github.event.workflow_run.head_sha || github.ref }}
@@ -128,7 +128,7 @@ jobs:
       matrix: ${{ fromJson(needs.setup.outputs.matrix) }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.event.workflow_run.head_sha || github.ref }}
 
