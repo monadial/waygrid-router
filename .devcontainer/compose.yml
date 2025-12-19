@@ -1,0 +1,26 @@
+volumes:
+  waygrid_sbt_cache: {}
+  waygrid_coursier_cache: {}
+
+services:
+  devcontainer:
+    build:
+      context: ./.devcontainer
+      dockerfile: Dockerfile
+    volumes:
+      - ..:/workspace:cached
+      - waygrid_sbt_cache:/home/vscode/.sbt
+      - waygrid_coursier_cache:/home/vscode/.cache/coursier
+    command: sleep infinity
+    depends_on:
+      - kafka-node-1
+      - kafka-node-2
+      - kafka-node-3
+      - redis-node-1
+      - schema-registry
+      - otel-lgtm
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-lgtm:4317
+      - OTEL_JAVA_GLOBAL_AUTOCONFIGURE_ENABLED=true
+      - KAFKA_BOOTSTRAP_SERVERS=kafka-node-1:9092,kafka-node-2:9094,kafka-node-3:9096
+      - REDIS_NODES=redis-node-1:6379,redis-node-2:6379,redis-node-3:6379
