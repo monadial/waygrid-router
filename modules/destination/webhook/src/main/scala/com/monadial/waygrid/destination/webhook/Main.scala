@@ -1,5 +1,7 @@
 package com.monadial.waygrid.destination.webhook
 
+import scala.annotation.nowarn
+
 import cats.Parallel
 import cats.effect.std.Console
 import cats.effect.{ Async, Resource }
@@ -10,8 +12,6 @@ import com.monadial.waygrid.destination.webhook.settings.WebhookSettings
 import com.suprnation.actor.ActorSystem
 import org.typelevel.otel4s.metrics.MeterProvider
 import org.typelevel.otel4s.trace.{ Tracer, TracerProvider }
-
-import scala.annotation.nowarn
 
 object Main extends WaygridApp[WebhookSettings](NodeDescriptor.Destination(NodeService("webhook"))):
 
@@ -30,5 +30,5 @@ object Main extends WaygridApp[WebhookSettings](NodeDescriptor.Destination(NodeS
     settings: WebhookSettings
   ): Resource[F, Unit] =
     for
-      _ <- Resource.eval(Logger[F].info(s"Starting Waystation Service."))
+      _ <- Resource.eval(Logger[F].info("Starting Waystation Service."))
     yield ()
