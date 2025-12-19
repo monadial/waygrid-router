@@ -40,12 +40,24 @@ object Kafka:
   final case class Source(
   ) extends SourceSettings derives Codec.AsObject
 
+  /**
+   * Schema Registry configuration for Avro serialization.
+   *
+   * @param url               Schema Registry URL (e.g., "http://localhost:8081")
+   * @param autoRegisterSchemas Whether to auto-register schemas on produce (default: true)
+   */
+  final case class SchemaRegistry(
+    url: String,
+    autoRegisterSchemas: Boolean = true
+  ) derives Codec.AsObject
+
   final case class Settings(
     bootstrapServers: List[String],
     clientId: String,
     batch: Batch,
     sink: Sink,
-    source: Source
+    source: Source,
+    schemaRegistry: Option[SchemaRegistry] = None
   ) derives Codec.AsObject
 
 final case class EventStreamSettings(

@@ -13,16 +13,15 @@ import com.monadial.waygrid.common.application.kafka.KafkaUtils.{ toEndpoint, to
 import com.monadial.waygrid.common.application.kafka.Tags.{ Consumer, RebalanceListener }
 import com.monadial.waygrid.common.application.kafka.Value.Key
 import com.monadial.waygrid.common.application.util.cats.effect.{ FiberT, FiberType }
-import com.monadial.waygrid.common.application.util.scodec.codecs.ApplicationTransportEnvelopeScodecCodecs.given
+import com.monadial.waygrid.common.application.util.vulcan.codecs.ApplicationTransportEnvelopeVulcanCodecs.given
 import com.monadial.waygrid.common.domain.algebra.messaging.event.Event
 import com.monadial.waygrid.common.domain.model.envelope.DomainEnvelope
 import com.monadial.waygrid.common.domain.value.Address.Endpoint
 import fs2.kafka.*
+import fs2.kafka.vulcan.{ avroDeserializer, AvroSettings, SchemaRegistryClientSettings }
 import org.typelevel.otel4s.context.propagation.TextMapGetter
 import org.typelevel.otel4s.metrics.{ Counter, Histogram, Meter, UpDownCounter }
 import org.typelevel.otel4s.trace.Tracer
-import scodec.Codec
-import scodec.bits.BitVector
 
 import java.nio.charset.Charset
 
@@ -105,12 +104,21 @@ object KafkaEventSource:
         Deserializer.lift(x => Key(scodec.bits.ByteVector(x)).pure[F])
       )
 
-      // Deserializer using scodec binary format
-      given ValueDeserializer[F, TransportEnvelope] <- Resource.pure(Deserializer.lift { bytes =>
-        Codec[TransportEnvelope].decode(BitVector(bytes)) match
-          case scodec.Attempt.Successful(result) => result.value.pure[F]
-          case scodec.Attempt.Failure(err)       => Async[F].raiseError(new RuntimeException(s"Failed to decode TransportEnvelope: ${err.messageWithContext}"))
-      })
+      // Configure Avro deserializer with Schema Registry
+      avroSettings <- settings.schemaRegistry match
+        case Some(sr) =>
+          Resource.pure(
+            AvroSettings(
+              SchemaRegistryClientSettings[F](sr.url)
+            )
+                .withAutoRegisterSchemas(sr.autoRegisterSchemas)
+          )
+        case None =>
+          Resource.raiseError[F, AvroSettings[F], Throwable](
+            new IllegalStateException("Schema Registry configuration is required for Avro deserialization")
+          )
+
+      given ValueDeserializer[F, TransportEnvelope] <- avroDeserializer[TransportEnvelope].forValue(avroSettings)
 
       consumerSettings <- Resource.pure(
         ConsumerSettings[F, Key, TransportEnvelope]

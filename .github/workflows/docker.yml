@@ -1,20 +1,43 @@
 name: Docker Build & Push
 
 on:
-  # Trigger after CI workflow completes successfully
+  # Trigger after CI workflow completes successfully on main
   workflow_run:
     workflows: ["CI"]
     types: [completed]
     branches: [main]
-  # Allow manual triggers and tag releases
+  # Tag releases
   push:
     tags: ['v*']
+  # Manual trigger - select branch in GitHub UI, then choose module
   workflow_dispatch:
     inputs:
       module:
-        description: 'Specific module to build (leave empty for all)'
+        description: 'Module to build'
         required: false
-        type: string
+        type: choice
+        default: 'all'
+        options:
+          - all
+          - system-topology
+          - system-waystation
+          - system-history
+          - system-scheduler
+          - system-dag-registry
+          - system-secure-store
+          - system-blob-store
+          - system-iam
+          - system-billing
+          - system-kms
+          - origin-http
+          - origin-grpc
+          - origin-kafka
+          - destination-webhook
+          - destination-websocket
+          - destination-blackhole
+          - processor-openai
+          - processor-lambda
+          - infrastructure-k8s-operator
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.workflow_run.head_branch || github.ref }}
@@ -75,8 +98,16 @@ jobs:
           sudo wget -qO /usr/local/bin/yq "https://github.com/mikefarah/yq/releases/latest/download/yq_linux_${YQ_ARCH}"
           sudo chmod +x /usr/local/bin/yq
 
-          # Get only modules with docker: true - use jq -c for compact single-line JSON
-          MATRIX=$(yq -o=json '.modules | map(select(.docker == true)) | {"include": .}' .github/modules.yml | jq -c)
+          # Check if specific module was requested (for workflow_dispatch)
+          SPECIFIC_MODULE="${{ github.event.inputs.module }}"
+
+          if [[ -n "$SPECIFIC_MODULE" && "$SPECIFIC_MODULE" != "all" ]]; then
+            # Filter for specific module with docker: true
+            MATRIX=$(yq -o=json '.modules | map(select(.name == "'"$SPECIFIC_MODULE"'" and .docker == true)) | {"include": .}' .github/modules.yml | jq -c)
+          else
+            # Get all modules with docker: true
+            MATRIX=$(yq -o=json '.modules | map(select(.docker == true)) | {"include": .}' .github/modules.yml | jq -c)
+          fi
           echo "matrix=$MATRIX" >> $GITHUB_OUTPUT
 
           echo "🐳 Docker modules to build:"

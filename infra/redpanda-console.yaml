@@ -1,0 +1,10 @@
+kafka:
+  brokers:
+    - kafka-node-1:9092
+    - kafka-node-2:9094
+    - kafka-node-3:9096
+
+schemaRegistry:
+  enabled: true
+  urls:
+    - http://schema-registry:8081

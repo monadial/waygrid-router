@@ -1,0 +1,40 @@
+name: Dependabot Auto-merge
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  dependabot-automerge:
+    name: Enable auto-merge for Dependabot PRs
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
+    steps:
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v2
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Enable auto-merge with rebase
+        run: gh pr merge --auto --rebase "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Summary
+        run: |
+          echo "## 🤖 Dependabot Auto-merge Enabled" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Property | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Package Ecosystem | ${{ steps.metadata.outputs.package-ecosystem }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Update Type | ${{ steps.metadata.outputs.update-type }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Dependency Names | ${{ steps.metadata.outputs.dependency-names }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| PR | [#${{ github.event.pull_request.number }}](${{ github.event.pull_request.html_url }}) |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Auto-merge with rebase strategy enabled. PR will be merged once all required checks pass." >> $GITHUB_STEP_SUMMARY

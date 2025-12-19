@@ -2,15 +2,18 @@ package com.monadial.waygrid.origin.http.http.resource.v1
 
 import cats.effect.Async
 import cats.implicits.*
-import com.monadial.waygrid.common.application.algebra.{ EventSink, Logger, ThisNode }
+import com.monadial.waygrid.common.application.algebra.{EventSink, Logger, ThisNode}
+import com.monadial.waygrid.common.application.syntax.EventSyntax.packIntoWaystationEnvelope
+import com.monadial.waygrid.common.application.syntax.EnvelopeSyntax.send
 import com.monadial.waygrid.common.application.util.circe.codecs.DomainRoutingSpecCirceCodecs.given
 import com.monadial.waygrid.common.domain.algebra.DagCompiler
 import com.monadial.waygrid.common.domain.algebra.messaging.message.Value.MessageId
 import com.monadial.waygrid.common.domain.algebra.storage.DagRepository
-import com.monadial.waygrid.common.domain.model.routing.Value.{ RouteSalt, TraversalId }
+import com.monadial.waygrid.common.domain.model.routing.Value.{RouteSalt, TraversalId}
+import com.monadial.waygrid.common.domain.model.traversal.Event.TraversalRequested
 import com.monadial.waygrid.common.domain.model.traversal.dag.Value.DagHash
 import com.monadial.waygrid.common.domain.model.traversal.spec.Spec
-import io.circe.{ Codec, Json }
+import io.circe.{Codec, Json}
 import org.http4s.*
 import org.http4s.circe.*
 import org.http4s.dsl.Http4sDsl
@@ -51,6 +54,10 @@ object IngestResource:
                 thisNode    <- ThisNode[F].get
                 compiledDag <-
                   Tracer[F].span("compiling_dag").surround(compiler.compile(request.graph, RouteSalt("test")))
+                _ <- Tracer[F].span("packing-and-sending-message").use: span =>
+                    TraversalRequested(messageId, traversalId)
+                    .packIntoWaystationEnvelope
+                    .flatMap(_.send(Some(span.context)))
                 response <- EndpointResponse(traversalId, compiledDag.dag.hash)
                   .pure[F]
                   .flatMap(Ok(_))

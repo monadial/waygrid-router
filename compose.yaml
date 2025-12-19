@@ -94,6 +94,24 @@ services:
       - dev.orbstack.domains=kafka-node-3.router.waygrid.local
       - dev.orbstack.http-port=29096
 
+  schema-registry:
+    image: confluentinc/cp-schema-registry:7.6.0
+    hostname: schema-registry
+    container_name: schema-registry
+    depends_on:
+      - kafka-node-1
+      - kafka-node-2
+      - kafka-node-3
+    ports:
+      - "8081:8081"
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka-node-1:9092,kafka-node-2:9094,kafka-node-3:9096
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+    labels:
+      - dev.orbstack.domains=schema-registry.router.waygrid.local
+      - dev.orbstack.http-port=8081
+
   redpanda:
     image: docker.redpanda.com/redpandadata/console:latest
     hostname: redpanda
@@ -102,10 +120,13 @@ services:
       - kafka-node-1
       - kafka-node-2
       - kafka-node-3
+      - schema-registry
     #    ports:
     #      - "1336:8080"
+    volumes:
+      - ./infra/redpanda-console.yaml:/etc/redpanda-console/config.yaml:ro
     environment:
-      - KAFKA_BROKERS=kafka-node-1:9092,kafka-node-2:9094,kafka-node-3:9096
+      CONFIG_FILEPATH: /etc/redpanda-console/config.yaml
     labels:
       - dev.orbstack.domains=redpanda.router.waygrid.local
       - dev.orbstack.http-port=8080

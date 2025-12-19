@@ -171,35 +171,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7697e996-c24f-4ea1-a7ee-bf168edbe1e9" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/instances/DurationInstances.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/instances/DurationInstances.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/interpreter/storage/PostgresTraversalStateRepository.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/interpreter/storage/PostgresTraversalStateRepository.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/interpreter/storage/RedisTraversalStateRepository.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/interpreter/storage/RedisTraversalStateRepository.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.sbt" beforeDir="false" afterPath="$PROJECT_DIR$/build.sbt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/compose.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/domain/model/settings/EventStreamSettings.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/domain/model/settings/EventStreamSettings.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/kafka/KafkaEventSink.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/kafka/KafkaEventSink.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/kafka/KafkaEventSource.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/kafka/KafkaEventSource.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/AllDomainEventCodecs.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/AllDomainEventCodecs.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/ApplicationTransportEnvelopeCodecs.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/ApplicationTransportEnvelopeCirceCodecs.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainAddressCodecs.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainAddressCirceCodecs.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainParameterCodecs.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainParameterCirceCodecs.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainRoutingCodecs.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainRoutingCirceCodecs.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainRoutingDagCodecs.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainRoutingDagCirceCodecs.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainRoutingSpecCodecs.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainRoutingSpecCirceCodecs.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainStampCodecs.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainStampCirceCodecs.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainTraversalStateCodecs.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainTraversalStateCirceCodecs.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainVectorClockCodecs.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/DomainVectorClockCirceCodecs.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/events/DomainSchedulingEventCodecs.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/events/DomainSchedulingEventCirceCodecs.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/events/DomainTraversalEvents.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/main/scala/com/monadial/waygrid/common/application/util/circe/codecs/events/DomainTraversalCirceEvents.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/application/src/test/scala/com/monadial/waygrid/common/application/util/circe/codecs/ParameterJsonCodecSuite.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/test/scala/com/monadial/waygrid/common/application/util/circe/codecs/ParameterJsonCodecSuite.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/application/src/test/scala/com/monadial/waygrid/common/application/util/circe/codecs/SpecJsonCodecSuite.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/application/src/test/scala/com/monadial/waygrid/common/application/util/circe/codecs/SpecJsonCodecSuite.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/algebra/value/ValueRefined.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/algebra/value/ValueRefined.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/instances/InstantInstances.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/instances/InstantInstances.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/instances/IntegerInstances.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/instances/IntegerInstances.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/instances/LongInstances.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/instances/LongInstances.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/instances/RefinedInstances.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/instances/RefinedInstances.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/instances/StringInstances.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/instances/StringInstances.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/instances/ULIDInstances.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/instances/ULIDInstances.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/instances/URIInstances.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/instances/URIInstances.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/model/traversal/condition/Condition.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/common/domain/src/main/scala/com/monadial/waygrid/common/domain/model/traversal/condition/Condition.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/origin/http/src/main/resources/application.conf" beforeDir="false" afterPath="$PROJECT_DIR$/modules/origin/http/src/main/resources/application.conf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/origin/http/src/main/scala/com/monadial/waygrid/origin/http/http/resource/v1/IngestResource.scala" beforeDir="false" afterPath="$PROJECT_DIR$/modules/origin/http/src/main/scala/com/monadial/waygrid/origin/http/http/resource/v1/IngestResource.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/Dependencies.scala" beforeDir="false" afterPath="$PROJECT_DIR$/project/Dependencies.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -207,7 +189,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="1367" />
+    <option name="cachedIndexableFilesCount" value="1400" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="ExternalProjectsData">
@@ -276,6 +258,11 @@
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/clickhouse/clickhouse-jdbc/0.7.1/clickhouse-jdbc-0.7.1-all.jar!/com/clickhouse/jdbc/ClickHouseDataSource.class" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/clickhouse/clickhouse-jdbc/0.7.1/clickhouse-jdbc-0.7.1-all.jar!/com/clickhouse/jdbc/ClickHouseDriver.class" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/disneystreaming/weaver-core_3/0.8.4/weaver-core_3-0.8.4-sources.jar!/weaver/suites.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/github/fd4s/fs2-kafka-vulcan_3/3.8.0/fs2-kafka-vulcan_3-3.8.0-sources.jar!/fs2/kafka/vulcan/AvroSettings.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/github/fd4s/fs2-kafka-vulcan_3/3.8.0/fs2-kafka-vulcan_3-3.8.0-sources.jar!/fs2/kafka/vulcan/SchemaRegistryClientSettings.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/github/fd4s/fs2-kafka-vulcan_3/3.8.0/fs2-kafka-vulcan_3-3.8.0-sources.jar!/fs2/kafka/vulcan/package.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/github/fd4s/vulcan_3/1.12.0/vulcan_3-1.12.0-sources.jar!/vulcan/Codec.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/github/fd4s/vulcan_3/1.12.0/vulcan_3-1.12.0-sources.jar!/vulcan/Props.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/io/chrisdavenport/http4s-grpc_3/0.0.4/http4s-grpc_3-0.0.4-sources.jar!/org/http4s/grpc/ClientGrpc.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/io/chrisdavenport/http4s-grpc_3/0.0.4/http4s-grpc_3-0.0.4-sources.jar!/org/http4s/grpc/codecs/ScalaPb.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/io/opentelemetry/opentelemetry-sdk-extension-autoconfigure/1.55.0/opentelemetry-sdk-extension-autoconfigure-1.55.0-sources.jar!/io/opentelemetry/sdk/autoconfigure/AutoConfiguredOpenTelemetrySdkBuilder.java" root0="SKIP_INSPECTION" />
@@ -289,12 +276,16 @@
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scodec/scodec-bits_3/1.1.38/scodec-bits_3-1.1.38-sources.jar!/scodec/bits/BitVector.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scodec/scodec-core_3/2.3.2/scodec-core_3-2.3.2-sources.jar!/scodec/codecs/codecs.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/tpolecat/doobie-free_3/1.0.0-RC10/doobie-free_3-1.0.0-RC10-sources.jar!/doobie/util/log.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-core_3/2.13.0/cats-core_3-2.13.0-sources.jar!/cats/FlatMap.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-core_3/2.13.0/cats-core_3-2.13.0-sources.jar!/cats/package.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-effect-kernel_3/3.6.3/cats-effect-kernel_3-3.6.3-sources.jar!/cats/effect/kernel/Resource.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-effect_3/3.6.1/cats-effect_3-3.6.1-sources.jar!/cats/effect/ArrayStack.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-effect_3/3.6.1/cats-effect_3-3.6.1-sources.jar!/cats/effect/CpuStarvationCheck.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-effect_3/3.6.1/cats-effect_3-3.6.1-sources.jar!/cats/effect/IO.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-effect_3/3.6.1/cats-effect_3-3.6.1-sources.jar!/cats/effect/IOFiber.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-effect_3/3.6.1/cats-effect_3-3.6.1-sources.jar!/cats/effect/tracing/RingBuffer.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-effect_3/3.6.1/cats-effect_3-3.6.1-sources.jar!/cats/effect/unsafe/IORuntime.scala" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-effect_3/3.6.3/cats-effect_3-3.6.3-sources.jar!/cats/effect/unsafe/WorkerThread.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/otel4s-core-common_3/0.14.0/otel4s-core-common_3-0.14.0-sources.jar!/org/typelevel/otel4s/context/propagation/TextMapGetter.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/otel4s-core-common_3/0.14.0/otel4s-core-common_3-0.14.0-sources.jar!/org/typelevel/otel4s/context/propagation/TextMapPropagator.scala" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/otel4s-core-common_3/0.14.0/otel4s-core-common_3-0.14.0-sources.jar!/org/typelevel/otel4s/context/propagation/TextMapUpdater.scala" root0="SKIP_INSPECTION" />
@@ -356,6 +347,7 @@
     "JUnit.SpecJsonCodecSuite$.executor": "Run",
     "JUnit.StringValueRefinedSuite$.executor": "Run",
     "JUnit.TransportEnvelopeScodecSuite$.executor": "Run",
+    "JUnit.TransportEnvelopeVulcanSuite$.executor": "Run",
     "JUnit.TraversalFSMSuite$.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -390,7 +382,30 @@
       <recent name="$PROJECT_DIR$/modules/system/blob-store/src/main" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.All in common-domain">
+  <component name="RunManager" selected="Application.Main">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true">
+      <envs>
+        <env name="WAYGRID_CLUSTER_ID" value="loc01" />
+        <env name="WAYGRID_REGION" value="lc-local-01" />
+      </envs>
+      <option name="MAIN_CLASS_NAME" value="com.monadial.waygrid.origin.http.Main" />
+      <module name="origin-http" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.monadial.waygrid.origin.http.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">
+        <option name="credential" />
+        <option name="region" />
+        <option name="useCurrentConnection" value="false" />
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+        <option name="BSP.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="All in common-domain" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="common-domain" />
       <option name="PACKAGE_NAME" value="" />
@@ -398,38 +413,6 @@
       <method v="2">
         <option name="Make" enabled="true" />
         <option name="BSP.BeforeRunTask" enabled="true" CHOSEN_TARGET="file:$PROJECT_DIR$/#common-domain/Test" />
-      </method>
-    </configuration>
-    <configuration name="BaseInstancesSuite$" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="common-domain" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.monadial.waygrid.common.domain.instances.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.monadial.waygrid.common.domain.instances" />
-      <option name="MAIN_CLASS_NAME" value="com.monadial.waygrid.common.domain.instances.BaseInstancesSuite$" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-        <option name="BSP.BeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="BytesValueRefinedSuite$" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="common-domain" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.monadial.waygrid.common.domain.value.valuerefined.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.monadial.waygrid.common.domain.value.valuerefined" />
-      <option name="MAIN_CLASS_NAME" value="com.monadial.waygrid.common.domain.value.valuerefined.BytesValueRefinedSuite$" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-        <option name="BSP.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
     <configuration name="DagPropertySuite$" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
@@ -448,16 +431,32 @@
         <option name="BSP.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="StringValueRefinedSuite$" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="common-domain" />
+    <configuration name="TransportEnvelopeScodecSuite$" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="common-application" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.monadial.waygrid.common.domain.value.string.*" />
+          <option name="PATTERN" value="com.monadial.waygrid.common.application.util.scodec.codecs.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="com.monadial.waygrid.common.domain.value.string" />
-      <option name="MAIN_CLASS_NAME" value="com.monadial.waygrid.common.domain.value.string.StringValueRefinedSuite$" />
+      <option name="PACKAGE_NAME" value="com.monadial.waygrid.common.application.util.scodec.codecs" />
+      <option name="MAIN_CLASS_NAME" value="com.monadial.waygrid.common.application.util.scodec.codecs.TransportEnvelopeScodecSuite$" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+        <option name="BSP.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TransportEnvelopeVulcanSuite$" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="common-application" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.monadial.waygrid.common.application.util.vulcan.codecs.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.monadial.waygrid.common.application.util.vulcan.codecs" />
+      <option name="MAIN_CLASS_NAME" value="com.monadial.waygrid.common.application.util.vulcan.codecs.TransportEnvelopeVulcanSuite$" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -512,21 +511,21 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Application.Main" />
+      <item itemvalue="JUnit.TransportEnvelopeScodecSuite$" />
+      <item itemvalue="JUnit.TransportEnvelopeVulcanSuite$" />
       <item itemvalue="JUnit.All in common-domain" />
-      <item itemvalue="JUnit.BaseInstancesSuite$" />
-      <item itemvalue="JUnit.BytesValueRefinedSuite$" />
       <item itemvalue="JUnit.DagPropertySuite$" />
-      <item itemvalue="JUnit.StringValueRefinedSuite$" />
       <item itemvalue="sbt Task.Unnamed (1)" />
       <item itemvalue="sbt Task.Unnamed" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Main" />
+        <item itemvalue="JUnit.TransportEnvelopeVulcanSuite$" />
+        <item itemvalue="JUnit.TransportEnvelopeScodecSuite$" />
         <item itemvalue="JUnit.All in common-domain" />
         <item itemvalue="JUnit.DagPropertySuite$" />
-        <item itemvalue="JUnit.StringValueRefinedSuite$" />
-        <item itemvalue="JUnit.BytesValueRefinedSuite$" />
-        <item itemvalue="JUnit.BaseInstancesSuite$" />
       </list>
     </recent_temporary>
   </component>
@@ -556,7 +555,7 @@
       <workItem from="1765806194819" duration="5004000" />
       <workItem from="1765837790966" duration="43987000" />
       <workItem from="1765981873712" duration="9761000" />
-      <workItem from="1766004647650" duration="10200000" />
+      <workItem from="1766004647650" duration="33857000" />
     </task>
     <servers />
   </component>
@@ -661,11 +660,6 @@
           <url>file://$PROJECT_DIR$/modules/common/domain/src/test/scala/com/monadial/waygrid/common/domain/model/traversal/fsm/TraversalFSMSuite.scala</url>
           <line>2659</line>
           <option name="timeStamp" value="40" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="scala-line">
-          <url>file://$PROJECT_DIR$/modules/origin/http/src/main/scala/com/monadial/waygrid/origin/http/http/resource/v1/IngestResource.scala</url>
-          <line>47</line>
-          <option name="timeStamp" value="42" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="scala-line">
           <url>file://$PROJECT_DIR$/modules/system/waystation/src/main/scala/com/monadial/waygrid/system/waystation/actor/TraversalExecutorActor.scala</url>

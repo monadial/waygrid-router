@@ -13,6 +13,7 @@ ThisBuild / organization     := "com.monadial"
 ThisBuild / organizationName := "Monadial"
 
 ThisBuild / resolvers += "jitpack" at "https://jitpack.io"
+ThisBuild / resolvers += "Confluent Maven Repo" at "https://packages.confluent.io/maven/"
 
 ThisBuild / homepage := Some(url("https://waygrid.dev"))
 ThisBuild / licenses := Seq(License.GPL3_or_later)
@@ -173,6 +174,10 @@ lazy val `common-application` =
         Libraries.shapeless3Typeable.value,
         // fs2
         Libraries.fs2Kafka.value,
+        // vulcan - Avro + Schema Registry
+        Libraries.vulcanCore.value,
+        Libraries.vulcanGeneric.value,
+        Libraries.fs2KafkaVulcan.value,
         // aws
         Libraries.fs2AwsCore.value,
         // scodec
