@@ -8,7 +8,7 @@ addSbtPlugin("com.eed3si9n"        % "sbt-buildinfo"        % "0.13.1")
 addSbtPlugin("com.timushev.sbt"    % "sbt-updates"          % "0.6.4")
 addSbtPlugin("net.vonbuchholtz"    % "sbt-dependency-check" % "5.1.0")
 addSbtPlugin("org.typelevel"       % "laika-sbt"            % "1.3.2")
-addSbtPlugin("org.wartremover"     % "sbt-wartremover"      % "3.4.2")
+addSbtPlugin("org.wartremover"     % "sbt-wartremover"      % "3.4.3")
 addSbtPlugin("io.chrisdavenport"   % "sbt-http4s-grpc"      % "0.0.4")
 addSbtPlugin("org.scoverage"       % "sbt-scoverage"        % "2.2.2")
 addDependencyTreePlugin
