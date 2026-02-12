@@ -201,3 +201,32 @@ services:
     labels:
       - dev.orbstack.domains=grafana.router.waygrid.local
       - dev.orbstack.http-port=3000
+
+  admin-ui:
+    build:
+      context: ./modules/admin/ui
+      dockerfile: Dockerfile
+      target: development
+    hostname: admin-ui
+    container_name: admin-ui
+    volumes:
+      - ./modules/admin/ui/src:/app/src:ro
+      - ./modules/admin/ui/public:/app/public:ro
+    environment:
+      - VITE_TOPOLOGY_URL=http://system-topology:1337
+      - VITE_WAYSTATION_URL=http://system-waystation:1337
+      - VITE_SCHEDULER_URL=http://system-scheduler:1337
+      - VITE_IAM_URL=http://system-iam:1337
+      - VITE_HISTORY_URL=http://system-history:1337
+      - VITE_DAG_REGISTRY_URL=http://system-dag-registry:1337
+      - VITE_SECURE_STORE_URL=http://system-secure-store:1337
+      - VITE_BILLING_URL=http://system-billing:1337
+      - VITE_KMS_URL=http://system-kms:1337
+      - VITE_BLOB_STORE_URL=http://system-blob-store:1337
+      - VITE_ORIGIN_HTTP_URL=http://origin-http:1337
+    labels:
+      - dev.orbstack.domains=admin.router.waygrid.local
+      - dev.orbstack.http-port=3000
+    depends_on:
+      - kafka-node-1
+      - redis-node-1
