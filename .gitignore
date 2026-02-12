@@ -48,3 +48,6 @@ build/
 ### Scala ###
 .bsp/
 .metals/
+
+### Worktrees ###
+.worktrees/
