@@ -10,5 +10,5 @@ addSbtPlugin("net.vonbuchholtz"    % "sbt-dependency-check" % "5.1.0")
 addSbtPlugin("org.typelevel"       % "laika-sbt"            % "1.3.2")
 addSbtPlugin("org.wartremover"     % "sbt-wartremover"      % "3.4.3")
 addSbtPlugin("io.chrisdavenport"   % "sbt-http4s-grpc"      % "0.0.4")
-addSbtPlugin("org.scoverage"       % "sbt-scoverage"        % "2.2.2")
+addSbtPlugin("org.scoverage"       % "sbt-scoverage"        % "2.4.4")
 addDependencyTreePlugin
