@@ -18,10 +18,10 @@ importers:
         specifier: ^3.1.1
         version: 3.1.1(@types/react@19.2.14)(react@19.2.6)
       clsx:
-        specifier: ^2.1.1
+        specifier: ^2.0.0
         version: 2.1.1
       prism-react-renderer:
-        specifier: ^2.4.1
+        specifier: ^2.3.0
         version: 2.4.1(react@19.2.6)
       react:
         specifier: ^19.2.6
