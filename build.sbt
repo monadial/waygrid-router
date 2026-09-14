@@ -8,7 +8,7 @@ import scala.collection.Seq
 // ======================================================
 
 ThisBuild / version          := "1.0.0-SNAPSHOT"
-ThisBuild / scalaVersion     := "3.7.4"
+ThisBuild / scalaVersion     := "3.8.2"
 ThisBuild / organization     := "com.monadial"
 ThisBuild / organizationName := "Monadial"
 
@@ -41,19 +41,19 @@ ThisBuild / semanticdbEnabled := true
 // Coverage
 // ======================================================
 
-ThisBuild / coverageEnabled           := false
-ThisBuild / coverageFailOnMinimum     := false
-ThisBuild / coverageHighlighting      := true
-ThisBuild / coverageExcludedPackages  := "<empty>;.*BuildInfo.*;.*scalapb.*"
+ThisBuild / coverageEnabled          := false
+ThisBuild / coverageFailOnMinimum    := false
+ThisBuild / coverageHighlighting     := true
+ThisBuild / coverageExcludedPackages := "<empty>;.*BuildInfo.*;.*scalapb.*"
 
 // ======================================================
 // Global Docker defaults
 // ======================================================
 
-ThisBuild / Docker / dockerBaseImage  := "eclipse-temurin:23"
-ThisBuild / Docker / maintainer       := "Monadial"
-ThisBuild / Docker / daemonUser       := "monadial"
-ThisBuild / Docker / dockerUsername   := Some("monadial")
+ThisBuild / Docker / dockerBaseImage := "eclipse-temurin:23"
+ThisBuild / Docker / maintainer      := "Monadial"
+ThisBuild / Docker / daemonUser      := "monadial"
+ThisBuild / Docker / dockerUsername  := Some("monadial")
 ThisBuild / Docker / dockerExposedPorts ++= Seq(1337)
 
 // ======================================================
@@ -98,8 +98,8 @@ def configureOtel(component: String, service: String): Seq[Setting[?]] =
 
 lazy val root = (project in file("."))
   .settings(
-    name := "Waygrid",
-    fork := true,
+    name              := "Waygrid",
+    fork              := true,
     scalafmtOnCompile := true,
     scalafixOnCompile := true
   )

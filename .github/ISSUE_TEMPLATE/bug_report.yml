@@ -93,7 +93,7 @@ body:
         Please provide your environment details:
       value: |
         - Waygrid Version: [e.g. 1.0.0]
-        - Scala Version: [e.g. 3.7.4]
+        - Scala Version: [e.g. 3.8.2]
         - JDK Version: [e.g. 23]
         - OS: [e.g. Ubuntu 22.04, macOS 14]
         - Kubernetes Version (if applicable): [e.g. 1.28]

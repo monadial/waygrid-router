@@ -467,8 +467,8 @@ sbt coverage test coverageAggregate       # Aggregate coverage across all module
 sbt <module>/coverage <module>/test <module>/coverageReport  # Coverage for specific module
 ```
 
-Coverage reports are generated in `target/scala-3.7.4/scoverage-report/index.html` for each module.
-For aggregated reports: `target/scala-3.7.4/scoverage-report/index.html` at project root.
+Coverage reports are generated in `target/scala-3.8.2/scoverage-report/index.html` for each module.
+For aggregated reports: `target/scala-3.8.2/scoverage-report/index.html` at project root.
 
 ### Module Naming Convention
 - Main source: `modules/<component>/<module>/src/main/scala/com/monadial/waygrid/<component>/<module>/`
